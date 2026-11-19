@@ -220,6 +220,30 @@ details.fold[open]>summary::before{content:"\25BE  "}
 .tagrow .f_tnote{max-width:260px}
 .stabs{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0 12px}
 .clrow{grid-template-columns:1.2fr 1fr 1fr 1.3fr auto}
+.sgrow{display:grid;grid-template-columns:170px minmax(0,1fr) auto;gap:6px;margin-bottom:6px;align-items:center}
+.tbar{height:8px;background:var(--line);border-radius:4px;overflow:hidden;margin-top:8px}
+.tbar i{display:block;height:100%;border-radius:4px;background:var(--focus)}
+.tbar i.g{background:#4d8a2a} .tbar i.r{background:var(--red)}
+.lhdr,.lrow{display:grid;grid-template-columns:96px minmax(150px,1.4fr) 48px minmax(120px,1.5fr) 84px minmax(130px,auto);gap:10px;align-items:start}
+.lhdr{font-size:12px;color:var(--muted);padding:6px 4px;border-bottom:1px solid var(--line2)}
+.lrow{padding:10px 4px;border-bottom:1px solid var(--line);cursor:pointer;font-size:13px}
+.lrow:hover{background:var(--bg)}
+.lrow.dragging{opacity:.4}
+.lrow.ldone{background:var(--green-bg)}
+.lno{display:flex;align-items:center;gap:6px}
+.lno .arr{display:flex;flex-direction:column;gap:2px}
+.mini{padding:0 7px;min-height:20px;font-size:9px;line-height:18px}
+.grip{cursor:grab;color:var(--muted);font-size:14px;letter-spacing:-3px}
+.lact{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.cand{display:flex;gap:8px;align-items:flex-start}
+.lhead{font-size:15px}
+@media (max-width:700px){
+  .lhdr{display:none}
+  .lrow{grid-template-columns:70px minmax(0,1fr) auto;grid-template-areas:"no pt age" "no pr pr" "ty ty act"}
+  .lrow .lno{grid-area:no} .lrow .lpt{grid-area:pt} .lrow .lage{grid-area:age} .lrow .lpr{grid-area:pr} .lrow .lty{grid-area:ty} .lrow .lact{grid-area:act}
+  .sgrow{grid-template-columns:1fr auto}
+  .sgrow .sg_role{grid-column:1 / -1}
+}
 </style>
 <link rel="manifest" href="data:application/manifest+json;base64,eyJuYW1lIjogIlBlZGlhdHJpYyBTdXJnZXJ5IFdhaXRpbmcgTGlzdCIsICJzaG9ydF9uYW1lIjogIldhaXRpbmcgbGlzdCIsICJzdGFydF91cmwiOiAiLiIsICJkaXNwbGF5IjogInN0YW5kYWxvbmUiLCAiYmFja2dyb3VuZF9jb2xvciI6ICIjZjZmNmY0IiwgInRoZW1lX2NvbG9yIjogIiMxZjFmMWQiLCAiaWNvbnMiOiBbeyJzcmMiOiAiZGF0YTppbWFnZS9wbmc7YmFzZTY0LGlWQk9SdzBLR2dvQUFBQU5TVWhFVWdBQUFNQUFBQURBQ0FJQUFBRGR2dnRRQUFBQzhVbEVRVlI0WHUzZFVXcmJRQlJBVWFkMEcyMnkvMVdGcnFTRWxHQkM2Z1pkaGI3eG5QT3ZBVDJ1Qm4zSTQ0Zkh4eDhYT09yYjBRdmhoWUJJQkVRaUlCSUJrUWlJUkVBa0FpSVJFSW1BU0FSRUlpQVNBWkVJaUVSQUpBSWlFUkNKZ0VnRVJDSWdFZ0dSQ0loRVFDUUNJaEVRaVlCSUJFUWlJQklCa1FpSVJFQWtBaUlSRUltQVNBUkVJaUFTQVpFSWlFUkFKQUlpRVJDSmdFZ0VSUEk5WFgybm5wOS8vZTNPbnA1KzN1bE5IL1RnejFhdTNVam5tb3plQ09pUFQ2WWpvM2U4QTcwNFVNL2hxKzZNZ0E3VzgrcFllZmRrOTRCNkFYMkZwZTBlRU5IV0FaMjFlWnkxem9xMkRvaHUzNERPM1RiT1hXMGgrd2JFS1FSRUlpQVNBWkVJaUVSQUpBSWlFUkNKZ0VnRVJDSWdFZ0dSQ0loRVFDUUNJaEVRaVlCSUJFUWlJQklCa1FpSVJFQWtBaUlSRUltQVNBUkVJaUFTQVpFSWlHVDZJWnZibm5weGJmS2hzSE1Ea3M0N016T2FHSkIwYnBpVzBiaDNJUFhjTm0wK3N3S2FOcDJaUmsxcFVFQ2o1akxjbkZrTkNvZ1ZUUWxvemlPMWlpRVRteElRaXhvUjBKQ0hhVGtUNWpZaUlOWWxJQklCa1FpSVJFQWtBaUlSRUltQVNFWUVOTzBibDFWTW1OdUlnRmpYbElBbVBFeHJHVEt4S1FHeHFFRUJEWG1rbGpCblZvTUN1bHdHeldXeU9mVmNMc01DMHRBL2phcm5jaG41czU1WEV6NTJHV1ZhT3E4bS9pN3Ntb3lHNzhyVEEvbzZwNmM1YzRmNGFyTmVvbG1PZ0VnRVJDSWdFZ0dSQ0loRVFDUUNJaEVRaVlCSUJFUWlJQklCa1FpSVJFQWtBaUlSRUltQVNBUkVJaUFTQVpFSWlFUkFKQUlpRVJDSmdFZ0VSQ0lnRWdHUjdCdlF1WWRwbkx2YVF2WU5pRk5zSGRCWjI4Wlo2NnhvNjREb2RnK29ieDU5aGFYdEhsQThnWER6ZWlZZTgvdGZIT3ZnMkZWM1p0OUROai8weVpNM3BmTkdRQis0a1pGMDNoRVFpWmRvRWdHUkNJaEVRQ1FDSWhFUWlZQklCRVFpSUJJQmtRaUlSRUFrQWlJUkVJbUFTQVJFSWlBU0FaRUlpRVJBSkFJaUVSQ0pnRWdFUkNJZ0VnR1JDSWhFUUNRQ0loRVFpWUJJQkVRaUlCSUJrUWlJUkVBa0FpSVJFSW1BU0FSRUlpQVNBWkg4QmhGR1lydW1qbFlkQUFBQUFFbEZUa1N1UW1DQyIsICJzaXplcyI6ICIxOTJ4MTkyIiwgInR5cGUiOiAiaW1hZ2UvcG5nIn0sIHsic3JjIjogImRhdGE6aW1hZ2UvcG5nO2Jhc2U2NCxpVkJPUncwS0dnb0FBQUFOU1VoRVVnQUFBZ0FBQUFJQUNBSUFBQUI3R2tPdEFBQUpYMGxFUVZSNFh1M2FVV29jUnhSQVVTdGtHOUxNL2xjMWFDVWhHSUtKc0pCbHErdFYzWE8rSFZRZHF0N3RhdWJwZG52K0JrRFBYNzFIQnVCZkFnQVFKUUFBVVFJQUVDVUFBRkVDQUJBbEFBQlJBZ0FRSlFBQVVRSUFFQ1VBQUZFQ0FCQWxBQUJSQWdBUUpRQUFVUUlBRUNVQUFGRUNBQkFsQUFCUkFnQVFKUUFBVVFJQUVDVUFBRkVDQUJBbEFBQlJBZ0FRSlFBQVVRSUFFQ1VBQUZFQ0FCQWxBQUJSQWdBUUpRQUFVUUlBRUNVQUFGRUNBQkFsQUFCUkFnQVFKUUFBVVFJQUVDVUFBRkVDQUJBbEFBQlJBZ0FRSlFBQVVRSUFFQ1VBQUZFQ0FCQWxBQUJSQWdBUUpRQUFVUUlBRUNVQUFGRUNBQkFsQUFCUkFnQVFKUUFBVVFJQUVDVUFBRkVDQUJBbEFBQlJBZ0FRSlFBQVVRSUFFQ1VBQUZFQ0FCQWxBQUJSQWdBUUpRQUFVUUlBRUNVQUFGRUNBQkFsQUFCUkFnQVFKUUFBVVFJQUVDVUFBRkVDQUJBbEFBQlJBZ0FRSlFBQVVRSUFFQ1VBQUZFQ0FCQWxBQUJSQWdBUUpRQUFVUUlBRUNVQUFGRUNBQkFsQUFCUkFnQVFKUUFBVVFJQUVDVUFBRkVDQUJBbEFBQlJBZ0FRSlFBQVVRSUFFQ1VBQUZFQ0FCQWxBQUJSQWdBUUpRQUFVUUlBRUNVQUFGRUNBQkFsQUFCUkFnQVFKUUFBVVFJQUVDVUFBRkVDQUJBbEFBQlJBZ0FRSlFBQVVYOUhuNXVTeCtQMWM0OTd2Nzk4N2orRUxUemRiczliTEJSK3lhZUgvcytJQWVjUkFJN3l4K2YrVzByQU1RU0FRMXd3K244a0F4eEFBTmpleGFOZkJqaUdYd0d4dDRYVC85dTN4WDhkZnBNYkFMdGFPL3IveHhjaGR1UUd3SlpHVFg5WEFUWWxBT3huMnZUL2J1YXE0QjBDd0dZbXo5bkphNE8zQklDZHpKK3c4MWNJL3hFQXRySExiTjFsblNBQTdHR3ZxYnJYYXNrU0FEYXc0enpkY2MzVUNBQkFsQUF3M2I2djB2dXVuQWdCWUxUZForanU2K2RzQWdBUUpRRE1kY2JyOHhsUHdaRUVBQ0JLQUJqcXBCZm5rNTZGa3dnQVFKUUFBRVFKQUJPZDk4M2t2Q2ZpQUFJQUVDVUFBRkVDQUJBbEFJeHo2dWZ5VTUrTGZRa0FRSlFBQUVRSkFFQ1VBQUJFQ1FCQWxBQUFSQWtBUUpRQUFFUUpBRUNVQUFCRUNRQkFsQUFBUkFrQVFKUUFBRVFKQUVDVUFBQkVDUUJBbEFBQVJBa0FRSlFBQUVRSkFFQ1VBQUJFQ1FCQWxBQUFSQWtBUUpRQUFFUUpBRUNVQUFCRUNRQkFsQUFBUkFrQVFKUUFBRVFKQUVDVUFBQkVDUUJBbEFBQVJBa0FRSlFBQUVRSkFFQ1VBQUJFQ1FCQWxBQUFSQWtBUUpRQUFFUUpBRUNVQUFCRUNRQkFsQUFBUkFrQVFKUUFBRVFKQUVDVUFBQkVDUUJBbEFBQVJBa0FRSlFBQUVRSkFFQ1VBQUJFQ1FCQWxBQUFSQWtBUUpRQUFFUUpBRUNVQUFCRUNRQkFsQUFBUkFrQVFKUUFBRVFKQUVDVUFBQkVDUUJBbEFBQVJBa0FRSlFBQUVROTNXN1AwVWZmMXVQeHV1M2FPZHo5L25MNEU1NUZBUFpnNkxNZE1aaFBBRVl6OXptQUVvd2xBRU1aL1J4R0JnWVNnSEdNZmc0bUE2UDRGZEFzcGo5bnM4TkhjUU9Zd3NFZ3hWVmdBamVBRVV4L2F1ejVDUVJnUFNlQkpqdC9PUUZZekJtZ3pQNWZTd0JXc3Z2QktWaElBSmF4NytFN1oyRVZBVmpEam9jZk9SRkxDTUFDOWpxODVWeGNUd0FBb2dUZ2FsNXo0R2Vjam9zSndLWHNiM2lmTTNJbEFRQ0lFb0RyZUxXQmozQlNMaU1BQUZFQ2NCRXZOZkJ4enNzMUJBQWdTZ0FBb2dUZ0N1Nno4S3VjbWdzSUFFQ1VBQUJFQ1FCQWxBQjhPWjh5NFhPY25hOG1BQUJSQWdBUUpRQUFVUUlBRUNVQUFGRUNBQkFsQUFCUkFnQVFKUUFBVVFJQUVDVUFBRkVDQUJBbEFBQlJBZ0FRSlFBQVVRSUFFQ1VBQUZFQ0FCQWxBRi91Zm4vNThyOEJKM0oydnBvQUFFUUpBRUNVQUFCRUNjQVZmTXFFWCtYVVhFQUFBS0lFQUNCS0FDN2lQZ3NmNTd4Y1F3QUFvZ1RnT2w1cTRDT2NsTXNJQUVDVUFGektxdzI4enhtNWtnQmN6ZjZHbjNFNkxpWUFBRkVDc0lEWEhIakx1YmllQUt4aHI4T1BuSWdsQkdBWk94NitjeFpXRVlDVjdIdHdDaFlTZ01Yc2ZzcnMvN1VFWUQxbmdDWTdmemtCR01GSm9NYWVuK0RwZG51ZXNBNitlenhlL2EvZ2JFYi9IRzRBc3pnYm5NME9IOFVOWUNoWEFRNWo5QThrQUtQSkFBY3crc2NTZ0Qwb0Fkc3g5K2NUZ1AySUFXTVorbnNSQU1ZNXVIRG1JNlA0RlJCQWxBQUFSQWtBUUpRQUFFUUpBRUNVQUFCRUNRQkFsQUFBUkFrQVFKUUFBRVFKQUVDVUFBQkVDUUJBbEFBQVJBa0FRSlFBQUVRSkFFQ1VBQUJFQ1FCQWxBQUFSQWtBUUpRQUFFUUpBRUNVQUFCRUNRQkFsQUFBUkFrQVFKUUFBRVFKQUVDVUFBQkVDUUJBbEFBQVJBa0FRSlFBQUVRSkFFQ1VBQUJFQ1FCQWxBQUFSQWtBUUpRQUFFUUpBRUNVQUFCRUNRQkFsQUFBUkFrQVFKUUFBRVFKQUVDVUFBQkVDUUJBbEFBQVJBa0FRSlFBQUVRSkFFQ1VBQUJFQ1FCQWxBQUFSQWtBUUpRQUFFUUpBRUNVQUFCRUNRQkFsQUFBUkFrQVFKUUFBRVFKQUVDVUFBQkVDUUJBbEFBQVJBa0FRSlFBQUVRSkFFQ1VBQUJFQ1FCQWxBQUFSQWtBNDl6dkwrUFc5Q2VjK2x6c1N3QUFvZ1FBSUVvQUFLSUVnSW5PKzF4KzNoTnhBQUVBaUJJQWdDZ0JZS2lUdnBtYzlDeWNSQUFBb2dTQXVjNTRjVDdqS1RpU0FBQkVDUUNqN2Y3NnZQdjZPWnNBTU4yK00zVGZsUk1oQUFCUkFzQUdkbnlWM25ITjFBZ0FlOWhybnU2MVdySUVnRzNzTWxWM1dTY0lBRHVaUDF2bnJ4RCtJd0JzWnZLRW5idzJlRXNBMk0vTU9UdHpWZkFPQVdCTDA2YnR0UFhBUnp6ZGJzOGYrWGN3MCtQeHVuWmhSai83Y2dOZ2Iydm43OXEvRHIvSkRZQkRYSHdWTVBvNWdBQndsQXN5WVBSekRBSGdUSCs4Qk9ZKzV4RUF6dmZwR0JqNm5FMEFBS0w4Q2dnZ1NnQUFvZ1FBSUVvQUFLSUVBQ0JLQUFDaUJBQWdTZ0FBb2dRQUlFb0FBS0lFQUNCS0FBQ2lCQUFnU2dBQW9nUUFJRW9BQUtJRUFDQktBQUNpQkFBZ1NnQUFvZ1FBSUVvQUFLSUVBQ0JLQUFDaUJBQWdTZ0FBb2dRQUlFb0FBS0lFQUNCS0FBQ2lCQUFnU2dBQW9nUUFJRW9BQUtJRUFDQktBQUNpQkFBZ1NnQUFvZ1FBSUVvQUFLSUVBQ0JLQUFDaUJBQWdTZ0FBb2dRQUlFb0FBS0lFQUNCS0FBQ2lCQUFnU2dBQW9nUUFJRW9BQUtJRUFDQktBQUNpQkFBZ1NnQUFvZ1FBSUVvQUFLSUVBQ0JLQUFDaUJBQWdTZ0FBb2dRQUlFb0FBS0lFQUNCS0FBQ2lCQUFnU2dBQW9nUUFJRW9BQUtJRUFDQktBQUNpQkFBZ1NnQUFvZ1FBSUVvQUFLSUVBQ0JLQUFDaUJBQWdTZ0FBb2dRQUlFb0FBS0lFQUNCS0FBQ2lCQUFnU2dBQW9nUUFJRW9BQUtJRUFDQktBQUNpQkFBZ1NnQUFvZ1FBSUVvQUFLSUVBQ0JLQUFDaUJBQWdTZ0FBb2dRQUlFb0FBS0lFQUNCS0FBQ2lCQUFnU2dBQW9nUUFJRW9BQUtJRUFDQktBQUNpQkFBZ1NnQUFvZ1FBSUVvQUFLSUVBQ0JLQUFDaUJBQWdTZ0FBb3Y0QjlVdjVjMDZlVzNVQUFBQUFTVVZPUks1Q1lJST0iLCAic2l6ZXMiOiAiNTEyeDUxMiIsICJ0eXBlIjogImltYWdlL3BuZyJ9XX0=">
 <meta name="theme-color" content="#1f1f1d">
@@ -251,7 +275,7 @@ details.fold[open]>summary::before{content:"\25BE  "}
     };
   }
   window.google = { script: { run: run() } };
-  window.APP_VERSION = '0.6.0';
+  window.APP_VERSION = '0.7.0';
   window.APP_HOST = 'GitHub Pages';
 })();
 
@@ -262,8 +286,9 @@ var VERSION = window.APP_VERSION || '';
 var SPECIALTIES = ['Anesthesia', 'Cardiology', 'Nephrology', 'Pulmonology', 'Hematology', 'Endocrinology', 'Neurology', 'Immunology', 'General pediatrics', 'Genetics', 'Other'];
 var TAGS = ['Congenital heart disease', 'Asthmatic', 'Chronic lung disease', 'Kidney disease', 'Bleeding or clotting disorder', 'Sickle cell or thalassemia', 'Epilepsy', 'Developmental delay or cerebral palsy', 'Diabetes', 'Metabolic or endocrine disorder', 'Immunodeficiency', 'Syndromic', 'Prematurity or low weight', 'Trisomy 21', 'Other'];
 // the specialty review a tag adds ('' = none); older tag names kept so existing records still work
-var TAG_SPEC = { 'Congenital heart disease': 'Cardiology', 'Asthmatic': 'Pulmonology', 'Chronic lung disease': 'Pulmonology', 'Kidney disease': 'Nephrology', 'Bleeding or clotting disorder': 'Hematology', 'Sickle cell or thalassemia': 'Hematology', 'Epilepsy': 'Neurology', 'Developmental delay or cerebral palsy': 'Neurology', 'Diabetes': 'Endocrinology', 'Metabolic or endocrine disorder': 'Endocrinology', 'Immunodeficiency': 'Immunology', 'Syndromic': 'General pediatrics', 'Prematurity or low weight': 'General pediatrics', 'Trisomy 21': '', 'Other': '', 'Cardiac': 'Cardiology', 'Asthma': 'Pulmonology', 'Renal': 'Nephrology', 'Hematologic': 'Hematology', 'Neurologic': 'Neurology', 'Prematurity': 'General pediatrics' };
+var TAG_SPEC_DEFAULT = { 'Congenital heart disease': 'Cardiology', 'Asthmatic': 'Pulmonology', 'Chronic lung disease': 'Pulmonology', 'Kidney disease': 'Nephrology', 'Bleeding or clotting disorder': 'Hematology', 'Sickle cell or thalassemia': 'Hematology', 'Epilepsy': 'Neurology', 'Developmental delay or cerebral palsy': 'Neurology', 'Diabetes': 'Endocrinology', 'Metabolic or endocrine disorder': 'Endocrinology', 'Immunodeficiency': 'Immunology', 'Syndromic': 'General pediatrics', 'Prematurity or low weight': 'General pediatrics', 'Trisomy 21': '', 'Other': '', 'Cardiac': 'Cardiology', 'Asthma': 'Pulmonology', 'Renal': 'Nephrology', 'Hematologic': 'Hematology', 'Neurologic': 'Neurology', 'Prematurity': 'General pediatrics' };
 var SPONSOR = ['Bahraini', 'Family of Bahraini', 'Family of government worker', 'Exempted', 'Self-payment', 'Covered by insurance'];
+var SURGEON_ROLES = ['Primary surgeon', 'First assistant', 'Second assistant', 'Supervising consultant'];
 var PRIORITY = ['', 'Clinical', 'Social', 'Age-sensitive', 'Other'];
 var REMOVE_REASONS = ['Patient refused procedure', 'Done in private', 'Not needed', 'Booked and did not attend', 'Called multiple times, no response', 'Transferred to adult services', 'Other'];
 var NOT_READY_REASONS = ['Sick', 'Traveling', 'Busy (exams)', 'Other'];
@@ -272,10 +297,16 @@ var CATS = ['Minor', 'Intermediate', 'Major'];
 var DAYS = ['', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 var MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
+function tagSpec(t) {
+  var links = {};
+  try { links = JSON.parse((S.d && S.d.settings && S.d.settings.tagLinks) || '{}') || {}; } catch (e) { links = {}; }
+  if (Object.prototype.hasOwnProperty.call(links, t)) return links[t];
+  return TAG_SPEC_DEFAULT[t] || '';
+}
 var S = {
   token: null, user: null, d: null, today: '', view: 'list', cons: 'all', loadedAt: 0,
   f: { q: '', chip: '', cat: '', care: '', proc: '', prio: false, wait: '', time: '', age: '', flag: '', med: '', ageFrom: '', ageTo: '' }, sort: 'priority', sortDir: 'asc',
-  doneQ: '', doneStar: false, removedQ: '', calMonth: '', redrawList: null,
+  doneQ: '', doneStar: false, removedQ: '', dn: { proc: '', cons: '', year: '' }, rm: { reason: '' }, lbName: '', calMonth: '', redrawList: null,
   dashCons: 'all', dashYear: '', idleTimer: null, backup: null, setTab: 'consultants'
 };
 
@@ -1074,48 +1105,213 @@ function viewWarn() {
   bindRows($('view'));
 }
 
+// ---------------------------------------------------------------- done cases
+function doneYears() {
+  var y = {}; S.d.patients.forEach(function (p) { if (p.Status === 'Done' && p.DoneDate) y[p.DoneDate.slice(0, 4)] = true; });
+  return Object.keys(y).sort().reverse();
+}
+function doneList() {
+  var q = S.doneQ.toLowerCase(), f = S.dn;
+  return S.d.patients.filter(function (p) {
+    return p.Status === 'Done' && (!q || (p.Name + ' ' + p.MRN).toLowerCase().indexOf(q) >= 0) && (!S.doneStar || p.Starred) &&
+      (!f.proc || p.ProcedureId === f.proc) && (!f.cons || p.ConsultantId === f.cons) && (!f.year || (p.DoneDate || '').slice(0, 4) === f.year);
+  }).sort(function (a, b) { return (b.DoneDate || '').localeCompare(a.DoneDate || ''); });
+}
+function ageAt(p, date) { var m = ageMonths(p.DOB, date || S.today); return m < 24 ? m + 'm' : Math.floor(m / 12) + 'y'; }
 function viewDone() {
-  $('view').innerHTML = '<h2>Done cases</h2>' +
+  $('view').innerHTML = '<div class="spread"><h2>Done cases</h2><div class="row"><button id="dn_log">Surgeon logbook</button><button id="dn_x">Export Excel</button></div></div>' +
     '<div class="filters"><input type="text" id="dq" placeholder="Search name or MRN" value="' + esc(S.doneQ) + '">' +
     '<label class="check" style="padding-top:8px"><input type="checkbox" id="dstar"' + (S.doneStar ? ' checked' : '') + '> Starred for case report</label></div>' +
     '<div id="doneBody"></div>';
   $('dq').addEventListener('input', function () { S.doneQ = this.value; doneBody(); });
   $('dstar').addEventListener('change', function () { S.doneStar = this.checked; doneBody(); });
+  $('dn_log').addEventListener('click', function () { dlgLogbook(); });
+  $('dn_x').addEventListener('click', function () { exportPatients('done-cases', doneList()); });
   doneBody();
 }
 function doneBody() {
-  var q = S.doneQ.toLowerCase();
-  var list = S.d.patients.filter(function (p) {
-    return p.Status === 'Done' && (!q || (p.Name + ' ' + p.MRN).toLowerCase().indexOf(q) >= 0) && (!S.doneStar || p.Starred);
-  }).sort(function (a, b) { return (b.DoneDate || '').localeCompare(a.DoneDate || ''); });
-  $('doneBody').innerHTML = list.length ?
-    '<table class="tbl"><thead><tr><th>Patient</th><th>Procedure</th><th>Consultant</th><th>Done</th><th>Notes</th></tr></thead><tbody>' +
-    list.map(function (p) {
-      return '<tr class="click" data-id="' + esc(p.Id) + '"><td>' + (p.Starred ? '<span class="chip amber">★</span>' : '') + '<strong>' + esc(p.Name) + '</strong><br><span class="muted small">' + esc(ageText(p.DOB)) + ' · ' + esc(p.MRN) + '</span></td>' +
-        '<td>' + esc(procLabel(p)) + '</td><td>' + esc(consName(p.ConsultantId)) + '</td><td>' + esc(fmtDate(p.DoneDate)) + '</td><td>' + esc(p.DoneNotes) + '</td></tr>';
-    }).join('') + '</tbody></table>' : '<p class="muted">No done cases yet.</p>';
-  bindRows($('doneBody'));
+  var list = doneList(), f = S.dn;
+  var chips = [];
+  if (f.proc) chips.push(['proc', (procById(f.proc) || {}).Name || 'Procedure']);
+  if (f.cons) chips.push(['cons', consName(f.cons)]);
+  if (f.year) chips.push(['year', f.year]);
+  function th(col, label, on_) { return '<th><button type="button" class="hbtn' + (on_ ? ' fon' : '') + '" data-col="' + col + '">' + label + ' <span class="car">&#9662;</span></button></th>'; }
+  var rowsHtml;
+  if (!list.length) rowsHtml = '<p class="muted">No done cases match.</p>';
+  else if (useTable()) {
+    rowsHtml = '<table class="tbl dn"><thead><tr>' + th('year', 'Date', f.year) + '<th>Patient</th><th>Age</th>' + th('proc', 'Procedure', f.proc) + '<th>Type</th>' + th('cons', 'Consultant', f.cons) + '<th>Surgeons</th><th></th></tr></thead><tbody>' +
+      list.map(function (p) {
+        return '<tr class="click" data-dn="' + esc(p.Id) + '"><td>' + esc(fmtDate(p.DoneDate)) + '</td>' +
+          '<td><strong>' + esc(p.Name) + '</strong><br><span class="muted small">' + esc(p.MRN) + '</span></td><td>' + esc(ageAt(p, p.DoneDate)) + '</td><td>' + esc(procLabel(p)) + '</td><td>' + typeHtml(p) + '</td>' +
+          '<td>' + esc(consName(p.ConsultantId)) + '</td><td>' + surgeonsHtml(p) + '</td><td>' + (p.Starred ? '<span class="chip amber">★</span>' : '') + '</td></tr>';
+      }).join('') + '</tbody></table>';
+  } else {
+    rowsHtml = '<div class="cards">' + list.map(function (p) {
+      return '<div class="card" data-dn="' + esc(p.Id) + '"><div class="spread"><div class="name">' + (p.Starred ? '★ ' : '') + esc(p.Name) + ' <span class="muted small">· ' + esc(ageAt(p, p.DoneDate)) + '</span></div><span class="muted small">' + esc(fmtDate(p.DoneDate)) + '</span></div>' +
+        '<div class="muted small">' + esc(p.MRN) + ' · ' + esc(consName(p.ConsultantId)) + '</div><div class="small">' + esc(procLabel(p)) + ' · ' + careShort(p) + '</div><div class="small" style="margin-top:4px">' + surgeonsHtml(p) + '</div></div>';
+    }).join('') + '</div>';
+  }
+  $('doneBody').innerHTML = (chips.length ? '<div class="afrow">' + chips.map(function (c) { return '<button type="button" class="chip afc" data-xf="' + c[0] + '">' + esc(c[1]) + ' &times;</button>'; }).join('') + '</div>' : '') +
+    '<p class="muted small">' + list.length + (list.length === 1 ? ' case' : ' cases') + '</p>' + rowsHtml;
+  on($('doneBody'), '[data-xf]', 'click', function (e) { S.dn[e.currentTarget.getAttribute('data-xf')] = ''; doneBody(); });
+  on($('doneBody'), '[data-dn]', 'click', function (e) { dlgDone(getP(e.currentTarget.getAttribute('data-dn')), null, true); });
+  on($('doneBody'), '[data-col]', 'click', function (e) {
+    e.stopPropagation();
+    var c = e.currentTarget.getAttribute('data-col'), items = [];
+    if (c === 'proc') {
+      items.push({ label: 'All procedures', on: !f.proc, fn: function () { f.proc = ''; doneBody(); } });
+      S.d.procedures.forEach(function (pr) { items.push({ label: pr.Name, on: f.proc === pr.Id, fn: function () { f.proc = pr.Id; doneBody(); } }); });
+    } else if (c === 'cons') {
+      items.push({ label: 'All consultants', on: !f.cons, fn: function () { f.cons = ''; doneBody(); } });
+      S.d.consultants.forEach(function (x) { items.push({ label: x.Name, on: f.cons === x.Id, fn: function () { f.cons = x.Id; doneBody(); } }); });
+    } else {
+      items.push({ label: 'All years', on: !f.year, fn: function () { f.year = ''; doneBody(); } });
+      doneYears().forEach(function (y) { items.push({ label: y, on: f.year === y, fn: function () { f.year = y; doneBody(); } }); });
+    }
+    pickMenu(c === 'proc' ? 'Procedure' : c === 'cons' ? 'Consultant' : 'Year', items);
+  });
+}
+function surgeonsHtml(p) {
+  var a = surgeonIn(p, 'Primary surgeon'), b = surgeonIn(p, 'First assistant');
+  if (!a && !b) return '<span class="muted small">Add surgeons</span>';
+  return (a ? '<div class="small"><span class="muted">Primary</span> ' + esc(a) + '</div>' : '') + (b ? '<div class="small"><span class="muted">1st assistant</span> ' + esc(b) + '</div>' : '');
 }
 
+/** Mark done (from the theatre list or the patient window), or open a done case to add or correct surgeons (edit = true). */
+function dlgDone(p, after, edit) {
+  var l = p.ListId ? listById(p.ListId) : null;
+  var defDate = edit ? (p.DoneDate || S.today) : (l && l.Date <= S.today ? l.Date : S.today);
+  var sg = edit ? surgeonsOf(p).slice() : [];
+  if (!sg.length) sg = [{ role: 'Primary surgeon', name: '' }, { role: 'First assistant', name: '' }];
+  var pool = surgeonPool();
+  var m = openModal('<h2>' + (edit ? 'Done case' : 'Mark done') + '</h2><p class="muted small">' + esc(p.Name) + ' · ' + esc(p.MRN) + ' · ' + esc(procLabel(p)) + '</p>' +
+    '<div class="field"><label for="d_date">Date of procedure</label><input type="date" id="d_date" value="' + esc(defDate) + '"></div>' +
+    '<datalist id="d_pool">' + pool.map(function (n) { return '<option value="' + esc(n) + '">'; }).join('') + '</datalist>' +
+    '<h3 style="margin-top:6px">Surgeons</h3><p class="muted small" style="margin:2px 0 6px">In order. Choose from the list or type a name. Can be added or corrected later from the Done page.</p><div id="d_sg"></div>' +
+    '<div class="row" style="margin:6px 0"><button type="button" id="d_addsg">+ Add surgeon</button></div>' +
+    '<div class="field"><label for="d_notes">Notes: outcome or complications (optional)</label><textarea id="d_notes">' + esc(edit ? p.DoneNotes : '') + '</textarea></div>' +
+    (edit ? '<label class="check"><input type="checkbox" id="d_star"' + (p.Starred ? ' checked' : '') + '> Starred for case report</label>' : '') +
+    '<div class="row" style="margin-top:10px"><button class="primary" id="d_go">' + (edit ? 'Save' : 'Mark done') + '</button><button id="d_cancel">Cancel</button>' + (edit ? '<button id="d_open">Open patient file</button>' : '') + '</div>', { narrow: true });
+  function read() {
+    var rows = m.el.querySelectorAll('.sgrow'), out = [];
+    for (var i = 0; i < rows.length; i++) out.push({ role: rows[i].querySelector('.sg_role').value, name: rows[i].querySelector('.sg_name').value.trim() });
+    return out;
+  }
+  function draw() {
+    $('d_sg').innerHTML = sg.map(function (x, i) {
+      return '<div class="sgrow"><select class="sg_role">' + SURGEON_ROLES.map(function (r) { return opt(r, r, r === x.role); }).join('') + '</select>' +
+        '<input type="text" class="sg_name" list="d_pool" value="' + esc(x.name) + '" placeholder="Name"><button type="button" class="sg_x" data-i="' + i + '" title="Remove">&times;</button></div>';
+    }).join('');
+    on($('d_sg'), '.sg_x', 'click', function (e) { sg = read(); sg.splice(+e.currentTarget.getAttribute('data-i'), 1); draw(); });
+  }
+  draw();
+  $('d_addsg').addEventListener('click', function () {
+    sg = read();
+    var next = SURGEON_ROLES.filter(function (r) { return !sg.some(function (x) { return x.role === r; }); })[0] || 'Second assistant';
+    sg.push({ role: next, name: '' }); draw();
+  });
+  $('d_cancel').addEventListener('click', m.close);
+  if (edit) $('d_open').addEventListener('click', function () { m.close(); openPatient(p.Id); });
+  $('d_go').addEventListener('click', function () {
+    var surgeons = read().filter(function (x) { return x.name; });
+    var payload = { patientId: p.Id, date: val('d_date'), notes: val('d_notes'), surgeons: surgeons };
+    if (edit) payload.starred = checked('d_star');
+    $('d_go').disabled = true;
+    call(edit ? 'saveDone' : 'markDone', payload).then(function (r) {
+      upsertP(r); m.close(); if (after) after(); render(); toast(edit ? 'Saved' : 'Moved to done cases');
+    }).catch(function (e) { $('d_go').disabled = false; fail(e); });
+  });
+}
+
+// ---------------------------------------------------------------- surgeon logbook
+function dlgLogbook(preset) {
+  var pool = surgeonPool();
+  var st = { name: preset || S.lbName || pool[0] || '', year: '' };
+  var m = openModal('<div id="lb_body"></div>');
+  m.el.style.maxWidth = '900px';
+  function entries() {
+    var out = [];
+    S.d.patients.forEach(function (p) {
+      if (p.Status !== 'Done') return;
+      surgeonsOf(p).forEach(function (x) { if (x.name === st.name && (!st.year || (p.DoneDate || '').slice(0, 4) === st.year)) out.push({ p: p, role: x.role }); });
+    });
+    return out.sort(function (a, b) { return (b.p.DoneDate || '').localeCompare(a.p.DoneDate || ''); });
+  }
+  function years() { var y = {}; S.d.patients.forEach(function (p) { if (p.Status === 'Done' && p.DoneDate && surgeonsOf(p).some(function (x) { return x.name === st.name; })) y[p.DoneDate.slice(0, 4)] = true; }); return Object.keys(y).sort().reverse(); }
+  function draw() {
+    var es = entries(), byRole = {}, byProc = {};
+    es.forEach(function (e) { byRole[e.role] = (byRole[e.role] || 0) + 1; var k = e.p.Procedure; byProc[k] = byProc[k] || {}; byProc[k][e.role] = (byProc[k][e.role] || 0) + 1; byProc[k].total = (byProc[k].total || 0) + 1; });
+    var ys = years();
+    $('lb_body').innerHTML = '<div class="spread"><h2>Surgeon logbook</h2><button id="lb_close">Close</button></div>' +
+      '<div class="filters"><div class="field"><label for="lb_who">Surgeon</label><select id="lb_who">' + (pool.length ? pool.map(function (n) { return opt(n, n, n === st.name); }).join('') : opt('', 'No surgeons yet', true)) + '</select></div>' +
+      '<div class="field"><label for="lb_year">Year</label><select id="lb_year">' + opt('', 'All years', !st.year) + ys.map(function (y) { return opt(y, y, y === st.year); }).join('') + '</select></div></div>' +
+      '<div class="row" style="margin-bottom:8px"><button id="lb_xl"' + (es.length ? '' : ' disabled') + '>Export Excel</button><button id="lb_pdf"' + (es.length ? '' : ' disabled') + '>Export PDF</button></div>' +
+      (es.length ? '<div class="tiles"><div class="tile"><div class="n">' + es.length + '</div><div class="l">Cases</div></div>' +
+        SURGEON_ROLES.map(function (r) { return '<div class="tile"><div class="n">' + (byRole[r] || 0) + '</div><div class="l">' + esc(r) + '</div></div>'; }).join('') + '</div>' +
+        '<h3>By procedure</h3><table class="tbl"><thead><tr><th>Procedure</th><th>Total</th>' + SURGEON_ROLES.map(function (r) { return '<th>' + esc(r) + '</th>'; }).join('') + '</tr></thead><tbody>' +
+        Object.keys(byProc).sort(function (a, b) { return byProc[b].total - byProc[a].total; }).map(function (k) { return '<tr><td>' + esc(k) + '</td><td>' + byProc[k].total + '</td>' + SURGEON_ROLES.map(function (r) { return '<td>' + (byProc[k][r] || '') + '</td>'; }).join('') + '</tr>'; }).join('') + '</tbody></table>' +
+        '<h3 style="margin-top:12px">Cases</h3><table class="tbl"><thead><tr><th>Date</th><th>MRN</th><th>Age</th><th>Procedure</th><th>Role</th></tr></thead><tbody>' +
+        es.map(function (e) { return '<tr class="click" data-dn="' + esc(e.p.Id) + '"><td>' + esc(fmtDate(e.p.DoneDate)) + '</td><td>' + esc(e.p.MRN) + '</td><td>' + esc(ageAt(e.p, e.p.DoneDate)) + '</td><td>' + esc(procLabel(e.p)) + '</td><td>' + esc(e.role) + '</td></tr>'; }).join('') + '</tbody></table>'
+        : '<p class="muted">No cases in the logbook of ' + esc(st.name || 'this surgeon') + ' yet. Add surgeons when marking a case done, or from the Done page.</p>');
+    $('lb_close').addEventListener('click', m.close);
+    $('lb_who').addEventListener('change', function () { st.name = this.value; S.lbName = st.name; st.year = ''; draw(); });
+    $('lb_year').addEventListener('change', function () { st.year = this.value; draw(); });
+    on($('lb_body'), '[data-dn]', 'click', function (e) { dlgDone(getP(e.currentTarget.getAttribute('data-dn')), function () { draw(); }, true); });
+    var rowsFor = function () { return es.map(function (e) { return [e.p.DoneDate, e.p.MRN, ageAt(e.p, e.p.DoneDate), procLabel(e.p), e.role]; }); };
+    var fname = 'logbook-' + st.name.replace(/[^A-Za-z0-9]+/g, '-').replace(/^-|-$/g, '');
+    if ($('lb_xl')) $('lb_xl').addEventListener('click', function () {
+      var sum = [['Procedure', 'Total'].concat(SURGEON_ROLES)];
+      Object.keys(byProc).sort(function (a, b) { return byProc[b].total - byProc[a].total; }).forEach(function (k) { sum.push([k, byProc[k].total].concat(SURGEON_ROLES.map(function (r) { return byProc[k][r] || 0; }))); });
+      exportXlsx(fname, [{ name: 'Logbook', rows: [['Date', 'MRN', 'Age', 'Procedure', 'Role']].concat(rowsFor()) }, { name: 'Counts', rows: sum }]);
+    });
+    if ($('lb_pdf')) $('lb_pdf').addEventListener('click', function () {
+      var cvs = renderTableDoc({ title: 'Surgeon logbook', lines: [st.name + (st.year ? ' · ' + st.year : ''), es.length + ' cases · ' + SURGEON_ROLES.map(function (r) { return (byRole[r] || 0) + ' ' + r.toLowerCase(); }).join(' · ')],
+        cols: [{ h: 'Date', w: 0.14 }, { h: 'MRN', w: 0.16 }, { h: 'Age', w: 0.08 }, { h: 'Procedure', w: 0.38 }, { h: 'Role', w: 0.24 }],
+        rows: rowsFor().map(function (r) { r[0] = fmtDate(r[0]); return r; }), footer: 'Generated ' + fmtDate(S.today) + ' · MRN and age only' }, 1754);
+      shareOrSave(pdfFromCanvases(cvs), fname + '.pdf');
+    });
+  }
+  draw();
+}
+
+// ---------------------------------------------------------------- removed
 function viewRemoved() {
-  $('view').innerHTML = '<h2>Removed from the list</h2>' +
+  $('view').innerHTML = '<div class="spread"><h2>Removed from the list</h2><button id="rm_x">Export Excel</button></div>' +
     '<div class="filters"><input type="text" id="rq" placeholder="Search name or MRN" value="' + esc(S.removedQ) + '"></div><div id="remBody"></div>';
   $('rq').addEventListener('input', function () { S.removedQ = this.value; remBody(); });
+  $('rm_x').addEventListener('click', function () { exportPatients('removed', remList()); });
   remBody();
 }
-function remBody() {
+function remList() {
   var q = S.removedQ.toLowerCase();
-  var list = S.d.patients.filter(function (p) {
-    return p.Status === 'Removed' && (!q || (p.Name + ' ' + p.MRN).toLowerCase().indexOf(q) >= 0);
+  return S.d.patients.filter(function (p) {
+    return p.Status === 'Removed' && (!q || (p.Name + ' ' + p.MRN).toLowerCase().indexOf(q) >= 0) && (!S.rm.reason || p.RemovedReason === S.rm.reason);
   }).sort(function (a, b) { return (b.RemovedDate || '').localeCompare(a.RemovedDate || ''); });
-  $('remBody').innerHTML = list.length ?
-    '<table class="tbl"><thead><tr><th>Patient</th><th>Procedure</th><th>Reason</th><th>Removed</th><th></th></tr></thead><tbody>' +
-    list.map(function (p) {
-      return '<tr class="click" data-id="' + esc(p.Id) + '"><td><strong>' + esc(p.Name) + '</strong><br><span class="muted small">' + esc(ageText(p.DOB)) + ' · ' + esc(p.MRN) + '</span></td>' +
-        '<td>' + esc(procLabel(p)) + '</td><td>' + esc(p.RemovedReason) + (p.RemovedNote ? '<br><span class="muted small">' + esc(p.RemovedNote) + '</span>' : '') + '</td>' +
-        '<td>' + esc(fmtDate(p.RemovedDate)) + '</td><td><button data-restore="' + esc(p.Id) + '">Restore</button></td></tr>';
-    }).join('') + '</tbody></table>' : '<p class="muted">Nobody has been removed.</p>';
+}
+function remBody() {
+  var list = remList();
+  var head = '<th>Patient</th><th>Age</th><th>Procedure</th><th><button type="button" class="hbtn' + (S.rm.reason ? ' fon' : '') + '" data-col="reason">Reason <span class="car">&#9662;</span></button></th><th>Removed</th><th>By</th><th></th>';
+  $('remBody').innerHTML = (S.rm.reason ? '<div class="afrow"><button type="button" class="chip afc" data-xf="1">' + esc(S.rm.reason) + ' &times;</button></div>' : '') +
+    '<p class="muted small">' + list.length + (list.length === 1 ? ' patient' : ' patients') + '</p>' +
+    (!list.length ? '<p class="muted">Nobody has been removed.</p>' : useTable() ?
+      '<table class="tbl rm"><thead><tr>' + head + '</tr></thead><tbody>' +
+      list.map(function (p) {
+        return '<tr class="click" data-id="' + esc(p.Id) + '"><td><strong>' + esc(p.Name) + '</strong><br><span class="muted small">' + esc(p.MRN) + ' · ' + esc(consName(p.ConsultantId)) + '</span></td><td>' + esc(ageText(p.DOB)) + '</td>' +
+          '<td>' + esc(procLabel(p)) + '</td><td>' + esc(p.RemovedReason) + (p.RemovedNote ? '<br><span class="muted small">' + esc(p.RemovedNote) + '</span>' : '') + '</td>' +
+          '<td>' + esc(fmtDate(p.RemovedDate)) + '</td><td class="small">' + esc(p.UpdatedBy) + '</td><td><button data-restore="' + esc(p.Id) + '">Restore</button></td></tr>';
+      }).join('') + '</tbody></table>' :
+      '<div class="cards">' + list.map(function (p) {
+        return '<div class="card" data-id="' + esc(p.Id) + '"><div class="spread"><div class="name">' + esc(p.Name) + ' <span class="muted small">· ' + esc(ageText(p.DOB)) + '</span></div><span class="muted small">' + esc(fmtDate(p.RemovedDate)) + '</span></div>' +
+          '<div class="muted small">' + esc(p.MRN) + '</div><div class="small">' + esc(procLabel(p)) + '</div><div class="small">' + esc(p.RemovedReason) + '</div><div class="row" style="margin-top:6px"><button data-restore="' + esc(p.Id) + '">Restore</button></div></div>';
+      }).join('') + '</div>');
   bindRows($('remBody'));
+  on($('remBody'), '[data-xf]', 'click', function () { S.rm.reason = ''; remBody(); });
+  on($('remBody'), '[data-col]', 'click', function (e) {
+    e.stopPropagation();
+    var items = [{ label: 'All reasons', on: !S.rm.reason, fn: function () { S.rm.reason = ''; remBody(); } }];
+    REMOVE_REASONS.forEach(function (r) { items.push({ label: r, on: S.rm.reason === r, fn: function () { S.rm.reason = r; remBody(); } }); });
+    pickMenu('Reason', items);
+  });
   on($('remBody'), '[data-restore]', 'click', function (e) {
     e.stopPropagation();
     var id = e.currentTarget.getAttribute('data-restore');
@@ -1162,7 +1358,7 @@ function openPatient(id, opts) {
     '<div id="f_medbox"><label>Conditions (each adds its specialty review as not cleared)</label><div class="tagrows">' +
     allTags.map(function (t) {
       var on_ = tags.indexOf(t) >= 0;
-      return '<div class="tagrow"><label class="check"><input type="checkbox" class="f_tag" value="' + esc(t) + '"' + (on_ ? ' checked' : '') + '> ' + esc(t) + (TAG_SPEC[t] ? ' <span class="muted small">(' + esc(TAG_SPEC[t].toLowerCase()) + ')</span>' : '') + '</label>' +
+      return '<div class="tagrow"><label class="check"><input type="checkbox" class="f_tag" value="' + esc(t) + '"' + (on_ ? ' checked' : '') + '> ' + esc(t) + (tagSpec(t) ? ' <span class="muted small">(' + esc(tagSpec(t).toLowerCase()) + ')</span>' : '') + '</label>' +
         '<input type="text" class="f_tnote" data-t="' + esc(t) + '" placeholder="Details, for example TOF" value="' + esc(tnotes[t] || '') + '"' + (on_ ? '' : ' style="display:none"') + '></div>';
     }).join('') + '</div></div></div>' +
 
@@ -1291,7 +1487,7 @@ function openPatient(id, opts) {
   $('f_med').addEventListener('change', medChanged);
   medChanged();
   on(m.el, '.f_tag', 'change', function (e) {
-    var el = e.currentTarget, t = el.value, spec = TAG_SPEC[t] || '';
+    var el = e.currentTarget, t = el.value, spec = tagSpec(t);
     var note = m.el.querySelector('.f_tnote[data-t="' + t.replace(/"/g, '') + '"]');
     if (note) { note.style.display = el.checked ? '' : 'none'; if (el.checked) note.focus(); }
     if (!spec) return;
@@ -1299,7 +1495,7 @@ function openPatient(id, opts) {
     if (el.checked) {
       if (!cl.some(function (c) { return c.spec === spec; })) cl.push({ spec: spec, state: 'Requested', apptDate: '', doctor: '' });
     } else {
-      var other = checkedTags().some(function (x) { return TAG_SPEC[x] === spec; });
+      var other = checkedTags().some(function (x) { return tagSpec(x) === spec; });
       if (!other) cl = cl.filter(function (c) { return !(c.spec === spec && c.state === 'Requested'); });
     }
     drawCl(); $('fd_cl').open = true;
@@ -1398,7 +1594,7 @@ function openPatient(id, opts) {
       bind('a_nr', function () { dlgNotReady(cur, m); });
       bind('a_off', function () { dlgTakeOff(cur, function () { m.close(); }); });
       bind('a_send', function () { dlgSendToList(cur, function () { m.close(); }); });
-      bind('a_done', function () { dlgDone(cur, m); });
+      bind('a_done', function () { dlgDone(cur, function () { m.close(); }); });
       bind('a_rem', function () { dlgRemove(cur, m); });
       bind('a_back', function () {
         call('clearNotReady', { patientId: cur.Id }).then(function (r) { upsertP(r.patient); m.close(); render(); toast('Back on the list'); }).catch(fail);
@@ -1434,18 +1630,6 @@ function dlgNotReady(p, parent) {
     }).catch(fail);
   });
 }
-function dlgDone(p, parent) {
-  var m = openModal('<h2>Mark done</h2>' +
-    '<div class="field"><label for="d_date">Date of procedure</label><input type="date" id="d_date" value="' + esc(S.today) + '"></div>' +
-    '<div class="field"><label for="d_notes">Notes (optional)</label><textarea id="d_notes"></textarea></div>' +
-    '<div class="row"><button class="primary" id="d_go">Save</button><button id="d_cancel">Cancel</button></div>', { narrow: true });
-  $('d_cancel').addEventListener('click', m.close);
-  $('d_go').addEventListener('click', function () {
-    call('markDone', { patientId: p.Id, date: val('d_date'), notes: val('d_notes') }).then(function (r) {
-      upsertP(r); m.close(); parent.close(); render(); toast('Moved to done cases');
-    }).catch(fail);
-  });
-}
 function dlgRemove(p, parent) {
   var m = openModal('<h2>Remove from the list</h2><p class="muted small">You can restore the patient later from the Removed page.</p>' +
     '<div class="field"><label for="r_reason">Reason</label><select id="r_reason">' + REMOVE_REASONS.map(function (s) { return opt(s, s); }).join('') + '</select></div>' +
@@ -1468,6 +1652,7 @@ function viewSettings() {
     '<div class="panel stab" data-t="consultants"><div class="spread"><h3>Pediatric surgery consultants and operating days</h3><button id="s_addcons">Add consultant</button></div><div id="s_cons"></div></div>' +
     '<div class="panel stab" data-t="consultants"><h3>Specialty consultants (pediatrics and other specialties)</h3><p class="muted small">Chosen when a medical review is requested. Anesthesia has no consultant name.</p><div id="s_sc"></div>' +
     '<div class="row" style="margin-top:8px"><input type="text" id="s_scname" placeholder="Doctor name" style="max-width:240px"><select id="s_scspec" style="max-width:200px">' + SPECIALTIES.filter(function (x) { return x !== 'Anesthesia'; }).map(function (x) { return opt(x, x); }).join('') + '</select><button id="s_addsc">Add</button></div></div>' +
+    '<div class="panel stab" data-t="tags"><h3>Medical tags and the review each one adds</h3><p class="muted small">When a tag is ticked on a patient, the linked specialty review is added as not cleared. Choose "No review" for a tag that adds nothing.</p><div id="s_tags"></div><button id="tg_save" style="margin-top:8px">Save tag links</button></div>' +
     '<div class="panel stab" data-t="rooms"><div class="spread"><h3>Operating rooms</h3></div><div id="s_rooms"></div>' +
     '<div class="row" style="margin-top:8px"><input type="text" id="s_roomname" placeholder="Room name, for example OT 1" style="max-width:260px"><button id="s_addroom">Add room</button></div></div>' +
     '<div class="panel stab" data-t="consultants"><div class="spread"><h3>Residents</h3></div><div id="s_res"></div>' +
@@ -1482,17 +1667,17 @@ function viewSettings() {
     '<div class="grid3"><div class="field"><label for="t_idle">Sign out after idle (minutes, 0 = never)</label><input type="number" id="t_idle" min="0" value="' + esc(st.idleMinutes) + '"></div>' +
     '<div class="field"><label for="t_ahead">Create OT-day lists this many weeks ahead (0 = off)</label><input type="number" id="t_ahead" min="0" max="52" value="' + esc(st.listsAheadWeeks) + '"></div></div>' +
     '<button id="t_save">Save thresholds</button></div>' +
-    '<div class="panel stab" data-t="data"><h3>Data</h3><div class="row"><button id="x_import" class="primary">Import from Excel or CSV</button></div><div class="row" style="margin-top:8px"><button id="x_wait">Export waiting list (CSV)</button><button id="x_done">Export done cases (CSV)</button><button id="x_rem">Export removed (CSV)</button></div>' +
+    '<div class="panel stab" data-t="data"><h3>Data</h3><div class="row"><button id="x_import" class="primary">Import from Excel or CSV</button></div><div class="row" style="margin-top:8px"><button id="x_wait">Export waiting list (Excel)</button><button id="x_done">Export done cases (Excel)</button><button id="x_rem">Export removed (Excel)</button></div>' +
     (admin ? '<div class="row"><button id="x_sample">Add sample patients</button><button id="x_clear" class="danger">Remove all sample patients</button></div>' : '') + '</div>' +
     (admin ? '<div class="panel stab" data-t="users"><h3>Backup</h3><p class="muted small">Makes a copy of the whole Google Sheet in a Drive folder called "Waiting list backups" (the newest 14 are kept). The copies stay in the same Google account and contain patient data, so they follow the same data-location rules as the Sheet.</p><p id="bk_info" class="small">Loading…</p><div class="row"><button id="bk_now">Back up now</button><button id="bk_daily">Daily backup</button></div></div>' : '') +
     (admin ? '<div class="panel stab" data-t="users"><div class="spread"><h3>Users</h3><button id="u_add">Add doctor</button></div><div id="u_list"><p class="muted small">Loading…</p></div></div>' +
-      '<div class="panel stab" data-t="users"><div class="spread"><h3>Audit log</h3><button id="a_load">Show recent changes</button></div><div id="a_list"></div></div>' : '') +
+      '<div class="panel stab" data-t="users"><div class="spread"><h3>Audit log</h3><div class="row"><button id="a_load">Show recent changes</button><button id="a_x">Export Excel</button></div></div><div id="a_list"></div></div>' : '') +
     '<div class="panel stab" data-t="users"><h3>My account</h3><p class="muted small">' + esc(S.user.Name) + ' · ' + esc(S.user.Email) + ' · ' + esc(S.user.Role) + ' · app v' + esc(VERSION) + '</p>' +
     '<div class="grid3"><div class="field"><label for="m_old">Current PIN</label><input type="password" id="m_old"></div>' +
     '<div class="field"><label for="m_new">New PIN</label><input type="password" id="m_new"></div>' +
     '<div class="field"><label>&nbsp;</label><button id="m_go">Change PIN</button></div></div></div>';
 
-  drawProcs(); drawCons(); drawRes(); drawRooms(); drawSC();
+  drawProcs(); drawCons(); drawRes(); drawRooms(); drawSC(); drawTags();
   function showSetTab() {
     var ps = document.querySelectorAll('.stab'); for (var i = 0; i < ps.length; i++) ps[i].classList.toggle('hid', ps[i].getAttribute('data-t') !== S.setTab);
     var ts = document.querySelectorAll('#s_tabs .pill'); for (var j = 0; j < ts.length; j++) ts[j].classList.toggle('on', ts[j].getAttribute('data-t') === S.setTab);
@@ -1515,9 +1700,9 @@ function viewSettings() {
     call('saveSettings', { waitDaysMinor: val('t_min'), waitDaysIntermediate: val('t_int'), waitDaysMajor: val('t_maj'), noContactDays: val('t_nc'), targetWarnDays: val('t_tg'), warn14Months: val('t_14'), idleMinutes: val('t_idle'), listsAheadWeeks: val('t_ahead') })
       .then(function (s) { S.d.settings = s; resetIdle(); toast('Saved'); }).catch(fail);
   });
-  $('x_wait').addEventListener('click', function () { exportCsv('waiting-list', S.d.patients.filter(isActive)); });
-  $('x_done').addEventListener('click', function () { exportCsv('done-cases', S.d.patients.filter(function (p) { return p.Status === 'Done'; })); });
-  $('x_rem').addEventListener('click', function () { exportCsv('removed', S.d.patients.filter(function (p) { return p.Status === 'Removed'; })); });
+  $('x_wait').addEventListener('click', function () { exportPatients('waiting-list', S.d.patients.filter(isActive)); });
+  $('x_done').addEventListener('click', function () { exportPatients('done-cases', S.d.patients.filter(function (p) { return p.Status === 'Done'; })); });
+  $('x_rem').addEventListener('click', function () { exportPatients('removed', S.d.patients.filter(function (p) { return p.Status === 'Removed'; })); });
   $('m_go').addEventListener('click', function () {
     call('changePin', { oldPin: $('m_old').value, newPin: $('m_new').value }).then(function () { $('m_old').value = ''; $('m_new').value = ''; toast('PIN changed'); }).catch(fail);
   });
@@ -1544,6 +1729,11 @@ function viewSettings() {
     });
     $('u_add').addEventListener('click', function () { userModal(); });
     drawUsers();
+    $('a_x').addEventListener('click', function () {
+      call('getAudit').then(function (rows) {
+        exportXlsx('audit-log', [{ name: 'Audit log', rows: [['When', 'Who', 'What', 'Details']].concat(rows.map(function (r) { return [r.At ? new Date(r.At).toLocaleString() : '', r.User, r.Action, r.Details]; })) }]);
+      }).catch(fail);
+    });
     $('a_load').addEventListener('click', function () {
       call('getAudit').then(function (rows) {
         $('a_list').innerHTML = '<table class="tbl" style="margin-top:8px"><thead><tr><th>When</th><th>Who</th><th>What</th><th>Details</th></tr></thead><tbody>' +
@@ -1555,7 +1745,19 @@ function viewSettings() {
     });
   }
 }
-var SET_TABS = [['consultants', 'Consultants'], ['procedures', 'Procedures'], ['warnings', 'Warnings'], ['rooms', 'Operating rooms'], ['users', 'Users and account'], ['data', 'Data']];
+var SET_TABS = [['consultants', 'Consultants'], ['procedures', 'Procedures'], ['tags', 'Tags'], ['warnings', 'Warnings'], ['rooms', 'Operating rooms'], ['users', 'Users and backup'], ['data', 'Data']];
+function drawTags() {
+  var specs = SPECIALTIES.filter(function (x) { return x !== 'Anesthesia'; });
+  $('s_tags').innerHTML = TAGS.filter(function (t) { return t !== 'Other'; }).map(function (t) {
+    var cur = tagSpec(t);
+    return '<div class="tagrow" style="margin:4px 0"><span style="min-width:260px">' + esc(t) + '</span><select class="tg_sel" data-t="' + esc(t) + '" style="max-width:220px">' + opt('', 'No review', !cur) + specs.map(function (x) { return opt(x, x, x === cur); }).join('') + '</select></div>';
+  }).join('');
+  $('tg_save').addEventListener('click', function () {
+    var o = {}, sels = document.querySelectorAll('.tg_sel');
+    for (var i = 0; i < sels.length; i++) o[sels[i].getAttribute('data-t')] = sels[i].value;
+    call('saveSettings', { tagLinks: JSON.stringify(o) }).then(function (st) { S.d.settings = st; toast('Tag links saved'); }).catch(fail);
+  });
+}
 function drawSC() {
   var l = S.d.specialtyConsultants || [];
   $('s_sc').innerHTML = l.length ? l.map(function (r) {
@@ -1796,7 +1998,7 @@ function dlgSendToList(p, after) {
 
 // ---------------------------------------------------------------- print a theatre list
 function printList(l) {
-  var pts = onList(l).sort(function (a, b) { return ageMonths(a.DOB, S.today) - ageMonths(b.DOB, S.today); });
+  var pts = ordered(l);
   var used = pts.reduce(function (s, p) { return s + totalMin(p); }, 0);
   var m = openModal('<div class="row noprint" style="margin-bottom:8px"><button class="primary" id="pr_go">Print</button><button id="pr_close">Close</button></div>' +
     '<div class="printable"><h2>Theatre list: ' + esc(fmtDay(l.Date)) + '</h2>' +
@@ -1831,18 +2033,17 @@ function monthKey(s) { return s ? s.slice(0, 7) : ''; }
 function viewDashboard() {
   var d = S.d, cons = d.consultants.filter(function (c) { return c.Active === 'Y'; });
   var all = d.patients.filter(function (p) { return S.dashCons === 'all' || p.ConsultantId === S.dashCons; });
-  var act = all.filter(isActive), done = all.filter(function (p) { return p.Status === 'Done'; }), rem = all.filter(function (p) { return p.Status === 'Removed'; });
+  var act = all.filter(isActive), done = all.filter(function (p) { return p.Status === 'Done'; });
   var booked = act.filter(function (p) { return p.ListId; }).length;
-  var warn = act.filter(function (p) { return warnings(p).length; }).length;
-  var avg = act.length ? Math.round(act.reduce(function (s, p) { return s + waitDays(p); }, 0) / act.length) : 0;
+  var ready = act.filter(function (p) { return p.Status === 'Ready' && !p.ListId; }).length;
+  var over = act.filter(waitOver).length;
   var buckets = { '0 to 30 days': 0, '31 to 90 days': 0, '91 to 180 days': 0, '181 to 365 days': 0, 'Over a year': 0 };
   act.forEach(function (p) { var w = waitDays(p); buckets[w <= 30 ? '0 to 30 days' : w <= 90 ? '31 to 90 days' : w <= 180 ? '91 to 180 days' : w <= 365 ? '181 to 365 days' : 'Over a year']++; });
   var end = addDaysStr(S.today, 28);
   var up = d.lists.filter(function (l) { return l.Status === 'Open' && l.Date >= S.today && l.Date <= end && (S.dashCons === 'all' || l.ConsultantId === S.dashCons); });
   var cap = 0, usedMin = 0, empty = 0;
   up.forEach(function (l) { var u = listUsed(l); cap += Number(l.Minutes) || 0; usedMin += u.min; if (!u.n) empty++; });
-  var util = cap ? Math.round(usedMin / cap * 100) : 0;
-  // 12-month trend
+  var util = cap ? Math.min(100, Math.round(usedMin / cap * 100)) : 0;
   var months = [], t = S.today.slice(0, 7);
   for (var i = 11; i >= 0; i--) { var y = +t.slice(0, 4), mo = +t.slice(5, 7) - i; while (mo < 1) { mo += 12; y--; } months.push(y + '-' + ('0' + mo).slice(-2)); }
   var addedM = countBy(all.filter(function (p) { return p.DateAdded; }), function (p) { return monthKey(p.DateAdded); });
@@ -1851,58 +2052,71 @@ function viewDashboard() {
   var trend = '<div class="trend">' + months.map(function (k) {
     return '<div class="tcol"><div class="tbars"><i class="ta" style="height:' + Math.round((addedM[k] || 0) / tmax * 100) + '%" title="Added ' + (addedM[k] || 0) + '"></i><i class="td" style="height:' + Math.round((doneM[k] || 0) / tmax * 100) + '%" title="Done ' + (doneM[k] || 0) + '"></i></div><div class="tl">' + MONTHS[+k.slice(5) - 1] + '</div></div>';
   }).join('') + '</div><p class="muted small"><span class="chip">Added</span> <span class="chip green">Done</span> per month, last 12 months</p>';
-  // years available
-  var years = {}; years[S.today.slice(0, 4)] = true;
-  all.forEach(function (p) { if (p.DoneDate) years[p.DoneDate.slice(0, 4)] = true; if (p.DateAdded) years[p.DateAdded.slice(0, 4)] = true; if (p.RemovedDate) years[p.RemovedDate.slice(0, 4)] = true; });
-  var ylist = Object.keys(years).sort().reverse();
-  if (!S.dashYear || !years[S.dashYear]) S.dashYear = ylist[0];
-  var yr = S.dashYear;
-  var dY = done.filter(function (p) { return (p.DoneDate || '').slice(0, 4) === yr; });
-  var aY = all.filter(function (p) { return (p.DateAdded || '').slice(0, 4) === yr; });
-  var rY = rem.filter(function (p) { return (p.RemovedDate || '').slice(0, 4) === yr; });
-  var waits = dY.filter(function (p) { return p.DateAdded && p.DoneDate; }).map(function (p) { return daysBetween(p.DateAdded, p.DoneDate); }).sort(function (a, b) { return a - b; });
-  var med = waits.length ? waits[Math.floor(waits.length / 2)] : 0;
-  var byRem = countBy(rY, function (p) { return p.RemovedReason; });
-  $('view').innerHTML =
-    '<div class="spread"><h2>Dashboard</h2><select id="dc" style="width:auto">' + opt('all', 'All consultants', S.dashCons === 'all') + cons.map(function (c) { return opt(c.Id, c.Name, S.dashCons === c.Id); }).join('') + '</select></div>' +
-    '<div class="tiles"><div class="tile"><div class="n">' + act.length + '</div><div class="l">Waiting</div></div>' +
-    '<div class="tile"><div class="n">' + booked + '</div><div class="l">Booked on a list</div></div>' +
-    '<div class="tile"><div class="n">' + warn + '</div><div class="l">With warnings</div></div>' +
-    '<div class="tile"><div class="n">' + avg + ' d</div><div class="l">Average wait</div></div>' +
-    '<div class="tile"><div class="n">' + util + '%</div><div class="l">Theatre time booked, next 4 weeks</div></div>' +
-    '<div class="tile"><div class="n">' + empty + '</div><div class="l">Empty lists, next 4 weeks</div></div></div>' +
-    '<div class="grid2"><div class="panel"><h3>Waiting by procedure</h3>' + barsHtml(countBy(act, function (p) { return p.Procedure; })) + '</div>' +
-    '<div class="panel"><h3>Waiting by category</h3>' + barsHtml(countBy(act, function (p) { return p.Category; })) +
-    '<h3 style="margin-top:14px">Waiting time</h3>' + barsHtml(buckets, Math.max(1, act.length)) + '</div></div>' +
-    '<div class="grid2"><div class="panel"><h3>Waiting by consultant</h3>' + barsHtml(countBy(act, function (p) { return consName(p.ConsultantId); })) + '</div>' +
-    '<div class="panel"><h3>Day-case or inpatient</h3>' + barsHtml(countBy(act, function (p) { return p.CareType; })) + '</div></div>' +
-    '<div class="panel"><h3>Trend</h3>' + trend + '</div>' +
-    '<div class="panel"><div class="spread"><h3>Yearly summary</h3><div class="row"><select id="dy" style="width:auto">' + ylist.map(function (y) { return opt(y, y, y === yr); }).join('') + '</select><button id="dy_csv">Export CSV</button></div></div>' +
-    '<div class="tiles"><div class="tile"><div class="n">' + dY.length + '</div><div class="l">Operations done</div></div>' +
-    '<div class="tile"><div class="n">' + aY.length + '</div><div class="l">Added to the list</div></div>' +
-    '<div class="tile"><div class="n">' + rY.length + '</div><div class="l">Removed</div></div>' +
-    '<div class="tile"><div class="n">' + med + ' d</div><div class="l">Median wait of done cases</div></div></div>' +
-    '<div class="grid2"><div><h3>Done by procedure</h3>' + barsHtml(countBy(dY, function (p) { return p.Procedure; })) + '</div>' +
-    '<div><h3>Done by consultant</h3>' + barsHtml(countBy(dY, function (p) { return consName(p.ConsultantId); })) + '<h3 style="margin-top:14px">Done by category</h3>' + barsHtml(countBy(dY, function (p) { return p.Category; })) + '</div></div>' +
-    '<h3>Removed by reason</h3>' + barsHtml(byRem) + '</div>';
-  $('dc').addEventListener('change', function () { S.dashCons = this.value; viewDashboard(); });
-  $('dy').addEventListener('change', function () { S.dashYear = this.value; viewDashboard(); });
-  $('dy_csv').addEventListener('click', function () {
-    var rows = [['Year', yr], ['Consultant', S.dashCons === 'all' ? 'All' : consName(S.dashCons)], ['Operations done', dY.length], ['Added', aY.length], ['Removed', rY.length], ['Median wait of done cases (days)', med], [], ['Done by procedure', 'Count']];
-    var bp = countBy(dY, function (p) { return p.Procedure; }); Object.keys(bp).sort(function (a, b) { return bp[b] - bp[a]; }).forEach(function (k) { rows.push([k, bp[k]]); });
-    rows.push([], ['Done by consultant', 'Count']);
-    var bc = countBy(dY, function (p) { return consName(p.ConsultantId); }); Object.keys(bc).sort(function (a, b) { return bc[b] - bc[a]; }).forEach(function (k) { rows.push([k, bc[k]]); });
-    rows.push([], ['Done by month', 'Count']);
-    var bm = countBy(dY, function (p) { return monthKey(p.DoneDate); }); Object.keys(bm).sort().forEach(function (k) { rows.push([k, bm[k]]); });
-    rows.push([], ['Removed by reason', 'Count']);
-    Object.keys(byRem).forEach(function (k) { rows.push([k, byRem[k]]); });
-    var csv = '﻿' + rows.map(function (r) { return r.map(csvCell).join(','); }).join('\r\n');
-    var a = document.createElement('a');
-    a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }));
-    a.download = 'yearly-summary-' + yr + '.csv';
-    document.body.appendChild(a); a.click();
-    setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 500);
+  // cases per surgeon this year
+  var yr = S.today.slice(0, 4), per = {};
+  done.forEach(function (p) {
+    if ((p.DoneDate || '').slice(0, 4) !== yr) return;
+    surgeonsOf(p).forEach(function (x) { var o = per[x.name] = per[x.name] || { primary: 0, assist: 0 }; if (x.role === 'Primary surgeon') o.primary++; else o.assist++; });
   });
+  var pn = Object.keys(per).sort(function (a, b) { return (per[b].primary + per[b].assist) - (per[a].primary + per[a].assist); });
+  $('view').innerHTML =
+    '<div class="spread"><h2>Dashboard</h2><div class="row"><select id="dc" style="width:auto">' + opt('all', 'All consultants', S.dashCons === 'all') + cons.map(function (c) { return opt(c.Id, c.Name, S.dashCons === c.Id); }).join('') + '</select><button id="dy_open">Yearly summary</button></div></div>' +
+    '<div class="tiles"><div class="tile"><div class="n">' + act.length + '</div><div class="l">Waiting</div></div>' +
+    '<div class="tile"><div class="n">' + ready + '</div><div class="l">Ready, not scheduled</div></div>' +
+    '<div class="tile"><div class="n">' + booked + '</div><div class="l">Booked on a list</div></div>' +
+    '<div class="tile"><div class="n' + (over ? ' wred' : '') + '">' + over + '</div><div class="l">Over the wait limit</div></div></div>' +
+    '<div class="grid2"><div class="panel"><h3>Waiting by procedure</h3>' + barsHtml(countBy(act, function (p) { return p.Procedure; })) + '</div>' +
+    '<div class="panel"><h3>Waiting by consultant</h3>' + barsHtml(countBy(act, function (p) { return consName(p.ConsultantId); })) +
+    '<h3 style="margin-top:14px">Waiting time</h3>' + barsHtml(buckets, Math.max(1, act.length)) + '</div></div>' +
+    '<div class="panel"><h3>Theatre time, next 4 weeks</h3><div class="tbar" style="height:12px"><i class="' + (util >= 85 ? 'g' : 'b') + '" style="width:' + util + '%"></i></div>' +
+    '<p class="small" style="margin:4px 0 0"><strong>' + usedMin + ' of ' + cap + ' min</strong> used (' + util + '%) · ' + up.length + ' lists · ' + empty + ' empty</p></div>' +
+    '<div class="panel"><h3>Trend</h3>' + trend + '</div>' +
+    '<div class="panel"><h3>Cases per surgeon, ' + esc(yr) + '</h3>' + (pn.length ? '<table class="tbl"><thead><tr><th>Surgeon</th><th>Primary</th><th>Assisted</th><th>Total</th></tr></thead><tbody>' +
+      pn.map(function (n) { return '<tr class="click" data-lb="' + esc(n) + '"><td>' + esc(n) + '</td><td>' + per[n].primary + '</td><td>' + per[n].assist + '</td><td>' + (per[n].primary + per[n].assist) + '</td></tr>'; }).join('') + '</tbody></table>' : '<p class="muted small">No done cases with surgeons this year yet.</p>') + '</div>';
+  $('dc').addEventListener('change', function () { S.dashCons = this.value; viewDashboard(); });
+  $('dy_open').addEventListener('click', dlgYearly);
+  on($('view'), '[data-lb]', 'click', function (e) { dlgLogbook(e.currentTarget.getAttribute('data-lb')); });
+}
+function dlgYearly() {
+  var m = openModal('<div id="yr_body"></div>');
+  m.el.style.maxWidth = '900px';
+  function draw() {
+    var all = S.d.patients.filter(function (p) { return S.dashCons === 'all' || p.ConsultantId === S.dashCons; });
+    var done = all.filter(function (p) { return p.Status === 'Done'; }), rem = all.filter(function (p) { return p.Status === 'Removed'; });
+    var years = {}; years[S.today.slice(0, 4)] = true;
+    all.forEach(function (p) { if (p.DoneDate) years[p.DoneDate.slice(0, 4)] = true; if (p.DateAdded) years[p.DateAdded.slice(0, 4)] = true; if (p.RemovedDate) years[p.RemovedDate.slice(0, 4)] = true; });
+    var ylist = Object.keys(years).sort().reverse();
+    if (!S.dashYear || !years[S.dashYear]) S.dashYear = ylist[0];
+    var yr = S.dashYear;
+    var dY = done.filter(function (p) { return (p.DoneDate || '').slice(0, 4) === yr; });
+    var aY = all.filter(function (p) { return (p.DateAdded || '').slice(0, 4) === yr; });
+    var rY = rem.filter(function (p) { return (p.RemovedDate || '').slice(0, 4) === yr; });
+    var waits = dY.filter(function (p) { return p.DateAdded && p.DoneDate; }).map(function (p) { return daysBetween(p.DateAdded, p.DoneDate); }).sort(function (a, b) { return a - b; });
+    var med = waits.length ? waits[Math.floor(waits.length / 2)] : 0;
+    var byRem = countBy(rY, function (p) { return p.RemovedReason; });
+    $('yr_body').innerHTML = '<div class="spread"><h2>Yearly summary</h2><div class="row"><select id="dy" style="width:auto">' + ylist.map(function (y) { return opt(y, y, y === yr); }).join('') + '</select><button id="dy_x">Export Excel</button><button id="yr_close">Close</button></div></div>' +
+      '<p class="muted small">' + (S.dashCons === 'all' ? 'All consultants' : esc(consName(S.dashCons))) + '</p>' +
+      '<div class="tiles"><div class="tile"><div class="n">' + dY.length + '</div><div class="l">Operations done</div></div>' +
+      '<div class="tile"><div class="n">' + aY.length + '</div><div class="l">Added to the list</div></div>' +
+      '<div class="tile"><div class="n">' + rY.length + '</div><div class="l">Removed</div></div>' +
+      '<div class="tile"><div class="n">' + med + ' d</div><div class="l">Median wait of done cases</div></div></div>' +
+      '<div class="grid2"><div><h3>Done by procedure</h3>' + barsHtml(countBy(dY, function (p) { return p.Procedure; })) + '</div>' +
+      '<div><h3>Done by consultant</h3>' + barsHtml(countBy(dY, function (p) { return consName(p.ConsultantId); })) + '<h3 style="margin-top:14px">Done by category</h3>' + barsHtml(countBy(dY, function (p) { return p.Category; })) + '</div></div>' +
+      '<h3>Removed by reason</h3>' + barsHtml(byRem);
+    $('yr_close').addEventListener('click', m.close);
+    $('dy').addEventListener('change', function () { S.dashYear = this.value; draw(); });
+    $('dy_x').addEventListener('click', function () {
+      function tab(title, o, sortNum) { var r = [[title, 'Count']]; Object.keys(o).sort(function (a, b) { return sortNum ? o[b] - o[a] : a.localeCompare(b); }).forEach(function (k) { r.push([k, o[k]]); }); return r; }
+      exportXlsx('yearly-summary-' + yr, [
+        { name: 'Summary', header: false, rows: [['Year', yr], ['Consultant', S.dashCons === 'all' ? 'All' : consName(S.dashCons)], ['Operations done', dY.length], ['Added', aY.length], ['Removed', rY.length], ['Median wait of done cases (days)', med]] },
+        { name: 'Done by procedure', rows: tab('Procedure', countBy(dY, function (p) { return p.Procedure; }), true) },
+        { name: 'Done by consultant', rows: tab('Consultant', countBy(dY, function (p) { return consName(p.ConsultantId); }), true) },
+        { name: 'Done by month', rows: tab('Month', countBy(dY, function (p) { return monthKey(p.DoneDate); }), false) },
+        { name: 'Removed by reason', rows: tab('Reason', byRem, true) }
+      ]);
+    });
+  }
+  draw();
 }
 
 function dlgTakeOff(p, after) {
@@ -1930,80 +2144,170 @@ function dlgCancelList(l) {
   });
 }
 
+function ordered(l) {
+  return onList(l).sort(function (a, b) {
+    var x = Number(a.ListOrder) || 9999, y = Number(b.ListOrder) || 9999;
+    if (x !== y) return x - y;
+    return ageMonths(a.DOB, S.today) - ageMonths(b.DOB, S.today);
+  });
+}
+function shareData(l) {
+  var pts = ordered(l);
+  return {
+    title: 'Theatre list',
+    lines: [fmtDay(l.Date), 'OT: ' + (roomName(l.RoomId) || 'not set'), 'Consultant: ' + consName(l.ConsultantId)],
+    cols: [{ h: '#', w: 0.06 }, { h: 'Name', w: 0.24, bold: true }, { h: 'MRN', w: 0.16 }, { h: 'Age', w: 0.08 }, { h: 'Procedure', w: 0.38 }, { h: 'Type', w: 0.08 }],
+    rows: pts.map(function (p, i) { return [String(i + 1), p.Name, p.MRN, ageText(p.DOB), procLabel(p), careShort(p)]; }),
+    footer: 'Contains patient information. Handle according to hospital policy.'
+  };
+}
+function shareText(l) {
+  var d = shareData(l);
+  return d.lines.join('\n') + '\n\n' + (d.rows.length ? d.rows.map(function (r) { return r[0] + '. ' + [r[1], r[2], r[3], r[4], r[5]].join(', '); }).join('\n') : 'Nobody on this list.');
+}
+function dlgShare(l) {
+  var d = shareData(l), txt = shareText(l);
+  var base = 'theatre-list-' + l.Date;
+  var m = openModal('<div class="spread"><h2>Share list</h2><button id="sh_close">Close</button></div>' +
+    '<p class="muted small" style="margin:2px 0 8px">' + esc(fmtDay(l.Date)) + ' · ' + esc(consName(l.ConsultantId)) + ' · ' + d.rows.length + ' cases. Contact numbers are not included.</p>' +
+    '<div class="row" style="margin-bottom:8px"><button class="primary" id="sh_pdf">PDF</button><button id="sh_img">Image</button><button id="sh_txt">Copy text</button></div>' +
+    '<textarea id="sh_ta" readonly rows="9" style="font-size:13px">' + esc(txt) + '</textarea>', { narrow: true });
+  $('sh_close').addEventListener('click', m.close);
+  $('sh_txt').addEventListener('click', function () { copyText(txt); });
+  $('sh_pdf').addEventListener('click', function () { shareOrSave(pdfFromCanvases(renderTableDoc(d, 1754)), base + '.pdf'); });
+  $('sh_img').addEventListener('click', function () { canvasBlob(renderTableDoc(d, null)[0], function (b) { shareOrSave(b, base + '.png'); }); });
+}
+
 function openList(id) {
-  var F = { allCons: false, awaiting: false, noMajor: false, noAdmit: false, medFree: false, fit: true, care: '', minAge: '', minUnit: 'y', maxAge: '', maxUnit: 'y', excl: {} };
-  var T = {};
+  var F = { open: false, filt: false, allCons: false, awaiting: false, noMajor: false, noAdmit: false, medFree: false, fit: true, care: '', minAge: '', minUnit: 'y', maxAge: '', maxUnit: 'y', excl: {} };
+  var T = {}, dragId = null;
   var m = openModal('<div id="ls_body"></div>');
   m.el.style.maxWidth = '980px';
 
+  function orderIds() { return ordered(listById(id)).map(function (p) { return p.Id; }); }
+  function saveOrder(ids) {
+    ids.forEach(function (pid, i) { var p = getP(pid); if (p) p.ListOrder = String(i + 1); });
+    draw();
+    call('reorderList', { listId: id, patientIds: ids }).then(function (r) { r.forEach(upsertP); }).catch(function (e) { fail(e); load().then(function () { draw(); }); });
+  }
+  function move(pid, delta) {
+    var ids = orderIds(), i = ids.indexOf(pid), j = i + delta;
+    if (i < 0 || j < 0 || j >= ids.length) return;
+    ids.splice(i, 1); ids.splice(j, 0, pid); saveOrder(ids);
+  }
+  function rowHtml(p, i, n, open) {
+    var done = p.Status === 'Done';
+    return '<div class="lrow' + (done ? ' ldone' : '') + '" data-id="' + esc(p.Id) + '"' + (open && !done ? ' draggable="true"' : '') + '>' +
+      '<div class="lno">' + (open && !done ? '<span class="grip" title="Drag to reorder">&#8942;&#8942;</span>' : '') + '<b>' + (i + 1) + '</b>' +
+      (open && !done ? '<span class="arr"><button type="button" class="mini" data-up="' + esc(p.Id) + '"' + (i === 0 ? ' disabled' : '') + ' aria-label="Move up">&#9650;</button><button type="button" class="mini" data-dn="' + esc(p.Id) + '"' + (i === n - 1 ? ' disabled' : '') + ' aria-label="Move down">&#9660;</button></span>' : '') + '</div>' +
+      '<div class="lpt"><strong>' + (p.Starred ? '★ ' : '') + esc(p.Name) + '</strong><br><span class="muted small">' + esc(p.MRN) + '</span>' + (medOf(p) === 'NotFree' ? ' <span class="chip amber">Not medically free</span>' : '') + '</div>' +
+      '<div class="lage">' + esc(ageText(p.DOB)) + '</div>' +
+      '<div class="lpr">' + esc(procLabel(p)) + (done ? '<div class="small muted">' + surgeonsLine(p) + '</div>' : '') + '</div>' +
+      '<div class="lty">' + typeHtml(p) + '</div>' +
+      '<div class="lact">' + (done ? '<span class="chip green">Done</span><button type="button" data-surg="' + esc(p.Id) + '">Surgeons</button>' :
+        (open ? '<button type="button" class="primary" data-done="' + esc(p.Id) + '">Done</button><button type="button" data-off="' + esc(p.Id) + '">Remove</button>' : '')) + '</div></div>';
+  }
+  function surgeonsLine(p) {
+    var a = surgeonIn(p, 'Primary surgeon'), b = surgeonIn(p, 'First assistant');
+    return (a || b) ? esc([a ? 'Primary ' + a : '', b ? '1st assistant ' + b : ''].filter(Boolean).join(' · ')) : 'No surgeons added yet';
+  }
   function draw() {
     var l = listById(id);
     if (!l) { m.close(); return; }
     var cap = Number(l.Minutes) || 0;
-    var pts = onList(l).sort(function (a, b) { return ageMonths(a.DOB, S.today) - ageMonths(b.DOB, S.today); });
+    var pts = ordered(l);
     var used = pts.reduce(function (s, p) { return s + totalMin(p); }, 0), rem = cap - used;
     var open = l.Status === 'Open', past = l.Date < S.today;
-    var html = '<div class="spread"><h2>' + esc(fmtDay(l.Date)) + '</h2><button id="ls_close">Close</button></div>' +
-      '<p style="margin:4px 0"><strong>' + esc(consName(l.ConsultantId)) + '</strong>' + (l.RoomId ? ' · ' + esc(roomName(l.RoomId)) : '') + ' · ' + cap + ' min list</p>' +
-      '<p style="margin:4px 0">' + pts.length + (pts.length === 1 ? ' case' : ' cases') + ' · <strong>' + used + ' min used</strong> · ' + (rem >= 0 ? rem + ' min free' : '<span style="color:var(--red)">' + (-rem) + ' min over</span>') +
-      (l.Status !== 'Open' ? ' · <span class="chip red">Cancelled: ' + esc(l.CancelReason) + '</span>' : '') + '</p>' +
-      (l.Notes ? '<p class="muted small" style="margin:4px 0">' + esc(l.Notes) + '</p>' : '') +
-      '<div class="row" style="margin:8px 0">' + (open ? '<button id="ls_edit">Edit list</button>' : '') + '<button id="ls_print">Print list</button>' + (open ? '<button id="ls_cancel" class="danger">Cancel list</button>' : '') + '</div>';
-    html += '<div class="sect"><h3>On this list</h3>' + (pts.length ? pts.map(function (p, i) {
-      return '<div class="log"><div class="spread"><div><strong>' + (i + 1) + '. ' + (p.Starred ? '★ ' : '') + esc(p.Name) + '</strong> <span class="muted small">' + esc(ageText(p.DOB)) + ' · ' + esc(p.MRN) + '</span><br>' +
-        esc(procLabel(p)) + ' <span class="muted small">· ' + totalMin(p) + ' min · ' + esc(p.CareType) + '</span></div>' +
-        '<div class="row">' + (p.Status === 'Done' ? '<span class="chip green">Done</span>' : '<span class="chip green">Booked</span>') + '<button data-open="' + esc(p.Id) + '">Open</button>' +
-        (open && p.Status !== 'Done' ? '<button data-off="' + esc(p.Id) + '">Take off</button>' : '') + '</div></div><div>' + flagsHtml(p) + '</div></div>';
-    }).join('') : '<p class="muted small">Nobody on this list yet.</p>') + '</div>';
+    var pct = cap ? Math.min(100, Math.round(used / cap * 100)) : 0, tcls = used > cap ? 'r' : pct >= 85 ? 'g' : 'b';
+    var html = '<div class="spread"><div class="lhead"><strong>' + esc(fmtDay(l.Date)) + '</strong> · ' + esc(consName(l.ConsultantId)) + (l.RoomId ? ' · ' + esc(roomName(l.RoomId)) : '') + '</div>' +
+      '<div class="row"><button id="ls_share">Share</button>' + '<button id="ls_more" aria-label="More">&#8943;</button><button id="ls_close">Close</button></div></div>' +
+      '<div class="tbar" title="' + used + ' of ' + cap + ' min"><i class="' + tcls + '" style="width:' + pct + '%"></i></div>' +
+      '<p class="small" style="margin:3px 0 8px">' + (rem >= 0 ? '<strong>' + used + ' of ' + cap + ' min</strong> · ' + pts.length + (pts.length === 1 ? ' case' : ' cases') : '<strong style="color:var(--red)">' + used + ' of ' + cap + ' min (' + (-rem) + ' over)</strong> · ' + pts.length + ' cases') +
+      (l.Status !== 'Open' ? ' · <span class="chip red">Cancelled: ' + esc(l.CancelReason) + '</span>' : '') + (l.Notes ? ' · <span class="muted">' + esc(l.Notes) + '</span>' : '') + '</p>';
+    html += pts.length ? '<div class="lhdr"><span>#</span><span>Patient</span><span>Age</span><span>Procedure</span><span>Type</span><span></span></div>' + pts.map(function (p, i) { return rowHtml(p, i, pts.length, open); }).join('') : '<p class="muted small">Nobody on this list yet.</p>';
 
     if (open && !past) {
       var cs = cands(l, rem);
       var procs = S.d.procedures.filter(function (x) { return x.Active === 'Y'; });
-      html += '<div class="sect"><h3>Add patients</h3>' +
-        '<div class="tags" style="margin-bottom:8px">' +
-        chk('b_all', F.allCons, 'All consultants') + chk('b_nomaj', F.noMajor, 'No major cases') +
-        chk('b_noadm', F.noAdmit, 'No prior admission needed') + chk('b_free', F.medFree, 'Only medically free') + chk('b_fit', F.fit, 'Only cases that fit the free time') + '</div>' +
+      html += '<details class="fold" id="ls_add"' + (F.open ? ' open' : '') + '><summary>+ Add patients</summary>' +
+        (cs.length ? cs.map(function (p) {
+          return '<div class="log cand"><label class="check" style="align-items:flex-start;flex:1"><input type="checkbox" class="b_chk" data-id="' + esc(p.Id) + '"' + (T[p.Id] ? ' checked' : '') + '><span><strong>' + (p.Starred ? '★ ' : '') + esc(p.Name) + '</strong> <span class="muted small">' + esc(ageText(p.DOB)) + ' · ' + esc(p.MRN) + (F.allCons ? ' · ' + esc(consName(p.ConsultantId)) : '') + '</span><br>' +
+            esc(procLabel(p)) + ' <span class="muted small">· ' + totalMin(p) + ' min · ' + esc(p.Category) + ' · ' + careShort(p) + '</span>' + (totalMin(p) > rem ? ' <span class="chip red">Longer than the free time</span>' : '') + '</span></label>' +
+            '<button type="button" class="primary" data-addone="' + esc(p.Id) + '">Add</button></div>';
+        }).join('') : '<p class="muted small">No patients match these filters.</p>') +
+        '<div class="row" style="margin:8px 0"><button id="b_suggest">Suggest a full list</button><button class="primary" id="b_add">Add ticked</button><span class="muted small" id="b_tot"></span></div>' +
+        '<div class="row">' + chk('b_free', F.medFree, 'Only medically free') + chk('b_fit', F.fit, 'Fits the free time') + '<button type="button" class="link" id="b_filt">' + (F.filt ? 'Hide filters' : 'Filters') + '</button></div>' +
+        (F.filt ? '<div class="tags" style="margin:8px 0">' + chk('b_all', F.allCons, 'All consultants') + chk('b_nomaj', F.noMajor, 'No major cases') + chk('b_noadm', F.noAdmit, 'No prior admission needed') + '</div>' +
         '<div class="grid3"><div class="field"><label for="b_care">Care</label><select id="b_care">' + opt('', 'Day-case and inpatient', !F.care) + opt('Day-case', 'Day-case', F.care === 'Day-case') + opt('Inpatient', 'Inpatient', F.care === 'Inpatient') + '</select></div>' +
         '<div class="field"><label for="b_min">Age from</label><div class="row" style="flex-wrap:nowrap"><input type="number" id="b_min" min="0" value="' + esc(F.minAge) + '"><select id="b_minu" style="width:auto">' + opt('y', 'years', F.minUnit === 'y') + opt('m', 'months', F.minUnit === 'm') + '</select></div></div>' +
         '<div class="field"><label for="b_max">Age up to</label><div class="row" style="flex-wrap:nowrap"><input type="number" id="b_max" min="0" value="' + esc(F.maxAge) + '"><select id="b_maxu" style="width:auto">' + opt('y', 'years', F.maxUnit === 'y') + opt('m', 'months', F.maxUnit === 'm') + '</select></div></div></div>' +
-        '<details style="margin-bottom:8px"><summary class="small muted" style="cursor:pointer">Leave out procedures' + (Object.keys(F.excl).length ? ' (' + Object.keys(F.excl).length + ')' : '') + '</summary><div class="tags" style="margin-top:6px">' +
-        procs.map(function (x) { return chk('b_ex_' + x.Id, !!F.excl[x.Name], x.Name, 'b_ex'); }).join('') + '</div></details>' +
-        '<div class="row" style="margin-bottom:8px"><button id="b_suggest">Suggest a full list</button><button class="primary" id="b_add">Add ticked</button><span class="muted small" id="b_tot"></span></div>' +
-        (cs.length ? cs.map(function (p) {
-          return '<div class="log"><label class="check" style="align-items:flex-start"><input type="checkbox" class="b_chk" data-id="' + esc(p.Id) + '"' + (T[p.Id] ? ' checked' : '') + '><span><strong>' + (p.Starred ? '★ ' : '') + esc(p.Name) + '</strong> <span class="muted small">' + esc(ageText(p.DOB)) + ' · ' + esc(p.MRN) + (F.allCons ? ' · ' + esc(consName(p.ConsultantId)) : '') + '</span><br>' +
-            esc(procLabel(p)) + ' <span class="muted small">· ' + totalMin(p) + ' min · ' + esc(p.Category) + ' · ' + esc(p.CareType) + ' · waiting ' + waitDays(p) + ' d</span><br>' + flagsHtml(p) + (totalMin(p) > rem ? '<span class="chip red">Longer than the free time</span>' : '') + '</span></label></div>';
-        }).join('') : '<p class="muted small">No patients match these filters.</p>') + '</div>';
+        '<div class="small muted">Leave out procedures' + (Object.keys(F.excl).length ? ' (' + Object.keys(F.excl).length + ')' : '') + '</div><div class="tags" style="margin-top:6px">' +
+        procs.map(function (x) { return chk('b_ex_' + x.Id, !!F.excl[x.Name], x.Name, 'b_ex'); }).join('') + '</div>' : '') + '</details>';
     } else if (open && past) {
       html += '<p class="muted small">This list is in the past, so patients can\'t be added.</p>';
     }
     $('ls_body').innerHTML = html;
 
     $('ls_close').addEventListener('click', m.close);
-    var b = function (idd, fn) { var e = $(idd); if (e) e.addEventListener('click', fn); };
-    b('ls_edit', function () { listForm(listById(id)); });
-    b('ls_print', function () { printList(listById(id)); });
-    b('ls_cancel', function () { dlgCancelList(listById(id)); });
-    on($('ls_body'), '[data-open]', 'click', function (e) { openPatient(e.currentTarget.getAttribute('data-open')); });
-    on($('ls_body'), '[data-off]', 'click', function (e) { dlgTakeOff(getP(e.currentTarget.getAttribute('data-off'))); });
+    $('ls_share').addEventListener('click', function () { dlgShare(listById(id)); });
+    $('ls_more').addEventListener('click', function () {
+      var items = [];
+      if (open) items.push({ label: 'Edit list', fn: function () { listForm(listById(id)); } });
+      if (open && pts.length > 1) items.push({ label: 'Order youngest first', fn: function () { saveOrder(ordered(listById(id)).sort(function (a, b) { return ageMonths(a.DOB, S.today) - ageMonths(b.DOB, S.today); }).map(function (p) { return p.Id; })); } });
+      items.push({ label: 'Print', fn: function () { printList(listById(id)); } });
+      if (open) items.push({ label: 'Cancel list', fn: function () { dlgCancelList(listById(id)); } });
+      pickMenu('List options', items);
+    });
+    var body = $('ls_body');
+    on(body, '[data-up]', 'click', function (e) { e.stopPropagation(); move(e.currentTarget.getAttribute('data-up'), -1); });
+    on(body, '[data-dn]', 'click', function (e) { e.stopPropagation(); move(e.currentTarget.getAttribute('data-dn'), 1); });
+    on(body, '[data-done]', 'click', function (e) { e.stopPropagation(); dlgDone(getP(e.currentTarget.getAttribute('data-done')), null); });
+    on(body, '[data-surg]', 'click', function (e) { e.stopPropagation(); dlgDone(getP(e.currentTarget.getAttribute('data-surg')), null, true); });
+    on(body, '[data-off]', 'click', function (e) { e.stopPropagation(); dlgTakeOff(getP(e.currentTarget.getAttribute('data-off'))); });
+    on(body, '.lrow', 'click', function (e) { if (e.target.closest('button')) return; openPatient(e.currentTarget.getAttribute('data-id')); });
+    on(body, '.lrow[draggable]', 'dragstart', function (e) { dragId = e.currentTarget.getAttribute('data-id'); try { e.dataTransfer.setData('text/plain', dragId); e.dataTransfer.effectAllowed = 'move'; } catch (x) { /* ignore */ } e.currentTarget.classList.add('dragging'); });
+    on(body, '.lrow[draggable]', 'dragend', function (e) { e.currentTarget.classList.remove('dragging'); });
+    on(body, '.lrow[draggable]', 'dragover', function (e) { if (dragId) e.preventDefault(); });
+    on(body, '.lrow[draggable]', 'drop', function (e) {
+      e.preventDefault();
+      var target = e.currentTarget.getAttribute('data-id');
+      if (!dragId || dragId === target) return;
+      var ids = orderIds(), from = ids.indexOf(dragId), to = ids.indexOf(target);
+      if (from < 0 || to < 0) return;
+      ids.splice(from, 1); ids.splice(to, 0, dragId); dragId = null; saveOrder(ids);
+    });
     if (open && !past) {
-      [['b_all', 'allCons'], ['b_nomaj', 'noMajor'], ['b_noadm', 'noAdmit'], ['b_free', 'medFree'], ['b_fit', 'fit']].forEach(function (x) {
-        $(x[0]).addEventListener('change', function () { F[x[1]] = this.checked; T = {}; draw(); });
+      $('ls_add').addEventListener('toggle', function () { F.open = this.open; });
+      $('b_filt').addEventListener('click', function () { F.filt = !F.filt; F.open = true; draw(); });
+      [['b_free', 'medFree'], ['b_fit', 'fit'], ['b_all', 'allCons'], ['b_nomaj', 'noMajor'], ['b_noadm', 'noAdmit']].forEach(function (x) {
+        var el = $(x[0]); if (el) el.addEventListener('change', function () { F[x[1]] = this.checked; F.open = true; T = {}; draw(); });
       });
-      $('b_care').addEventListener('change', function () { F.care = this.value; T = {}; draw(); });
-      [['b_min', 'minAge'], ['b_max', 'maxAge']].forEach(function (x) { $(x[0]).addEventListener('change', function () { F[x[1]] = this.value; T = {}; draw(); }); });
-      [['b_minu', 'minUnit'], ['b_maxu', 'maxUnit']].forEach(function (x) { $(x[0]).addEventListener('change', function () { F[x[1]] = this.value; T = {}; draw(); }); });
-      on($('ls_body'), '.b_ex', 'change', function (e) {
-        var name = e.currentTarget.getAttribute('data-name');
-        if (e.currentTarget.checked) F.excl[name] = true; else delete F.excl[name];
-        T = {}; draw();
-      });
-      on($('ls_body'), '.b_chk', 'change', function (e) {
+      if (F.filt) {
+        $('b_care').addEventListener('change', function () { F.care = this.value; F.open = true; T = {}; draw(); });
+        [['b_min', 'minAge'], ['b_max', 'maxAge']].forEach(function (x) { $(x[0]).addEventListener('change', function () { F[x[1]] = this.value; F.open = true; T = {}; draw(); }); });
+        [['b_minu', 'minUnit'], ['b_maxu', 'maxUnit']].forEach(function (x) { $(x[0]).addEventListener('change', function () { F[x[1]] = this.value; F.open = true; T = {}; draw(); }); });
+        on(body, '.b_ex', 'change', function (e) {
+          var name = e.currentTarget.getAttribute('data-name');
+          if (e.currentTarget.checked) F.excl[name] = true; else delete F.excl[name];
+          F.open = true; T = {}; draw();
+        });
+      }
+      on(body, '.b_chk', 'change', function (e) {
         var pid = e.currentTarget.getAttribute('data-id');
         if (e.currentTarget.checked) T[pid] = true; else delete T[pid];
         tot(rem);
       });
+      function addIds(ids) {
+        var sum = ids.reduce(function (s, x) { return s + totalMin(getP(x)); }, 0);
+        if (sum > rem && !window.confirm('This goes over the list time by ' + (sum - rem) + ' minutes. Add anyway?')) return;
+        call('addToList', { listId: id, patientIds: ids }).then(function (r) {
+          r.patients.forEach(upsertP); T = {}; F.open = true; render();
+          toast(r.patients.length + ' added' + (r.skipped.length ? ', ' + r.skipped.length + ' skipped (' + r.skipped[0].reason + ')' : ''), r.skipped.length > 0);
+        }).catch(fail);
+      }
+      on(body, '[data-addone]', 'click', function (e) { addIds([e.currentTarget.getAttribute('data-addone')]); });
       $('b_suggest').addEventListener('click', function () {
-        T = {};
+        T = {}; F.open = true;
         var left = rem;
         cands(listById(id), rem).forEach(function (p) { var t = totalMin(p); if (t <= left) { T[p.Id] = true; left -= t; } });
         draw();
@@ -2012,12 +2316,7 @@ function openList(id) {
       $('b_add').addEventListener('click', function () {
         var ids = Object.keys(T);
         if (!ids.length) { toast('Tick at least one patient', true); return; }
-        var sum = ids.reduce(function (s, x) { return s + totalMin(getP(x)); }, 0);
-        if (sum > rem && !window.confirm('This goes over the list time by ' + (sum - rem) + ' minutes. Add anyway?')) return;
-        call('addToList', { listId: id, patientIds: ids }).then(function (r) {
-          r.patients.forEach(upsertP); T = {}; render();
-          toast(r.patients.length + ' added' + (r.skipped.length ? ', ' + r.skipped.length + ' skipped (' + r.skipped[0].reason + ')' : ''), r.skipped.length > 0);
-        }).catch(fail);
+        addIds(ids);
       });
       tot(rem);
     }
@@ -2246,28 +2545,214 @@ function drawRooms() {
 }
 
 // ---------------------------------------------------------------- export
-function csvCell(v) {
-  var s = String(v === null || v === undefined ? '' : v);
-  if (/^[=+\-@]/.test(s)) s = "'" + s;
-  return '"' + s.replace(/"/g, '""') + '"';
-}
-function exportCsv(name, list) {
-  var head = ['MRN', 'Name', 'Date of birth', 'Age', 'Consultant', 'Procedure', 'Side', 'Diagnosis', 'Category', 'Minutes', 'Care', 'Status', 'Date added',
-    'Days waiting', 'Booked date', 'Conditions', 'Clearances', 'Priority', 'Sponsorship', 'Guardian', 'Done date', 'Removed reason', 'Notes'];
-  var rows = list.map(function (p) {
-    return [p.MRN, p.Name, p.DOB, ageText(p.DOB), consName(p.ConsultantId), procLabel(p), p.Laterality, p.Diagnosis, p.Category, totalMin(p), p.CareType, p.Status, p.DateAdded,
-      waitDays(p), p.ScheduledDate, tagsOf(p).concat(p.TagsOther ? [p.TagsOther] : []).join('; '),
-      clearances(p).map(function (c) { return c.spec + ' ' + c.state; }).join('; '), p.Priority, p.Sponsorship, p.Guardian, p.DoneDate, p.RemovedReason, p.Notes];
-  });
-  var csv = '﻿' + [head].concat(rows).map(function (r) { return r.map(csvCell).join(','); }).join('\r\n');
-  var blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+// ---------------------------------------------------------------- files: Excel, PDF, image
+function downloadBlob(blob, name) {
   var a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
-  a.download = name + '-' + S.today + '.csv';
+  a.download = name;
   document.body.appendChild(a);
   a.click();
   setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 500);
-  toast('Exported ' + list.length + ' rows');
+}
+/** On a phone the share sheet opens; elsewhere the file is downloaded. */
+function shareOrSave(blob, name) {
+  var file = null;
+  try { file = new File([blob], name, { type: blob.type }); } catch (e) { file = null; }
+  if (file && !useTable() && navigator.canShare && navigator.canShare({ files: [file] })) {
+    navigator.share({ files: [file], title: name }).catch(function (e) { if (!e || e.name !== 'AbortError') downloadBlob(blob, name); });
+    return;
+  }
+  downloadBlob(blob, name);
+}
+var CRC_T = null;
+function crc32(b) {
+  if (!CRC_T) { CRC_T = []; for (var n = 0; n < 256; n++) { var c = n; for (var k = 0; k < 8; k++) c = (c & 1) ? (0xEDB88320 ^ (c >>> 1)) : (c >>> 1); CRC_T[n] = c >>> 0; } }
+  var x = 0xFFFFFFFF;
+  for (var i = 0; i < b.length; i++) x = CRC_T[(x ^ b[i]) & 255] ^ (x >>> 8);
+  return (x ^ 0xFFFFFFFF) >>> 0;
+}
+function zipStore(files) {
+  var enc = new TextEncoder(), parts = [], central = [], off = 0;
+  files.forEach(function (f) {
+    var nm = enc.encode(f.name), crc = crc32(f.data), sz = f.data.length;
+    var h = new DataView(new ArrayBuffer(30));
+    h.setUint32(0, 0x04034b50, true); h.setUint16(4, 20, true); h.setUint16(6, 0x0800, true); h.setUint16(10, 0, true); h.setUint16(12, 0x21, true);
+    h.setUint32(14, crc, true); h.setUint32(18, sz, true); h.setUint32(22, sz, true); h.setUint16(26, nm.length, true);
+    parts.push(new Uint8Array(h.buffer), nm, f.data);
+    var c = new DataView(new ArrayBuffer(46));
+    c.setUint32(0, 0x02014b50, true); c.setUint16(4, 20, true); c.setUint16(6, 20, true); c.setUint16(8, 0x0800, true); c.setUint16(14, 0x21, true);
+    c.setUint32(16, crc, true); c.setUint32(20, sz, true); c.setUint32(24, sz, true); c.setUint16(28, nm.length, true); c.setUint32(42, off, true);
+    central.push(new Uint8Array(c.buffer), nm);
+    off += 30 + nm.length + sz;
+  });
+  var cs = 0; central.forEach(function (x) { cs += x.length; });
+  var e = new DataView(new ArrayBuffer(22));
+  e.setUint32(0, 0x06054b50, true); e.setUint16(8, files.length, true); e.setUint16(10, files.length, true); e.setUint32(12, cs, true); e.setUint32(16, off, true);
+  return new Blob(parts.concat(central, [new Uint8Array(e.buffer)]), { type: 'application/zip' });
+}
+function xmlEsc(s) {
+  return String(s).replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g, '').replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; });
+}
+function colName(i) { var s = ''; i++; while (i > 0) { var m = (i - 1) % 26; s = String.fromCharCode(65 + m) + s; i = Math.floor((i - 1) / 26); } return s; }
+/** sheets: [{ name, rows: [[cell, ...], ...], header: true }]. Cells are numbers or text. Returns an .xlsx Blob. */
+function makeXlsx(sheets) {
+  var enc = new TextEncoder(), files = [], used = {};
+  var names = sheets.map(function (s, i) {
+    var n = String(s.name || 'Sheet' + (i + 1)).replace(/[\[\]:*?\/\\]/g, ' ').slice(0, 31) || 'Sheet' + (i + 1);
+    while (used[n.toLowerCase()]) n = n.slice(0, 28) + ' ' + (i + 1);
+    used[n.toLowerCase()] = true; return n;
+  });
+  sheets.forEach(function (s, si) {
+    var widths = [];
+    var rowsXml = s.rows.map(function (r, ri) {
+      var cells = r.map(function (v, ci) {
+        var ref = colName(ci) + (ri + 1), st = (s.header !== false && ri === 0) ? ' s="1"' : '';
+        if (v === null || v === undefined || v === '') return '';
+        var len = String(v).length; widths[ci] = Math.max(widths[ci] || 8, Math.min(60, len + 2));
+        if (typeof v === 'number' && isFinite(v)) return '<c r="' + ref + '"' + st + '><v>' + v + '</v></c>';
+        return '<c r="' + ref + '"' + st + ' t="inlineStr"><is><t xml:space="preserve">' + xmlEsc(v) + '</t></is></c>';
+      }).join('');
+      return '<row r="' + (ri + 1) + '">' + cells + '</row>';
+    }).join('');
+    var cols = widths.length ? '<cols>' + widths.map(function (w, i) { return '<col min="' + (i + 1) + '" max="' + (i + 1) + '" width="' + (w || 8) + '" customWidth="1"/>'; }).join('') + '</cols>' : '';
+    var pane = s.header !== false ? '<sheetViews><sheetView workbookViewId="0"><pane ySplit="1" topLeftCell="A2" activePane="bottomLeft" state="frozen"/></sheetView></sheetViews>' : '';
+    files.push({ name: 'xl/worksheets/sheet' + (si + 1) + '.xml', data: enc.encode('<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">' + pane + cols + '<sheetData>' + rowsXml + '</sheetData></worksheet>') });
+  });
+  var X = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>';
+  files.unshift(
+    { name: '[Content_Types].xml', data: enc.encode(X + '<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/>' + sheets.map(function (s, i) { return '<Override PartName="/xl/worksheets/sheet' + (i + 1) + '.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>'; }).join('') + '</Types>') },
+    { name: '_rels/.rels', data: enc.encode(X + '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/></Relationships>') },
+    { name: 'xl/workbook.xml', data: enc.encode(X + '<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets>' + names.map(function (n, i) { return '<sheet name="' + xmlEsc(n) + '" sheetId="' + (i + 1) + '" r:id="rId' + (i + 1) + '"/>'; }).join('') + '</sheets></workbook>') },
+    { name: 'xl/_rels/workbook.xml.rels', data: enc.encode(X + '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">' + sheets.map(function (s, i) { return '<Relationship Id="rId' + (i + 1) + '" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet' + (i + 1) + '.xml"/>'; }).join('') + '<Relationship Id="rId' + (sheets.length + 1) + '" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>') },
+    { name: 'xl/styles.xml', data: enc.encode(X + '<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><fonts count="2"><font><sz val="11"/><name val="Calibri"/></font><font><b/><sz val="11"/><name val="Calibri"/></font></fonts><fills count="2"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill></fills><borders count="1"><border><left/><right/><top/><bottom/><diagonal/></border></borders><cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs><cellXfs count="2"><xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/><xf numFmtId="0" fontId="1" fillId="0" borderId="0" xfId="0" applyFont="1"/></cellXfs><cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>') }
+  );
+  var b = zipStore(files);
+  return new Blob([b], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+}
+function exportXlsx(name, sheets) {
+  shareOrSave(makeXlsx(sheets), name + '-' + S.today + '.xlsx');
+}
+function surgeonsOf(p) { try { var a = JSON.parse(p.Surgeons || '[]'); return Array.isArray(a) ? a : []; } catch (e) { return []; } }
+function surgeonIn(p, role) { var l = surgeonsOf(p).filter(function (x) { return x.role === role; }); return l.length ? l[0].name : ''; }
+function patientExportRows(list) {
+  var head = ['MRN', 'Name', 'Date of birth', 'Age', 'Consultant', 'Procedure', 'Side', 'Diagnosis', 'Category', 'Minutes', 'Care', 'Status', 'Medical status', 'Date added',
+    'Days waiting', 'Booked date', 'Conditions', 'Clearances', 'Priority', 'Sponsorship', 'Contact 1', 'Contact 2', 'Done date', 'Primary surgeon', 'First assistant',
+    'Second assistant', 'Supervising consultant', 'Removed reason', 'Notes'];
+  var rows = list.map(function (p) {
+    return [p.MRN, p.Name, p.DOB, ageText(p.DOB), consName(p.ConsultantId), procLabel(p), p.Laterality, p.Diagnosis, p.Category, totalMin(p), p.CareType, p.Status, medOf(p), p.DateAdded,
+      waitDays(p), p.ScheduledDate, tagsOf(p).concat(p.TagsOther ? [p.TagsOther] : []).join('; '),
+      clearances(p).map(function (c) { return c.spec + ' ' + c.state; }).join('; '), p.Priority, p.Sponsorship, p.Guardian, p.Guardian2, p.DoneDate,
+      surgeonIn(p, 'Primary surgeon'), surgeonIn(p, 'First assistant'), surgeonIn(p, 'Second assistant'), surgeonIn(p, 'Supervising consultant'), p.RemovedReason, p.Notes];
+  });
+  return [head].concat(rows);
+}
+function exportPatients(name, list) {
+  exportXlsx(name, [{ name: 'Patients', rows: patientExportRows(list) }]);
+  toast('Exported ' + list.length + ' rows to Excel');
+}
+
+/** Draws a table as one or more canvas pages. o: { title, lines, cols: [{h, w, bold}], rows, footer }. pageH = A4 page height, or null for one tall image. */
+function renderTableDoc(o, pageH) {
+  var W = pageH ? 1240 : 1080, M = 60, FONT = '"Helvetica Neue",Arial,sans-serif', tw = W - 2 * M, LH = 34;
+  var sc = document.createElement('canvas').getContext('2d');
+  var xs = [], acc = M, widths = [];
+  o.cols.forEach(function (c) { xs.push(acc); widths.push(c.w * tw - 14); acc += c.w * tw; });
+  function wrap(ctx, text, width) {
+    var words = String(text === null || text === undefined ? '' : text).split(/\s+/), lines = [], cur = '';
+    words.forEach(function (w) {
+      var t = cur ? cur + ' ' + w : w;
+      if (ctx.measureText(t).width > width && cur) { lines.push(cur); cur = w; } else cur = t;
+    });
+    lines.push(cur);
+    return lines;
+  }
+  var blocks = [];
+  sc.font = 'bold 44px ' + FONT; blocks.push({ t: 'title', h: 70, text: o.title });
+  sc.font = '30px ' + FONT; (o.lines || []).forEach(function (t) { blocks.push({ t: 'line', h: 42, text: t }); });
+  blocks.push({ t: 'gap', h: 24 });
+  var header = { t: 'head', h: 56 };
+  blocks.push(header);
+  sc.font = '28px ' + FONT;
+  o.rows.forEach(function (r) {
+    var cells = r.map(function (v, i) { return wrap(sc, v, widths[i]); });
+    var n = Math.max.apply(null, cells.map(function (c) { return c.length; }));
+    blocks.push({ t: 'row', h: n * LH + 22, cells: cells });
+  });
+  if (!o.rows.length) blocks.push({ t: 'line', h: 42, text: 'Nobody on this list.' });
+  if (o.footer) { blocks.push({ t: 'gap', h: 24 }); blocks.push({ t: 'foot', h: 36, text: o.footer }); }
+  var pages = [[]], y = M;
+  blocks.forEach(function (b) {
+    if (pageH && y + b.h > pageH - M && pages[pages.length - 1].length) { pages.push([header]); y = M + header.h; }
+    pages[pages.length - 1].push(b); y += b.h;
+  });
+  return pages.map(function (blks) {
+    var total = M * 2; blks.forEach(function (b) { total += b.h; });
+    var cv = document.createElement('canvas'); cv.width = W; cv.height = pageH || total;
+    var g = cv.getContext('2d'); g.fillStyle = '#fff'; g.fillRect(0, 0, W, cv.height); g.fillStyle = '#111'; g.textBaseline = 'top';
+    var yy = M;
+    blks.forEach(function (b) {
+      if (b.t === 'title') { g.font = 'bold 44px ' + FONT; g.fillText(b.text, M, yy); }
+      else if (b.t === 'line') { g.font = '30px ' + FONT; g.fillStyle = '#333'; g.fillText(b.text, M, yy); g.fillStyle = '#111'; }
+      else if (b.t === 'foot') { g.font = '22px ' + FONT; g.fillStyle = '#777'; g.fillText(b.text, M, yy); g.fillStyle = '#111'; }
+      else if (b.t === 'head') {
+        g.font = 'bold 26px ' + FONT; g.fillStyle = '#555';
+        o.cols.forEach(function (c, i) { g.fillText(c.h, xs[i], yy + 8); });
+        g.fillStyle = '#111'; g.fillRect(M, yy + b.h - 4, tw, 2);
+      } else if (b.t === 'row') {
+        b.cells.forEach(function (lines, i) {
+          g.font = (o.cols[i].bold ? 'bold ' : '') + '28px ' + FONT;
+          lines.forEach(function (ln, k) { g.fillText(ln, xs[i], yy + 8 + k * LH); });
+        });
+        g.fillStyle = '#ccc'; g.fillRect(M, yy + b.h - 2, tw, 1); g.fillStyle = '#111';
+      }
+      yy += b.h;
+    });
+    return cv;
+  });
+}
+function pdfFromCanvases(cvs) {
+  var enc = new TextEncoder(), chunks = [], offs = [], len = 0;
+  function add(x) { var u = typeof x === 'string' ? enc.encode(x) : x; chunks.push(u); len += u.length; }
+  function obj(n, parts) { offs[n] = len; add(n + ' 0 obj\n'); parts.forEach(add); add('\nendobj\n'); }
+  function bytes(dataUrl) { var bin = atob(dataUrl.split(',')[1]), u = new Uint8Array(bin.length); for (var i = 0; i < bin.length; i++) u[i] = bin.charCodeAt(i); return u; }
+  add('%PDF-1.4\n');
+  var kids = cvs.map(function (c, i) { return (3 + 3 * i) + ' 0 R'; });
+  obj(1, ['<< /Type /Catalog /Pages 2 0 R >>']);
+  obj(2, ['<< /Type /Pages /Kids [' + kids.join(' ') + '] /Count ' + cvs.length + ' >>']);
+  cvs.forEach(function (c, i) {
+    var pw = 595.28, ph = pw * c.height / c.width, jpg = bytes(c.toDataURL('image/jpeg', 0.92));
+    var content = 'q ' + pw.toFixed(2) + ' 0 0 ' + ph.toFixed(2) + ' 0 0 cm /Im0 Do Q';
+    obj(3 + 3 * i, ['<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ' + pw.toFixed(2) + ' ' + ph.toFixed(2) + '] /Resources << /XObject << /Im0 ' + (5 + 3 * i) + ' 0 R >> >> /Contents ' + (4 + 3 * i) + ' 0 R >>']);
+    obj(4 + 3 * i, ['<< /Length ' + content.length + ' >>\nstream\n' + content + '\nendstream']);
+    obj(5 + 3 * i, ['<< /Type /XObject /Subtype /Image /Width ' + c.width + ' /Height ' + c.height + ' /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ' + jpg.length + ' >>\nstream\n', jpg, '\nendstream']);
+  });
+  var n = 2 + 3 * cvs.length, at = len, x = 'xref\n0 ' + (n + 1) + '\n0000000000 65535 f \n';
+  for (var i = 1; i <= n; i++) x += ('0000000000' + offs[i]).slice(-10) + ' 00000 n \n';
+  add(x + 'trailer\n<< /Size ' + (n + 1) + ' /Root 1 0 R >>\nstartxref\n' + at + '\n%%EOF');
+  return new Blob(chunks, { type: 'application/pdf' });
+}
+function canvasBlob(cv, cb) { cv.toBlob(function (b) { cb(b); }, 'image/png'); }
+function copyText(text) {
+  function fallback() {
+    var ta = document.createElement('textarea'); ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); toast('Copied'); } catch (e) { toast('Could not copy. Select the text and copy it by hand.', true); }
+    ta.remove();
+  }
+  if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(function () { toast('Copied'); }).catch(fallback); else fallback();
+}
+function pickMenu(title, items) {
+  var m = openModal('<h2>' + esc(title) + '</h2><div class="menulist">' + items.map(function (it, i) { return '<button type="button" data-i="' + i + '"' + (it.on ? ' class="primary"' : '') + '>' + esc(it.label) + '</button>'; }).join('') + '</div>', { narrow: true });
+  on(m.el, '[data-i]', 'click', function (e) { var it = items[+e.currentTarget.getAttribute('data-i')]; m.close(); it.fn(); });
+  return m;
+}
+function surgeonPool() {
+  var seen = {}, out = [];
+  function add(n) { n = String(n || '').trim(); if (n && !seen[n.toLowerCase()]) { seen[n.toLowerCase()] = true; out.push(n); } }
+  S.d.consultants.forEach(function (c) { if (c.Active === 'Y') add(c.Name); });
+  (S.d.residents || []).forEach(function (r) { if (r.Active === 'Y') add(r.Name); });
+  S.d.patients.forEach(function (p) { if (p.Status === 'Done') surgeonsOf(p).forEach(function (x) { add(x.name); }); });
+  return out;
 }
 
 init();
