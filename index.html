@@ -209,7 +209,7 @@ html,body{height:100%}
     };
   }
   window.google = { script: { run: run() } };
-  window.APP_VERSION = '0.5.1';
+  window.APP_VERSION = '0.5.4';
   window.APP_HOST = 'GitHub Pages';
 })();
 
@@ -279,29 +279,16 @@ function toast(msg, isErr) {
 function store(k, v) { try { if (v === null) sessionStorage.removeItem(k); else sessionStorage.setItem(k, v); } catch (e) { /* ignore */ } }
 function fetchStored(k) { try { return sessionStorage.getItem(k); } catch (e) { return null; } }
 
-var SPEED = [];
-function noteSpeed(ms) {
-  if (ms !== null) { SPEED.push(ms); if (SPEED.length > 20) SPEED.shift(); }
-  var el = document.getElementById('spd');
-  if (el && SPEED.length) {
-    ms = SPEED[SPEED.length - 1];
-    var avg = SPEED.reduce(function (a, b) { return a + b; }, 0) / SPEED.length;
-    el.textContent = (ms / 1000).toFixed(1) + ' s';
-    el.title = 'Hosted on: ' + (window.APP_HOST || 'Apps Script') + '. Last server call ' + Math.round(ms) + ' ms; average of the last ' + SPEED.length + ' calls ' + Math.round(avg) + ' ms.';
-  }
-}
 function call(action, payload) {
-  var t0 = Date.now();
   return new Promise(function (resolve, reject) {
     google.script.run
       .withSuccessHandler(function (r) {
-        noteSpeed(Date.now() - t0);
         if (r && r.ok) { resolve(r.data); return; }
         var m = (r && r.error) || 'Request failed';
         if (m === 'SESSION_EXPIRED') { expire(); }
         reject(new Error(m));
       })
-      .withFailureHandler(function (e) { noteSpeed(Date.now() - t0); reject(new Error((e && e.message) || 'Could not reach the server')); })
+      .withFailureHandler(function (e) { reject(new Error((e && e.message) || 'Could not reach the server')); })
       .api(S.token, action, payload || {});
   });
 }
@@ -539,7 +526,7 @@ function buildShell() {
     '<div class="shell">' +
     '<aside class="side"><div class="brand"><strong>Pediatric Surgery</strong><span class="muted small">Waiting list · v' + esc(VERSION) + '</span></div>' +
     '<nav class="sidenav">' + NAV.map(function (n) { return '<button data-v="' + n[0] + '">' + ico(n[0]) + '<span>' + esc(n[1]) + '</span><em class="badge" data-b="' + n[0] + '"></em></button>'; }).join('') + '</nav>' +
-    '<div class="sidefoot"><div class="muted small">' + esc(S.user.Name) + '</div><span class="muted small" id="spd"></span>' +
+    '<div class="sidefoot"><div class="muted small">' + esc(S.user.Name) + '</div>' +
     '<div class="row" style="margin-top:6px"><button id="refresh" title="Reload data">Refresh</button><button id="logout">Sign out</button></div></div></aside>' +
     '<div class="main"><header class="top"><div class="ttl" id="ttl"></div>' +
     '<label class="gsearch">' + ico('search') + '<input type="search" id="gq" placeholder="Search name or MRN   ( / )" value="' + esc(S.f.q) + '" autocomplete="off"></label>' +
@@ -560,12 +547,11 @@ function buildShell() {
     var m = openModal('<div class="spread"><h2>Menu</h2><button id="mm_x">Close</button></div><div class="menulist">' +
       ['done', 'removed', 'settings'].map(function (v) { return '<button data-v="' + v + '">' + ico(v) + '<span>' + esc(navTitle(v)) + '</span></button>'; }).join('') +
       '<button id="mm_ref">' + ico('dash') + '<span>Reload data</span></button><button id="mm_out">' + ico('removed') + '<span>Sign out (' + esc(S.user.Name) + ')</span></button></div>' +
-      '<p class="muted small" style="margin-top:10px">v' + esc(VERSION) + ' · <span id="mm_spd"></span></p>', { narrow: true });
+      '<p class="muted small" style="margin-top:10px">v' + esc(VERSION) + '</p>', { narrow: true });
     $('mm_x').addEventListener('click', m.close);
     on(m.el, '[data-v]', 'click', function (e) { m.close(); go(e.currentTarget.getAttribute('data-v')); });
     $('mm_ref').addEventListener('click', function () { m.close(); doRefresh(); });
     $('mm_out').addEventListener('click', function () { m.close(); doLogout(); });
-    var sp = $('spd'); $('mm_spd').textContent = sp && sp.title ? sp.textContent + ' last call' : '';
   }
   $('tabmore').addEventListener('click', more);
   $('topmore').addEventListener('click', more);
@@ -582,7 +568,6 @@ function render() {
   for (var j = 0; j < bs.length; j++) { bs[j].textContent = nw ? String(nw) : ''; bs[j].style.display = nw ? '' : 'none'; }
   $('ttl').textContent = navTitle(S.view);
   var g = $('gq'); if (g && document.activeElement !== g && g.value !== S.f.q) g.value = S.f.q;
-  noteSpeed(null);
   if (S.view === 'list') viewList();
   else if (S.view === 'cal') viewCalendar();
   else if (S.view === 'dash') viewDashboard();
