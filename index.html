@@ -178,6 +178,48 @@ html,body{height:100%}
   .overlay{padding:0}
   .modal{border-radius:0;min-height:100vh}
 }
+
+/* ---- v0.6 waiting list ---- */
+.hid{display:none!important}
+.constabs{display:flex;gap:8px;margin:2px 0 10px;flex-wrap:wrap}
+.constabs .pill{font-size:15px;padding:9px 18px;font-weight:500;border-radius:10px}
+.constabs .pill b{font-weight:600;opacity:.65;margin-left:4px}
+.constabs .pill.on b{opacity:.85}
+.chiprow{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0}
+.schip{border:1px solid var(--line2);border-radius:20px;padding:5px 12px;background:var(--card);font-size:13px;min-height:0;white-space:nowrap}
+.schip b{font-weight:600;margin-right:2px}
+.schip.on{background:var(--ink);color:var(--onink);border-color:var(--ink)}
+.fbtn{margin-left:auto}
+.afrow{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin:4px 0 8px}
+.chip.afc{border:1px solid var(--line2);cursor:pointer;background:var(--card);color:var(--text);min-height:0;padding:3px 9px}
+.tagbtn{border:none;cursor:pointer;min-height:0;font:inherit;font-size:11px;padding:2px 8px;line-height:1.4}
+.tagbtn:hover{filter:brightness(.95);outline:1px solid var(--line2)}
+.chip.stbook{background:transparent;color:#4d8a2a;border:1px solid #8fbf72}
+.hbtn{border:none;background:none;min-height:0;padding:0;color:var(--muted);font-weight:500;cursor:pointer;font-size:13px}
+.hbtn.hs{margin-right:6px}
+.hbtn:hover{color:var(--text)}
+.hbtn .car{font-size:10px}
+.hbtn.fon{color:var(--focus);font-weight:600}
+.hbtn.fon::after{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--focus);margin-left:4px;vertical-align:middle}
+table.wl td:nth-child(1){min-width:150px}
+table.wl td:nth-child(2),table.wl td:nth-child(6){white-space:nowrap}
+table.wl td:nth-child(3){min-width:120px}
+table.wl td:nth-child(4){white-space:nowrap}
+table.wl td.acts{white-space:nowrap;text-align:right}
+.wred{color:var(--red);font-weight:600}
+.phbtn{padding:5px 9px;min-height:34px}
+.phbtn .ico{width:16px;height:16px}
+button.btn-sched{white-space:nowrap}
+.bignum{font-size:30px;font-weight:600;letter-spacing:1px;font-variant-numeric:tabular-nums;margin:2px 0}
+details.fold{border-top:1px solid var(--line);margin-top:10px;padding-top:8px}
+details.fold>summary{cursor:pointer;font-weight:500;list-style:none;padding:4px 0}
+details.fold>summary::before{content:"\25B8  ";color:var(--muted)}
+details.fold[open]>summary::before{content:"\25BE  "}
+.tagrows{display:flex;flex-direction:column;gap:6px;margin:6px 0 4px}
+.tagrow{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.tagrow .f_tnote{max-width:260px}
+.stabs{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0 12px}
+.clrow{grid-template-columns:1.2fr 1fr 1fr 1.3fr auto}
 </style>
 <link rel="manifest" href="data:application/manifest+json;base64,eyJuYW1lIjogIlBlZGlhdHJpYyBTdXJnZXJ5IFdhaXRpbmcgTGlzdCIsICJzaG9ydF9uYW1lIjogIldhaXRpbmcgbGlzdCIsICJzdGFydF91cmwiOiAiLiIsICJkaXNwbGF5IjogInN0YW5kYWxvbmUiLCAiYmFja2dyb3VuZF9jb2xvciI6ICIjZjZmNmY0IiwgInRoZW1lX2NvbG9yIjogIiMxZjFmMWQiLCAiaWNvbnMiOiBbeyJzcmMiOiAiZGF0YTppbWFnZS9wbmc7YmFzZTY0LGlWQk9SdzBLR2dvQUFBQU5TVWhFVWdBQUFNQUFBQURBQ0FJQUFBRGR2dnRRQUFBQzhVbEVRVlI0WHUzZFVXcmJRQlJBVWFkMEcyMnkvMVdGcnFTRWxHQkM2Z1pkaGI3eG5QT3ZBVDJ1Qm4zSTQ0Zkh4eDhYT09yYjBRdmhoWUJJQkVRaUlCSUJrUWlJUkVBa0FpSVJFSW1BU0FSRUlpQVNBWkVJaUVSQUpBSWlFUkNKZ0VnRVJDSWdFZ0dSQ0loRVFDUUNJaEVRaVlCSUJFUWlJQklCa1FpSVJFQWtBaUlSRUltQVNBUkVJaUFTQVpFSWlFUkFKQUlpRVJDSmdFZ0VSUEk5WFgybm5wOS8vZTNPbnA1KzN1bE5IL1RnejFhdTNVam5tb3plQ09pUFQ2WWpvM2U4QTcwNFVNL2hxKzZNZ0E3VzgrcFllZmRrOTRCNkFYMkZwZTBlRU5IV0FaMjFlWnkxem9xMkRvaHUzNERPM1RiT1hXMGgrd2JFS1FSRUlpQVNBWkVJaUVSQUpBSWlFUkNKZ0VnRVJDSWdFZ0dSQ0loRVFDUUNJaEVRaVlCSUJFUWlJQklCa1FpSVJFQWtBaUlSRUltQVNBUkVJaUFTQVpFSWlHVDZJWnZibm5weGJmS2hzSE1Ea3M0N016T2FHSkIwYnBpVzBiaDNJUFhjTm0wK3N3S2FOcDJaUmsxcFVFQ2o1akxjbkZrTkNvZ1ZUUWxvemlPMWlpRVRteElRaXhvUjBKQ0hhVGtUNWpZaUlOWWxJQklCa1FpSVJFQWtBaUlSRUltQVNFWUVOTzBibDFWTW1OdUlnRmpYbElBbVBFeHJHVEt4S1FHeHFFRUJEWG1rbGpCblZvTUN1bHdHeldXeU9mVmNMc01DMHRBL2phcm5jaG41czU1WEV6NTJHV1ZhT3E4bS9pN3Ntb3lHNzhyVEEvbzZwNmM1YzRmNGFyTmVvbG1PZ0VnRVJDSWdFZ0dSQ0loRVFDUUNJaEVRaVlCSUJFUWlJQklCa1FpSVJFQWtBaUlSRUltQVNBUkVJaUFTQVpFSWlFUkFKQUlpRVJDSmdFZ0VSQ0lnRWdHUjdCdlF1WWRwbkx2YVF2WU5pRk5zSGRCWjI4Wlo2NnhvNjREb2RnK29ieDU5aGFYdEhsQThnWER6ZWlZZTgvdGZIT3ZnMkZWM1p0OUROai8weVpNM3BmTkdRQis0a1pGMDNoRVFpWmRvRWdHUkNJaEVRQ1FDSWhFUWlZQklCRVFpSUJJQmtRaUlSRUFrQWlJUkVJbUFTQVJFSWlBU0FaRUlpRVJBSkFJaUVSQ0pnRWdFUkNJZ0VnR1JDSWhFUUNRQ0loRVFpWUJJQkVRaUlCSUJrUWlJUkVBa0FpSVJFSW1BU0FSRUlpQVNBWkg4QmhGR1lydW1qbFlkQUFBQUFFbEZUa1N1UW1DQyIsICJzaXplcyI6ICIxOTJ4MTkyIiwgInR5cGUiOiAiaW1hZ2UvcG5nIn0sIHsic3JjIjogImRhdGE6aW1hZ2UvcG5nO2Jhc2U2NCxpVkJPUncwS0dnb0FBQUFOU1VoRVVnQUFBZ0FBQUFJQUNBSUFBQUI3R2tPdEFBQUpYMGxFUVZSNFh1M2FVV29jUnhSQVVTdGtHOUxNL2xjMWFDVWhHSUtKc0pCbHErdFYzWE8rSFZRZHF0N3RhdWJwZG52K0JrRFBYNzFIQnVCZkFnQVFKUUFBVVFJQUVDVUFBRkVDQUJBbEFBQlJBZ0FRSlFBQVVRSUFFQ1VBQUZFQ0FCQWxBQUJSQWdBUUpRQUFVUUlBRUNVQUFGRUNBQkFsQUFCUkFnQVFKUUFBVVFJQUVDVUFBRkVDQUJBbEFBQlJBZ0FRSlFBQVVRSUFFQ1VBQUZFQ0FCQWxBQUJSQWdBUUpRQUFVUUlBRUNVQUFGRUNBQkFsQUFCUkFnQVFKUUFBVVFJQUVDVUFBRkVDQUJBbEFBQlJBZ0FRSlFBQVVRSUFFQ1VBQUZFQ0FCQWxBQUJSQWdBUUpRQUFVUUlBRUNVQUFGRUNBQkFsQUFCUkFnQVFKUUFBVVFJQUVDVUFBRkVDQUJBbEFBQlJBZ0FRSlFBQVVRSUFFQ1VBQUZFQ0FCQWxBQUJSQWdBUUpRQUFVUUlBRUNVQUFGRUNBQkFsQUFCUkFnQVFKUUFBVVFJQUVDVUFBRkVDQUJBbEFBQlJBZ0FRSlFBQVVRSUFFQ1VBQUZFQ0FCQWxBQUJSQWdBUUpRQUFVUUlBRUNVQUFGRUNBQkFsQUFCUkFnQVFKUUFBVVFJQUVDVUFBRkVDQUJBbEFBQlJBZ0FRSlFBQVVRSUFFQ1VBQUZFQ0FCQWxBQUJSQWdBUUpRQUFVUUlBRUNVQUFGRUNBQkFsQUFCUkFnQVFKUUFBVVFJQUVDVUFBRkVDQUJBbEFBQlJBZ0FRSlFBQVVYOUhuNXVTeCtQMWM0OTd2Nzk4N2orRUxUemRiczliTEJSK3lhZUgvcytJQWVjUkFJN3l4K2YrVzByQU1RU0FRMXd3K244a0F4eEFBTmpleGFOZkJqaUdYd0d4dDRYVC85dTN4WDhkZnBNYkFMdGFPL3IveHhjaGR1UUd3SlpHVFg5WEFUWWxBT3huMnZUL2J1YXE0QjBDd0dZbXo5bkphNE8zQklDZHpKK3c4MWNJL3hFQXRySExiTjFsblNBQTdHR3ZxYnJYYXNrU0FEYXc0enpkY2MzVUNBQkFsQUF3M2I2djB2dXVuQWdCWUxUZForanU2K2RzQWdBUUpRRE1kY2JyOHhsUHdaRUVBQ0JLQUJqcXBCZm5rNTZGa3dnQVFKUUFBRVFKQUJPZDk4M2t2Q2ZpQUFJQUVDVUFBRkVDQUJBbEFJeHo2dWZ5VTUrTGZRa0FRSlFBQUVRSkFFQ1VBQUJFQ1FCQWxBQUFSQWtBUUpRQUFFUUpBRUNVQUFCRUNRQkFsQUFBUkFrQVFKUUFBRVFKQUVDVUFBQkVDUUJBbEFBQVJBa0FRSlFBQUVRSkFFQ1VBQUJFQ1FCQWxBQUFSQWtBUUpRQUFFUUpBRUNVQUFCRUNRQkFsQUFBUkFrQVFKUUFBRVFKQUVDVUFBQkVDUUJBbEFBQVJBa0FRSlFBQUVRSkFFQ1VBQUJFQ1FCQWxBQUFSQWtBUUpRQUFFUUpBRUNVQUFCRUNRQkFsQUFBUkFrQVFKUUFBRVFKQUVDVUFBQkVDUUJBbEFBQVJBa0FRSlFBQUVRSkFFQ1VBQUJFQ1FCQWxBQUFSQWtBUUpRQUFFUUpBRUNVQUFCRUNRQkFsQUFBUkFrQVFKUUFBRVFKQUVDVUFBQkVDUUJBbEFBQVJBa0FRSlFBQUVROTNXN1AwVWZmMXVQeHV1M2FPZHo5L25MNEU1NUZBUFpnNkxNZE1aaFBBRVl6OXptQUVvd2xBRU1aL1J4R0JnWVNnSEdNZmc0bUE2UDRGZEFzcGo5bnM4TkhjUU9Zd3NFZ3hWVmdBamVBRVV4L2F1ejVDUVJnUFNlQkpqdC9PUUZZekJtZ3pQNWZTd0JXc3Z2QktWaElBSmF4NytFN1oyRVZBVmpEam9jZk9SRkxDTUFDOWpxODVWeGNUd0FBb2dUZ2FsNXo0R2Vjam9zSndLWHNiM2lmTTNJbEFRQ0lFb0RyZUxXQmozQlNMaU1BQUZFQ2NCRXZOZkJ4enNzMUJBQWdTZ0FBb2dUZ0N1Nno4S3VjbWdzSUFFQ1VBQUJFQ1FCQWxBQjhPWjh5NFhPY25hOG1BQUJSQWdBUUpRQUFVUUlBRUNVQUFGRUNBQkFsQUFCUkFnQVFKUUFBVVFJQUVDVUFBRkVDQUJBbEFBQlJBZ0FRSlFBQVVRSUFFQ1VBQUZFQ0FCQWxBRi91Zm4vNThyOEJKM0oydnBvQUFFUUpBRUNVQUFCRUNjQVZmTXFFWCtYVVhFQUFBS0lFQUNCS0FDN2lQZ3NmNTd4Y1F3QUFvZ1RnT2w1cTRDT2NsTXNJQUVDVUFGektxdzI4enhtNWtnQmN6ZjZHbjNFNkxpWUFBRkVDc0lEWEhIakx1YmllQUt4aHI4T1BuSWdsQkdBWk94NitjeFpXRVlDVjdIdHdDaFlTZ01Yc2ZzcnMvN1VFWUQxbmdDWTdmemtCR01GSm9NYWVuK0RwZG51ZXNBNitlenhlL2EvZ2JFYi9IRzRBc3pnYm5NME9IOFVOWUNoWEFRNWo5QThrQUtQSkFBY3crc2NTZ0Qwb0Fkc3g5K2NUZ1AySUFXTVorbnNSQU1ZNXVIRG1JNlA0RlJCQWxBQUFSQWtBUUpRQUFFUUpBRUNVQUFCRUNRQkFsQUFBUkFrQVFKUUFBRVFKQUVDVUFBQkVDUUJBbEFBQVJBa0FRSlFBQUVRSkFFQ1VBQUJFQ1FCQWxBQUFSQWtBUUpRQUFFUUpBRUNVQUFCRUNRQkFsQUFBUkFrQVFKUUFBRVFKQUVDVUFBQkVDUUJBbEFBQVJBa0FRSlFBQUVRSkFFQ1VBQUJFQ1FCQWxBQUFSQWtBUUpRQUFFUUpBRUNVQUFCRUNRQkFsQUFBUkFrQVFKUUFBRVFKQUVDVUFBQkVDUUJBbEFBQVJBa0FRSlFBQUVRSkFFQ1VBQUJFQ1FCQWxBQUFSQWtBUUpRQUFFUUpBRUNVQUFCRUNRQkFsQUFBUkFrQVFKUUFBRVFKQUVDVUFBQkVDUUJBbEFBQVJBa0FRSlFBQUVRSkFFQ1VBQUJFQ1FCQWxBQUFSQWtBNDl6dkwrUFc5Q2VjK2x6c1N3QUFvZ1FBSUVvQUFLSUVnSW5PKzF4KzNoTnhBQUVBaUJJQWdDZ0JZS2lUdnBtYzlDeWNSQUFBb2dTQXVjNTRjVDdqS1RpU0FBQkVDUUNqN2Y3NnZQdjZPWnNBTU4yK00zVGZsUk1oQUFCUkFzQUdkbnlWM25ITjFBZ0FlOWhybnU2MVdySUVnRzNzTWxWM1dTY0lBRHVaUDF2bnJ4RCtJd0JzWnZLRW5idzJlRXNBMk0vTU9UdHpWZkFPQVdCTDA2YnR0UFhBUnp6ZGJzOGYrWGN3MCtQeHVuWmhSai83Y2dOZ2Iydm43OXEvRHIvSkRZQkRYSHdWTVBvNWdBQndsQXN5WVBSekRBSGdUSCs4Qk9ZKzV4RUF6dmZwR0JqNm5FMEFBS0w4Q2dnZ1NnQUFvZ1FBSUVvQUFLSUVBQ0JLQUFDaUJBQWdTZ0FBb2dRQUlFb0FBS0lFQUNCS0FBQ2lCQUFnU2dBQW9nUUFJRW9BQUtJRUFDQktBQUNpQkFBZ1NnQUFvZ1FBSUVvQUFLSUVBQ0JLQUFDaUJBQWdTZ0FBb2dRQUlFb0FBS0lFQUNCS0FBQ2lCQUFnU2dBQW9nUUFJRW9BQUtJRUFDQktBQUNpQkFBZ1NnQUFvZ1FBSUVvQUFLSUVBQ0JLQUFDaUJBQWdTZ0FBb2dRQUlFb0FBS0lFQUNCS0FBQ2lCQUFnU2dBQW9nUUFJRW9BQUtJRUFDQktBQUNpQkFBZ1NnQUFvZ1FBSUVvQUFLSUVBQ0JLQUFDaUJBQWdTZ0FBb2dRQUlFb0FBS0lFQUNCS0FBQ2lCQUFnU2dBQW9nUUFJRW9BQUtJRUFDQktBQUNpQkFBZ1NnQUFvZ1FBSUVvQUFLSUVBQ0JLQUFDaUJBQWdTZ0FBb2dRQUlFb0FBS0lFQUNCS0FBQ2lCQUFnU2dBQW9nUUFJRW9BQUtJRUFDQktBQUNpQkFBZ1NnQUFvZ1FBSUVvQUFLSUVBQ0JLQUFDaUJBQWdTZ0FBb2dRQUlFb0FBS0lFQUNCS0FBQ2lCQUFnU2dBQW9nUUFJRW9BQUtJRUFDQktBQUNpQkFBZ1NnQUFvZ1FBSUVvQUFLSUVBQ0JLQUFDaUJBQWdTZ0FBb3Y0QjlVdjVjMDZlVzNVQUFBQUFTVVZPUks1Q1lJST0iLCAic2l6ZXMiOiAiNTEyeDUxMiIsICJ0eXBlIjogImltYWdlL3BuZyJ9XX0=">
 <meta name="theme-color" content="#1f1f1d">
@@ -209,7 +251,7 @@ html,body{height:100%}
     };
   }
   window.google = { script: { run: run() } };
-  window.APP_VERSION = '0.5.4';
+  window.APP_VERSION = '0.6.0';
   window.APP_HOST = 'GitHub Pages';
 })();
 
@@ -217,22 +259,24 @@ html,body{height:100%}
 'use strict';
 
 var VERSION = window.APP_VERSION || '';
-var SPECIALTIES = ['Anesthesia', 'Cardiology', 'Nephrology', 'Pulmonology', 'Hematology', 'Endocrinology', 'Neurology', 'Genetics', 'Other'];
-var TAGS = ['Cardiac', 'Asthma', 'Trisomy 21', 'Syndromic', 'Renal', 'Hematologic', 'Prematurity', 'Neurologic'];
+var SPECIALTIES = ['Anesthesia', 'Cardiology', 'Nephrology', 'Pulmonology', 'Hematology', 'Endocrinology', 'Neurology', 'Immunology', 'General pediatrics', 'Genetics', 'Other'];
+var TAGS = ['Congenital heart disease', 'Asthmatic', 'Chronic lung disease', 'Kidney disease', 'Bleeding or clotting disorder', 'Sickle cell or thalassemia', 'Epilepsy', 'Developmental delay or cerebral palsy', 'Diabetes', 'Metabolic or endocrine disorder', 'Immunodeficiency', 'Syndromic', 'Prematurity or low weight', 'Trisomy 21', 'Other'];
+// the specialty review a tag adds ('' = none); older tag names kept so existing records still work
+var TAG_SPEC = { 'Congenital heart disease': 'Cardiology', 'Asthmatic': 'Pulmonology', 'Chronic lung disease': 'Pulmonology', 'Kidney disease': 'Nephrology', 'Bleeding or clotting disorder': 'Hematology', 'Sickle cell or thalassemia': 'Hematology', 'Epilepsy': 'Neurology', 'Developmental delay or cerebral palsy': 'Neurology', 'Diabetes': 'Endocrinology', 'Metabolic or endocrine disorder': 'Endocrinology', 'Immunodeficiency': 'Immunology', 'Syndromic': 'General pediatrics', 'Prematurity or low weight': 'General pediatrics', 'Trisomy 21': '', 'Other': '', 'Cardiac': 'Cardiology', 'Asthma': 'Pulmonology', 'Renal': 'Nephrology', 'Hematologic': 'Hematology', 'Neurologic': 'Neurology', 'Prematurity': 'General pediatrics' };
 var SPONSOR = ['Bahraini', 'Family of Bahraini', 'Family of government worker', 'Exempted', 'Self-payment', 'Covered by insurance'];
 var PRIORITY = ['', 'Clinical', 'Social', 'Age-sensitive', 'Other'];
-var REMOVE_REASONS = ['Patient refused procedure', 'Done in private', 'Not needed', 'Booked and did not attend', 'Called multiple times, no response', 'Other'];
+var REMOVE_REASONS = ['Patient refused procedure', 'Done in private', 'Not needed', 'Booked and did not attend', 'Called multiple times, no response', 'Transferred to adult services', 'Other'];
 var NOT_READY_REASONS = ['Sick', 'Traveling', 'Busy (exams)', 'Other'];
-var CONTACT_TYPES = ['Called - reached', 'Called - no answer', 'Booked', 'Note'];
+var CONTACT_TYPES = ['Called - reached', 'Called - no answer', 'Called - call back later', 'Called - wrong number', 'Booked', 'Note'];
 var CATS = ['Minor', 'Intermediate', 'Major'];
 var DAYS = ['', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 var MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
 var S = {
   token: null, user: null, d: null, today: '', view: 'list', cons: 'all', loadedAt: 0,
-  f: { q: '', status: '', cat: '', care: '', proc: '', prio: false }, sort: 'priority',
+  f: { q: '', chip: '', cat: '', care: '', proc: '', prio: false, wait: '', time: '', age: '', flag: '', med: '', ageFrom: '', ageTo: '' }, sort: 'priority', sortDir: 'asc',
   doneQ: '', doneStar: false, removedQ: '', calMonth: '', redrawList: null,
-  dashCons: 'all', dashYear: '', idleTimer: null, backup: null
+  dashCons: 'all', dashYear: '', idleTimer: null, backup: null, setTab: 'consultants'
 };
 
 // ---------------------------------------------------------------- helpers
@@ -327,6 +371,29 @@ function isActive(p) { return p.Status === 'Ready' || p.Status === 'Awaiting cle
 function clearances(p) { try { var a = JSON.parse(p.Clearances || '[]'); return Array.isArray(a) ? a : []; } catch (e) { return []; } }
 function tagsOf(p) { return (p.Tags || '').split(',').map(function (x) { return x.trim(); }).filter(Boolean); }
 function waitDays(p) { return Math.max(0, daysBetween(p.DateAdded || S.today, S.today)); }
+function waitParts(p) {
+  var a = (p.DateAdded || S.today).split('-'), b = S.today.split('-');
+  var y = +b[0] - +a[0], m = +b[1] - +a[1], d = +b[2] - +a[2];
+  if (d < 0) { m--; d += new Date(Date.UTC(+b[0], +b[1] - 1, 0)).getUTCDate(); }
+  if (m < 0) { y--; m += 12; }
+  if (y < 0) return { y: 0, m: 0, d: 0 };
+  return { y: y, m: m, d: d };
+}
+/** Waiting time as years, months and days, leaving out the zero parts. */
+function waitText(p) {
+  var w = waitParts(p), out = [];
+  if (w.y) out.push(w.y + 'y');
+  if (w.m) out.push(w.m + 'm');
+  if (w.d) out.push(w.d + 'd');
+  return out.length ? out.join(' ') : '0d';
+}
+function waitLimit(p) { return Number(S.d.settings['waitDays' + p.Category]) || 0; }
+function waitOver(p) { var l = waitLimit(p); return l > 0 && waitDays(p) > l; }
+function medOf(p) { return p.MedicalStatus === 'Free' || p.MedicalStatus === 'NotFree' ? p.MedicalStatus : (p.MedicalStatus === 'Unknown' ? 'Unknown' : (tagsOf(p).length ? 'NotFree' : 'Unknown')); }
+function tagNotes(p) { try { var o = JSON.parse(p.TagNotes || '{}'); return o && typeof o === 'object' ? o : {}; } catch (e) { return {}; } }
+function careShort(p) { return p.CareType === 'Inpatient' ? 'INP' : 'DCU'; }
+function phoneText(n) { n = String(n || ''); return /^\d{8}$/.test(n) ? n.slice(0, 4) + ' ' + n.slice(4) : n; }
+function specConsultants(spec) { return (S.d.specialtyConsultants || []).filter(function (x) { return x.Active === 'Y' && (!spec || x.Specialty === spec); }); }
 function priceFor(p) {
   var pr = procById(p.ProcedureId);
   if (!pr) return '';
@@ -354,7 +421,7 @@ function statusInfo(p) {
   if (p.Status === 'Ready') {
     if (p.ScheduledDate) {
       var bl = p.ListId ? listById(p.ListId) : null;
-      return { label: 'Booked ' + fmtDate(p.ScheduledDate), cls: 'green', sub: bl ? listTitle(bl) : '' };
+      return { label: fmtDate(p.ScheduledDate), cls: 'green', sub: bl ? listTitle(bl) : '', booked: true };
     }
     return { label: 'Ready', cls: 'green' };
   }
@@ -374,29 +441,34 @@ function warnings(p) {
   var st = S.d.settings, t = S.today, pr = procById(p.ProcedureId);
   var wait = waitDays(p);
   var lim = Number(st['waitDays' + p.Category]) || 0;
-  if (lim > 0 && wait > lim) w.push({ sev: 'high', text: 'Waiting ' + wait + ' d (limit ' + lim + ')' });
+  if (lim > 0 && wait > lim) w.push({ kind: 'wait', sev: 'high', text: 'Waiting ' + waitText(p) + ' (limit ' + lim + ' d)' });
+  var m14 = 168 - ageMonths(p.DOB, t), w14 = Number(st.warn14Months);
+  if (isNaN(w14)) w14 = 6;
+  if (m14 <= 0) w.push({ kind: 'age14', sev: 'high', text: 'Age 14: adult services' });
+  else if (m14 <= w14) w.push({ kind: 'age14', sev: 'med', text: '14 years in ' + m14 + ' mo' });
   if (pr && Number(pr.MaxAgeMonths) > 0) {
     var rem = Number(pr.MaxAgeMonths) - ageMonths(p.DOB, t);
     var wm = Number(pr.WarnMonthsBefore) || 3;
-    if (rem < 0) w.push({ sev: 'high', text: 'Past age limit' });
-    else if (rem <= wm) w.push({ sev: 'high', text: rem === 0 ? 'Age limit this month' : 'Age limit in ' + rem + ' mo' });
+    if (rem < 0) w.push({ kind: 'age', sev: 'high', text: 'Past age limit' });
+    else if (rem <= wm) w.push({ kind: 'age', sev: 'high', text: rem === 0 ? 'Age limit this month' : 'Age limit in ' + rem + ' mo' });
   }
   var target = p.TargetDate || (pr && Number(pr.TargetDays) > 0 ? addDaysStr(p.DateAdded, Number(pr.TargetDays)) : '');
   if (target) {
     var left = daysBetween(t, target), tw = Number(st.targetWarnDays) || 14;
-    if (left < 0) w.push({ sev: 'high', text: 'Past target date by ' + (-left) + ' d' });
-    else if (left <= tw) w.push({ sev: 'med', text: 'Target date in ' + left + ' d' });
+    if (left < 0) w.push({ kind: 'target', sev: 'high', text: 'Past target date by ' + (-left) + ' d' });
+    else if (left <= tw) w.push({ kind: 'target', sev: 'med', text: 'Target date in ' + left + ' d' });
   }
   var nc = Number(st.noContactDays) || 0;
   if (nc > 0 && p.Status !== 'Not ready') {
     var gap = daysBetween(p.LastContact || p.DateAdded, t);
-    if (gap > nc) w.push({ sev: 'med', text: 'No contact for ' + gap + ' d' });
+    if (gap > nc) w.push({ kind: 'contact', sev: 'med', text: 'No contact for ' + gap + ' d' });
   }
   clearances(p).forEach(function (c) {
-    if (c.state === 'Requested' && c.apptDate && c.apptDate < t) w.push({ sev: 'med', text: 'Check ' + c.spec + ' result (visit ' + fmtDate(c.apptDate) + ')' });
+    if (c.state === 'Requested' && c.apptDate && c.apptDate < t) w.push({ kind: 'clearance', sev: 'med', text: 'Check ' + c.spec + ' result (visit ' + fmtDate(c.apptDate) + ')' });
   });
-  if (p.ScheduledDate && p.ScheduledDate < t) w.push({ sev: 'high', text: 'Booked date passed (' + fmtDate(p.ScheduledDate) + ')' });
-  if (Number(p.CallCount) >= 3) w.push({ sev: 'med', text: 'Called ' + p.CallCount + ' times, no answer' });
+  if (p.ScheduledDate && p.ScheduledDate < t) w.push({ kind: 'booked', sev: 'high', text: 'Booked date passed (' + fmtDate(p.ScheduledDate) + ')' });
+  if (Number(p.CallCount) >= 3) w.push({ kind: 'calls', sev: 'med', text: 'Called ' + p.CallCount + ' times, no answer' });
+  if (p.Status === 'Ready' && medOf(p) === 'Unknown') w.push({ kind: 'med', sev: 'med', text: 'Medical status not set' });
   return w;
 }
 
@@ -508,7 +580,8 @@ var ICON = {
   settings: '<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/>',
   more: '<circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/>',
   plus: '<path d="M12 5v14M5 12h14"/>',
-  search: '<circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/>'
+  search: '<circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/>',
+  phone: '<path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/>'
 };
 function ico(n) { return '<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + ICON[n] + '</svg>'; }
 var NAV = [['list', 'Waiting list'], ['cal', 'Calendar'], ['dash', 'Dashboard'], ['warn', 'Warnings'], ['done', 'Done'], ['removed', 'Removed'], ['settings', 'Settings']];
@@ -524,7 +597,7 @@ function go(v) {
 function buildShell() {
   $('app').innerHTML =
     '<div class="shell">' +
-    '<aside class="side"><div class="brand"><strong>Pediatric Surgery</strong><span class="muted small">Waiting list · v' + esc(VERSION) + '</span></div>' +
+    '<aside class="side"><div class="brand"><strong>Pediatric Surgery</strong><span class="muted small">v' + esc(VERSION) + '</span></div>' +
     '<nav class="sidenav">' + NAV.map(function (n) { return '<button data-v="' + n[0] + '">' + ico(n[0]) + '<span>' + esc(n[1]) + '</span><em class="badge" data-b="' + n[0] + '"></em></button>'; }).join('') + '</nav>' +
     '<div class="sidefoot"><div class="muted small">' + esc(S.user.Name) + '</div>' +
     '<div class="row" style="margin-top:6px"><button id="refresh" title="Reload data">Refresh</button><button id="logout">Sign out</button></div></div></aside>' +
@@ -580,33 +653,66 @@ function render() {
 function useTable() { return window.innerWidth >= 860; }
 
 // ---------------------------------------------------------------- waiting list
+var WAIT_RANGES = [['u3', 'Under 3 months', 0, 92], ['3-6', '3 to 6 months', 92, 183], ['6-12', '6 to 12 months', 183, 365], ['o12', 'Over a year', 365, 99999]];
+var TIME_RANGES = [['u30', 'Up to 30 min', 0, 30], ['30-60', '31 to 60 min', 31, 60], ['60-120', '61 to 120 min', 61, 120], ['o120', 'Over 120 min', 121, 9999]];
+var AGE_RANGES = [['u1', 'Under 1 year', 0, 11], ['1-2', '1 to 2 years', 12, 35], ['2-5', '2 to 5 years', 36, 71], ['5-10', '5 to 10 years', 72, 131], ['o10', '10 years and over', 132, 9999]];
+var FLAG_KINDS = [['contact', 'No contact'], ['clearance', 'Clearance date passed'], ['age14', 'Turning 14'], ['age', 'Age limit'], ['target', 'Target date'], ['calls', 'Unanswered calls'], ['booked', 'Booked date passed'], ['med', 'Medical status not set'], ['prio', 'Priority']];
+
 function activeList() {
   return S.d.patients.filter(function (p) {
     return isActive(p) && (S.cons === 'all' || p.ConsultantId === S.cons);
   });
 }
+function inRange(v, list, key) {
+  for (var i = 0; i < list.length; i++) if (list[i][0] === key) return v >= list[i][2] && v <= list[i][3];
+  return true;
+}
+function chipMatch(p, chip) {
+  if (!chip) return true;
+  if (chip === 'Ready') return p.Status === 'Ready' && !p.ListId;
+  if (chip === 'Booked') return p.Status === 'Ready' && !!p.ListId;
+  if (chip === 'Warnings') return warnings(p).length > 0;
+  return p.Status === chip;
+}
 function applyFilters(list) {
   var f = S.f, q = f.q.toLowerCase();
   return list.filter(function (p) {
     if (q && (p.Name + ' ' + p.MRN).toLowerCase().indexOf(q) < 0) return false;
-    if (f.status && p.Status !== f.status) return false;
+    if (!chipMatch(p, f.chip)) return false;
     if (f.cat && p.Category !== f.cat) return false;
     if (f.care && p.CareType !== f.care) return false;
     if (f.proc && p.ProcedureId !== f.proc && p.Procedure !== f.proc) return false;
     if (f.prio && !p.Priority) return false;
+    if (f.med && medOf(p) !== f.med) return false;
+    if (f.wait) {
+      if (f.wait === 'over') { if (!waitOver(p)) return false; }
+      else if (!inRange(waitDays(p), WAIT_RANGES, f.wait)) return false;
+    }
+    if (f.time && !inRange(totalMin(p), TIME_RANGES, f.time)) return false;
+    var am = ageMonths(p.DOB, S.today);
+    if (f.age && !inRange(am, AGE_RANGES, f.age)) return false;
+    if (f.ageFrom !== '' && am < Number(f.ageFrom) * 12) return false;
+    if (f.ageTo !== '' && am >= (Number(f.ageTo) + 1) * 12) return false;
+    if (f.flag) {
+      if (f.flag === 'prio') { if (!p.Priority) return false; }
+      else if (!warnings(p).some(function (w) { return w.kind === f.flag; })) return false;
+    }
     return true;
   });
 }
-function sortList(list, key) {
-  var k = key || S.sort;
+function sortList(list, key, dir) {
+  var k = key || S.sort, mul = (dir || S.sortDir) === 'desc' ? -1 : 1;
   var arr = list.slice();
   var cache = {};
   function wc(p) { if (!cache[p.Id]) cache[p.Id] = warnings(p).filter(function (x) { return x.sev === 'high'; }).length; return cache[p.Id]; }
   arr.sort(function (a, b) {
-    if (k === 'wait') return waitDays(b) - waitDays(a);
-    if (k === 'name') return a.Name.localeCompare(b.Name);
-    if (k === 'procedure') return a.Procedure.localeCompare(b.Procedure) || waitDays(b) - waitDays(a);
-    if (k === 'age') return ageMonths(a.DOB, S.today) - ageMonths(b.DOB, S.today);
+    if (k === 'wait') return (waitDays(a) - waitDays(b)) * mul;
+    if (k === 'name') return a.Name.localeCompare(b.Name) * mul;
+    if (k === 'procedure') return (a.Procedure.localeCompare(b.Procedure) || waitDays(b) - waitDays(a)) * mul;
+    if (k === 'age') return (ageMonths(a.DOB, S.today) - ageMonths(b.DOB, S.today)) * mul;
+    if (k === 'time') return (totalMin(a) - totalMin(b)) * mul;
+    if (k === 'category') return (CATS.indexOf(a.Category) - CATS.indexOf(b.Category)) * mul;
+    if (k === 'care') return a.CareType.localeCompare(b.CareType) * mul;
     var pa = a.Priority ? 1 : 0, pb = b.Priority ? 1 : 0;
     if (pa !== pb) return pb - pa;
     if (wc(a) !== wc(b)) return wc(b) - wc(a);
@@ -614,116 +720,340 @@ function sortList(list, key) {
   });
   return arr;
 }
+function filtersOn() {
+  var f = S.f;
+  return !!(f.cat || f.care || f.proc || f.prio || f.wait || f.time || f.age || f.flag || f.med || f.ageFrom !== '' || f.ageTo !== '' || f.chip);
+}
+function clearFilters() {
+  var q = S.f.q;
+  S.f = { q: q, chip: '', cat: '', care: '', proc: '', prio: false, wait: '', time: '', age: '', flag: '', med: '', ageFrom: '', ageTo: '' };
+  S.sort = 'priority'; S.sortDir = 'asc';
+}
 
 function viewList() {
   var d = S.d;
-  var procs = d.procedures.filter(function (p) { return p.Active === 'Y'; });
   var cons = d.consultants.filter(function (c) { return c.Active === 'Y'; });
+  var act = d.patients.filter(isActive);
+  var counts = {}; act.forEach(function (p) { counts[p.ConsultantId] = (counts[p.ConsultantId] || 0) + 1; });
   $('view').innerHTML =
-    '<div class="pills scrollx" id="conspills"></div>' +
-    '<button id="ftoggle" class="ftoggle">Filters' + (S.f.status || S.f.cat || S.f.care || S.f.proc || S.f.prio || S.sort !== 'priority' ? ' (on)' : '') + '</button>' +
-    '<div class="filters' + (S.filtersOpen ? '' : ' fcollapsed') + '" id="filters">' +
-    '<select id="fstatus"><option value="">All statuses</option>' + ['Ready', 'Awaiting clearance', 'Not ready'].map(function (s) { return opt(s, s, S.f.status === s); }).join('') + '</select>' +
-    '<select id="fcat"><option value="">All categories</option>' + CATS.map(function (s) { return opt(s, s, S.f.cat === s); }).join('') + '</select>' +
-    '<select id="fcare"><option value="">Day-case and inpatient</option>' + ['Day-case', 'Inpatient'].map(function (s) { return opt(s, s, S.f.care === s); }).join('') + '</select>' +
-    '<select id="fproc"><option value="">All procedures</option>' + procs.map(function (p) { return opt(p.Id, p.Name, S.f.proc === p.Id); }).join('') + '</select>' +
-    '<select id="fsort">' + [['priority', 'Sort: priority and wait'], ['wait', 'Sort: longest wait'], ['name', 'Sort: name'], ['procedure', 'Sort: procedure'], ['age', 'Sort: youngest first']].map(function (s) { return opt(s[0], s[1], S.sort === s[0]); }).join('') + '</select>' +
-    '<label class="check" style="padding-top:8px"><input type="checkbox" id="fprio"' + (S.f.prio ? ' checked' : '') + '> Priority only</label>' +
-    '</div><div id="listBody"></div>';
-  $('ftoggle').addEventListener('click', function () { S.filtersOpen = !S.filtersOpen; $('filters').classList.toggle('fcollapsed', !S.filtersOpen); });
-  [['fstatus', 'status'], ['fcat', 'cat'], ['fcare', 'care'], ['fproc', 'proc']].forEach(function (x) {
-    $(x[0]).addEventListener('change', function () { S.f[x[1]] = this.value; listBody(); });
-  });
-  $('fsort').addEventListener('change', function () { S.sort = this.value; listBody(); });
-  $('fprio').addEventListener('change', function () { S.f.prio = this.checked; listBody(); });
+    '<div class="constabs scrollx" id="conspills"></div><div id="listBody"></div>';
   var cp = $('conspills');
-  cp.innerHTML = '<span class="pill' + (S.cons === 'all' ? ' on' : '') + '" data-c="all">All</span>' +
-    cons.map(function (c) { return '<span class="pill' + (S.cons === c.Id ? ' on' : '') + '" data-c="' + esc(c.Id) + '">' + esc(c.Name) + '</span>'; }).join('');
+  cp.innerHTML = '<span class="pill' + (S.cons === 'all' ? ' on' : '') + '" data-c="all">All <b>' + act.length + '</b></span>' +
+    cons.map(function (c) { return '<span class="pill' + (S.cons === c.Id ? ' on' : '') + '" data-c="' + esc(c.Id) + '">' + esc(c.Name) + ' <b>' + (counts[c.Id] || 0) + '</b></span>'; }).join('');
   on(cp, '.pill', 'click', function (e) { S.cons = e.currentTarget.getAttribute('data-c'); viewList(); });
   listBody();
 }
 
+function statusHtml(p) {
+  var si = statusInfo(p), h = '';
+  if (p.Status === 'Awaiting clearance') {
+    var cl = clearances(p), any = false;
+    cl.forEach(function (c, i) {
+      if (c.state !== 'Requested') return;
+      any = true;
+      h += '<button type="button" class="chip blue tagbtn" data-clr="' + i + '" data-id="' + esc(p.Id) + '" title="Tap to change">Awaiting ' + esc(c.spec.toLowerCase()) + '</button>';
+    });
+    if (!any) h = '<span class="chip blue">Awaiting clearance</span>';
+    return h;
+  }
+  if (p.Status === 'Not ready') return '<button type="button" class="chip tagbtn" data-nr="' + esc(p.Id) + '" title="Tap to change">Not ready until ' + esc(fmtDate(p.NotReadyUntil)) + '</button>' + (p.NotReadyReason ? '<br><span class="muted small">' + esc(p.NotReadyReason) + '</span>' : '');
+  if (si.booked) return '<span class="chip stbook">' + esc(si.label) + '</span>' + (si.sub ? '<br><span class="muted small">' + esc(si.sub) + '</span>' : '');
+  return '<span class="chip ' + si.cls + '">' + esc(si.label) + '</span>';
+}
+function typeHtml(p) {
+  return '<strong>' + careShort(p) + '</strong><br>' + esc(p.Category) + '<br><span class="muted small">' + totalMin(p) + ' min</span>';
+}
+function thf(col, label, on_) { return '<th><button type="button" class="hbtn' + (on_ ? ' fon' : '') + '" data-col="' + col + '">' + label + ' <span class="car">&#9662;</span></button></th>'; }
 function patientRowsHtml(list) {
   if (!list.length) return '<p class="muted">No patients match.</p>';
+  var f = S.f;
   if (useTable()) {
-    return '<table class="tbl"><thead><tr><th>Patient</th><th>Procedure</th><th>Category</th><th>Type</th><th>Status</th><th>Wait</th><th>Flags</th><th></th></tr></thead><tbody>' +
+    var sorted = function (k) { return S.sort === k; };
+    return '<table class="tbl wl"><thead><tr><th>Patient</th>' +
+      thf('age', 'Age', f.age || f.ageFrom !== '' || f.ageTo !== '' || sorted('age')) +
+      thf('procedure', 'Procedure', f.proc || sorted('procedure')) +
+      '<th><button type="button" class="hbtn hs' + (f.care ? ' fon' : '') + '" data-col="care">DCU/INP <span class="car">&#9662;</span></button> <button type="button" class="hbtn hs' + (f.cat || sorted('category') ? ' fon' : '') + '" data-col="category">Category <span class="car">&#9662;</span></button> <button type="button" class="hbtn hs' + (f.time || sorted('time') ? ' fon' : '') + '" data-col="time">Time <span class="car">&#9662;</span></button></th>' +
+      thf('status', 'Status', f.chip) +
+      thf('wait', 'Wait', f.wait || sorted('wait')) +
+      thf('flags', 'Flags', f.flag || f.prio) +
+      '<th></th></tr></thead><tbody>' +
       list.map(function (p) {
-        var si = statusInfo(p);
         return '<tr class="click" data-id="' + esc(p.Id) + '">' +
-          '<td>' + (p.Starred ? '<span class="chip amber">★</span>' : '') + '<strong>' + esc(p.Name) + '</strong><br><span class="muted small">' + esc(ageText(p.DOB)) + ' · ' + esc(p.MRN) + ' · ' + esc(consName(p.ConsultantId)) + '</span></td>' +
-          '<td>' + esc(procLabel(p)) + '<br><span class="muted small">' + esc(p.Diagnosis) + '</span></td>' +
-          '<td>' + esc(p.Category) + '<br><span class="muted small">' + totalMin(p) + ' min</span></td>' +
-          '<td>' + esc(p.CareType) + (p.NeedsAdmission ? '<br><span class="muted small">Needs admission</span>' : '') + '</td>' +
-          '<td><span class="chip ' + si.cls + '">' + esc(si.label) + '</span>' + (si.sub ? '<br><span class="muted small">' + esc(si.sub) + '</span>' : '') + '</td>' +
-          '<td>' + waitDays(p) + ' d</td>' +
-          '<td>' + flagsHtml(p) + '</td><td>' + sendBtn(p) + '</td></tr>';
+          '<td>' + (p.Starred ? '<span class="chip amber">★</span>' : '') + '<strong>' + esc(p.Name) + '</strong><br><span class="muted small">' + esc(p.MRN) + '</span><br><span class="muted small">' + esc(consName(p.ConsultantId)) + '</span></td>' +
+          '<td>' + esc(ageText(p.DOB)) + '</td>' +
+          '<td>' + esc(procLabel(p)) + '</td>' +
+          '<td>' + typeHtml(p) + '</td>' +
+          '<td>' + statusHtml(p) + '</td>' +
+          '<td class="' + (waitOver(p) ? 'wred' : '') + '">' + esc(waitText(p)) + '</td>' +
+          '<td>' + flagsHtml(p) + '</td><td class="acts"><button type="button" class="phbtn" data-call="' + esc(p.Id) + '" title="Log a call">' + ico('phone') + '</button> ' + sendBtn(p) + '</td></tr>';
       }).join('') + '</tbody></table>';
   }
   return '<div class="cards">' + list.map(function (p) {
-    var si = statusInfo(p);
     return '<div class="card" data-id="' + esc(p.Id) + '">' +
-      '<div class="spread"><div class="name">' + (p.Starred ? '★ ' : '') + esc(p.Name) + ' <span class="muted small">· ' + esc(ageText(p.DOB)) + ' · ' + esc(p.MRN) + '</span></div>' +
-      '<span class="chip ' + si.cls + '">' + esc(si.label) + '</span></div>' +
-      '<div class="small" style="margin-top:2px">' + esc(procLabel(p)) + ' · ' + esc(consName(p.ConsultantId)) + '</div>' +
-      '<div style="margin-top:4px"><span class="chip">' + esc(p.Category) + ' · ' + esc(p.ExpMinutes) + ' min</span><span class="chip">' + esc(p.CareType) + '</span><span class="chip">Waiting ' + waitDays(p) + ' d</span>' + flagsHtml(p) + '</div>' + (isActive(p) ? '<div style="margin-top:6px">' + sendBtn(p) + '</div>' : '') + '</div>';
+      '<div class="spread"><div class="name">' + (p.Starred ? '★ ' : '') + esc(p.Name) + ' <span class="muted small">· ' + esc(ageText(p.DOB)) + '</span></div><div>' + statusHtml(p) + '</div></div>' +
+      '<div class="muted small">' + esc(p.MRN) + ' · ' + esc(consName(p.ConsultantId)) + '</div>' +
+      '<div class="small" style="margin-top:2px">' + esc(procLabel(p)) + ' · ' + careShort(p) + ' · ' + esc(p.Category) + ' · ' + totalMin(p) + ' min</div>' +
+      '<div style="margin-top:4px"><span class="chip' + (waitOver(p) ? ' red' : '') + '">Wait ' + esc(waitText(p)) + '</span>' + flagsHtml(p) + '</div>' +
+      '<div class="row" style="margin-top:6px"><button type="button" class="phbtn" data-call="' + esc(p.Id) + '" title="Log a call">' + ico('phone') + '</button>' + sendBtn(p) + '</div></div>';
   }).join('') + '</div>';
 }
-function canSend(p) { return p.Status === 'Ready' && !p.ListId; }
-function sendWhy(p) { return p.ListId ? 'Already booked on an OT list' : p.Status === 'Awaiting clearance' ? 'Not cleared yet' : p.Status === 'Not ready' ? 'Patient is not ready' : ''; }
+function canSend(p) { return p.Status === 'Ready' && !p.ListId && medOf(p) !== 'Unknown'; }
+function sendWhy(p) {
+  return p.ListId ? 'Already scheduled on an OT list' : p.Status === 'Awaiting clearance' ? 'Not cleared yet' : p.Status === 'Not ready' ? 'Patient is not ready' :
+    (p.Status === 'Ready' && medOf(p) === 'Unknown') ? 'Set the medical status first' : '';
+}
 function sendBtn(p) {
-  if (canSend(p)) return '<button data-send="' + esc(p.Id) + '">Add to OT</button>';
-  if (isActive(p)) return '<button disabled class="greyed ' + (p.ListId ? 'bk' : 'nr') + '" title="' + esc(sendWhy(p)) + '">' + (p.ListId ? 'Booked' : 'Not ready') + '</button>';
+  if (canSend(p)) return '<button class="primary btn-sched" data-send="' + esc(p.Id) + '">Schedule</button>';
+  if (isActive(p)) {
+    var lbl = p.ListId ? fmtDate(p.ScheduledDate) : (p.Status === 'Ready' ? 'Medical status' : 'Not ready');
+    return '<button disabled class="greyed ' + (p.ListId ? 'bk' : 'nr') + '" title="' + esc(sendWhy(p)) + '">' + esc(lbl) + '</button>';
+  }
   return '';
 }
 function flagsHtml(p) {
   var h = '';
-  if (p.Priority) h += '<span class="chip amber">Priority: ' + esc(p.Priority) + '</span>';
-  warnings(p).forEach(function (w) { h += '<span class="chip ' + (w.sev === 'high' ? 'red' : 'amber') + '">' + esc(w.text) + '</span>'; });
-  var tags = tagsOf(p);
-  if (tags.length) h += tags.map(function (t) { return '<span class="chip">' + esc(t) + '</span>'; }).join('');
-  else if (!clearances(p).some(function (c) { return c.state === 'Requested'; })) h += '<span class="chip">Medically free</span>';
+  if (p.Priority) h += '<button type="button" class="chip amber tagbtn" data-flag="prio" data-id="' + esc(p.Id) + '" title="' + esc(p.PriorityReason) + '">Priority: ' + esc(p.Priority) + '</button>';
+  warnings(p).forEach(function (w) {
+    if (w.kind === 'wait') return;
+    h += '<button type="button" class="chip tagbtn ' + (w.sev === 'high' ? 'red' : 'amber') + '" data-flag="' + w.kind + '" data-id="' + esc(p.Id) + '">' + esc(w.text) + '</button>';
+  });
   return h;
+}
+function flagAction(p, kind) {
+  if (kind === 'contact' || kind === 'calls') dlgCall(p);
+  else if (kind === 'clearance') { var cl = clearances(p), i; for (i = 0; i < cl.length; i++) if (cl[i].state === 'Requested') break; dlgClearQuick(p, i < cl.length ? i : 0); }
+  else if (kind === 'age14') dlgPriority(p, { adult: true });
+  else if (kind === 'age' || kind === 'target' || kind === 'prio') dlgPriority(p, {});
+  else if (kind === 'med') dlgMedical(p);
+  else openPatient(p.Id);
 }
 function bindRows(root) {
   on(root, '[data-send]', 'click', function (e) { e.stopPropagation(); dlgSendToList(getP(e.currentTarget.getAttribute('data-send'))); });
+  on(root, '[data-call]', 'click', function (e) { e.stopPropagation(); dlgCall(getP(e.currentTarget.getAttribute('data-call'))); });
+  on(root, '[data-flag]', 'click', function (e) { e.stopPropagation(); flagAction(getP(e.currentTarget.getAttribute('data-id')), e.currentTarget.getAttribute('data-flag')); });
+  on(root, '[data-clr]', 'click', function (e) { e.stopPropagation(); dlgClearQuick(getP(e.currentTarget.getAttribute('data-id')), +e.currentTarget.getAttribute('data-clr')); });
+  on(root, '[data-nr]', 'click', function (e) { e.stopPropagation(); dlgNotReadyQuick(getP(e.currentTarget.getAttribute('data-nr'))); });
   on(root, '[data-id]', 'click', function (e) {
     if (e.target.closest && e.target.closest('button')) return;
     openPatient(e.currentTarget.getAttribute('data-id'));
   });
 }
 
+function activeFilterChips() {
+  var f = S.f, out = [];
+  function add(label, key, v) { out.push({ label: label, key: key, v: v }); }
+  if (f.proc) add('Procedure: ' + (procById(f.proc) ? procById(f.proc).Name : f.proc), 'proc', '');
+  if (f.care) add(f.care === 'Inpatient' ? 'INP' : 'DCU', 'care', '');
+  if (f.cat) add(f.cat, 'cat', '');
+  if (f.time) add(TIME_RANGES.filter(function (x) { return x[0] === f.time; })[0][1], 'time', '');
+  if (f.age) add('Age: ' + AGE_RANGES.filter(function (x) { return x[0] === f.age; })[0][1], 'age', '');
+  if (f.ageFrom !== '' || f.ageTo !== '') add('Age ' + (f.ageFrom !== '' ? f.ageFrom : '0') + ' to ' + (f.ageTo !== '' ? f.ageTo : 'any') + ' y', 'ageFrom', '');
+  if (f.wait) add(f.wait === 'over' ? 'Wait over the limit' : 'Wait: ' + WAIT_RANGES.filter(function (x) { return x[0] === f.wait; })[0][1], 'wait', '');
+  if (f.flag) add('Flag: ' + FLAG_KINDS.filter(function (x) { return x[0] === f.flag; })[0][1], 'flag', '');
+  if (f.prio) add('Priority only', 'prio', false);
+  if (f.med) add(f.med === 'NotFree' ? 'Not medically free' : (f.med === 'Free' ? 'Medically free' : 'Medical status unknown'), 'med', '');
+  return out;
+}
+
 function listBody() {
   var base = activeList();
-  var counts = { all: base.length, Ready: 0, 'Awaiting clearance': 0, 'Not ready': 0 };
+  var counts = { all: base.length, Ready: 0, Booked: 0, 'Awaiting clearance': 0, 'Not ready': 0, Warnings: 0 };
   var byProc = {};
-  var nw = 0;
   base.forEach(function (p) {
-    counts[p.Status]++;
+    if (p.Status === 'Ready') counts[p.ListId ? 'Booked' : 'Ready']++; else counts[p.Status]++;
     byProc[p.Procedure] = (byProc[p.Procedure] || 0) + 1;
-    if (warnings(p).length) nw++;
+    if (warnings(p).length) counts.Warnings++;
   });
   var list = sortList(applyFilters(base));
   var procChips = Object.keys(byProc).sort(function (a, b) { return byProc[b] - byProc[a]; }).map(function (k) {
     return '<span class="pill' + (S.f.proc === k ? ' on' : '') + '" data-proc="' + esc(k) + '">' + esc(k) + ' ' + byProc[k] + '</span>';
   }).join('');
+  var chips = [['', 'Waiting', counts.all], ['Ready', 'Ready', counts.Ready], ['Booked', 'Booked', counts.Booked], ['Awaiting clearance', 'Awaiting clearance', counts['Awaiting clearance']], ['Not ready', 'Not ready', counts['Not ready']], ['Warnings', 'Warnings', counts.Warnings]];
+  var af = activeFilterChips();
   $('listBody').innerHTML =
-    '<div class="tiles">' +
-    '<div class="tile"><div class="n">' + counts.all + '</div><div class="l">Waiting</div></div>' +
-    '<div class="tile"><div class="n">' + counts.Ready + '</div><div class="l">Ready or booked</div></div>' +
-    '<div class="tile"><div class="n">' + counts['Awaiting clearance'] + '</div><div class="l">Awaiting clearance</div></div>' +
-    '<div class="tile"><div class="n">' + counts['Not ready'] + '</div><div class="l">Not ready</div></div>' +
-    '<div class="tile"><div class="n">' + nw + '</div><div class="l">With warnings</div></div></div>' +
+    '<div class="chiprow scrollx">' + chips.map(function (c) {
+      return '<button type="button" class="schip' + (S.f.chip === c[0] ? ' on' : '') + '" data-chip="' + esc(c[0]) + '"><b>' + c[2] + '</b> ' + esc(c[1]) + '</button>';
+    }).join('') + '<button type="button" class="schip fbtn' + (S.f.prio || S.f.med || S.f.ageFrom !== '' || S.f.ageTo !== '' ? ' on' : '') + '" id="fbtn">Filters</button></div>' +
     '<div class="pills scrollx">' + procChips + '</div>' +
-    '<p class="muted small">Showing ' + list.length + ' of ' + base.length + '</p>' +
+    (af.length ? '<div class="afrow">' + af.map(function (x, i) { return '<button type="button" class="chip afc" data-af="' + i + '">' + esc(x.label) + ' &times;</button>'; }).join('') + '<button type="button" class="link" id="fclear">Clear filters</button></div>' : '') +
     patientRowsHtml(list);
   var lb = $('listBody');
   on(lb, '[data-proc]', 'click', function (e) {
     var k = e.currentTarget.getAttribute('data-proc');
     S.f.proc = (S.f.proc === k) ? '' : k;
-    var sel = $('fproc'); if (sel) sel.value = '';
     listBody();
   });
+  on(lb, '[data-chip]', 'click', function (e) { var k = e.currentTarget.getAttribute('data-chip'); S.f.chip = (S.f.chip === k) ? '' : k; listBody(); });
+  on(lb, '[data-af]', 'click', function (e) {
+    var x = af[+e.currentTarget.getAttribute('data-af')];
+    if (x.key === 'ageFrom') { S.f.ageFrom = ''; S.f.ageTo = ''; } else S.f[x.key] = x.v;
+    listBody();
+  });
+  if ($('fclear')) $('fclear').addEventListener('click', function () { clearFilters(); listBody(); });
+  $('fbtn').addEventListener('click', dlgFilters);
+  on(lb, '[data-col]', 'click', function (e) { e.stopPropagation(); headerMenu(e.currentTarget.getAttribute('data-col')); });
   bindRows(lb);
+}
+
+// ---- header menus (tap a column title: sort and filter)
+function headerMenu(col) {
+  var f = S.f, items = [], title = '', sorts = [];
+  function pick(label, on_, fn) { items.push({ label: label, on: on_, fn: fn }); }
+  if (col === 'age') {
+    title = 'Age'; sorts = [['age', 'asc', 'Youngest first'], ['age', 'desc', 'Oldest first']];
+    pick('All ages', !f.age, function () { f.age = ''; });
+    AGE_RANGES.forEach(function (r) { pick(r[1], f.age === r[0], function () { f.age = r[0]; f.ageFrom = ''; f.ageTo = ''; }); });
+  } else if (col === 'procedure') {
+    title = 'Procedure'; sorts = [['procedure', 'asc', 'A to Z'], ['procedure', 'desc', 'Z to A']];
+    pick('All procedures', !f.proc, function () { f.proc = ''; });
+    S.d.procedures.filter(function (p) { return p.Active === 'Y'; }).forEach(function (pr) { pick(pr.Name, f.proc === pr.Id, function () { f.proc = pr.Id; }); });
+  } else if (col === 'care') {
+    title = 'DCU or INP'; sorts = [];
+    pick('Both', !f.care, function () { f.care = ''; });
+    pick('DCU (day-case)', f.care === 'Day-case', function () { f.care = 'Day-case'; });
+    pick('INP (inpatient)', f.care === 'Inpatient', function () { f.care = 'Inpatient'; });
+  } else if (col === 'category') {
+    title = 'Category'; sorts = [['category', 'asc', 'Minor first'], ['category', 'desc', 'Major first']];
+    pick('All categories', !f.cat, function () { f.cat = ''; });
+    CATS.forEach(function (c) { pick(c, f.cat === c, function () { f.cat = c; }); });
+  } else if (col === 'time') {
+    title = 'Time'; sorts = [['time', 'asc', 'Shortest first'], ['time', 'desc', 'Longest first']];
+    pick('Any time', !f.time, function () { f.time = ''; });
+    TIME_RANGES.forEach(function (r) { pick(r[1], f.time === r[0], function () { f.time = r[0]; }); });
+  } else if (col === 'status') {
+    title = 'Status'; sorts = [];
+    [['', 'All'], ['Ready', 'Ready (not yet scheduled)'], ['Booked', 'Booked'], ['Awaiting clearance', 'Awaiting clearance'], ['Not ready', 'Not ready']].forEach(function (r) { pick(r[1], f.chip === r[0], function () { f.chip = r[0]; }); });
+  } else if (col === 'wait') {
+    title = 'Wait'; sorts = [['wait', 'desc', 'Longest first'], ['wait', 'asc', 'Shortest first']];
+    pick('Any wait', !f.wait, function () { f.wait = ''; });
+    pick('Over the limit', f.wait === 'over', function () { f.wait = 'over'; });
+    WAIT_RANGES.forEach(function (r) { pick(r[1], f.wait === r[0], function () { f.wait = r[0]; }); });
+  } else if (col === 'flags') {
+    title = 'Flags'; sorts = [['priority', 'asc', 'Priority and warnings first']];
+    pick('All', !f.flag, function () { f.flag = ''; });
+    FLAG_KINDS.forEach(function (r) { pick(r[1], f.flag === r[0], function () { f.flag = r[0]; }); });
+  }
+  var m = openModal('<div class="spread"><h2>' + esc(title) + '</h2><button id="hm_x">Close</button></div>' +
+    (sorts.length ? '<div class="row" style="margin-bottom:8px">' + sorts.map(function (s, i) { return '<button type="button" data-s="' + i + '"' + (S.sort === s[0] && S.sortDir === s[1] ? ' class="primary"' : '') + '>' + esc(s[2]) + '</button>'; }).join('') + '</div>' : '') +
+    '<div class="menulist">' + items.map(function (it, i) { return '<button type="button" data-i="' + i + '"' + (it.on ? ' class="primary"' : '') + '>' + esc(it.label) + '</button>'; }).join('') + '</div>', { narrow: true });
+  $('hm_x').addEventListener('click', m.close);
+  on(m.el, '[data-s]', 'click', function (e) { var s = sorts[+e.currentTarget.getAttribute('data-s')]; S.sort = s[0]; S.sortDir = s[1]; m.close(); listBody(); });
+  on(m.el, '[data-i]', 'click', function (e) { items[+e.currentTarget.getAttribute('data-i')].fn(); m.close(); listBody(); });
+}
+
+function dlgFilters() {
+  var f = S.f;
+  var m = openModal('<div class="spread"><h2>Filters</h2><button id="fl_x">Close</button></div>' +
+    '<div class="field"><label for="fl_med">Medical status</label><select id="fl_med">' + opt('', 'Any', !f.med) + opt('Free', 'Medically free', f.med === 'Free') + opt('NotFree', 'Not medically free', f.med === 'NotFree') + opt('Unknown', 'Unknown', f.med === 'Unknown') + '</select></div>' +
+    '<div class="grid2"><div class="field"><label for="fl_af">Age from (years)</label><input type="number" id="fl_af" min="0" value="' + esc(f.ageFrom) + '"></div>' +
+    '<div class="field"><label for="fl_at">Age up to (years)</label><input type="number" id="fl_at" min="0" value="' + esc(f.ageTo) + '"></div></div>' +
+    '<label class="check"><input type="checkbox" id="fl_pr"' + (f.prio ? ' checked' : '') + '> Priority patients only</label>' +
+    '<div class="row" style="margin-top:12px"><button class="primary" id="fl_ok">Apply</button><button id="fl_clr">Clear all filters</button></div>', { narrow: true });
+  $('fl_x').addEventListener('click', m.close);
+  $('fl_ok').addEventListener('click', function () {
+    f.med = val('fl_med'); f.ageFrom = val('fl_af'); f.ageTo = val('fl_at'); f.prio = checked('fl_pr');
+    if (f.ageFrom !== '' || f.ageTo !== '') f.age = '';
+    m.close(); listBody();
+  });
+  $('fl_clr').addEventListener('click', function () { clearFilters(); m.close(); listBody(); });
+}
+
+// ---- quick windows opened from the list: call log, clearance, priority, medical status
+function patchAndRefresh(payload, msg, closeFn) {
+  return call('patchPatient', payload).then(function (r) {
+    upsertP(r.patient); if (closeFn) closeFn(); render(); toast(msg);
+    if (r.patient.Status === 'Awaiting clearance' && payload.Clearances !== undefined && getP(payload.patientId)) { /* status updated by server */ }
+  }).catch(fail);
+}
+function dlgCall(p) {
+  if (!p) return;
+  var nums = [p.Guardian, p.Guardian2].filter(Boolean);
+  var outcome = 'Called - reached';
+  var OUT = [['Called - reached', 'Answered'], ['Called - no answer', 'No answer'], ['Called - call back later', 'Call back later'], ['Called - wrong number', 'Wrong number']];
+  var m = openModal('<div class="spread"><h2>' + esc(p.Name) + '</h2><button id="cl_x">Close</button></div>' +
+    '<p class="muted small" style="margin:0 0 8px">' + esc(p.MRN) + ' · ' + esc(consName(p.ConsultantId)) + '</p>' +
+    (nums.length ? nums.map(function (n) { return '<div class="bignum">' + esc(phoneText(n)) + '</div>'; }).join('') : '<p class="muted">No contact number recorded.</p>') +
+    '<p class="small" id="cl_last" style="margin:8px 0">Loading last contact…</p>' +
+    '<div class="row" id="cl_out" style="margin-bottom:10px">' + OUT.map(function (o, i) { return '<button type="button" data-o="' + i + '"' + (i === 0 ? ' class="primary"' : '') + '>' + esc(o[1]) + '</button>'; }).join('') + '</div>' +
+    '<div class="field"><label for="cl_note">Note (optional)</label><input type="text" id="cl_note" placeholder="Sick, call back in 2 weeks"></div>' +
+    '<div class="row"><button class="primary" id="cl_save">Save to log</button><button id="cl_nr">Mark not ready…</button></div>', { narrow: true });
+  $('cl_x').addEventListener('click', m.close);
+  on(m.el, '[data-o]', 'click', function (e) {
+    var i = +e.currentTarget.getAttribute('data-o'); outcome = OUT[i][0];
+    var bs = m.el.querySelectorAll('[data-o]'); for (var k = 0; k < bs.length; k++) bs[k].classList.toggle('primary', k === i);
+  });
+  $('cl_nr').addEventListener('click', function () { dlgNotReady(p, m); });
+  $('cl_save').addEventListener('click', function () {
+    $('cl_save').disabled = true;
+    call('addContact', { patientId: p.Id, type: outcome, date: S.today, note: val('cl_note') }).then(function (r) {
+      upsertP(r.patient); m.close(); render(); toast('Call saved');
+    }).catch(function (e) { $('cl_save').disabled = false; fail(e); });
+  });
+  call('getContacts', { patientId: p.Id }).then(function (list) {
+    var c = list.filter(function (x) { return x.Type.indexOf('Called') === 0; })[0];
+    var t = $('cl_last'); if (!t) return;
+    t.textContent = c ? 'Last call: ' + c.Type.replace('Called - ', '') + ', ' + fmtDate(c.Date) + (Number(p.CallCount) > 0 ? ' · ' + p.CallCount + ' unanswered in a row' : '') : 'No calls logged yet.';
+  }).catch(function () { var t = $('cl_last'); if (t) t.textContent = ''; });
+}
+function dlgClearQuick(p, idx) {
+  if (!p) return;
+  var cl = clearances(p), c = cl[idx];
+  if (!c) { openPatient(p.Id); return; }
+  var docs = specConsultants(c.spec);
+  var m = openModal('<div class="spread"><h2>' + esc(c.spec) + ' review</h2><button id="cq_x">Close</button></div>' +
+    '<p class="muted small" style="margin:0 0 10px">' + esc(p.Name) + ' · ' + esc(p.MRN) + '</p>' +
+    (c.spec !== 'Anesthesia' ? '<div class="field"><label for="cq_doc">Consultant</label><select id="cq_doc">' + opt('', 'Not chosen', !c.doctor) + docs.map(function (d) { return opt(d.Name, d.Name, d.Name === c.doctor); }).join('') + (c.doctor && !docs.some(function (d) { return d.Name === c.doctor; }) ? opt(c.doctor, c.doctor, true) : '') + '</select></div>' : '') +
+    '<div class="field"><label for="cq_date">Appointment date</label><input type="date" id="cq_date" value="' + esc(c.apptDate || '') + '"></div>' +
+    '<div class="row"><button class="primary" id="cq_ok">Cleared</button><button id="cq_save">Save changes</button><button id="cq_del" class="danger">Remove review</button></div>', { narrow: true });
+  $('cq_x').addEventListener('click', m.close);
+  function save(state, note) {
+    var arr = clearances(p);
+    arr[idx] = { spec: c.spec, state: state, apptDate: val('cq_date'), doctor: $('cq_doc') ? val('cq_doc') : '' };
+    patchAndRefresh({ patientId: p.Id, Clearances: JSON.stringify(arr), logNote: note }, state === 'Cleared' ? c.spec + ' cleared' : 'Saved', m.close);
+  }
+  $('cq_ok').addEventListener('click', function () { save('Cleared', c.spec + ' cleared'); });
+  $('cq_save').addEventListener('click', function () { save('Requested', ''); });
+  $('cq_del').addEventListener('click', function () {
+    var arr = clearances(p); arr.splice(idx, 1);
+    patchAndRefresh({ patientId: p.Id, Clearances: JSON.stringify(arr), logNote: c.spec + ' review removed' }, 'Review removed', m.close);
+  });
+}
+function dlgNotReadyQuick(p) {
+  if (!p) return;
+  var m = openModal('<div class="spread"><h2>Not ready</h2><button id="nq_x">Close</button></div>' +
+    '<p class="muted small" style="margin:0 0 10px">' + esc(p.Name) + ': until ' + esc(fmtDate(p.NotReadyUntil)) + (p.NotReadyReason ? ', ' + esc(p.NotReadyReason) : '') + '</p>' +
+    '<div class="menulist"><button id="nq_back" class="primary">Ready now</button><button id="nq_date">Change the return date</button></div>', { narrow: true });
+  $('nq_x').addEventListener('click', m.close);
+  $('nq_back').addEventListener('click', function () {
+    call('clearNotReady', { patientId: p.Id }).then(function (r) { upsertP(r.patient); m.close(); render(); toast('Back on the list'); }).catch(fail);
+  });
+  $('nq_date').addEventListener('click', function () { dlgNotReady(p, m); });
+}
+function dlgPriority(p, o) {
+  if (!p) return;
+  o = o || {};
+  var m = openModal('<div class="spread"><h2>Priority</h2><button id="pq_x">Close</button></div>' +
+    '<p class="muted small" style="margin:0 0 10px">' + esc(p.Name) + ' · ' + esc(ageText(p.DOB)) + ' · ' + esc(procLabel(p)) + '</p>' +
+    '<div class="field"><label for="pq_tag">Priority tag</label><select id="pq_tag">' + PRIORITY.map(function (s) { return opt(s, s || 'None', p.Priority === s); }).join('') + '</select></div>' +
+    '<div class="field"><label for="pq_why">Reason</label><input type="text" id="pq_why" value="' + esc(p.PriorityReason || '') + '"></div>' +
+    '<div class="row"><button class="primary" id="pq_ok">Save</button>' + (o.adult ? '<button id="pq_adult" class="danger">Remove: transferred to adult services</button>' : '') + '</div>', { narrow: true });
+  $('pq_x').addEventListener('click', m.close);
+  $('pq_ok').addEventListener('click', function () {
+    patchAndRefresh({ patientId: p.Id, Priority: val('pq_tag'), PriorityReason: val('pq_why'), logNote: val('pq_tag') ? 'Priority: ' + val('pq_tag') + ' (' + val('pq_why') + ')' : 'Priority removed' }, 'Priority saved', m.close);
+  });
+  if (o.adult) $('pq_adult').addEventListener('click', function () {
+    if (!window.confirm('Remove ' + p.Name + ' from the list: transferred to adult services?')) return;
+    call('removePatient', { patientId: p.Id, reason: 'Transferred to adult services', note: '' }).then(function (r) { upsertP(r); m.close(); render(); toast('Removed from the list'); }).catch(fail);
+  });
+}
+function dlgMedical(p) {
+  if (!p) return;
+  var m = openModal('<div class="spread"><h2>Medical status</h2><button id="mq_x">Close</button></div>' +
+    '<p class="muted small" style="margin:0 0 10px">' + esc(p.Name) + ' · ' + esc(p.MRN) + '</p>' +
+    '<div class="menulist"><button id="mq_free" class="primary">Medically free</button><button id="mq_not">Not medically free (choose conditions)</button></div>', { narrow: true });
+  $('mq_x').addEventListener('click', m.close);
+  $('mq_free').addEventListener('click', function () { patchAndRefresh({ patientId: p.Id, MedicalStatus: 'Free', logNote: 'Medically free' }, 'Medical status saved', m.close); });
+  $('mq_not').addEventListener('click', function () { m.close(); openPatient(p.Id, { focusMed: true }); });
 }
 
 // ---------------------------------------------------------------- warnings, done, removed
@@ -794,7 +1124,8 @@ function remBody() {
 }
 
 // ---------------------------------------------------------------- patient record
-function openPatient(id) {
+function openPatient(id, opts) {
+  opts = opts || {};
   var p = id ? getP(id) : null;
   var isNew = !p;
   var d = S.d;
@@ -804,54 +1135,65 @@ function openPatient(id) {
   if (p) procSel = procById(p.ProcedureId) ? p.ProcedureId : (p.Procedure ? '__other' : '');
   var preCons = p ? p.ConsultantId : (S.cons !== 'all' ? S.cons : '');
   var tags = p ? tagsOf(p) : [];
-  var extraTags = p ? (p.TagsOther || '') : '';
+  var tnotes = p ? tagNotes(p) : {};
+  var medNow = opts.focusMed ? 'NotFree' : (p ? medOf(p) : 'Unknown');
+  var allTags = TAGS.slice(); tags.forEach(function (t) { if (allTags.indexOf(t) < 0) allTags.push(t); });
   var statusLine = '';
   if (p) {
     var si = statusInfo(p);
-    statusLine = '<span class="chip ' + si.cls + '">' + esc(si.label) + '</span>' + (si.sub ? '<span class="muted small"> ' + esc(si.sub) + '</span>' : '');
+    statusLine = '<span class="chip ' + si.cls + '">' + esc(si.booked ? 'Scheduled ' + si.label : si.label) + '</span>' + (si.sub ? '<span class="muted small"> ' + esc(si.sub) + '</span>' : '');
   }
   var html =
     '<div class="spread"><h2>' + (isNew ? 'Add patient' : esc(p.Name)) + '</h2><button id="f_close">Close</button></div>' +
     (p ? '<div style="margin-bottom:8px">' + statusLine + '</div>' : '') +
     '<div class="grid2">' +
     '<div class="field"><label for="f_name">Name *</label><input type="text" id="f_name" value="' + esc(p ? p.Name : '') + '"></div>' +
-    '<div class="field"><label for="f_mrn">MRN *</label><input type="text" id="f_mrn" value="' + esc(p ? p.MRN : '') + '"></div>' +
+    '<div class="field"><label for="f_mrn">MRN * (9 digits, or T and digits)</label><input type="text" id="f_mrn" value="' + esc(p ? p.MRN : '') + '" autocomplete="off"></div>' +
     '<div class="field"><label for="f_dob">Date of birth *</label><input type="date" id="f_dob" value="' + esc(p ? p.DOB : '') + '"></div>' +
-    '<div class="field"><label for="f_sex">Sex</label><select id="f_sex">' + opt('', '', !p || !p.Sex) + opt('M', 'Male', p && p.Sex === 'M') + opt('F', 'Female', p && p.Sex === 'F') + '</select></div>' +
-    '<div class="field"><label for="f_guard">Guardian contact</label><input type="text" id="f_guard" value="' + esc(p ? p.Guardian : '') + '"></div>' +
     '<div class="field"><label for="f_cons">Consultant *</label><select id="f_cons">' + opt('', 'Choose…', !preCons) + cons.map(function (c) { return opt(c.Id, c.Name, c.Id === preCons); }).join('') + '</select></div>' +
-    '<div class="field"><label for="f_seen">Seen by consultant</label><select id="f_seen">' + opt('', '', !p || !p.SeenByConsultant) + opt('Y', 'Yes', p && p.SeenByConsultant === 'Y') + opt('N', 'No', p && p.SeenByConsultant === 'N') + '</select></div>' +
-    '<div class="field"><label for="f_added">Date added</label><input type="date" id="f_added" value="' + esc(p ? p.DateAdded : S.today) + '"></div></div>' +
-
-    '<div class="sect"><h3>Procedure</h3><div class="grid2">' +
+    '<div class="field"><label for="f_guard">Contact number * (8 digits)</label><input type="text" id="f_guard" inputmode="tel" value="' + esc(p ? p.Guardian : '') + '"></div>' +
+    '<div class="field"><label for="f_guard2">Second contact number</label><input type="text" id="f_guard2" inputmode="tel" value="' + esc(p ? p.Guardian2 : '') + '"></div>' +
     '<div class="field"><label for="f_proc">Procedure *</label><select id="f_proc">' + opt('', 'Choose…', !procSel) + procs.map(function (x) { return opt(x.Id, x.Name, x.Id === procSel); }).join('') + opt('__other', 'Other (type the name)', procSel === '__other') + '</select></div>' +
     '<div class="field" id="r_procother"><label for="f_procother">Procedure name</label><input type="text" id="f_procother" value="' + esc(p && procSel === '__other' ? p.Procedure : '') + '"></div>' +
-    '<div class="field" id="r_lat"><label for="f_lat">Side</label><select id="f_lat">' + opt('', '', !p || !p.Laterality) + ['Right', 'Left', 'Bilateral'].map(function (s) { return opt(s, s, p && p.Laterality === s); }).join('') + '</select></div>' +
+    '<div class="field" id="r_lat"><label for="f_lat">Side *</label><select id="f_lat">' + opt('', 'Choose…', !p || !p.Laterality) + ['Right', 'Left', 'Bilateral'].map(function (s) { return opt(s, s, p && p.Laterality === s); }).join('') + '</select></div>' +
+    '<div class="field"><label for="f_added">Date added</label><input type="date" id="f_added" value="' + esc(p ? p.DateAdded : S.today) + '"></div></div>' +
+
+    '<div class="sect"><h3>Medical status *</h3><div class="field"><select id="f_med">' + opt('Unknown', 'Unknown', medNow === 'Unknown') + opt('Free', 'Medically free', medNow === 'Free') + opt('NotFree', 'Not medically free', medNow === 'NotFree') + '</select></div>' +
+    '<div id="f_medbox"><label>Conditions (each adds its specialty review as not cleared)</label><div class="tagrows">' +
+    allTags.map(function (t) {
+      var on_ = tags.indexOf(t) >= 0;
+      return '<div class="tagrow"><label class="check"><input type="checkbox" class="f_tag" value="' + esc(t) + '"' + (on_ ? ' checked' : '') + '> ' + esc(t) + (TAG_SPEC[t] ? ' <span class="muted small">(' + esc(TAG_SPEC[t].toLowerCase()) + ')</span>' : '') + '</label>' +
+        '<input type="text" class="f_tnote" data-t="' + esc(t) + '" placeholder="Details, for example TOF" value="' + esc(tnotes[t] || '') + '"' + (on_ ? '' : ' style="display:none"') + '></div>';
+    }).join('') + '</div></div></div>' +
+
+    '<details class="fold" id="fd_cl"' + (p && clearances(p).length ? ' open' : '') + '><summary>Medical clearance</summary><div id="f_cl"></div><button id="f_addcl" type="button">Add clearance</button></details>' +
+
+    '<details class="fold"' + (isNew ? '' : '') + '><summary>Procedure details</summary><div class="grid2">' +
     '<div class="field"><label for="f_dx">Diagnosis</label><input type="text" id="f_dx" value="' + esc(p ? p.Diagnosis : '') + '"></div>' +
     '<div class="field"><label for="f_cat">Category</label><select id="f_cat">' + CATS.map(function (s) { return opt(s, s, p && p.Category === s); }).join('') + '</select></div>' +
     '<div class="field"><label for="f_min">Expected time (minutes)</label><input type="number" id="f_min" min="0" value="' + esc(p ? p.ExpMinutes : '') + '"></div>' +
     '<div class="field"><label for="f_care">Day-case or inpatient</label><select id="f_care">' + ['Day-case', 'Inpatient'].map(function (s) { return opt(s, s, p && p.CareType === s); }).join('') + '</select></div>' +
     '<div class="field"><label>&nbsp;</label><label class="check"><input type="checkbox" id="f_admit"' + (p && p.NeedsAdmission ? ' checked' : '') + '> Needs prior admission</label></div>' +
     '<div class="field"><label for="f_target">Target date (optional)</label><input type="date" id="f_target" value="' + esc(p ? p.TargetDate : '') + '"></div>' +
-    '<div class="field"><label for="f_sched">Booked on OT list</label><input type="date" id="f_sched" value="' + esc(p ? p.ScheduledDate : '') + '" disabled></div></div>' +
-    '<p class="small muted" id="f_price"></p><p class="small" id="f_sponsorhint" style="color:var(--amber)"></p></div>' +
-    '<div class="sect"><h3>Additional procedures in the same sitting</h3><div id="f_ex"></div><button type="button" id="f_addex">Add procedure</button><p class="small muted" id="f_total"></p></div>' +
+    '<div class="field"><label for="f_sched">Scheduled on OT list</label><input type="date" id="f_sched" value="' + esc(p ? p.ScheduledDate : '') + '" disabled></div></div>' +
+    '<label>Additional procedures in the same sitting</label><div id="f_ex"></div><button type="button" id="f_addex">Add procedure</button><p class="small muted" id="f_total"></p></details>' +
 
-    '<div class="sect"><h3>Medical</h3>' +
-    '<label>Conditions (none ticked means medically free)</label><div class="tags" style="margin-bottom:10px">' +
-    TAGS.map(function (t, i) { return '<label class="check"><input type="checkbox" class="f_tag" value="' + esc(t) + '"' + (tags.indexOf(t) >= 0 ? ' checked' : '') + '> ' + esc(t) + '</label>'; }).join('') + '</div>' +
-    '<div class="grid2"><div class="field"><label for="f_tagother">Other conditions</label><input type="text" id="f_tagother" value="' + esc(extraTags) + '"></div>' +
-    '<div class="field"><label for="f_spdocs">Specialty doctors (who follows him or her)</label><input type="text" id="f_spdocs" value="' + esc(p ? p.SpecialtyDoctors : '') + '" placeholder="Cardiology: Dr. …"></div></div>' +
-    '<label>Medical clearance</label><div id="f_cl"></div><button id="f_addcl" type="button">Add clearance</button></div>' +
-
-    '<div class="sect"><h3>Priority, sponsorship and notes</h3><div class="grid2">' +
+    '<details class="fold"' + (p && p.Priority ? ' open' : '') + '><summary>Priority</summary><div class="grid2">' +
     '<div class="field"><label for="f_prio">Priority tag</label><select id="f_prio">' + PRIORITY.map(function (s) { return opt(s, s || 'None', p ? p.Priority === s : s === ''); }).join('') + '</select></div>' +
-    '<div class="field"><label for="f_prior">Priority reason</label><input type="text" id="f_prior" value="' + esc(p ? p.PriorityReason : '') + '"></div>' +
-    '<div class="field"><label for="f_spons">Sponsorship</label><select id="f_spons">' + opt('', '', !p || !p.Sponsorship) + SPONSOR.map(function (s) { return opt(s, s, p && p.Sponsorship === s); }).join('') + '</select></div>' +
-    '<div class="field"><label>&nbsp;</label><label class="check"><input type="checkbox" id="f_star"' + (p && p.Starred ? ' checked' : '') + '> Star: interesting case for a report</label></div></div>' +
-    '<div class="field"><label for="f_notes">Notes</label><textarea id="f_notes">' + esc(p ? p.Notes : '') + '</textarea></div></div>' +
-    '<div class="row" style="margin-top:8px"><button class="primary" id="f_save">' + (isNew ? 'Add to list' : 'Save changes') + '</button><button id="f_cancel">Cancel</button></div>' +
+    '<div class="field"><label for="f_prior">Priority reason</label><input type="text" id="f_prior" value="' + esc(p ? p.PriorityReason : '') + '"></div></div></details>' +
+
+    '<details class="fold"><summary>Sponsorship and price</summary><div class="field"><label for="f_spons">Sponsorship</label><select id="f_spons">' + opt('', '', !p || !p.Sponsorship) + SPONSOR.map(function (s) { return opt(s, s, p && p.Sponsorship === s); }).join('') + '</select></div>' +
+    '<p class="small" id="f_sponsorhint" style="color:var(--amber)"></p><p class="small muted" id="f_price"></p></details>' +
+
+    '<details class="fold"><summary>More: sex, seen by consultant, notes</summary><div class="grid2">' +
+    '<div class="field"><label for="f_sex">Sex</label><select id="f_sex">' + opt('', '', !p || !p.Sex) + opt('M', 'Male', p && p.Sex === 'M') + opt('F', 'Female', p && p.Sex === 'F') + '</select></div>' +
+    '<div class="field"><label for="f_seen">Seen by consultant</label><select id="f_seen">' + opt('', '', !p || !p.SeenByConsultant) + opt('Y', 'Yes', p && p.SeenByConsultant === 'Y') + opt('N', 'No', p && p.SeenByConsultant === 'N') + '</select></div></div>' +
+    '<label class="check" style="margin-bottom:8px"><input type="checkbox" id="f_star"' + (p && p.Starred ? ' checked' : '') + '> Star: interesting case for a report</label>' +
+    '<div class="field"><label for="f_notes">Notes</label><textarea id="f_notes">' + esc(p ? p.Notes : '') + '</textarea></div></details>' +
+
+    '<div class="row" style="margin-top:10px"><button class="primary" id="f_save">' + (isNew ? 'Add to list' : 'Save changes') + '</button><button id="f_cancel">Cancel</button></div>' +
     (p ? '<div class="sect"><h3>Contact log</h3>' +
+      '<div class="row" style="margin-bottom:8px"><button type="button" id="c_call">' + ico('phone') + ' Log a call</button></div>' +
       '<div class="grid3"><div class="field"><label for="c_type">Type</label><select id="c_type">' + CONTACT_TYPES.map(function (s) { return opt(s, s, s === 'Called - reached'); }).join('') + '</select></div>' +
       '<div class="field"><label for="c_date">Date</label><input type="date" id="c_date" value="' + esc(S.today) + '"></div>' +
       '<div class="field"><label for="c_note">Note</label><input type="text" id="c_note" placeholder="Called, sick, call back in 2 weeks"></div></div>' +
@@ -864,25 +1206,31 @@ function openPatient(id) {
   function readCl() {
     var rows = m.el.querySelectorAll('.clrow'), out = [];
     for (var i = 0; i < rows.length; i++) {
-      var r = rows[i];
+      var r = rows[i], dd = r.querySelector('.cl_doc');
       out.push({
         spec: r.querySelector('.cl_spec').value, state: r.querySelector('.cl_state').value,
-        apptDate: r.querySelector('.cl_date').value, doctor: r.querySelector('.cl_doc').value.trim()
+        apptDate: r.querySelector('.cl_date').value, doctor: dd ? dd.value : ''
       });
     }
     return out;
   }
   function drawCl() {
     $('f_cl').innerHTML = cl.map(function (c, i) {
+      var docs = specConsultants(c.spec);
+      var docSel = c.spec === 'Anesthesia' ? '<span class="cl_nodoc"></span>' :
+        '<select class="cl_doc" title="Consultant">' + opt('', 'Consultant…', !c.doctor) + docs.map(function (x) { return opt(x.Name, x.Name, x.Name === c.doctor); }).join('') + (c.doctor && !docs.some(function (x) { return x.Name === c.doctor; }) ? opt(c.doctor, c.doctor, true) : '') + '</select>';
       return '<div class="clrow">' +
         '<select class="cl_spec">' + SPECIALTIES.map(function (s) { return opt(s, s, s === c.spec); }).join('') + '</select>' +
-        '<select class="cl_state">' + ['Requested', 'Cleared'].map(function (s) { return opt(s, s, s === c.state); }).join('') + '</select>' +
-        '<input type="date" class="cl_date" title="Appointment date" value="' + esc(c.apptDate || '') + '">' +
-        '<input type="text" class="cl_doc" placeholder="Doctor" value="' + esc(c.doctor || '') + '">' +
+        '<select class="cl_state">' + opt('Requested', 'Not cleared', c.state !== 'Cleared') + opt('Cleared', 'Cleared', c.state === 'Cleared') + '</select>' +
+        '<input type="date" class="cl_date" title="Appointment date" value="' + esc(c.apptDate || '') + '">' + docSel +
         '<button type="button" class="cl_x" data-i="' + i + '" aria-label="Remove clearance">Remove</button></div>';
     }).join('') || '<p class="muted small" style="margin:0 0 6px">None requested.</p>';
     on($('f_cl'), '.cl_x', 'click', function (e) {
       cl = readCl(); cl.splice(+e.currentTarget.getAttribute('data-i'), 1); drawCl();
+    });
+    on($('f_cl'), '.cl_spec', 'change', function (e) {
+      var i = Array.prototype.indexOf.call(m.el.querySelectorAll('.cl_spec'), e.currentTarget);
+      cl = readCl(); if (cl[i]) cl[i].doctor = ''; drawCl();
     });
   }
   drawCl();
@@ -929,6 +1277,32 @@ function openPatient(id) {
   });
   $('f_addcl').addEventListener('click', function () {
     cl = readCl(); cl.push({ spec: 'Cardiology', state: 'Requested', apptDate: '', doctor: '' }); drawCl();
+    $('fd_cl').open = true;
+  });
+
+  function checkedTags() {
+    var out = [], els = m.el.querySelectorAll('.f_tag');
+    for (var i = 0; i < els.length; i++) if (els[i].checked) out.push(els[i].value);
+    return out;
+  }
+  function medChanged() {
+    $('f_medbox').style.display = $('f_med').value === 'NotFree' ? '' : 'none';
+  }
+  $('f_med').addEventListener('change', medChanged);
+  medChanged();
+  on(m.el, '.f_tag', 'change', function (e) {
+    var el = e.currentTarget, t = el.value, spec = TAG_SPEC[t] || '';
+    var note = m.el.querySelector('.f_tnote[data-t="' + t.replace(/"/g, '') + '"]');
+    if (note) { note.style.display = el.checked ? '' : 'none'; if (el.checked) note.focus(); }
+    if (!spec) return;
+    cl = readCl();
+    if (el.checked) {
+      if (!cl.some(function (c) { return c.spec === spec; })) cl.push({ spec: spec, state: 'Requested', apptDate: '', doctor: '' });
+    } else {
+      var other = checkedTags().some(function (x) { return TAG_SPEC[x] === spec; });
+      if (!other) cl = cl.filter(function (c) { return !(c.spec === spec && c.state === 'Requested'); });
+    }
+    drawCl(); $('fd_cl').open = true;
   });
 
   var prevDx = '';
@@ -955,40 +1329,46 @@ function openPatient(id) {
     }
     $('f_price').textContent = txt;
   }
-  function sponsorHint() {
-    var s = $('f_spons').value, b = $('f_sched').value;
-    $('f_sponsorhint').textContent = (b || !p) ? (s ? 'Check sponsorship with the family before booking: ' + s : 'Sponsorship not recorded yet. Check with the family before booking.') : '';
-  }
+  function sponsorHint() { $('f_sponsorhint').textContent = $('f_spons').value === 'Self-payment' ? 'No exemption records' : ''; }
   $('f_proc').addEventListener('change', function () { procChanged(true); });
   $('f_care').addEventListener('change', priceChanged);
   $('f_spons').addEventListener('change', sponsorHint);
-  $('f_sched').addEventListener('change', sponsorHint);
   procChanged(false); sponsorHint();
+  if (opts.focusMed) { var fm = $('f_med'); if (fm.scrollIntoView) fm.scrollIntoView(); }
 
   $('f_close').addEventListener('click', m.close);
   $('f_cancel').addEventListener('click', m.close);
   $('f_save').addEventListener('click', function () {
     var sel = $('f_proc').value, pr = procById(sel);
-    var tagList = [], tagEls = m.el.querySelectorAll('.f_tag');
-    for (var i = 0; i < tagEls.length; i++) if (tagEls[i].checked) tagList.push(tagEls[i].value);
+    var med = val('f_med'), tagList = med === 'NotFree' ? checkedTags() : [], notes = {};
+    tagList.forEach(function (t) { var el = m.el.querySelector('.f_tnote[data-t="' + t.replace(/"/g, '') + '"]'); if (el && el.value.trim()) notes[t] = el.value.trim(); });
     var o = {
-      Id: p ? p.Id : '', Name: val('f_name'), MRN: val('f_mrn'), DOB: val('f_dob'), Sex: val('f_sex'), Guardian: val('f_guard'),
+      Id: p ? p.Id : '', Name: val('f_name'), MRN: val('f_mrn'), DOB: val('f_dob'), Sex: val('f_sex'), Guardian: val('f_guard'), Guardian2: val('f_guard2'),
       ConsultantId: val('f_cons'), SeenByConsultant: val('f_seen'), DateAdded: val('f_added'),
       ProcedureId: pr ? sel : '', Procedure: pr ? pr.Name : (sel === '__other' ? val('f_procother') : ''),
       Laterality: $('r_lat').style.display === 'none' ? '' : val('f_lat'),
       Diagnosis: val('f_dx'), Category: val('f_cat'), ExpMinutes: val('f_min'), CareType: val('f_care'),
       NeedsAdmission: checked('f_admit') ? 'Y' : '', TargetDate: val('f_target'),
-      Tags: tagList.join(','), TagsOther: val('f_tagother'), SpecialtyDoctors: val('f_spdocs'),
+      MedicalStatus: med, Tags: tagList.join(','), TagNotes: JSON.stringify(notes),
       Clearances: JSON.stringify(readCl().filter(function (c) { return c.spec; })),
       Priority: val('f_prio'), PriorityReason: val('f_prior'), Sponsorship: val('f_spons'),
       Starred: checked('f_star') ? 'Y' : '', Notes: val('f_notes'), Extra: JSON.stringify(readEx())
     };
     $('f_save').disabled = true;
     var hadList = !!(p && p.ListId);
-    if (hadList && o.Clearances.indexOf('"Requested"') >= 0 && !window.confirm('This patient is booked on an OT list. A pending clearance takes them off it until cleared. Continue?')) return;
-    call('savePatient', o).then(function (saved) {
-      upsertP(saved); m.close(); render(); toast(isNew ? 'Patient added' : (hadList && !saved.ListId ? 'Saved. Taken off the OT list until cleared.' : 'Saved'));
-    }).catch(function (e) { $('f_save').disabled = false; fail(e); });
+    if (hadList && o.Clearances.indexOf('"Requested"') >= 0 && !window.confirm('This patient is scheduled on an OT list. A pending clearance takes them off it until cleared. Continue?')) { $('f_save').disabled = false; return; }
+    function send(extra) {
+      call('savePatient', Object.assign({}, o, extra || {})).then(function (saved) {
+        upsertP(saved); m.close(); render(); toast(isNew ? 'Patient added' : (hadList && !saved.ListId ? 'Saved. Taken off the OT list until cleared.' : 'Saved'));
+      }).catch(function (e) {
+        if (e && e.message && e.message.indexOf('MRN_EXISTS') === 0) {
+          if (window.confirm(e.message.replace('MRN_EXISTS: ', '') + ' Add this one as well?')) { send({ confirmMrn: true }); return; }
+          $('f_save').disabled = false; return;
+        }
+        $('f_save').disabled = false; fail(e);
+      });
+    }
+    send();
   });
 
   if (p) {
@@ -1002,8 +1382,8 @@ function openPatient(id) {
       var h = '';
       if (isActive(cur)) {
         if (cur.ListId) h += '<button id="a_off">Take off theatre list</button>';
-        if (canSend(cur)) h += '<button id="a_send" class="primary">Add to OT</button>';
-        else h += '<button disabled class="greyed ' + (cur.ListId ? 'bk' : 'nr') + '" title="' + esc(sendWhy(cur)) + '">' + (cur.ListId ? 'Booked' : 'Not ready') + '</button>';
+        if (canSend(cur)) h += '<button id="a_send" class="primary btn-sched">Schedule</button>';
+        else h += sendBtn(cur);
         h += cur.Status === 'Not ready' ? '<button id="a_back">Back on the list now</button>' : '<button id="a_nr">Mark not ready</button>';
         h += '<button id="a_done">Mark done</button><button id="a_rem" class="danger">Remove from list</button>';
       } else { h += '<button id="a_restore">Restore to waiting list</button>'; }
@@ -1029,6 +1409,7 @@ function openPatient(id) {
     }
     drawActions();
     call('getContacts', { patientId: p.Id }).then(drawLog).catch(function () { $('c_list').innerHTML = '<p class="muted small">Could not load the log.</p>'; });
+    $('c_call').addEventListener('click', function () { dlgCall(cur); });
     $('c_add').addEventListener('click', function () {
       call('addContact', { patientId: cur.Id, type: val('c_type'), date: val('c_date'), note: val('c_note') }).then(function (r) {
         cur = r.patient; upsertP(cur); drawLog(r.contacts); $('c_note').value = ''; render(); toast('Added to the log');
@@ -1082,33 +1463,45 @@ function dlgRemove(p, parent) {
 function viewSettings() {
   var d = S.d, st = d.settings, admin = S.user.Role === 'admin';
   $('view').innerHTML =
-    '<h2>Settings</h2>' +
-    '<div class="panel"><div class="spread"><h3>Procedures</h3><button id="s_addproc">Add procedure</button></div><div id="s_procs"></div></div>' +
-    '<div class="panel"><div class="spread"><h3>Consultants and operating days</h3><button id="s_addcons">Add consultant</button></div><div id="s_cons"></div></div>' +
-    '<div class="panel"><div class="spread"><h3>Operating rooms</h3></div><div id="s_rooms"></div>' +
+    '<h2>Settings</h2><div class="stabs scrollx" id="s_tabs">' + SET_TABS.map(function (t) { return '<span class="pill' + (S.setTab === t[0] ? ' on' : '') + '" data-t="' + t[0] + '">' + esc(t[1]) + '</span>'; }).join('') + '</div>' +
+    '<div class="panel stab" data-t="procedures"><div class="spread"><h3>Procedures</h3><button id="s_addproc">Add procedure</button></div><div id="s_procs"></div></div>' +
+    '<div class="panel stab" data-t="consultants"><div class="spread"><h3>Pediatric surgery consultants and operating days</h3><button id="s_addcons">Add consultant</button></div><div id="s_cons"></div></div>' +
+    '<div class="panel stab" data-t="consultants"><h3>Specialty consultants (pediatrics and other specialties)</h3><p class="muted small">Chosen when a medical review is requested. Anesthesia has no consultant name.</p><div id="s_sc"></div>' +
+    '<div class="row" style="margin-top:8px"><input type="text" id="s_scname" placeholder="Doctor name" style="max-width:240px"><select id="s_scspec" style="max-width:200px">' + SPECIALTIES.filter(function (x) { return x !== 'Anesthesia'; }).map(function (x) { return opt(x, x); }).join('') + '</select><button id="s_addsc">Add</button></div></div>' +
+    '<div class="panel stab" data-t="rooms"><div class="spread"><h3>Operating rooms</h3></div><div id="s_rooms"></div>' +
     '<div class="row" style="margin-top:8px"><input type="text" id="s_roomname" placeholder="Room name, for example OT 1" style="max-width:260px"><button id="s_addroom">Add room</button></div></div>' +
-    '<div class="panel"><div class="spread"><h3>Residents</h3></div><div id="s_res"></div>' +
+    '<div class="panel stab" data-t="consultants"><div class="spread"><h3>Residents</h3></div><div id="s_res"></div>' +
     '<div class="row" style="margin-top:8px"><input type="text" id="s_resname" placeholder="Resident name" style="max-width:260px"><button id="s_addres">Add resident</button></div></div>' +
-    '<div class="panel"><h3>Warning thresholds</h3><p class="muted small">Days in the list before a patient is flagged, by category.</p>' +
+    '<div class="panel stab" data-t="warnings"><h3>Warning thresholds</h3><p class="muted small">Days in the list before a patient is flagged, by category.</p>' +
     '<div class="grid3"><div class="field"><label for="t_min">Minor (days)</label><input type="number" id="t_min" min="0" value="' + esc(st.waitDaysMinor) + '"></div>' +
     '<div class="field"><label for="t_int">Intermediate (days)</label><input type="number" id="t_int" min="0" value="' + esc(st.waitDaysIntermediate) + '"></div>' +
     '<div class="field"><label for="t_maj">Major (days)</label><input type="number" id="t_maj" min="0" value="' + esc(st.waitDaysMajor) + '"></div>' +
     '<div class="field"><label for="t_nc">No contact for (days)</label><input type="number" id="t_nc" min="0" value="' + esc(st.noContactDays) + '"></div>' +
-    '<div class="field"><label for="t_tg">Warn before target date (days)</label><input type="number" id="t_tg" min="0" value="' + esc(st.targetWarnDays) + '"></div></div>' +
+    '<div class="field"><label for="t_tg">Warn before target date (days)</label><input type="number" id="t_tg" min="0" value="' + esc(st.targetWarnDays) + '"></div>' +
+    '<div class="field"><label for="t_14">Warn before age 14, adult services (months)</label><input type="number" id="t_14" min="0" value="' + esc(st.warn14Months) + '"></div></div>' +
     '<div class="grid3"><div class="field"><label for="t_idle">Sign out after idle (minutes, 0 = never)</label><input type="number" id="t_idle" min="0" value="' + esc(st.idleMinutes) + '"></div>' +
     '<div class="field"><label for="t_ahead">Create OT-day lists this many weeks ahead (0 = off)</label><input type="number" id="t_ahead" min="0" max="52" value="' + esc(st.listsAheadWeeks) + '"></div></div>' +
     '<button id="t_save">Save thresholds</button></div>' +
-    '<div class="panel"><h3>Data</h3><div class="row"><button id="x_import" class="primary">Import from Excel or CSV</button></div><div class="row" style="margin-top:8px"><button id="x_wait">Export waiting list (CSV)</button><button id="x_done">Export done cases (CSV)</button><button id="x_rem">Export removed (CSV)</button></div>' +
+    '<div class="panel stab" data-t="data"><h3>Data</h3><div class="row"><button id="x_import" class="primary">Import from Excel or CSV</button></div><div class="row" style="margin-top:8px"><button id="x_wait">Export waiting list (CSV)</button><button id="x_done">Export done cases (CSV)</button><button id="x_rem">Export removed (CSV)</button></div>' +
     (admin ? '<div class="row"><button id="x_sample">Add sample patients</button><button id="x_clear" class="danger">Remove all sample patients</button></div>' : '') + '</div>' +
-    (admin ? '<div class="panel"><h3>Backup</h3><p class="muted small">Makes a copy of the whole Google Sheet in a Drive folder called "Waiting list backups" (the newest 14 are kept). The copies stay in the same Google account and contain patient data, so they follow the same data-location rules as the Sheet.</p><p id="bk_info" class="small">Loading…</p><div class="row"><button id="bk_now">Back up now</button><button id="bk_daily">Daily backup</button></div></div>' : '') +
-    (admin ? '<div class="panel"><div class="spread"><h3>Users</h3><button id="u_add">Add doctor</button></div><div id="u_list"><p class="muted small">Loading…</p></div></div>' +
-      '<div class="panel"><div class="spread"><h3>Audit log</h3><button id="a_load">Show recent changes</button></div><div id="a_list"></div></div>' : '') +
-    '<div class="panel"><h3>My account</h3><p class="muted small">' + esc(S.user.Name) + ' · ' + esc(S.user.Email) + ' · ' + esc(S.user.Role) + ' · app v' + esc(VERSION) + '</p>' +
+    (admin ? '<div class="panel stab" data-t="users"><h3>Backup</h3><p class="muted small">Makes a copy of the whole Google Sheet in a Drive folder called "Waiting list backups" (the newest 14 are kept). The copies stay in the same Google account and contain patient data, so they follow the same data-location rules as the Sheet.</p><p id="bk_info" class="small">Loading…</p><div class="row"><button id="bk_now">Back up now</button><button id="bk_daily">Daily backup</button></div></div>' : '') +
+    (admin ? '<div class="panel stab" data-t="users"><div class="spread"><h3>Users</h3><button id="u_add">Add doctor</button></div><div id="u_list"><p class="muted small">Loading…</p></div></div>' +
+      '<div class="panel stab" data-t="users"><div class="spread"><h3>Audit log</h3><button id="a_load">Show recent changes</button></div><div id="a_list"></div></div>' : '') +
+    '<div class="panel stab" data-t="users"><h3>My account</h3><p class="muted small">' + esc(S.user.Name) + ' · ' + esc(S.user.Email) + ' · ' + esc(S.user.Role) + ' · app v' + esc(VERSION) + '</p>' +
     '<div class="grid3"><div class="field"><label for="m_old">Current PIN</label><input type="password" id="m_old"></div>' +
     '<div class="field"><label for="m_new">New PIN</label><input type="password" id="m_new"></div>' +
     '<div class="field"><label>&nbsp;</label><button id="m_go">Change PIN</button></div></div></div>';
 
-  drawProcs(); drawCons(); drawRes(); drawRooms();
+  drawProcs(); drawCons(); drawRes(); drawRooms(); drawSC();
+  function showSetTab() {
+    var ps = document.querySelectorAll('.stab'); for (var i = 0; i < ps.length; i++) ps[i].classList.toggle('hid', ps[i].getAttribute('data-t') !== S.setTab);
+    var ts = document.querySelectorAll('#s_tabs .pill'); for (var j = 0; j < ts.length; j++) ts[j].classList.toggle('on', ts[j].getAttribute('data-t') === S.setTab);
+  }
+  on($('s_tabs'), '.pill', 'click', function (e) { S.setTab = e.currentTarget.getAttribute('data-t'); showSetTab(); });
+  showSetTab();
+  $('s_addsc').addEventListener('click', function () {
+    call('saveSpecialtyConsultant', { Name: val('s_scname'), Specialty: val('s_scspec') }).then(function (l) { S.d.specialtyConsultants = l; $('s_scname').value = ''; drawSC(); toast('Added'); }).catch(fail);
+  });
   $('s_addroom').addEventListener('click', function () {
     call('saveRoom', { Name: val('s_roomname') }).then(function (l) { S.d.rooms = l; viewSettings(); toast('Room added'); }).catch(fail);
   });
@@ -1119,7 +1512,7 @@ function viewSettings() {
     call('saveResident', { Name: val('s_resname') }).then(function (l) { S.d.residents = l; viewSettings(); toast('Resident added'); }).catch(fail);
   });
   $('t_save').addEventListener('click', function () {
-    call('saveSettings', { waitDaysMinor: val('t_min'), waitDaysIntermediate: val('t_int'), waitDaysMajor: val('t_maj'), noContactDays: val('t_nc'), targetWarnDays: val('t_tg'), idleMinutes: val('t_idle'), listsAheadWeeks: val('t_ahead') })
+    call('saveSettings', { waitDaysMinor: val('t_min'), waitDaysIntermediate: val('t_int'), waitDaysMajor: val('t_maj'), noContactDays: val('t_nc'), targetWarnDays: val('t_tg'), warn14Months: val('t_14'), idleMinutes: val('t_idle'), listsAheadWeeks: val('t_ahead') })
       .then(function (s) { S.d.settings = s; resetIdle(); toast('Saved'); }).catch(fail);
   });
   $('x_wait').addEventListener('click', function () { exportCsv('waiting-list', S.d.patients.filter(isActive)); });
@@ -1161,6 +1554,17 @@ function viewSettings() {
       }).catch(fail);
     });
   }
+}
+var SET_TABS = [['consultants', 'Consultants'], ['procedures', 'Procedures'], ['warnings', 'Warnings'], ['rooms', 'Operating rooms'], ['users', 'Users and account'], ['data', 'Data']];
+function drawSC() {
+  var l = S.d.specialtyConsultants || [];
+  $('s_sc').innerHTML = l.length ? l.map(function (r) {
+    return '<div class="spread log"><span>' + esc(r.Name) + ' <span class="muted small">' + esc(r.Specialty) + '</span>' + (r.Active !== 'Y' ? ' <span class="chip">inactive</span>' : '') + '</span><button data-sc="' + esc(r.Id) + '">' + (r.Active === 'Y' ? 'Deactivate' : 'Activate') + '</button></div>';
+  }).join('') : '<p class="muted small">None yet.</p>';
+  on($('s_sc'), '[data-sc]', 'click', function (e) {
+    var id = e.currentTarget.getAttribute('data-sc'), r = (S.d.specialtyConsultants || []).filter(function (x) { return x.Id === id; })[0];
+    call('saveSpecialtyConsultant', { Id: id, Name: r.Name, Specialty: r.Specialty, Active: r.Active === 'Y' ? 'N' : 'Y' }).then(function (l2) { S.d.specialtyConsultants = l2; drawSC(); }).catch(fail);
+  });
 }
 function drawProcs() {
   var l = S.d.procedures;
@@ -1363,7 +1767,7 @@ function dlgSendToList(p, after) {
   var m = openModal('<div id="sl_body"></div>', { narrow: true });
   function draw() {
     var rows = (showAll ? all : mine).slice(0, 40);
-    var html = '<div class="spread"><h2>Add to OT</h2><button id="sl_close">Close</button></div>' +
+    var html = '<div class="spread"><h2>Schedule</h2><button id="sl_close">Close</button></div>' +
       '<p style="margin:4px 0"><strong>' + esc(p.Name) + '</strong> <span class="muted small">' + esc(ageText(p.DOB)) + ' · ' + esc(p.MRN) + '</span><br>' + esc(procLabel(p)) + ' <span class="muted small">· ' + need + ' min · ' + esc(p.CareType) + ' · ' + esc(consName(p.ConsultantId)) + '</span></p>' +
       '<p class="muted small">Check with the family before booking.' + (p.Sponsorship ? ' Sponsorship: ' + esc(p.Sponsorship) + '.' : ' Sponsorship is not recorded.') + '</p>' +
       '<label class="check"><input type="checkbox" id="sl_all"' + (showAll ? ' checked' : '') + '> Show lists of all consultants</label>';
@@ -1630,7 +2034,7 @@ function openList(id) {
   function cands(l, rem) {
     var base = S.d.patients.filter(function (p) {
       if (p.ListId) return false;
-      if (p.Status !== 'Ready') return false;
+      if (p.Status !== 'Ready' || medOf(p) === 'Unknown') return false;
       if (!F.allCons && p.ConsultantId !== l.ConsultantId) return false;
       if (F.noMajor && p.Category === 'Major') return false;
       if (F.noAdmit && p.NeedsAdmission) return false;
