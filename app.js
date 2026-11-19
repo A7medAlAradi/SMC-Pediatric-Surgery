@@ -10,12 +10,12 @@
         fetch(cfg.apiUrl, { method: 'POST', redirect: 'follow', body: JSON.stringify({ token: token, action: action, payload: payload }) })
           .then(function (r) { return r.json(); })
           .then(function (j) { onOk && onOk(j); })
-          .catch(function () { onFail && onFail({ message: 'Could not reach the server' }); });
+          .catch(function () { onFail && onFail({ message: 'Could not reach the server. Check the address in config.js and that the web app access is set to Anyone.' }); });
       }
     };
   }
   window.google = { script: { run: run() } };
-  window.APP_VERSION = '0.4.0';
+  window.APP_VERSION = '0.4.1';
   window.APP_HOST = 'GitHub Pages';
 })();
 
