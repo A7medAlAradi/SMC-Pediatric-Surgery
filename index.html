@@ -406,7 +406,7 @@ button.primary{background:var(--ink);color:var(--onink);border-color:var(--ink)}
     };
   }
   window.google = { script: { run: run() } };
-  window.APP_VERSION = '0.12.1';
+  window.APP_VERSION = '0.12.4';
   window.APP_HOST = 'GitHub Pages';
 })();
 
@@ -4504,7 +4504,7 @@ function openImport() {
       var row = st.table[r], o = { _n: row._n };
       IMP2.forEach(function (f) { var i = st.map[f.k]; o[f.k] = i === undefined ? '' : String(row[i] === undefined ? '' : row[i]).trim(); });
       if (!o.Name && !o.MRN && !o.Procedure) continue;
-      o.ProposedDate = o.ProposedDate; o.apply = !!st.apply[o._n];
+      o.ProposedDate = o.ProposedDate; o.apply = st.apply[o._n] !== false;
       out.push(o);
     }
     return out;
@@ -4570,7 +4570,7 @@ function openImport() {
     h += '<div style="overflow-x:auto"><table class="tbl" style="font-size:12px"><thead><tr><th>Row</th><th></th><th>Patient</th><th>Procedure</th><th>Notes</th><th>Comments say</th></tr></thead><tbody>' +
       shown.slice(0, 200).map(function (i) {
         var tagc = { 'new': 'green', update: 'amber', unchanged: '', problem: 'red' }[i.action];
-        var sg = i.suggest && i.action !== 'problem' && i.action !== 'unchanged' ? '<label class="check" style="margin:0"><input type="checkbox" data-ap="' + i.rowId + '"' + (st.apply[i.rowId] ? ' checked' : '') + '> ' + esc((i.suggest.calls ? 'no answer x' + i.suggest.calls : '') + (i.suggest.calls && i.suggest.tags.length ? '; ' : '') + i.suggest.tags.join(', ')) + '</label>' : '';
+        var sg = i.suggest && i.action !== 'problem' && i.action !== 'unchanged' ? '<label class="check" style="margin:0"><input type="checkbox" data-ap="' + i.rowId + '"' + (st.apply[i.rowId] !== false ? ' checked' : '') + '> ' + esc((i.suggest.calls ? 'no answer x' + i.suggest.calls : '') + (i.suggest.calls && i.suggest.tags.length ? '; ' : '') + i.suggest.tags.join(', ')) + '</label>' : '';
         return '<tr><td>' + esc(i.n) + '</td><td><span class="chip ' + tagc + '">' + esc(i.action === 'new' ? 'New' : i.action === 'update' ? 'Update' : i.action === 'unchanged' ? 'Same' : 'Problem') + '</span></td><td>' + esc(i.name) + '<br><span class="muted">' + esc(i.mrn) + '</span></td><td>' + esc(i.procedure) + '</td><td>' +
           esc(i.action === 'problem' ? i.reason : (i.action === 'update' ? 'Fills: ' + i.changes.join(', ') + (i.warnings.length ? '. ' : '') : '') + i.warnings.join('. ')) + '</td><td>' + sg + '</td></tr>';
       }).join('') + '</tbody></table></div>' + (shown.length > 200 ? '<p class="muted small">Showing the first 200 of ' + shown.length + '. All of them are imported.</p>' : '');
@@ -4583,7 +4583,7 @@ function openImport() {
     on(el, '[data-ap]', 'change', function (e) { st.apply[e.currentTarget.getAttribute('data-ap')] = e.currentTarget.checked; });
     if ($('im_tick')) {
       $('im_tick').addEventListener('click', function () { sugg.forEach(function (i) { st.apply[i.rowId] = true; }); drawPlan(); });
-      $('im_untick').addEventListener('click', function () { st.apply = {}; drawPlan(); });
+      $('im_untick').addEventListener('click', function () { sugg.forEach(function (i) { st.apply[i.rowId] = false; }); drawPlan(); });
     }
     $('im_back').addEventListener('click', function () { step1(); });
     $('im_go').addEventListener('click', function () {
@@ -4862,7 +4862,7 @@ openImport = function (mode) {
       if (!o.Name && !o.MRN && !o.TNumber && !o.Procedure) continue;
       if (/^(no\.?|#)$/i.test(o.Name) || /^firm\b|waiting list|^pediatric/i.test(o.Name) && !o.Procedure) continue;
       var fx = st.fix[sh.idx + ':' + o._n]; if (fx) { if (fx.MRN !== undefined) o.MRN = fx.MRN; if (fx.TNumber !== undefined) o.TNumber = fx.TNumber; if (fx.Name !== undefined) o.Name = fx.Name; }
-      o.apply = !!st.apply[sh.idx + ':' + o._n];
+      o.apply = st.apply[sh.idx + ':' + o._n] !== false;
       out.push(o);
     }
     return out;
@@ -4901,7 +4901,7 @@ openImport = function (mode) {
       var d = impDetect(s.rows);
       return { idx: i, name: s.name, rows: s.rows, header: d.header, map: d.map, kind: s.kind || impKind(s.name), include: !!(s.kind || impKind(s.name)), plan: null };
     });
-    st.procMap = {}; st.consMap = {}; st.apply = {}; st.fix = {}; st.cur = 0; step2();
+    st.procMap = {}; st.consMap = {}; st.apply = {}; st.fix = {}; st.cur = 0; st.filter = ''; step2();
   }
   function callChunk(sh, part, dry) {
     return call('importCases', { dry: dry, source: st.source, sheet: sh.name, batch: sh.kind, consultantId: st.cons, consMap: st.consMap, procMap: st.procMap, rows: part });
@@ -4962,8 +4962,11 @@ openImport = function (mode) {
     var sh = st.sheets[st.cur], r = sh.plan, c = r.counts, el = $('im_plan');
     var unm = allUnmatched('unmatched'), unc = allUnmatched('unmatchedCons');
     var sugg = r.items.filter(function (i) { return i.suggest && i.action !== 'problem' && i.action !== 'unchanged'; });
-    var shown = r.items.filter(function (i) { return st.filter === 'all' || i.action === st.filter; });
-    var h = '<div class="chiprow">' + [['all', 'All ' + r.items.length], ['new', 'New ' + c.new], ['update', 'Update ' + c.update], ['unchanged', 'Unchanged ' + c.unchanged], ['problem', 'Problems ' + c.problem]].map(function (x) {
+    function needsLook(i) { return i.action === 'problem' || (i.warnings && i.warnings.length) || (i.flags && i.flags.length) || !!i.suggest; }
+    var nAtt = r.items.filter(needsLook).length;
+    if (!st.filter || (st.filter === 'attn' && !nAtt && st.filterAuto !== false)) st.filter = nAtt ? 'attn' : 'all';
+    var shown = r.items.filter(function (i) { return st.filter === 'all' || (st.filter === 'attn' ? needsLook(i) : i.action === st.filter); });
+    var h = '<div class="chiprow">' + [['attn', 'Needs a look ' + nAtt], ['all', 'All ' + r.items.length], ['new', 'New ' + c.new], ['update', 'Update ' + c.update], ['unchanged', 'Unchanged ' + c.unchanged], ['problem', 'Problems ' + c.problem]].map(function (x) {
       return '<button type="button" class="schip' + (st.filter === x[0] ? ' on' : '') + '" data-f="' + x[0] + '">' + x[1] + '</button>'; }).join('') + '</div>';
     var uk = Object.keys(unm), ck = Object.keys(unc);
     if (ck.length) h += '<div class="banner" style="display:block"><strong>Initials I do not know.</strong> These rows are imported under the default consultant with a tag. You can tell me who each one is (optional); I will remember.' + ck.map(function (u, i) {
@@ -4974,7 +4977,7 @@ openImport = function (mode) {
     h += '<div style="overflow-x:auto"><table class="tbl" style="font-size:12px"><thead><tr><th>Row</th><th></th><th>Patient</th><th>Procedure</th><th>Notes</th><th>Comments say</th></tr></thead><tbody>' +
       shown.slice(0, 150).map(function (i) {
         var tagc = { 'new': 'green', update: 'amber', unchanged: '', problem: 'red' }[i.action];
-        var sg = i.suggest && i.action !== 'problem' && i.action !== 'unchanged' ? '<label class="check" style="margin:0"><input type="checkbox" data-ap="' + i.rowId + '"' + (st.apply[sh.idx + ':' + i.rowId] ? ' checked' : '') + '> ' + esc((i.suggest.calls ? 'no answer x' + i.suggest.calls : '') + (i.suggest.calls && i.suggest.tags.length ? '; ' : '') + i.suggest.tags.join(', ')) + '</label>' : '';
+        var sg = i.suggest && i.action !== 'problem' && i.action !== 'unchanged' ? '<label class="check" style="margin:0"><input type="checkbox" data-ap="' + i.rowId + '"' + (st.apply[sh.idx + ':' + i.rowId] !== false ? ' checked' : '') + '> ' + esc((i.suggest.calls ? 'no answer x' + i.suggest.calls : '') + (i.suggest.calls && i.suggest.tags.length ? '; ' : '') + i.suggest.tags.join(', ')) + '</label>' : '';
         var kindNote = i.kind && i.kind !== sh.kind ? ' <span class="chip red">as ' + esc(i.kind) + '</span>' : '';
         var fixable = i.action === 'problem' && /CPR or T number|is not a 9-digit|No name/.test(i.reason), fx0 = st.fix[sh.idx + ':' + i.rowId] || {};
         var fixHtml = fixable ? '<div class="row" style="gap:4px;margin-top:4px;flex-wrap:wrap"><input type="text" class="im_fix" data-fr="' + i.rowId + '" data-ff="Name" placeholder="Name" value="' + esc(fx0.Name !== undefined ? fx0.Name : i.name) + '" style="width:120px">' +
@@ -4982,7 +4985,7 @@ openImport = function (mode) {
           '<input type="text" class="im_fix" data-fr="' + i.rowId + '" data-ff="TNumber" placeholder="T number" value="' + esc(fx0.TNumber || '') + '" style="width:85px"></div>' : '';
         return '<tr><td>' + esc(i.n) + '</td><td><span class="chip ' + tagc + '">' + esc(i.action === 'new' ? 'New' : i.action === 'update' ? 'Update' : i.action === 'unchanged' ? 'Same' : 'Problem') + '</span>' + kindNote + '</td><td>' + esc(i.name) + '<br><span class="muted">' + esc(i.mrn) + (i.t && i.cpr ? ' · ' + esc(i.t) : '') + '</span>' + fixHtml + '</td><td>' + esc(i.procedure) + '</td><td>' +
           esc(i.action === 'problem' ? i.reason : (i.action === 'update' ? 'Fills: ' + i.changes.join(', ') + (i.warnings.length ? '. ' : '') : '') + i.warnings.join('. ')) + '</td><td>' + sg + '</td></tr>';
-      }).join('') + '</tbody></table></div>' + (shown.length > 150 ? '<p class="muted small">Showing the first 150 of ' + shown.length + '. All of them are imported.</p>' : '') + summaryBar();
+      }).join('') + '</tbody></table></div>' + (shown.length > 150 ? '<p class="muted small">Showing the first 150 of ' + shown.length + '. All rows are imported, including the ones not shown.</p>' : '') + summaryBar();
     el.innerHTML = h;
     on(el, '[data-f]', 'click', function (e) { st.filter = e.currentTarget.getAttribute('data-f'); drawPlan(); });
     on(el, '[data-u]', 'change', function (e) { if (!e.currentTarget.value) return; st.procMap[e.currentTarget.getAttribute('data-u')] = e.currentTarget.value; replanAll(); });
@@ -4993,7 +4996,7 @@ openImport = function (mode) {
       sh.plan = null; drawSheet();
     });
     on(el, '[data-ap]', 'change', function (e) { st.apply[sh.idx + ':' + e.currentTarget.getAttribute('data-ap')] = e.currentTarget.checked; });
-    if ($('im_tick')) { $('im_tick').addEventListener('click', function () { sugg.forEach(function (i) { st.apply[sh.idx + ':' + i.rowId] = true; }); drawPlan(); }); $('im_untick').addEventListener('click', function () { sugg.forEach(function (i) { delete st.apply[sh.idx + ':' + i.rowId]; }); drawPlan(); }); }
+    if ($('im_tick')) { $('im_tick').addEventListener('click', function () { sugg.forEach(function (i) { st.apply[sh.idx + ':' + i.rowId] = true; }); drawPlan(); }); $('im_untick').addEventListener('click', function () { sugg.forEach(function (i) { st.apply[sh.idx + ':' + i.rowId] = false; }); drawPlan(); }); }
     wireGo();
   }
   function wireGo() {
