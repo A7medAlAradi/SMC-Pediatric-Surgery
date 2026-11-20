@@ -404,7 +404,7 @@ button.primary{background:var(--ink);color:var(--onink);border-color:var(--ink)}
     };
   }
   window.google = { script: { run: run() } };
-  window.APP_VERSION = '0.11.0';
+  window.APP_VERSION = '0.12.0';
   window.APP_HOST = 'GitHub Pages';
 })();
 
@@ -1938,8 +1938,13 @@ function drawTags() {
 function drawSC() {
   var l = S.d.specialtyConsultants || [];
   $('s_sc').innerHTML = l.length ? l.map(function (r) {
-    return '<div class="spread log"><span>' + esc(r.Name) + ' <span class="muted small">' + esc(r.Specialty) + '</span>' + (r.Active !== 'Y' ? ' <span class="chip">inactive</span>' : '') + '</span><button data-sc="' + esc(r.Id) + '">' + (r.Active === 'Y' ? 'Deactivate' : 'Activate') + '</button></div>';
+    return '<div class="spread log"><span>' + esc(r.Name) + ' <span class="muted small">' + esc(r.Specialty) + '</span>' + (r.Active !== 'Y' ? ' <span class="chip">inactive</span>' : '') + '</span><button data-sc="' + esc(r.Id) + '">' + (r.Active === 'Y' ? 'Deactivate' : 'Activate') + '</button> <button data-scdel="' + esc(r.Id) + '" style="color:var(--red)">Delete</button></div>';
   }).join('') : '<p class="muted small">None yet.</p>';
+  on($('s_sc'), '[data-scdel]', 'click', function (e) {
+    var id = e.currentTarget.getAttribute('data-scdel'), r = (S.d.specialtyConsultants || []).filter(function (x) { return x.Id === id; })[0];
+    if (!r || !window.confirm('Delete ' + r.Name + '? Names already chosen on patients stay as written. This cannot be undone.')) return;
+    call('deleteSpecialtyConsultant', { Id: id }).then(function (l2) { S.d.specialtyConsultants = l2; drawSC(); toast('Deleted'); }).catch(fail);
+  });
   on($('s_sc'), '[data-sc]', 'click', function (e) {
     var id = e.currentTarget.getAttribute('data-sc'), r = (S.d.specialtyConsultants || []).filter(function (x) { return x.Id === id; })[0];
     call('saveSpecialtyConsultant', { Id: id, Name: r.Name, Specialty: r.Specialty, Active: r.Active === 'Y' ? 'N' : 'Y' }).then(function (l2) { S.d.specialtyConsultants = l2; drawSC(); }).catch(fail);
@@ -2313,6 +2318,17 @@ function dlgCancelList(l) {
   });
 }
 
+function dlgDeleteList(l) {
+  var n = onList(l).length;
+  var m = openModal('<h2>Delete this list?</h2><p>' + esc(fmtDay(l.Date)) + ' · ' + esc(listTitle(l)) + '</p><p class="muted small">' + (n ? n + ' patient' + (n === 1 ? '' : 's') + ' on it go back on the waiting list. ' : 'The list is empty. ') + 'The list is removed completely and will not be created again by the automatic schedule. This cannot be undone. To keep a record, use "Cancel list" instead.</p>' +
+    '<div class="row"><button class="danger" id="dl_go">Delete list</button><button id="dl_back">Keep list</button></div>', { narrow: true });
+  $('dl_back').addEventListener('click', m.close);
+  $('dl_go').addEventListener('click', function () {
+    call('deleteList', { listId: l.Id }).then(function (r) {
+      S.d.lists = r.lists; r.patients.forEach(upsertP); m.close(); render(); toast('List deleted');
+    }).catch(fail);
+  });
+}
 function ordered(l) {
   return onList(l).sort(function (a, b) {
     var x = Number(a.ListOrder) || 9999, y = Number(b.ListOrder) || 9999;
@@ -2422,6 +2438,7 @@ function openList(id) {
       if (open && pts.length > 1) items.push({ label: 'Order youngest first', fn: function () { saveOrder(ordered(listById(id)).sort(function (a, b) { return ageMonths(a.DOB, S.today) - ageMonths(b.DOB, S.today); }).map(function (p) { return p.Id; })); } });
       items.push({ label: 'Print', fn: function () { printList(listById(id)); } });
       if (open) items.push({ label: 'Cancel list', fn: function () { dlgCancelList(listById(id)); } });
+      if (can('lists')) items.push({ label: 'Delete list…', fn: function () { dlgDeleteList(listById(id)); } });
       pickMenu('List options', items);
     });
     var body = $('ls_body');
@@ -4315,6 +4332,10 @@ function xlsIssues(p) {
   if (p.DobFlag === 'est') o.push('Date of birth estimated from the age');
   if (!p.Guardian && p.Status !== 'Removed') o.push('No contact number');
   if (!/^\d{9}$/.test(p.MRN || '')) o.push('Only a T number (no CPR yet)');
+  if (!p.ProcedureId && p.Procedure) o.push('Procedure not in the list: choose one');
+  var fl = String(p.ImportFlags || '');
+  if (/cons/.test(fl)) o.push('Consultant to confirm (the default was used)');
+  if (/dob/.test(fl)) o.push('Date of birth missing (placeholder set)');
   if (active && (p.MedicalStatus || 'Unknown') === 'Unknown') o.push(p.ListId ? 'Scheduled without a medical status' : 'Medical status not set');
   if (p.Status === 'Done') {
     var sg = []; try { sg = JSON.parse(p.Surgeons || '[]'); } catch (e) { sg = []; }
@@ -4828,7 +4849,7 @@ function impChunks(rows, size) {
 openImport = function (mode) {
   var cons = S.d.consultants.filter(function (c) { return c.Active === 'Y'; });
   var canFile = can('importFile');
-  var st = { source: mode === 'paste' || !canFile ? 'paste' : 'file', cons: '', sheets: [], procMap: {}, consMap: {}, apply: {}, cur: 0, filter: 'all', done: null };
+  var st = { source: mode === 'paste' || !canFile ? 'paste' : 'file', cons: '', sheets: [], procMap: {}, consMap: {}, apply: {}, fix: {}, cur: 0, filter: 'all', done: null };
   var m = openModal('<div id="im_body"></div>', { locked: true });
   var KINDS = [['waiting', 'Waiting'], ['done', 'Done'], ['removed', 'Removed']];
   function dataRows(sh) {
@@ -4838,6 +4859,7 @@ openImport = function (mode) {
       IMP3.forEach(function (f) { var i = sh.map[f.k]; o[f.k] = i === undefined ? '' : String(row[i] === undefined ? '' : row[i]).trim(); });
       if (!o.Name && !o.MRN && !o.TNumber && !o.Procedure) continue;
       if (/^(no\.?|#)$/i.test(o.Name) || /^firm\b|waiting list|^pediatric/i.test(o.Name) && !o.Procedure) continue;
+      var fx = st.fix[sh.idx + ':' + o._n]; if (fx) { if (fx.MRN !== undefined) o.MRN = fx.MRN; if (fx.TNumber !== undefined) o.TNumber = fx.TNumber; if (fx.Name !== undefined) o.Name = fx.Name; }
       o.apply = !!st.apply[sh.idx + ':' + o._n];
       out.push(o);
     }
@@ -4877,7 +4899,7 @@ openImport = function (mode) {
       var d = impDetect(s.rows);
       return { idx: i, name: s.name, rows: s.rows, header: d.header, map: d.map, kind: s.kind || impKind(s.name), include: !!(s.kind || impKind(s.name)), plan: null };
     });
-    st.procMap = {}; st.consMap = {}; st.apply = {}; st.cur = 0; step2();
+    st.procMap = {}; st.consMap = {}; st.apply = {}; st.fix = {}; st.cur = 0; step2();
   }
   function callChunk(sh, part, dry) {
     return call('importCases', { dry: dry, source: st.source, sheet: sh.name, batch: sh.kind, consultantId: st.cons, consMap: st.consMap, procMap: st.procMap, rows: part });
@@ -4942,9 +4964,9 @@ openImport = function (mode) {
     var h = '<div class="chiprow">' + [['all', 'All ' + r.items.length], ['new', 'New ' + c.new], ['update', 'Update ' + c.update], ['unchanged', 'Unchanged ' + c.unchanged], ['problem', 'Problems ' + c.problem]].map(function (x) {
       return '<button type="button" class="schip' + (st.filter === x[0] ? ' on' : '') + '" data-f="' + x[0] + '">' + x[1] + '</button>'; }).join('') + '</div>';
     var uk = Object.keys(unm), ck = Object.keys(unc);
-    if (ck.length) h += '<div class="banner" style="display:block"><strong>Initials I do not know.</strong> Tell me who each one is; I will remember.' + ck.map(function (u, i) {
+    if (ck.length) h += '<div class="banner" style="display:block"><strong>Initials I do not know.</strong> These rows are imported under the default consultant with a tag. You can tell me who each one is (optional); I will remember.' + ck.map(function (u, i) {
       return '<div class="field" style="margin:6px 0 0"><label>"' + esc(u) + '" (' + unc[u] + ' rows)</label><select data-cu="' + esc(u) + '">' + opt('', 'Choose…', true) + cons.map(function (c2) { return opt(c2.Id, c2.Name); }).join('') + opt('__batch', 'Not a consultant: use the default') + '</select></div>'; }).join('') + '</div>';
-    if (uk.length) h += '<div class="banner" style="display:block"><strong>Procedures I could not match.</strong> Choose what each one is; I will remember.' + uk.map(function (u, i) {
+    if (uk.length) h += '<div class="banner" style="display:block"><strong>Procedures not in your list.</strong> These rows are imported as typed with a tag. You can map each one now (optional); I will remember.' + uk.map(function (u, i) {
       return '<div class="field" style="margin:6px 0 0"><label>"' + esc(u) + '" (' + unm[u] + ' rows)</label><select data-u="' + esc(u) + '">' + opt('', 'Choose…', true) + S.d.procedures.filter(function (p) { return p.Active !== 'N'; }).map(function (p) { return opt(p.Id, p.Name); }).join('') + opt('__asis', 'Keep as typed (not in my list)') + opt('__skip', 'Skip these rows') + '</select></div>'; }).join('') + '</div>';
     if (sugg.length) h += '<p class="small"><strong>' + sugg.length + '</strong> rows have suggestions from the comments. They are only applied when ticked. <button type="button" class="link" id="im_tick">Tick all</button> · <button type="button" class="link" id="im_untick">Untick all</button></p>';
     h += '<div style="overflow-x:auto"><table class="tbl" style="font-size:12px"><thead><tr><th>Row</th><th></th><th>Patient</th><th>Procedure</th><th>Notes</th><th>Comments say</th></tr></thead><tbody>' +
@@ -4952,13 +4974,22 @@ openImport = function (mode) {
         var tagc = { 'new': 'green', update: 'amber', unchanged: '', problem: 'red' }[i.action];
         var sg = i.suggest && i.action !== 'problem' && i.action !== 'unchanged' ? '<label class="check" style="margin:0"><input type="checkbox" data-ap="' + i.rowId + '"' + (st.apply[sh.idx + ':' + i.rowId] ? ' checked' : '') + '> ' + esc((i.suggest.calls ? 'no answer x' + i.suggest.calls : '') + (i.suggest.calls && i.suggest.tags.length ? '; ' : '') + i.suggest.tags.join(', ')) + '</label>' : '';
         var kindNote = i.kind && i.kind !== sh.kind ? ' <span class="chip red">as ' + esc(i.kind) + '</span>' : '';
-        return '<tr><td>' + esc(i.n) + '</td><td><span class="chip ' + tagc + '">' + esc(i.action === 'new' ? 'New' : i.action === 'update' ? 'Update' : i.action === 'unchanged' ? 'Same' : 'Problem') + '</span>' + kindNote + '</td><td>' + esc(i.name) + '<br><span class="muted">' + esc(i.mrn) + (i.t && i.cpr ? ' · ' + esc(i.t) : '') + '</span></td><td>' + esc(i.procedure) + '</td><td>' +
+        var fixable = i.action === 'problem' && /CPR or T number|is not a 9-digit|No name/.test(i.reason), fx0 = st.fix[sh.idx + ':' + i.rowId] || {};
+        var fixHtml = fixable ? '<div class="row" style="gap:4px;margin-top:4px;flex-wrap:wrap"><input type="text" class="im_fix" data-fr="' + i.rowId + '" data-ff="Name" placeholder="Name" value="' + esc(fx0.Name !== undefined ? fx0.Name : i.name) + '" style="width:120px">' +
+          '<input type="text" class="im_fix" data-fr="' + i.rowId + '" data-ff="MRN" placeholder="CPR (9 digits)" value="' + esc(fx0.MRN || '') + '" maxlength="9" style="width:105px">' +
+          '<input type="text" class="im_fix" data-fr="' + i.rowId + '" data-ff="TNumber" placeholder="T number" value="' + esc(fx0.TNumber || '') + '" style="width:85px"></div>' : '';
+        return '<tr><td>' + esc(i.n) + '</td><td><span class="chip ' + tagc + '">' + esc(i.action === 'new' ? 'New' : i.action === 'update' ? 'Update' : i.action === 'unchanged' ? 'Same' : 'Problem') + '</span>' + kindNote + '</td><td>' + esc(i.name) + '<br><span class="muted">' + esc(i.mrn) + (i.t && i.cpr ? ' · ' + esc(i.t) : '') + '</span>' + fixHtml + '</td><td>' + esc(i.procedure) + '</td><td>' +
           esc(i.action === 'problem' ? i.reason : (i.action === 'update' ? 'Fills: ' + i.changes.join(', ') + (i.warnings.length ? '. ' : '') : '') + i.warnings.join('. ')) + '</td><td>' + sg + '</td></tr>';
       }).join('') + '</tbody></table></div>' + (shown.length > 150 ? '<p class="muted small">Showing the first 150 of ' + shown.length + '. All of them are imported.</p>' : '') + summaryBar();
     el.innerHTML = h;
     on(el, '[data-f]', 'click', function (e) { st.filter = e.currentTarget.getAttribute('data-f'); drawPlan(); });
     on(el, '[data-u]', 'change', function (e) { if (!e.currentTarget.value) return; st.procMap[e.currentTarget.getAttribute('data-u')] = e.currentTarget.value; replanAll(); });
     on(el, '[data-cu]', 'change', function (e) { if (!e.currentTarget.value) return; st.consMap[e.currentTarget.getAttribute('data-cu')] = e.currentTarget.value; replanAll(); });
+    on(el, '.im_fix', 'change', function (e) {
+      var inp = e.currentTarget, k = sh.idx + ':' + inp.getAttribute('data-fr'), f = inp.getAttribute('data-ff');
+      st.fix[k] = st.fix[k] || {}; st.fix[k][f] = inp.value.trim().toUpperCase() === inp.value.trim() || f === 'Name' ? inp.value.trim() : inp.value.trim().toUpperCase();
+      sh.plan = null; drawSheet();
+    });
     on(el, '[data-ap]', 'change', function (e) { st.apply[sh.idx + ':' + e.currentTarget.getAttribute('data-ap')] = e.currentTarget.checked; });
     if ($('im_tick')) { $('im_tick').addEventListener('click', function () { sugg.forEach(function (i) { st.apply[sh.idx + ':' + i.rowId] = true; }); drawPlan(); }); $('im_untick').addEventListener('click', function () { sugg.forEach(function (i) { delete st.apply[sh.idx + ':' + i.rowId]; }); drawPlan(); }); }
     wireGo();
@@ -4994,6 +5025,36 @@ openImport = function (mode) {
   }
   step1();
 };
+
+
+// ---- v0.12.0: dates without lists (Settings > Operating rooms)
+function skipDates() { try { var a = JSON.parse((S.d.settings || {}).otSkipDates || '[]'); return Array.isArray(a) ? a : []; } catch (e) { return []; } }
+(function () {
+  var oldDraw2 = drawSetPanel;
+  drawSetPanel = function () {
+    oldDraw2();
+    if (S.setTab !== 'rooms' || !$('s_main')) return;
+    var box = document.createElement('div'); box.className = 'sect'; box.id = 'sk_box';
+    $('s_main').appendChild(box);
+    function paint() {
+      var l = skipDates().filter(function (x) { return x.date >= S.today; });
+      box.innerHTML = '<h3>Theatre lists are created automatically</h3><p class="muted small">Every consultant gets a list on their operating day, and each shared room on its day, for the next 6 months. The lists are topped up every night. Dates below get no list (holidays, leave). Lists that already hold patients, and lists you added yourself, are never changed or removed.</p>' +
+        '<div class="row"><input type="date" id="sk_date" style="max-width:170px"><input type="text" id="sk_note" placeholder="Note (optional)" style="max-width:220px"><button id="sk_add">Add date</button><button id="sk_fill">Create lists now</button></div>' +
+        '<div id="sk_list" style="margin-top:8px">' + (l.length ? l.map(function (x) { return '<div class="spread log"><span>' + esc(fmtDate(x.date)) + (x.note ? ' <span class="muted small">' + esc(x.note) + '</span>' : '') + '</span><button data-skd="' + esc(x.date) + '">Remove</button></div>'; }).join('') : '<p class="muted small">No dates without lists.</p>') + '</div>';
+      function save(arr) {
+        call('saveSkipDates', { dates: arr }).then(function (r) { S.d.settings.otSkipDates = JSON.stringify(r.skip); S.d.lists = r.lists; paint(); toast(r.removed ? r.removed + ' empty list(s) removed' : 'Saved'); }).catch(fail);
+      }
+      $('sk_add').addEventListener('click', function () {
+        var d = val('sk_date'); if (!d) { toast('Choose a date', true); return; }
+        var cur = skipDates().filter(function (x) { return x.date !== d; }); cur.push({ date: d, note: val('sk_note') }); save(cur);
+      });
+      on(box, '[data-skd]', 'click', function (e) { var d = e.currentTarget.getAttribute('data-skd'); save(skipDates().filter(function (x) { return x.date !== d; })); });
+      $('sk_fill').addEventListener('click', function () { call('fillSchedule', {}).then(function (r) { S.d.lists = r.lists; toast(r.created ? r.created + ' list(s) created' : 'Everything is already created'); }).catch(fail); });
+      if (!can('lists')) { $('sk_add').disabled = true; $('sk_fill').disabled = true; }
+    }
+    paint();
+  };
+})();
 
 init();
 })();
