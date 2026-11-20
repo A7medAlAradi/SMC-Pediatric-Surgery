@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Pediatric Surgery Waiting List</title>
+<title>Pediatric Surgery</title>
 <meta name="robots" content="noindex, nofollow">
 <style>
 :root{
@@ -13,7 +13,7 @@
   --amber-bg:#fbefd5; --amber:#74450a; --gray-bg:#ecebe6; --gray:#4a4944; --focus:#2b72c8;
 }
 @media (prefers-color-scheme: dark){
-  :root{
+  :root:not([data-theme="light"]){
     --bg:#191918; --card:#232321; --text:#ecebe6; --muted:#a3a198; --line:#33322f; --line2:#46443f;
     --ink:#ecebe6; --onink:#191918;
     --green-bg:#233618; --green:#b8dc97; --blue-bg:#18304a; --blue:#a9cdf2; --red-bg:#471f1f; --red:#f2b4b4;
@@ -204,9 +204,12 @@ table.wl{table-layout:auto}
 table.wl th{white-space:normal}
 table.wl td:nth-child(2),table.wl td:nth-child(6){white-space:nowrap}
 table.wl .chip,table.wl .tagbtn{white-space:normal;text-align:left}
-table.wl td{overflow-wrap:anywhere}
-table.wl td.acts{white-space:nowrap;text-align:right;width:1%}
-.actw{display:inline-flex;align-items:center;justify-content:flex-end;gap:6px}
+table.wl td{overflow-wrap:break-word}
+table.wl td:first-child{min-width:150px}
+table.wl td:first-child .mrn,table.wl td:first-child .small{white-space:nowrap}
+table.wl td.acts{white-space:nowrap;text-align:right;width:1%;vertical-align:middle}
+.actw{display:inline-flex;flex-wrap:nowrap;align-items:center;justify-content:flex-end;gap:6px;white-space:nowrap}
+.actw>button:not(.phbtn){min-width:96px}
 .actw>button{height:36px;min-height:36px;padding:0 12px;display:inline-flex;align-items:center;justify-content:center;margin:0;box-sizing:border-box}
 .actw>.phbtn{width:40px;padding:0}
 table.dntbl td:nth-child(7){min-width:150px}
@@ -254,15 +257,128 @@ details.fold[open]>summary::before{content:"\25BE  "}
 }
 .syncbtn{display:block;width:100%;border:none;background:none;min-height:0;padding:4px 0 0;text-align:left;font-size:12px;color:var(--muted);cursor:pointer}
 .syncbtn:hover{color:var(--text)}
-@media (max-width:1099px){table.wl .actw{flex-direction:column;align-items:stretch}.actw>.phbtn{width:auto}}
+
+:root[data-theme="dark"]{
+  --bg:#191918; --card:#232321; --text:#ecebe6; --muted:#a3a198; --line:#33322f; --line2:#46443f;
+    --ink:#ecebe6; --onink:#191918;
+    --green-bg:#233618; --green:#b8dc97; --blue-bg:#18304a; --blue:#a9cdf2; --red-bg:#471f1f; --red:#f2b4b4;
+    --amber-bg:#46330f; --amber:#f2d194; --gray-bg:#33322f; --gray:#cfcdc5; --focus:#6aa6e8;
+}
+:root[data-density="compact"] .tbl td,:root[data-density="compact"] .tbl th{padding-top:4px;padding-bottom:4px}
+:root[data-density="compact"] button{min-height:30px;padding:4px 10px}
+:root[data-density="compact"] .card{padding:8px 10px}
+:root[data-text="large"] body{font-size:17px}
+:root[data-text="large"] .small{font-size:13.5px}
+/* ---- v0.9.0 ---- */
+.ini{display:inline-block;font-size:10.5px;font-weight:600;letter-spacing:.3px;padding:2px 7px;border-radius:8px;color:#2a2a28;vertical-align:middle}
+.swatch{display:inline-block;width:22px;height:22px;border-radius:6px;border:1px solid var(--line2);vertical-align:middle}
+.colbtn{width:34px;height:34px;min-height:0;padding:0;border-radius:50%;border:2px solid var(--line2)}
+.colbtn.on{border-color:var(--text);box-shadow:0 0 0 2px var(--card) inset}
+.colbtn:disabled{opacity:.35;cursor:not-allowed}
+.top{flex-wrap:wrap}
+.consbar{display:flex;gap:4px;align-items:center;background:var(--bg);border:1px solid var(--line2);border-radius:10px;padding:3px;max-width:100%}
+.segwrap{display:inline-flex;gap:2px;background:var(--bg);border:1px solid var(--line2);border-radius:10px;padding:3px;flex-wrap:wrap}
+.seg{border:none;background:none;border-radius:8px;padding:5px 12px;min-height:30px;font-size:13.5px;white-space:nowrap;flex:none}
+.seg.on{background:var(--ink);color:var(--onink)}
+.gsearch{max-width:260px}
+@media (max-width:699px){
+  .top .consbar{order:5;flex:1 1 100%}
+  .gsearch{max-width:none}
+}
+.sttabs{display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--line);margin:4px 0 8px}
+.sttabs-in{display:flex;gap:2px;flex:1;min-width:0;overflow-x:auto}
+.sttab{border:none;border-bottom:3px solid transparent;border-radius:0;background:none;padding:8px 12px;min-height:0;color:var(--muted);white-space:nowrap;flex:none}
+.sttab b{font-weight:600;margin-left:3px;opacity:.8}
+.sttab.on{color:var(--text);border-bottom-color:var(--ink);font-weight:600}
+.fbtn{flex:none;border-radius:18px;padding:4px 14px;min-height:32px}
+.fbtn.on{background:var(--ink);color:var(--onink);border-color:var(--ink)}
+.ptags{display:flex;gap:6px;overflow-x:auto;margin:6px 0 10px;padding-bottom:4px;flex-wrap:nowrap}
+.ptag{flex:none;border-radius:16px;padding:3px 12px;min-height:30px;font-size:13px;white-space:nowrap;background:var(--card)}
+.ptag b{font-weight:600;opacity:.7;margin-left:3px}
+.ptag.on{background:var(--ink);color:var(--onink);border-color:var(--ink)}
+.pname{font-size:15px;font-weight:600;line-height:1.3}
+.psub{font-size:12px;color:var(--muted)}
+table.wl td:nth-child(2),table.wl td:nth-child(5){white-space:nowrap}
+table.wl td:nth-child(6){white-space:normal}
+.phbtn{display:inline-flex;align-items:center;gap:6px;height:auto;min-height:36px;padding:3px 10px}
+.actw>.phbtn{width:auto;padding:3px 10px;height:auto}
+.phbtn .nums{display:flex;flex-direction:column;line-height:1.25;font-size:13px;font-variant-numeric:tabular-nums;text-align:left}
+.num.wrong,.bignum.wrong a{color:var(--red);text-decoration:line-through}
+.bignum a{color:inherit;text-decoration:none}
+.bignum.wrong a{text-decoration:line-through}
+.seg4{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:10px 0}
+.seg4 button{padding:8px 4px;font-size:13px}
+.tags{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.opt{border-radius:16px;padding:5px 14px;min-height:34px;background:var(--card)}
+.opt.on{background:var(--ink);color:var(--onink);border-color:var(--ink)}
+.dobrow{display:grid;grid-template-columns:70px minmax(0,1fr) 90px;gap:6px}
+.clcard{border:1px solid var(--line2);border-radius:10px;padding:10px;margin-bottom:8px;background:var(--bg)}
+.tagchip{padding:4px 6px 4px 10px;font-size:13px}
+.tagx{border:none;background:none;min-height:0;padding:0 4px;font-size:16px;line-height:1;color:var(--muted)}
+.exrow{display:grid;gap:6px;margin-bottom:6px;grid-template-columns:minmax(0,2fr) minmax(0,1fr) auto}
+.sect{margin-top:14px}
+/* OT schedule */
+.weekgrid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px}
+.wday{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:6px;min-height:160px}
+.wday.today{border-color:var(--focus)}
+.wday.wk{background:var(--bg)}
+.wdh{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
+.wdbtn{font-weight:600;color:var(--text);text-decoration:none}
+.lst{border:1px solid transparent;color:#2a2a28}
+.lst.cancelled{opacity:.5}
+.lst.cancelled strong{text-decoration:line-through}
+.lst.empty{border:1.5px dashed #b07a1c}
+.lst .over,.over{color:#a05a00;font-weight:600}
+.amberTxt{color:#8a5a00;font-weight:600}
+.blist{margin:3px 0 0;padding-left:16px;font-size:12px}
+.banner{background:var(--amber-bg);color:var(--amber);border-radius:10px;padding:8px 12px;margin:8px 0;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.amberbtn{background:var(--amber-bg);color:var(--amber);border-color:var(--amber);min-height:30px;padding:3px 10px;font-size:13px}
+.bar2row{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,2fr) 30px;gap:8px;align-items:center;margin:4px 0;font-size:13px}
+.bar2row .bl{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bt{display:flex;height:12px;background:var(--gray-bg);border-radius:6px;overflow:hidden}
+.bt i{display:block;height:100%}.bt .b1{background:var(--ink)}.bt .b2{background:var(--line2)}
+.mbars{display:flex;gap:6px;align-items:flex-end;min-height:110px}
+.mb{display:flex;flex-direction:column;align-items:center;gap:2px;flex:1}.mb i{display:block;width:100%;max-width:26px;background:var(--ink);border-radius:4px 4px 0 0}
+/* settings */
+.setlayout{display:grid;grid-template-columns:200px minmax(0,1fr);gap:18px;margin-top:10px}
+.setmenu{display:flex;flex-direction:column;gap:10px}
+.setgt{font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin:10px 0 4px}
+.setitem{display:block;width:100%;text-align:left;border-color:transparent;background:none;margin-bottom:2px}
+.setitem.on{background:var(--ink);color:var(--onink)}
+.setmain{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;min-width:0}
+@media (max-width:760px){
+  .setlayout{grid-template-columns:1fr}
+  .setmenu{flex-direction:row;overflow-x:auto}
+  .setgrp{display:flex;gap:4px;align-items:center;flex:none}
+  .setgrp .setgt{margin:0 4px 0 0}
+  .setitem{width:auto;white-space:nowrap}
+  .weekgrid{grid-template-columns:1fr}
+}
+.swt{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--text);margin:0;cursor:pointer}
+.swt input{position:absolute;opacity:0;width:0;height:0}
+.swk{width:34px;height:20px;border-radius:10px;background:var(--line2);position:relative;transition:background .15s;flex:none}
+.swk:after{content:"";position:absolute;left:2px;top:2px;width:16px;height:16px;border-radius:50%;background:#fff;transition:left .15s}
+.swt input:checked+.swk{background:var(--ink)}
+.swt input:checked+.swk:after{left:16px;background:var(--onink)}
+.swt input:focus-visible+.swk{outline:2px solid var(--focus);outline-offset:2px}
+.danger-area{margin-top:18px;border:1px solid var(--red);border-radius:10px;padding:10px 12px}
+/* shell polish */
+.sidenav .ico{width:18px;height:18px;opacity:.75}
+.sidenav button.on{background:var(--gray-bg);color:var(--text);font-weight:600}
+.sidenav button.on .ico{opacity:1;color:var(--ink)}
+.tabbar button.on .ico{color:var(--ink)}
+.login{margin-top:14vh}
+.login h2{font-size:22px}
+button.primary{background:var(--ink);color:var(--onink);border-color:var(--ink)}
+.page{padding-bottom:84px}
 </style>
-<link rel="manifest" href="data:application/manifest+json;base64,eyJuYW1lIjogIlBlZGlhdHJpYyBTdXJnZXJ5IFdhaXRpbmcgTGlzdCIsICJzaG9ydF9uYW1lIjogIldhaXRpbmcgbGlzdCIsICJzdGFydF91cmwiOiAiLiIsICJkaXNwbGF5IjogInN0YW5kYWxvbmUiLCAiYmFja2dyb3VuZF9jb2xvciI6ICIjZjZmNmY0IiwgInRoZW1lX2NvbG9yIjogIiMxZjFmMWQiLCAiaWNvbnMiOiBbeyJzcmMiOiAiZGF0YTppbWFnZS9wbmc7YmFzZTY0LGlWQk9SdzBLR2dvQUFBQU5TVWhFVWdBQUFNQUFBQURBQ0FJQUFBRGR2dnRRQUFBQzhVbEVRVlI0WHUzZFVXcmJRQlJBVWFkMEcyMnkvMVdGcnFTRWxHQkM2Z1pkaGI3eG5QT3ZBVDJ1Qm4zSTQ0Zkh4eDhYT09yYjBRdmhoWUJJQkVRaUlCSUJrUWlJUkVBa0FpSVJFSW1BU0FSRUlpQVNBWkVJaUVSQUpBSWlFUkNKZ0VnRVJDSWdFZ0dSQ0loRVFDUUNJaEVRaVlCSUJFUWlJQklCa1FpSVJFQWtBaUlSRUltQVNBUkVJaUFTQVpFSWlFUkFKQUlpRVJDSmdFZ0VSUEk5WFgybm5wOS8vZTNPbnA1KzN1bE5IL1RnejFhdTNVam5tb3plQ09pUFQ2WWpvM2U4QTcwNFVNL2hxKzZNZ0E3VzgrcFllZmRrOTRCNkFYMkZwZTBlRU5IV0FaMjFlWnkxem9xMkRvaHUzNERPM1RiT1hXMGgrd2JFS1FSRUlpQVNBWkVJaUVSQUpBSWlFUkNKZ0VnRVJDSWdFZ0dSQ0loRVFDUUNJaEVRaVlCSUJFUWlJQklCa1FpSVJFQWtBaUlSRUltQVNBUkVJaUFTQVpFSWlHVDZJWnZibm5weGJmS2hzSE1Ea3M0N016T2FHSkIwYnBpVzBiaDNJUFhjTm0wK3N3S2FOcDJaUmsxcFVFQ2o1akxjbkZrTkNvZ1ZUUWxvemlPMWlpRVRteElRaXhvUjBKQ0hhVGtUNWpZaUlOWWxJQklCa1FpSVJFQWtBaUlSRUltQVNFWUVOTzBibDFWTW1OdUlnRmpYbElBbVBFeHJHVEt4S1FHeHFFRUJEWG1rbGpCblZvTUN1bHdHeldXeU9mVmNMc01DMHRBL2phcm5jaG41czU1WEV6NTJHV1ZhT3E4bS9pN3Ntb3lHNzhyVEEvbzZwNmM1YzRmNGFyTmVvbG1PZ0VnRVJDSWdFZ0dSQ0loRVFDUUNJaEVRaVlCSUJFUWlJQklCa1FpSVJFQWtBaUlSRUltQVNBUkVJaUFTQVpFSWlFUkFKQUlpRVJDSmdFZ0VSQ0lnRWdHUjdCdlF1WWRwbkx2YVF2WU5pRk5zSGRCWjI4Wlo2NnhvNjREb2RnK29ieDU5aGFYdEhsQThnWER6ZWlZZTgvdGZIT3ZnMkZWM1p0OUROai8weVpNM3BmTkdRQis0a1pGMDNoRVFpWmRvRWdHUkNJaEVRQ1FDSWhFUWlZQklCRVFpSUJJQmtRaUlSRUFrQWlJUkVJbUFTQVJFSWlBU0FaRUlpRVJBSkFJaUVSQ0pnRWdFUkNJZ0VnR1JDSWhFUUNRQ0loRVFpWUJJQkVRaUlCSUJrUWlJUkVBa0FpSVJFSW1BU0FSRUlpQVNBWkg4QmhGR1lydW1qbFlkQUFBQUFFbEZUa1N1UW1DQyIsICJzaXplcyI6ICIxOTJ4MTkyIiwgInR5cGUiOiAiaW1hZ2UvcG5nIn0sIHsic3JjIjogImRhdGE6aW1hZ2UvcG5nO2Jhc2U2NCxpVkJPUncwS0dnb0FBQUFOU1VoRVVnQUFBZ0FBQUFJQUNBSUFBQUI3R2tPdEFBQUpYMGxFUVZSNFh1M2FVV29jUnhSQVVTdGtHOUxNL2xjMWFDVWhHSUtKc0pCbHErdFYzWE8rSFZRZHF0N3RhdWJwZG52K0JrRFBYNzFIQnVCZkFnQVFKUUFBVVFJQUVDVUFBRkVDQUJBbEFBQlJBZ0FRSlFBQVVRSUFFQ1VBQUZFQ0FCQWxBQUJSQWdBUUpRQUFVUUlBRUNVQUFGRUNBQkFsQUFCUkFnQVFKUUFBVVFJQUVDVUFBRkVDQUJBbEFBQlJBZ0FRSlFBQVVRSUFFQ1VBQUZFQ0FCQWxBQUJSQWdBUUpRQUFVUUlBRUNVQUFGRUNBQkFsQUFCUkFnQVFKUUFBVVFJQUVDVUFBRkVDQUJBbEFBQlJBZ0FRSlFBQVVRSUFFQ1VBQUZFQ0FCQWxBQUJSQWdBUUpRQUFVUUlBRUNVQUFGRUNBQkFsQUFCUkFnQVFKUUFBVVFJQUVDVUFBRkVDQUJBbEFBQlJBZ0FRSlFBQVVRSUFFQ1VBQUZFQ0FCQWxBQUJSQWdBUUpRQUFVUUlBRUNVQUFGRUNBQkFsQUFCUkFnQVFKUUFBVVFJQUVDVUFBRkVDQUJBbEFBQlJBZ0FRSlFBQVVRSUFFQ1VBQUZFQ0FCQWxBQUJSQWdBUUpRQUFVUUlBRUNVQUFGRUNBQkFsQUFCUkFnQVFKUUFBVVFJQUVDVUFBRkVDQUJBbEFBQlJBZ0FRSlFBQVVRSUFFQ1VBQUZFQ0FCQWxBQUJSQWdBUUpRQUFVUUlBRUNVQUFGRUNBQkFsQUFCUkFnQVFKUUFBVVFJQUVDVUFBRkVDQUJBbEFBQlJBZ0FRSlFBQVVYOUhuNXVTeCtQMWM0OTd2Nzk4N2orRUxUemRiczliTEJSK3lhZUgvcytJQWVjUkFJN3l4K2YrVzByQU1RU0FRMXd3K244a0F4eEFBTmpleGFOZkJqaUdYd0d4dDRYVC85dTN4WDhkZnBNYkFMdGFPL3IveHhjaGR1UUd3SlpHVFg5WEFUWWxBT3huMnZUL2J1YXE0QjBDd0dZbXo5bkphNE8zQklDZHpKK3c4MWNJL3hFQXRySExiTjFsblNBQTdHR3ZxYnJYYXNrU0FEYXc0enpkY2MzVUNBQkFsQUF3M2I2djB2dXVuQWdCWUxUZForanU2K2RzQWdBUUpRRE1kY2JyOHhsUHdaRUVBQ0JLQUJqcXBCZm5rNTZGa3dnQVFKUUFBRVFKQUJPZDk4M2t2Q2ZpQUFJQUVDVUFBRkVDQUJBbEFJeHo2dWZ5VTUrTGZRa0FRSlFBQUVRSkFFQ1VBQUJFQ1FCQWxBQUFSQWtBUUpRQUFFUUpBRUNVQUFCRUNRQkFsQUFBUkFrQVFKUUFBRVFKQUVDVUFBQkVDUUJBbEFBQVJBa0FRSlFBQUVRSkFFQ1VBQUJFQ1FCQWxBQUFSQWtBUUpRQUFFUUpBRUNVQUFCRUNRQkFsQUFBUkFrQVFKUUFBRVFKQUVDVUFBQkVDUUJBbEFBQVJBa0FRSlFBQUVRSkFFQ1VBQUJFQ1FCQWxBQUFSQWtBUUpRQUFFUUpBRUNVQUFCRUNRQkFsQUFBUkFrQVFKUUFBRVFKQUVDVUFBQkVDUUJBbEFBQVJBa0FRSlFBQUVRSkFFQ1VBQUJFQ1FCQWxBQUFSQWtBUUpRQUFFUUpBRUNVQUFCRUNRQkFsQUFBUkFrQVFKUUFBRVFKQUVDVUFBQkVDUUJBbEFBQVJBa0FRSlFBQUVROTNXN1AwVWZmMXVQeHV1M2FPZHo5L25MNEU1NUZBUFpnNkxNZE1aaFBBRVl6OXptQUVvd2xBRU1aL1J4R0JnWVNnSEdNZmc0bUE2UDRGZEFzcGo5bnM4TkhjUU9Zd3NFZ3hWVmdBamVBRVV4L2F1ejVDUVJnUFNlQkpqdC9PUUZZekJtZ3pQNWZTd0JXc3Z2QktWaElBSmF4NytFN1oyRVZBVmpEam9jZk9SRkxDTUFDOWpxODVWeGNUd0FBb2dUZ2FsNXo0R2Vjam9zSndLWHNiM2lmTTNJbEFRQ0lFb0RyZUxXQmozQlNMaU1BQUZFQ2NCRXZOZkJ4enNzMUJBQWdTZ0FBb2dUZ0N1Nno4S3VjbWdzSUFFQ1VBQUJFQ1FCQWxBQjhPWjh5NFhPY25hOG1BQUJSQWdBUUpRQUFVUUlBRUNVQUFGRUNBQkFsQUFCUkFnQVFKUUFBVVFJQUVDVUFBRkVDQUJBbEFBQlJBZ0FRSlFBQVVRSUFFQ1VBQUZFQ0FCQWxBRi91Zm4vNThyOEJKM0oydnBvQUFFUUpBRUNVQUFCRUNjQVZmTXFFWCtYVVhFQUFBS0lFQUNCS0FDN2lQZ3NmNTd4Y1F3QUFvZ1RnT2w1cTRDT2NsTXNJQUVDVUFGektxdzI4enhtNWtnQmN6ZjZHbjNFNkxpWUFBRkVDc0lEWEhIakx1YmllQUt4aHI4T1BuSWdsQkdBWk94NitjeFpXRVlDVjdIdHdDaFlTZ01Yc2ZzcnMvN1VFWUQxbmdDWTdmemtCR01GSm9NYWVuK0RwZG51ZXNBNitlenhlL2EvZ2JFYi9IRzRBc3pnYm5NME9IOFVOWUNoWEFRNWo5QThrQUtQSkFBY3crc2NTZ0Qwb0Fkc3g5K2NUZ1AySUFXTVorbnNSQU1ZNXVIRG1JNlA0RlJCQWxBQUFSQWtBUUpRQUFFUUpBRUNVQUFCRUNRQkFsQUFBUkFrQVFKUUFBRVFKQUVDVUFBQkVDUUJBbEFBQVJBa0FRSlFBQUVRSkFFQ1VBQUJFQ1FCQWxBQUFSQWtBUUpRQUFFUUpBRUNVQUFCRUNRQkFsQUFBUkFrQVFKUUFBRVFKQUVDVUFBQkVDUUJBbEFBQVJBa0FRSlFBQUVRSkFFQ1VBQUJFQ1FCQWxBQUFSQWtBUUpRQUFFUUpBRUNVQUFCRUNRQkFsQUFBUkFrQVFKUUFBRVFKQUVDVUFBQkVDUUJBbEFBQVJBa0FRSlFBQUVRSkFFQ1VBQUJFQ1FCQWxBQUFSQWtBUUpRQUFFUUpBRUNVQUFCRUNRQkFsQUFBUkFrQVFKUUFBRVFKQUVDVUFBQkVDUUJBbEFBQVJBa0FRSlFBQUVRSkFFQ1VBQUJFQ1FCQWxBQUFSQWtBNDl6dkwrUFc5Q2VjK2x6c1N3QUFvZ1FBSUVvQUFLSUVnSW5PKzF4KzNoTnhBQUVBaUJJQWdDZ0JZS2lUdnBtYzlDeWNSQUFBb2dTQXVjNTRjVDdqS1RpU0FBQkVDUUNqN2Y3NnZQdjZPWnNBTU4yK00zVGZsUk1oQUFCUkFzQUdkbnlWM25ITjFBZ0FlOWhybnU2MVdySUVnRzNzTWxWM1dTY0lBRHVaUDF2bnJ4RCtJd0JzWnZLRW5idzJlRXNBMk0vTU9UdHpWZkFPQVdCTDA2YnR0UFhBUnp6ZGJzOGYrWGN3MCtQeHVuWmhSai83Y2dOZ2Iydm43OXEvRHIvSkRZQkRYSHdWTVBvNWdBQndsQXN5WVBSekRBSGdUSCs4Qk9ZKzV4RUF6dmZwR0JqNm5FMEFBS0w4Q2dnZ1NnQUFvZ1FBSUVvQUFLSUVBQ0JLQUFDaUJBQWdTZ0FBb2dRQUlFb0FBS0lFQUNCS0FBQ2lCQUFnU2dBQW9nUUFJRW9BQUtJRUFDQktBQUNpQkFBZ1NnQUFvZ1FBSUVvQUFLSUVBQ0JLQUFDaUJBQWdTZ0FBb2dRQUlFb0FBS0lFQUNCS0FBQ2lCQUFnU2dBQW9nUUFJRW9BQUtJRUFDQktBQUNpQkFBZ1NnQUFvZ1FBSUVvQUFLSUVBQ0JLQUFDaUJBQWdTZ0FBb2dRQUlFb0FBS0lFQUNCS0FBQ2lCQUFnU2dBQW9nUUFJRW9BQUtJRUFDQktBQUNpQkFBZ1NnQUFvZ1FBSUVvQUFLSUVBQ0JLQUFDaUJBQWdTZ0FBb2dRQUlFb0FBS0lFQUNCS0FBQ2lCQUFnU2dBQW9nUUFJRW9BQUtJRUFDQktBQUNpQkFBZ1NnQUFvZ1FBSUVvQUFLSUVBQ0JLQUFDaUJBQWdTZ0FBb2dRQUlFb0FBS0lFQUNCS0FBQ2lCQUFnU2dBQW9nUUFJRW9BQUtJRUFDQktBQUNpQkFBZ1NnQUFvZ1FBSUVvQUFLSUVBQ0JLQUFDaUJBQWdTZ0FBb2dRQUlFb0FBS0lFQUNCS0FBQ2lCQUFnU2dBQW9nUUFJRW9BQUtJRUFDQktBQUNpQkFBZ1NnQUFvZ1FBSUVvQUFLSUVBQ0JLQUFDaUJBQWdTZ0FBb3Y0QjlVdjVjMDZlVzNVQUFBQUFTVVZPUks1Q1lJST0iLCAic2l6ZXMiOiAiNTEyeDUxMiIsICJ0eXBlIjogImltYWdlL3BuZyJ9XX0=">
-<meta name="theme-color" content="#1f1f1d">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#444441">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Waiting list">
+<meta name="apple-mobile-web-app-title" content="Pediatric Surgery">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAIAAACyr5FlAAACqElEQVR4Xu3cUUrDYBCF0ShuQ+3+VyWuxIdAkWK010Rm4pzzXAr9e/tFqM3D6+vzAl95dCxsMQ6Mg5xyoBzklAPlIKccKAc55UA5yCkHykFOOVAOcsqBcpBTDpSDnHKgHOSUA+UgpxwoBznlQDnIKQfKQU45UA5yyoFykFMOlIOccqAc5JQD5SCnHGx6cjZvb+9bh3C5vEw+n4fJdzD+ZhafjZ3I3MvKnctYluCR/8zEctw/ixvTEjK3HPxo3Dh+nY2B15dZ49izjNX+ZziRWeMgMmgcR33oj3qe/gaNg5RxsMk4MA5yyoFykFMOlIOccqAc5JQD5SCnHCgHOeVAOcgpB8pBTjlQDnLKgXKQUw6Ug5xyoBzklAPlINfxzj5zfql8o9udg3qNY+wsPuszkUZ/c1jGqs85tChHn+NopTwhjcpBN/XjkI0t5SdTPI7y199c7fkUj4POKsdR+7E4i8JTqhwHzRkHm4wD4yCnHCgHOeVAOchVlqP8W8dTKDylynHQXPE4Cj8Wp1B7PsXjWJbi199Z7TKWpcE4aKvFvwmuCr9+7Ka8Gav6y8pVkxMp1+ccGpXjamxC+sxi1XEcf+TAzXV7F/9Io8sK3RgHm4wD4yCnHCgHOeVAOcgpB8pBTjlQDnLKgXKQUw6Ug5xyoBzklAPlIKccKAc55UA5yCkHykFOOVAOcoPKcdSvn496nv4GjYPUrHHs/9Dvf4YTmTWOnfenG7WMXrd9optBd/a5Ed3oZ1ozVuMuK1f3v9/3P/KfmVuOq28SMnYWK+Ng09zLCj8yDpSDnHKgHOSUA+UgpxwoBznlQDnIKQfKQU45UA5yyoFykFMOlIOccqAc5JQD5SCnHCgHOeVAOcgpB8pBTjlQDnLKgXKQUw6Ug5xyoBzklAPlIPcBvAJWo1ANWwkAAAAASUVORK5CYII=">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 </head>
 <body>
 <div id="app"><p style="padding:24px">Loading…</p></div>
@@ -286,7 +402,7 @@ details.fold[open]>summary::before{content:"\25BE  "}
     };
   }
   window.google = { script: { run: run() } };
-  window.APP_VERSION = '0.8.3';
+  window.APP_VERSION = '0.9.0';
   window.APP_HOST = 'GitHub Pages';
 })();
 
@@ -518,7 +634,7 @@ function warnings(p) {
 // ---------------------------------------------------------------- start up and login
 function init() {
   S.token = fetchStored('psw_token');
-  var lv = fetchStored('psw_view'); if (lv && /^(list|cal|dash|warn|done|removed|settings)$/.test(lv)) S.view = lv;
+  var lv = fetchStored('psw_view'); if (lv && /^(list|cal|dash|warn|done|logbook|removed|settings)$/.test(lv)) S.view = lv;
   document.addEventListener('keydown', function (e) {
     if (!S.d) return;
     var t = e.target, typing = t && (/^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName) || t.isContentEditable);
@@ -540,7 +656,7 @@ function init() {
   ['click', 'keydown', 'touchstart', 'scroll', 'mousemove'].forEach(function (ev) { document.addEventListener(ev, idleTouch, true); });
   window.addEventListener('resize', function () {
     clearTimeout(init.h);
-    init.h = setTimeout(function () { if (S.d && (S.view === 'list' || S.view === 'warn' || S.view === 'done' || S.view === 'removed') && !document.querySelector('.overlay')) render(); }, 200);
+    init.h = setTimeout(function () { if (S.d && (S.view === 'list' || S.view === 'warn' || S.view === 'done' || S.view === 'removed' || S.view === 'cal' || S.view === 'logbook') && !document.querySelector('.overlay')) render(); }, 200);
   });
 }
 function tryAuto() {
@@ -593,7 +709,7 @@ var idleLast = 0;
 function idleTouch() { var n = Date.now(); if (n - idleLast > 5000) { idleLast = n; resetIdle(); } }
 function load() {
   return call('bootstrap').then(function (d) {
-    S.d = d; S.user = d.user; S.today = d.today; S.loadedAt = Date.now();
+    S.d = d; S.user = d.user; S.today = d.today; S.loadedAt = Date.now(); applyTheme();
     resetIdle();
     render();
     if (S.user.MustChange) forcePinChange();
@@ -622,13 +738,14 @@ var ICON = {
   done: '<path d="M20 6L9 17l-5-5"/>',
   removed: '<path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/>',
   settings: '<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/>',
+  logbook: '<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>',
   more: '<circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/>',
   plus: '<path d="M12 5v14M5 12h14"/>',
   search: '<circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/>',
   phone: '<path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/>'
 };
 function ico(n) { return '<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + ICON[n] + '</svg>'; }
-var NAV = [['list', 'Waiting list'], ['cal', 'Calendar'], ['dash', 'Dashboard'], ['warn', 'Warnings'], ['done', 'Done'], ['removed', 'Removed'], ['settings', 'Settings']];
+var NAV = [['list', 'Waiting list'], ['cal', 'OT schedule'], ['dash', 'Dashboard'], ['warn', 'Warnings'], ['done', 'Done'], ['logbook', 'Logbook'], ['removed', 'Removed'], ['settings', 'Settings']];
 var TABS = ['list', 'cal', 'dash', 'warn'];
 function navTitle(v) { for (var i = 0; i < NAV.length; i++) if (NAV[i][0] === v) return NAV[i][1]; return ''; }
 function syncText() {
@@ -654,7 +771,7 @@ function buildShell() {
     '<div class="sidefoot"><div class="muted small">' + esc(S.user.Name) + '</div>' +
     '<button type="button" class="syncbtn" id="syncinfo" title="Tap to reload"></button>' +
     '<div class="row" style="margin-top:6px"><button id="refresh" title="Reload data">Refresh</button><button id="logout">Sign out</button></div></div></aside>' +
-    '<div class="main"><header class="top"><div class="ttl" id="ttl"></div>' +
+    '<div class="main"><header class="top"><div class="ttl" id="ttl"></div><div class="consbar scrollx" id="consbar"></div>' +
     '<label class="gsearch">' + ico('search') + '<input type="search" id="gq" placeholder="Search name or MRN   ( / )" value="' + esc(S.f.q) + '" autocomplete="off"></label>' +
     '<button class="primary addbtn" id="addp" title="Add patient (N)">' + ico('plus') + '<span>Add patient</span></button>' +
     '<button class="topmore" id="topmore" aria-label="Menu">' + ico('more') + '</button></header>' +
@@ -672,7 +789,7 @@ function buildShell() {
   });
   function more() {
     var m = openModal('<div class="spread"><h2>Menu</h2><button id="mm_x">Close</button></div><div class="menulist">' +
-      ['done', 'removed', 'settings'].map(function (v) { return '<button data-v="' + v + '">' + ico(v) + '<span>' + esc(navTitle(v)) + '</span></button>'; }).join('') +
+      ['done', 'logbook', 'removed', 'settings'].map(function (v) { return '<button data-v="' + v + '">' + ico(v) + '<span>' + esc(navTitle(v)) + '</span></button>'; }).join('') +
       '<button id="mm_ref">' + ico('dash') + '<span>Reload data · ' + esc(syncText()) + '</span></button><button id="mm_out">' + ico('removed') + '<span>Sign out (' + esc(S.user.Name) + ')</span></button></div>' +
       '<p class="muted small" style="margin-top:10px">v' + esc(VERSION) + '</p>', { narrow: true });
     $('mm_x').addEventListener('click', m.close);
@@ -693,13 +810,14 @@ function render() {
   if (tm) tm.classList.toggle('on', TABS.indexOf(S.view) < 0);
   var bs = document.querySelectorAll('[data-b="warn"]');
   for (var j = 0; j < bs.length; j++) { bs[j].textContent = nw ? String(nw) : ''; bs[j].style.display = nw ? '' : 'none'; }
-  $('ttl').textContent = navTitle(S.view); syncShow();
+  $('ttl').textContent = navTitle(S.view); syncShow(); drawConsBar();
   var g = $('gq'); if (g && document.activeElement !== g && g.value !== S.f.q) g.value = S.f.q;
   if (S.view === 'list') viewList();
   else if (S.view === 'cal') viewCalendar();
   else if (S.view === 'dash') viewDashboard();
   else if (S.view === 'warn') viewWarn();
   else if (S.view === 'done') viewDone();
+  else if (S.view === 'logbook') viewLogbook();
   else if (S.view === 'removed') viewRemoved();
   else viewSettings();
   if (S.redrawList) S.redrawList();
@@ -1169,7 +1287,8 @@ function doneBody() {
   $('doneBody').innerHTML = (chips.length ? '<div class="afrow">' + chips.map(function (c) { return '<button type="button" class="chip afc" data-xf="' + c[0] + '">' + esc(c[1]) + ' &times;</button>'; }).join('') + '</div>' : '') +
     '<p class="muted small">' + list.length + (list.length === 1 ? ' case' : ' cases') + '</p>' + rowsHtml;
   on($('doneBody'), '[data-xf]', 'click', function (e) { S.dn[e.currentTarget.getAttribute('data-xf')] = ''; doneBody(); });
-  on($('doneBody'), '[data-dn]', 'click', function (e) { dlgDone(getP(e.currentTarget.getAttribute('data-dn')), null, true); });
+  on($('doneBody'), '[data-addsg]', 'click', function (e) { e.stopPropagation(); dlgSurgeons(getP(e.currentTarget.getAttribute('data-addsg'))); });
+  on($('doneBody'), '[data-dn]', 'click', function (e) { if (e.target.closest && e.target.closest('button')) return; dlgDone(getP(e.currentTarget.getAttribute('data-dn')), null, true); });
   on($('doneBody'), '[data-col]', 'click', function (e) {
     e.stopPropagation();
     var c = e.currentTarget.getAttribute('data-col'), items = [];
@@ -1907,13 +2026,14 @@ function userModal(u) {
     '<div class="field"><label for="u_user">Username (letters and numbers, no spaces)</label><input type="text" id="u_user" autocapitalize="none" autocorrect="off" spellcheck="false" value="' + esc(u.Username || '') + '"' + (isNew ? '' : ' readonly') + '></div>' +
     '<div class="field"><label for="u_name">Name</label><input type="text" id="u_name" value="' + esc(u.Name || '') + '"></div>' +
     '<div class="field"><label for="u_type">Type</label><select id="u_type">' + opt('', 'Choose…', !u.Type) + opt('Consultant', 'Consultant', u.Type === 'Consultant') + opt('Surgical team', 'Surgical team (resident)', u.Type === 'Surgical team') + '</select></div>' +
+    '<div class="field"><label for="u_sn">Logbook: this user is (optional)</label><select id="u_sn">' + opt('', 'Not linked', !u.SurgeonName) + surgeonPool().map(function (n) { return opt(n, n, n === u.SurgeonName); }).join('') + '</select></div>' +
     '<label class="check" style="margin-bottom:6px"><input type="checkbox" id="u_set"' + (u.SettingsAccess ? ' checked' : '') + '> Can open Settings (procedures, consultants, rooms, tags, import)</label>' +
     '<label class="check" style="margin-bottom:6px"><input type="checkbox" id="u_adm"' + (u.Admin ? ' checked' : '') + '> Admin (users, backup, audit log, sample data)</label>' +
     '<label class="check"><input type="checkbox" id="u_act"' + (u.Active === 'Y' ? ' checked' : '') + '> Can sign in</label>' +
     '<div class="row" style="margin-top:12px"><button class="primary" id="u_save">Save</button><button id="u_cancel">Cancel</button></div>', { narrow: true });
   $('u_cancel').addEventListener('click', m.close);
   $('u_save').addEventListener('click', function () {
-    call('saveUser', { Username: val('u_user'), Name: val('u_name'), Type: val('u_type'), SettingsAccess: checked('u_set') ? 'Y' : '', Admin: checked('u_adm') ? 'Y' : '', Active: checked('u_act') ? 'Y' : 'N' }).then(function (r) {
+    call('saveUser', { Username: val('u_user'), Name: val('u_name'), Type: val('u_type'), SurgeonName: val('u_sn'), SettingsAccess: checked('u_set') ? 'Y' : '', Admin: checked('u_adm') ? 'Y' : '', Active: checked('u_act') ? 'Y' : 'N' }).then(function (r) {
       m.close();
       if (r.tempPin) showPin(r); else { drawUsers(); toast('Saved'); }
     }).catch(fail);
@@ -2039,7 +2159,7 @@ function printList(l) {
   var pts = ordered(l);
   var m = openModal('<div class="row noprint" style="margin-bottom:8px"><button class="primary" id="pr_go">Print</button><button id="pr_close">Close</button></div>' +
     '<div class="printable"><h2>Theatre list: ' + esc(fmtDay(l.Date)) + '</h2>' +
-    '<p><strong>' + esc(consName(l.ConsultantId)) + '</strong>' + (l.RoomId ? ' · ' + esc(roomName(l.RoomId)) : '') + ' · ' + pts.length + (pts.length === 1 ? ' case' : ' cases') + '</p>' +
+    '<p><strong>' + esc(listTitle(l)) + '</strong> · ' + pts.length + (pts.length === 1 ? ' case' : ' cases') + '</p>' +
     (l.Notes ? '<p>' + esc(l.Notes) + '</p>' : '') +
     (pts.length ? '<table class="tbl"><thead><tr><th>#</th><th>Patient</th><th>Age</th><th>MRN</th><th>Procedure</th><th>Care</th><th>Notes</th></tr></thead><tbody>' +
       pts.map(function (p, i) {
@@ -2111,7 +2231,7 @@ function viewDashboard() {
       pn.map(function (n) { return '<tr class="click" data-lb="' + esc(n) + '"><td>' + esc(n) + '</td><td>' + per[n].primary + '</td><td>' + per[n].assist + '</td><td>' + (per[n].primary + per[n].assist) + '</td></tr>'; }).join('') + '</tbody></table>' : '<p class="muted small">No done cases with surgeons this year yet.</p>') + '</div>';
   $('dc').addEventListener('change', function () { S.dashCons = this.value; viewDashboard(); });
   $('dy_open').addEventListener('click', dlgYearly);
-  on($('view'), '[data-lb]', 'click', function (e) { dlgLogbook(e.currentTarget.getAttribute('data-lb')); });
+  on($('view'), '[data-lb]', 'click', function (e) { S.lbName = e.currentTarget.getAttribute('data-lb'); go('logbook'); });
 }
 function dlgYearly() {
   var m = openModal('<div id="yr_body"></div>');
@@ -2191,7 +2311,7 @@ function shareData(l) {
   var pts = ordered(l);
   return {
     title: 'Theatre list',
-    lines: [fmtDay(l.Date), 'OT: ' + (roomName(l.RoomId) || 'not set'), 'Consultant: ' + consName(l.ConsultantId)],
+    lines: [fmtDay(l.Date), 'OT: ' + (roomName(l.RoomId) || 'not set'), (l.ConsultantId ? 'Consultant: ' + consName(l.ConsultantId) : 'Shared list')],
     cols: [{ h: '#', w: 0.06 }, { h: 'Name', w: 0.24, bold: true }, { h: 'MRN', w: 0.16 }, { h: 'Age', w: 0.08 }, { h: 'Procedure', w: 0.38 }, { h: 'Type', w: 0.08 }],
     rows: pts.map(function (p, i) { return [String(i + 1), p.Name, p.MRN, ageText(p.DOB), procLabel(p), careShort(p)]; }),
     footer: 'Contains patient information. Handle according to hospital policy.'
@@ -2205,7 +2325,7 @@ function dlgShare(l) {
   var d = shareData(l), txt = shareText(l);
   var base = 'theatre-list-' + l.Date;
   var m = openModal('<div class="spread"><h2>Share list</h2><button id="sh_close">Close</button></div>' +
-    '<p class="muted small" style="margin:2px 0 8px">' + esc(fmtDay(l.Date)) + ' · ' + esc(consName(l.ConsultantId)) + ' · ' + d.rows.length + ' cases. Contact numbers are not included.</p>' +
+    '<p class="muted small" style="margin:2px 0 8px">' + esc(fmtDay(l.Date)) + ' · ' + esc(listTitle(l)) + ' · ' + d.rows.length + ' cases. Contact numbers are not included.</p>' +
     '<div class="row" style="margin-bottom:8px"><button class="primary" id="sh_pdf">PDF</button><button id="sh_img">Image</button><button id="sh_txt">Copy text</button></div>' +
     '<textarea id="sh_ta" readonly rows="9" style="font-size:13px">' + esc(txt) + '</textarea>', { narrow: true });
   $('sh_close').addEventListener('click', m.close);
@@ -2238,10 +2358,10 @@ function openList(id) {
       (open && !done ? '<span class="arr"><button type="button" class="mini" data-up="' + esc(p.Id) + '"' + (i === 0 ? ' disabled' : '') + ' aria-label="Move up">&#9650;</button><button type="button" class="mini" data-dn="' + esc(p.Id) + '"' + (i === n - 1 ? ' disabled' : '') + ' aria-label="Move down">&#9660;</button></span>' : '') + '</div>' +
       '<div class="lpt"><strong>' + (p.Starred ? '★ ' : '') + esc(p.Name) + '</strong><br><span class="muted small">' + esc(p.MRN) + '</span>' + (medOf(p) === 'NotFree' ? ' <span class="chip amber">Not medically free</span>' : '') + '</div>' +
       '<div class="lage">' + esc(ageText(p.DOB)) + '</div>' +
-      '<div class="lpr">' + esc(procLabel(p)) + (done ? '<div class="small muted">' + surgeonsLine(p) + '</div>' : '') + '</div>' +
+      '<div class="lpr">' + esc(procLabel(p)) + (admitText(p) ? '<div class="small muted">' + esc(admitText(p)) + '</div>' : '') + (done ? '<div class="small muted">' + surgeonsLine(p) + '</div>' : '') + '</div>' +
       '<div class="lty">' + typeHtml(p) + '</div>' +
       '<div class="lact">' + (done ? '<span class="chip green">Done</span><button type="button" data-surg="' + esc(p.Id) + '">Surgeons</button>' :
-        (open ? '<button type="button" class="primary" data-done="' + esc(p.Id) + '">Done</button><button type="button" data-off="' + esc(p.Id) + '">Remove</button>' : '')) + '</div></div>';
+        (open ? '<button type="button" class="primary" data-done="' + esc(p.Id) + '">Done</button><button type="button" data-mv="' + esc(p.Id) + '">Move</button><button type="button" data-off="' + esc(p.Id) + '">Remove</button>' : '')) + '</div></div>';
   }
   function surgeonsLine(p) {
     var a = surgeonIn(p, 'Primary surgeon'), b = surgeonIn(p, 'First assistant');
@@ -2252,9 +2372,9 @@ function openList(id) {
     if (!l) { m.close(); return; }
     var pts = ordered(l);
     var open = l.Status === 'Open', past = l.Date < S.today;
-    var html = '<div class="spread"><div class="lhead"><strong>' + esc(fmtDay(l.Date)) + '</strong> · ' + esc(consName(l.ConsultantId)) + (l.RoomId ? ' · ' + esc(roomName(l.RoomId)) : '') + '</div>' +
+    var html = '<div class="spread"><div class="lhead"><strong>' + esc(fmtDay(l.Date)) + '</strong> · ' + esc(listTitle(l)) + '</div>' +
       '<div class="row"><button id="ls_share">Share</button>' + '<button id="ls_more" aria-label="More">&#8943;</button><button id="ls_close">Close</button></div></div>' +
-      '<p class="small" style="margin:3px 0 8px"><strong>' + pts.length + (pts.length === 1 ? ' case' : ' cases') + '</strong>' +
+      '<p class="small" style="margin:3px 0 8px"><strong>' + esc(listCountText(l)) + '</strong>' +
       (l.Status !== 'Open' ? ' · <span class="chip red">Cancelled: ' + esc(l.CancelReason) + '</span>' : '') + (l.Notes ? ' · <span class="muted">' + esc(l.Notes) + '</span>' : '') + '</p>';
     html += pts.length ? '<div class="lhdr"><span>#</span><span>Patient</span><span>Age</span><span>Procedure</span><span>Type</span><span></span></div>' + pts.map(function (p, i) { return rowHtml(p, i, pts.length, open); }).join('') : '<p class="muted small">Nobody on this list yet.</p>';
 
@@ -2267,10 +2387,11 @@ function openList(id) {
             esc(procLabel(p)) + ' <span class="muted small">· ' + esc(p.Category) + ' · ' + careShort(p) + '</span></span></label>' +
             '<button type="button" class="primary" data-addone="' + esc(p.Id) + '">Add</button></div>';
         }).join('') : '<p class="muted small">No patients match these filters.</p>') +
+        '<div class="field" style="margin-top:8px"><label>Day-case or inpatient for the patients you add *</label><div class="tags"><button type="button" class="opt' + (F.care === 'Day-case' ? ' on' : '') + '" data-fc="Day-case">Day-case</button><button type="button" class="opt' + (F.care === 'Inpatient' ? ' on' : '') + '" data-fc="Inpatient">Inpatient</button></div></div>' +
         '<div class="row" style="margin:8px 0"><button class="primary" id="b_add">Add ticked</button><span class="muted small" id="b_tot"></span></div>' +
         '<div class="row">' + chk('b_free', F.medFree, 'Only medically free') + '<button type="button" class="link" id="b_filt">' + (F.filt ? 'Hide filters' : 'Filters') + '</button></div>' +
         (F.filt ? '<div class="tags" style="margin:8px 0">' + chk('b_all', F.allCons, 'All consultants') + chk('b_nomaj', F.noMajor, 'No major cases') + chk('b_noadm', F.noAdmit, 'No prior admission needed') + '</div>' +
-        '<div class="grid3"><div class="field"><label for="b_care">Care</label><select id="b_care">' + opt('', 'Day-case and inpatient', !F.care) + opt('Day-case', 'Day-case', F.care === 'Day-case') + opt('Inpatient', 'Inpatient', F.care === 'Inpatient') + '</select></div>' +
+        '<div class="grid3">' +
         '<div class="field"><label for="b_min">Age from</label><div class="row" style="flex-wrap:nowrap"><input type="number" id="b_min" min="0" value="' + esc(F.minAge) + '"><select id="b_minu" style="width:auto">' + opt('y', 'years', F.minUnit === 'y') + opt('m', 'months', F.minUnit === 'm') + '</select></div></div>' +
         '<div class="field"><label for="b_max">Age up to</label><div class="row" style="flex-wrap:nowrap"><input type="number" id="b_max" min="0" value="' + esc(F.maxAge) + '"><select id="b_maxu" style="width:auto">' + opt('y', 'years', F.maxUnit === 'y') + opt('m', 'months', F.maxUnit === 'm') + '</select></div></div></div>' +
         '<div class="small muted">Leave out procedures' + (Object.keys(F.excl).length ? ' (' + Object.keys(F.excl).length + ')' : '') + '</div><div class="tags" style="margin-top:6px">' +
@@ -2295,6 +2416,7 @@ function openList(id) {
     on(body, '[data-dn]', 'click', function (e) { e.stopPropagation(); move(e.currentTarget.getAttribute('data-dn'), 1); });
     on(body, '[data-done]', 'click', function (e) { e.stopPropagation(); dlgDone(getP(e.currentTarget.getAttribute('data-done')), null); });
     on(body, '[data-surg]', 'click', function (e) { e.stopPropagation(); dlgDone(getP(e.currentTarget.getAttribute('data-surg')), null, true); });
+    on(body, '[data-mv]', 'click', function (e) { e.stopPropagation(); dlgMoveCase(getP(e.currentTarget.getAttribute('data-mv')), function () { draw(); }); });
     on(body, '[data-off]', 'click', function (e) { e.stopPropagation(); dlgTakeOff(getP(e.currentTarget.getAttribute('data-off'))); });
     on(body, '.lrow', 'click', function (e) { if (e.target.closest('button')) return; openPatient(e.currentTarget.getAttribute('data-id')); });
     on(body, '.lrow[draggable]', 'dragstart', function (e) { dragId = e.currentTarget.getAttribute('data-id'); try { e.dataTransfer.setData('text/plain', dragId); e.dataTransfer.effectAllowed = 'move'; } catch (x) { /* ignore */ } e.currentTarget.classList.add('dragging'); });
@@ -2315,7 +2437,6 @@ function openList(id) {
         var el = $(x[0]); if (el) el.addEventListener('change', function () { F[x[1]] = this.checked; F.open = true; T = {}; draw(); });
       });
       if (F.filt) {
-        $('b_care').addEventListener('change', function () { F.care = this.value; F.open = true; T = {}; draw(); });
         [['b_min', 'minAge'], ['b_max', 'maxAge']].forEach(function (x) { $(x[0]).addEventListener('change', function () { F[x[1]] = this.value; F.open = true; T = {}; draw(); }); });
         [['b_minu', 'minUnit'], ['b_maxu', 'maxUnit']].forEach(function (x) { $(x[0]).addEventListener('change', function () { F[x[1]] = this.value; F.open = true; T = {}; draw(); }); });
         on(body, '.b_ex', 'change', function (e) {
@@ -2329,8 +2450,10 @@ function openList(id) {
         if (e.currentTarget.checked) T[pid] = true; else delete T[pid];
         tot();
       });
+      on(body, '[data-fc]', 'click', function (e) { F.care = e.currentTarget.getAttribute('data-fc'); F.open = true; draw(); });
       function addIds(ids) {
-        call('addToList', { listId: id, patientIds: ids }).then(function (r) {
+        if (!F.care && ids.some(function (pid) { var q = getP(pid); return q && !q.CareType; })) { toast('Choose day-case or inpatient first', true); return; }
+        call('addToList', { listId: id, patientIds: ids, careType: F.care }).then(function (r) {
           r.patients.forEach(upsertP); T = {}; F.open = true; render();
           toast(r.patients.length + ' added' + (r.skipped.length ? ', ' + r.skipped.length + ' skipped (' + r.skipped[0].reason + ')' : ''), r.skipped.length > 0);
         }).catch(fail);
@@ -2356,11 +2479,11 @@ function openList(id) {
     var base = S.d.patients.filter(function (p) {
       if (p.ListId) return false;
       if (p.Status !== 'Ready' || medOf(p) === 'Unknown') return false;
-      if (!F.allCons && p.ConsultantId !== l.ConsultantId) return false;
+      if (!F.allCons && !listShared(l) && p.ConsultantId !== l.ConsultantId) return false;
+      if (!listFitsPatient(l, p)) return false;
       if (F.noMajor && p.Category === 'Major') return false;
       if (F.noAdmit && p.NeedsAdmission) return false;
       if (F.medFree && (tagsOf(p).length || clearances(p).some(function (c) { return c.state === 'Requested'; }))) return false;
-      if (F.care && p.CareType !== F.care) return false;
       var names = [p.Procedure].concat(extras(p).map(function (x) { return x.procedure; }));
       if (names.some(function (n) { return F.excl[n]; })) return false;
       var am = ageMonths(p.DOB, S.today);
@@ -2783,6 +2906,1384 @@ function surgeonPool() {
   (S.d.residents || []).forEach(function (r) { if (r.Active === 'Y') add(r.Name); });
   S.d.patients.forEach(function (p) { if (p.Status === 'Done') surgeonsOf(p).forEach(function (x) { add(x.name); }); });
   return out;
+}
+
+
+// ================================================================ v0.9.0
+// Functions below replace the older versions of the same name above (the last declaration wins).
+
+// ---- age, initials, colours
+function ageTextAt(dob, date) {
+  if (!dob) return '';
+  var days = Math.max(0, daysBetween(dob, date));
+  if (days <= 60) return days + 'd';
+  var m = ageMonths(dob, date);
+  return m <= 24 ? m + 'm' : Math.floor(m / 12) + 'y';
+}
+function ageText(dob) { return ageTextAt(dob, S.today); }
+function ageAt(p, date) { return ageTextAt(p.DOB, date || S.today); }
+function fourteenth(p) { var a = p.DOB.split('-'); return (+a[0] + 14) + '-' + a[1] + '-' + a[2]; }
+/** Time left until 14, for patients above 13 years: { text, soon, above } or null. */
+function age14Info(p) {
+  var am = ageMonths(p.DOB, S.today);
+  if (am >= 168) return { above: true, text: 'Above 14' };
+  if (am < 156) return null;
+  var days = daysBetween(S.today, fourteenth(p));
+  if (days <= 60) return { text: Math.max(days, 0) + 'd left to 14' };
+  return { text: (168 - am) + 'm left to 14' };
+}
+function autoIni(n) {
+  var w = String(n || '').replace(/^(dr|prof)\.?\s+/i, '').replace(/\(.*?\)/g, '').trim().split(/\s+/).filter(Boolean);
+  var i = w.map(function (x) { return x.charAt(0); }).join('').toUpperCase().replace(/[^A-Z]/g, '').slice(0, 3);
+  return i.length < 2 ? (w.join('').toUpperCase().replace(/[^A-Z]/g, '') + 'XX').slice(0, 2) : i;
+}
+var PASTELS = ['#E4E2FA', '#CDEFE3', '#F9DDD2', '#F9D8E4', '#DCEBF7', '#F6EBC8', '#E3EFC9', '#E8DDF2'];
+var JMH_COLOR = '#E6E4DC';
+function consInit(id) { var c = consById(id); return c ? (c.Initials || autoIni(c.Name)) : '?'; }
+function consColor(id) { var c = consById(id); return (c && c.Color) || JMH_COLOR; }
+function iniChip(id) {
+  var c = consById(id);
+  if (!c) return '';
+  return '<span class="ini" style="background:' + esc(consColor(id)) + '" title="' + esc(c.Name) + '">' + esc(consInit(id)) + '</span>';
+}
+function roomObj(id) { var l = S.d.rooms || []; for (var i = 0; i < l.length; i++) if (l[i].Id === id) return l[i]; return null; }
+function roomShared(id) { var r = roomObj(id); return !!(r && r.Shared === 'Y'); }
+function listShared(l) { return !l.ConsultantId && roomShared(l.RoomId); }
+function listTitle(l) { return l.ConsultantId ? consName(l.ConsultantId) + (l.RoomId ? ' · ' + roomName(l.RoomId) : '') : (roomName(l.RoomId) || 'Shared list'); }
+function careShort(p) { return p.CareType === 'Inpatient' ? 'INP' : (p.CareType === 'Day-case' ? 'DCU' : ''); }
+function typeHtml(p) { return (careShort(p) ? '<strong>' + careShort(p) + '</strong><br>' : '') + esc(p.Category) + (p.NeedsAdmission && p.AdmitDays ? '<br><span class="small muted">Admit ' + esc(p.AdmitDays) + 'd before</span>' : ''); }
+function sideLetter(s) { return s === 'Right' ? 'R' : (s === 'Left' ? 'L' : (s === 'Bilateral' ? 'both' : '')); }
+function pStr(p) { return p.Procedure + (p.Laterality ? ' ' + sideLetter(p.Laterality) : ''); }
+function admitText(p) { return p.NeedsAdmission ? (Number(p.AdmitDays) ? 'Admit ' + p.AdmitDays + 'd before' : 'Admit days not set') : ''; }
+
+// ---- warnings (with discard)
+function discardedOf(p) { try { var o = JSON.parse(p.Discarded || '{}'); return o && typeof o === 'object' ? o : {}; } catch (e) { return {}; } }
+function warningsAll(p) {
+  var w = [];
+  if (!isActive(p)) return w;
+  var st = S.d.settings, t = S.today, pr = procById(p.ProcedureId);
+  var wait = waitDays(p), lim = waitLimit(p), tw = Number(st.targetWarnDays) || 14;
+  if (lim > 0) {
+    if (wait > lim) w.push({ kind: 'wait', sev: 'high', text: 'Waiting ' + waitText(p) + ' (target ' + lim + ' d)' });
+    else if (lim - wait <= tw) w.push({ kind: 'wait', sev: 'med', text: 'Wait target in ' + (lim - wait) + ' d' });
+  }
+  var m14 = 168 - ageMonths(p.DOB, t), w14 = Number(st.warn14Months);
+  if (isNaN(w14)) w14 = 6;
+  if (m14 <= 0) w.push({ kind: 'age14', sev: 'high', text: 'Above 14' });
+  else if (m14 <= w14) w.push({ kind: 'age14', sev: 'med', text: 'Approaching 14 soon' });
+  var al = ageLimit(p);
+  if (al > 0) {
+    var rem = al - ageMonths(p.DOB, t);
+    var wm = Number(p.TargetAgeMonths) ? 3 : (Number(pr && pr.WarnMonthsBefore) || 3);
+    if (rem < 0) w.push({ kind: 'age', sev: 'high', text: 'Past age target (' + al + ' mo)' });
+    else if (rem <= wm) w.push({ kind: 'age', sev: 'high', text: rem === 0 ? 'Must be done this month (age ' + al + ' mo)' : 'Do before age ' + al + ' mo (' + rem + ' mo left)' });
+  }
+  var nc = Number(st.noContactDays) || 0;
+  if (nc > 0 && p.Status !== 'Not ready') {
+    var gap = daysBetween(p.LastContact || p.DateAdded, t);
+    if (gap > nc) w.push({ kind: 'contact', sev: 'med', text: 'No contact for ' + gap + ' d' });
+  }
+  clearances(p).forEach(function (c) {
+    if (c.state === 'Requested' && c.apptDate && c.apptDate < t) w.push({ kind: 'clearance', sev: 'med', text: 'Check ' + c.spec + ' result (visit ' + fmtDate(c.apptDate) + ')' });
+  });
+  if (p.ScheduledDate && p.ScheduledDate < t) w.push({ kind: 'booked', sev: 'high', text: 'Booked date passed (' + fmtDate(p.ScheduledDate) + ')' });
+  if (Number(p.CallCount) >= 3) w.push({ kind: 'calls', sev: 'med', text: 'Called ' + p.CallCount + ' times, no answer' });
+  if (p.Status === 'Ready' && medOf(p) === 'Unknown') w.push({ kind: 'med', sev: 'med', text: 'Medical status not set' });
+  if (p.NeedsAdmission && !Number(p.AdmitDays)) w.push({ kind: 'admit', sev: 'med', text: 'Admission days not set' });
+  return w;
+}
+function warnings(p) { var d = discardedOf(p); return warningsAll(p).filter(function (w) { return !d[w.kind]; }); }
+var FLAG_KINDS = [['contact', 'No contact'], ['clearance', 'Clearance date passed'], ['age14', 'Turning 14'], ['age', 'Age target'], ['wait', 'Wait target'], ['calls', 'Unanswered calls'], ['booked', 'Booked date passed'], ['med', 'Medical status not set'], ['admit', 'Admission days'], ['prio', 'Priority']];
+
+// ---- contact numbers
+function numSpan(n, wrong) { return '<span class="num' + (wrong ? ' wrong' : '') + '">' + esc(phoneText(n)) + '</span>'; }
+function contactBtn(p) {
+  if (!p.Guardian && !p.Guardian2) return '';
+  var w = p.WrongNumber || '';
+  return '<button type="button" class="phbtn" data-call="' + esc(p.Id) + '" title="Call window">' + ico('phone') + '<span class="nums">' + (p.Guardian ? numSpan(p.Guardian, w.indexOf('1') >= 0) : '') + (p.Guardian2 ? numSpan(p.Guardian2, w.indexOf('2') >= 0) : '') + '</span></button>';
+}
+
+// ---- waiting list
+function procCell(p) {
+  var sub = [p.Category]; if (admitText(p)) sub.push(admitText(p));
+  return '<div class="pname">' + esc(procLabel(p)) + '</div><div class="psub">' + esc(sub.join(' · ')) + '</div>';
+}
+function ageCell(p) {
+  var i = age14Info(p);
+  return esc(ageText(p.DOB)) + (i && !i.above ? '<div class="psub">' + esc(i.text) + '</div>' : '');
+}
+function patientRowsHtml(list) {
+  if (!list.length) return '<p class="muted">No patients match.</p>';
+  var f = S.f, all = S.cons === 'all';
+  if (useTable()) {
+    var sorted = function (k) { return S.sort === k; };
+    return '<table class="tbl wl"><thead><tr><th>Patient</th>' +
+      thf('age', 'Age', f.age || f.ageFrom !== '' || f.ageTo !== '' || sorted('age')) +
+      thf('procedure', 'Procedure', f.proc || f.cat || sorted('procedure') || sorted('category')) +
+      thf('status', 'Status', f.chip) + thf('wait', 'Wait', f.wait || sorted('wait')) + thf('flags', 'Flags', f.flag || f.prio) +
+      '<th></th></tr></thead><tbody>' +
+      list.map(function (p) {
+        return '<tr class="click" data-id="' + esc(p.Id) + '">' +
+          '<td>' + (p.Starred ? '<span class="chip amber">★</span>' : '') + '<strong>' + esc(p.Name) + '</strong><br><span class="muted small">' + esc(p.MRN) + '</span>' + (all ? ' ' + iniChip(p.ConsultantId) : '') + '</td>' +
+          '<td>' + ageCell(p) + '</td><td>' + procCell(p) + '</td><td>' + statusHtml(p) + '</td>' +
+          '<td class="' + (waitOver(p) ? 'wred' : '') + '">' + esc(waitText(p)) + '</td><td>' + flagsHtml(p) + '</td>' +
+          '<td class="acts"><div class="actw">' + contactBtn(p) + sendBtn(p) + '</div></td></tr>';
+      }).join('') + '</tbody></table>';
+  }
+  return '<div class="cards">' + list.map(function (p) {
+    return '<div class="card" data-id="' + esc(p.Id) + '">' +
+      '<div class="spread"><div class="name">' + (p.Starred ? '★ ' : '') + esc(p.Name) + ' <span class="muted small">· ' + ageCell(p) + '</span></div><div>' + statusHtml(p) + '</div></div>' +
+      '<div class="muted small">' + esc(p.MRN) + (all ? ' ' + iniChip(p.ConsultantId) : '') + '</div>' +
+      '<div style="margin-top:3px">' + procCell(p) + '</div>' +
+      '<div style="margin-top:4px"><span class="chip' + (waitOver(p) ? ' red' : '') + '">Wait ' + esc(waitText(p)) + '</span>' + flagsHtml(p) + '</div>' +
+      '<div class="actw" style="margin-top:6px">' + contactBtn(p) + sendBtn(p) + '</div></div>';
+  }).join('') + '</div>';
+}
+function flagsHtml(p) {
+  var h = '';
+  if (p.Priority) h += '<button type="button" class="chip amber tagbtn" data-flag="prio" data-id="' + esc(p.Id) + '" title="' + esc(p.PriorityReason) + '">Priority: ' + esc(p.Priority) + '</button>';
+  warnings(p).forEach(function (w) {
+    if (w.kind === 'wait') return;
+    h += '<button type="button" class="chip tagbtn ' + (w.sev === 'high' ? 'red' : 'amber') + '" data-flag="' + w.kind + '" data-id="' + esc(p.Id) + '">' + esc(w.text) + '</button>';
+  });
+  return h;
+}
+function flagAction(p, kind) {
+  if (!p) return;
+  if (kind === 'contact' || kind === 'calls') dlgCall(p);
+  else if (kind === 'clearance') { var cl = clearances(p), i; for (i = 0; i < cl.length; i++) if (cl[i].state === 'Requested') break; dlgClearQuick(p, i < cl.length ? i : 0); }
+  else if (kind === 'age14') dlgPriority(p, { adult: true });
+  else if (kind === 'age' || kind === 'target' || kind === 'prio' || kind === 'wait') dlgPriority(p, {});
+  else if (kind === 'med') dlgMedical(p);
+  else if (kind === 'admit') dlgAdmitDays(p);
+  else if (kind === 'booked') pickMenu('Booked date passed', [{ label: 'Mark done', fn: function () { dlgDone(p, null); } }, { label: 'Take off the list / reschedule', fn: function () { dlgTakeOff(p); } }]);
+  else openPatient(p.Id);
+}
+function dlgAdmitDays(p) {
+  var m = openModal('<div class="spread"><h2>Prior admission</h2><button id="ad_x">Close</button></div><p class="muted small">' + esc(p.Name) + ' · ' + esc(p.MRN) + '</p>' +
+    '<div class="field"><label for="ad_d">Days before surgery the patient is admitted *</label><input type="number" id="ad_d" min="1" inputmode="numeric" value="' + esc(p.AdmitDays || '') + '"></div>' +
+    '<div class="row"><button class="primary" id="ad_ok">Save</button></div>', { narrow: true });
+  $('ad_x').addEventListener('click', m.close);
+  $('ad_ok').addEventListener('click', function () {
+    call('setAdmitDays', { patientId: p.Id, days: val('ad_d') }).then(function (r) { upsertP(r); m.close(); render(); toast('Saved'); }).catch(fail);
+  });
+}
+
+function drawConsBar() {
+  var el = $('consbar'); if (!el) return;
+  if (S.view !== 'list') { el.innerHTML = ''; el.style.display = 'none'; return; }
+  el.style.display = '';
+  var cons = S.d.consultants.filter(function (c) { return c.Active === 'Y'; });
+  el.innerHTML = '<button type="button" class="seg' + (S.cons === 'all' ? ' on' : '') + '" data-c="all">All</button>' +
+    cons.map(function (c) { return '<button type="button" class="seg' + (S.cons === c.Id ? ' on' : '') + '" data-c="' + esc(c.Id) + '" title="' + esc(c.Name) + '">' + esc(c.Name) + '</button>'; }).join('');
+  on(el, '.seg', 'click', function (e) { S.cons = e.currentTarget.getAttribute('data-c'); drawConsBar(); listBody(); });
+}
+function viewList() {
+  $('view').innerHTML = '<div id="listBody"></div>';
+  drawConsBar();
+  listBody();
+}
+function listBody() {
+  var base = activeList();
+  var counts = { all: base.length, Ready: 0, Booked: 0, 'Awaiting clearance': 0, 'Not ready': 0, Warnings: 0 };
+  var byProc = {};
+  base.forEach(function (p) {
+    if (p.Status === 'Ready') counts[p.ListId ? 'Booked' : 'Ready']++; else counts[p.Status]++;
+    byProc[p.Procedure] = (byProc[p.Procedure] || 0) + 1;
+    if (warnings(p).length) counts.Warnings++;
+  });
+  var list = sortList(applyFilters(base));
+  var procTags = '<button type="button" class="ptag' + (!S.f.proc ? ' on' : '') + '" data-proc="">All procedures <b>' + base.length + '</b></button>' +
+    Object.keys(byProc).sort(function (a, b) { return byProc[b] - byProc[a]; }).map(function (k) {
+      return '<button type="button" class="ptag' + (S.f.proc === k ? ' on' : '') + '" data-proc="' + esc(k) + '">' + esc(k) + ' <b>' + byProc[k] + '</b></button>';
+    }).join('');
+  var chips = [['', 'Waiting', counts.all], ['Ready', 'Ready', counts.Ready], ['Booked', 'Booked', counts.Booked], ['Awaiting clearance', 'Awaiting clearance', counts['Awaiting clearance']], ['Not ready', 'Not ready', counts['Not ready']], ['Warnings', 'Warnings', counts.Warnings]];
+  var af = activeFilterChips();
+  $('listBody').innerHTML =
+    '<div class="sttabs"><div class="sttabs-in scrollx">' + chips.map(function (c) {
+      return '<button type="button" class="sttab' + (S.f.chip === c[0] ? ' on' : '') + '" data-chip="' + esc(c[0]) + '">' + esc(c[1]) + ' <b>' + c[2] + '</b></button>';
+    }).join('') + '</div><button type="button" class="fbtn' + (S.f.prio || S.f.med || S.f.cat || S.f.ageFrom !== '' || S.f.ageTo !== '' ? ' on' : '') + '" id="fbtn">Filters</button></div>' +
+    '<div class="ptags scrollx">' + procTags + '</div>' +
+    (af.length ? '<div class="afrow">' + af.map(function (x, i) { return '<button type="button" class="chip afc" data-af="' + i + '">' + esc(x.label) + ' &times;</button>'; }).join('') + '<button type="button" class="link" id="fclear">Clear filters</button></div>' : '') +
+    patientRowsHtml(list);
+  var lb = $('listBody');
+  on(lb, '[data-proc]', 'click', function (e) { S.f.proc = e.currentTarget.getAttribute('data-proc'); listBody(); });
+  on(lb, '[data-chip]', 'click', function (e) { var k = e.currentTarget.getAttribute('data-chip'); S.f.chip = (S.f.chip === k) ? '' : k; listBody(); });
+  on(lb, '[data-af]', 'click', function (e) {
+    var x = af[+e.currentTarget.getAttribute('data-af')];
+    if (x.key === 'ageFrom') { S.f.ageFrom = ''; S.f.ageTo = ''; } else S.f[x.key] = x.v;
+    listBody();
+  });
+  if ($('fclear')) $('fclear').addEventListener('click', function () { clearFilters(); listBody(); });
+  $('fbtn').addEventListener('click', dlgFilters);
+  on(lb, '[data-col]', 'click', function (e) { e.stopPropagation(); headerMenu(e.currentTarget.getAttribute('data-col')); });
+  bindRows(lb);
+}
+function dlgFilters() {
+  var f = S.f;
+  var m = openModal('<div class="spread"><h2>Filters</h2><button id="fl_x">Close</button></div>' +
+    '<div class="field"><label for="fl_med">Medical status</label><select id="fl_med">' + opt('', 'Any', !f.med) + opt('Free', 'Medically free', f.med === 'Free') + opt('NotFree', 'Not medically free', f.med === 'NotFree') + opt('Unknown', 'Unknown', f.med === 'Unknown') + '</select></div>' +
+    '<div class="field"><label for="fl_cat">Category</label><select id="fl_cat">' + opt('', 'Any', !f.cat) + CATS.map(function (c) { return opt(c, c, f.cat === c); }).join('') + '</select></div>' +
+    '<div class="grid2"><div class="field"><label for="fl_af">Age from (years)</label><input type="number" id="fl_af" min="0" value="' + esc(f.ageFrom) + '"></div>' +
+    '<div class="field"><label for="fl_at">Age up to (years)</label><input type="number" id="fl_at" min="0" value="' + esc(f.ageTo) + '"></div></div>' +
+    '<label class="check"><input type="checkbox" id="fl_pr"' + (f.prio ? ' checked' : '') + '> Priority patients only</label>' +
+    '<div class="row" style="margin-top:12px"><button class="primary" id="fl_ok">Apply</button><button id="fl_clr">Clear all filters</button></div>', { narrow: true });
+  $('fl_x').addEventListener('click', m.close);
+  $('fl_ok').addEventListener('click', function () {
+    f.med = val('fl_med'); f.cat = val('fl_cat'); f.ageFrom = val('fl_af'); f.ageTo = val('fl_at'); f.prio = checked('fl_pr');
+    if (f.ageFrom !== '' || f.ageTo !== '') f.age = '';
+    m.close(); listBody();
+  });
+  $('fl_clr').addEventListener('click', function () { clearFilters(); m.close(); listBody(); });
+}
+
+// ---- call window
+var CALL_REASONS = [['', 'Just reached'], ['Sick', 'Sick'], ['Awaiting clearance', 'Awaiting clearance'], ['Travelling', 'Travelling'], ['Exams', 'Exams'], ['Other', 'Other']];
+function fmtDateTime(iso) {
+  var d = new Date(iso); if (isNaN(d)) return '';
+  var pad = function (n) { return (n < 10 ? '0' : '') + n; };
+  return pad(d.getDate()) + ' ' + MONTHS[d.getMonth()] + ' ' + d.getFullYear() + ' ' + pad(d.getHours()) + ':' + pad(d.getMinutes());
+}
+function dlgCall(p) {
+  if (!p) return;
+  var st = { mode: 'answered', reason: '', until: '', other: '', spec: 'Cardiology', doc: '', appt: '', num: '' };
+  var logHtml = '<p class="muted small">Loading…</p>';
+  var m = openModal('<div id="cl_body"></div>', { narrow: true });
+  function nums() {
+    var w = p.WrongNumber || '';
+    return [p.Guardian ? { n: '1', v: p.Guardian, wrong: w.indexOf('1') >= 0 } : null, p.Guardian2 ? { n: '2', v: p.Guardian2, wrong: w.indexOf('2') >= 0 } : null].filter(Boolean);
+  }
+  function cap() {
+    ['until', 'other', 'appt'].forEach(function (k) { var e = $('cl_' + k); if (e) st[k] = e.value; });
+    var s = $('cl_spec'); if (s) st.spec = s.value;
+    var d = $('cl_doc'); if (d) st.doc = d.value;
+  }
+  function draw() {
+    cap();
+    var ns = nums();
+    var h = '<div class="spread"><h2>' + esc(p.Name) + '</h2><button id="cl_x">Close</button></div>' +
+      '<p class="muted small" style="margin:0 0 8px">' + esc(p.MRN) + ' · ' + esc(consName(p.ConsultantId)) + '</p>' +
+      (ns.length ? ns.map(function (x) { return '<div class="bignum' + (x.wrong ? ' wrong' : '') + '"><a href="tel:' + esc(x.v) + '">' + esc(phoneText(x.v)) + '</a></div>'; }).join('') : '<p class="muted">No contact number recorded.</p>') +
+      '<div class="seg4" id="cl_mode">' + [['answered', 'Answered'], ['noanswer', 'No answer'], ['wrong', 'Wrong number'], ['schedule', 'Schedule']].map(function (o) { return '<button type="button" data-mode="' + o[0] + '"' + (st.mode === o[0] ? ' class="primary"' : '') + '>' + o[1] + '</button>'; }).join('') + '</div>';
+    if (st.mode === 'answered') {
+      h += '<div class="tags" id="cl_reasons">' + CALL_REASONS.map(function (r) { return '<button type="button" class="opt' + (st.reason === r[0] ? ' on' : '') + '" data-r="' + esc(r[0]) + '">' + esc(r[1]) + '</button>'; }).join('') + '</div>';
+      if (st.reason === 'Awaiting clearance') {
+        var docs = specConsultants(st.spec);
+        h += '<div class="grid2"><div class="field"><label for="cl_spec">Specialty</label><select id="cl_spec">' + SPECIALTIES.map(function (s) { return opt(s, s, s === st.spec); }).join('') + '</select></div>' +
+          (st.spec !== 'Anesthesia' ? '<div class="field"><label for="cl_doc">Consultant</label><select id="cl_doc">' + opt('', 'Not chosen', !st.doc) + docs.map(function (d) { return opt(d.Name, d.Name, d.Name === st.doc); }).join('') + '</select></div>' : '') + '</div>' +
+          '<div class="field"><label for="cl_appt">Appointment date (optional)</label><input type="date" id="cl_appt" value="' + esc(st.appt) + '"></div>';
+      } else if (st.reason) {
+        h += (st.reason === 'Other' ? '<div class="field"><label for="cl_other">Reason *</label><input type="text" id="cl_other" value="' + esc(st.other) + '"></div>' : '') +
+          '<div class="field"><label for="cl_until">Ready again on *</label><input type="date" id="cl_until" min="' + esc(S.today) + '" value="' + esc(st.until) + '"></div>' +
+          '<div class="row" style="margin-bottom:8px"><button type="button" data-d="14">2 weeks</button><button type="button" data-d="30">1 month</button><button type="button" data-d="90">3 months</button><button type="button" data-d="180">6 months</button></div>';
+      }
+    } else if (st.mode === 'noanswer') {
+      h += '<p class="small muted">Logs the date and time. ' + (Number(p.CallCount) > 0 ? p.CallCount + ' unanswered in a row so far.' : '') + '</p>';
+    } else if (st.mode === 'wrong') {
+      if (ns.length > 1) h += '<p class="small muted" style="margin:6px 0">Which number is wrong?</p><div class="tags">' + ns.map(function (x) { return '<button type="button" class="opt' + (st.num === x.n ? ' on' : '') + '" data-n="' + x.n + '">' + esc(phoneText(x.v)) + '</button>'; }).join('') + '</div>';
+      else h += '<p class="small muted">' + (ns.length ? 'Marks ' + esc(phoneText(ns[0].v)) + ' as a wrong number.' : '') + '</p>';
+      h += '<p class="small muted">The number shows in red until it is edited in the patient page.</p>';
+    }
+    if (st.mode !== 'schedule') h += '<div class="row" style="margin:10px 0"><button class="primary" id="cl_save">Save to log</button></div>';
+    h += '<h3 style="margin-top:8px">Call log</h3><div id="cl_log">' + logHtml + '</div>';
+    $('cl_body').innerHTML = h;
+    $('cl_x').addEventListener('click', m.close);
+    on($('cl_body'), '[data-mode]', 'click', function (e) {
+      var md = e.currentTarget.getAttribute('data-mode');
+      if (md === 'schedule') {
+        if (!canSend(p)) { toast(sendWhy(p) || 'This patient can\'t be scheduled yet', true); return; }
+        m.close(); dlgSendToList(p); return;
+      }
+      cap(); st.mode = md; if (md === 'wrong' && nums().length === 1) st.num = nums()[0].n; draw();
+    });
+    on($('cl_body'), '[data-r]', 'click', function (e) {
+      cap(); st.reason = e.currentTarget.getAttribute('data-r');
+      st.until = st.reason === 'Sick' ? addDaysStr(S.today, 14) : '';
+      draw();
+    });
+    on($('cl_body'), '[data-n]', 'click', function (e) { cap(); st.num = e.currentTarget.getAttribute('data-n'); draw(); });
+    on($('cl_body'), '[data-d]', 'click', function (e) { $('cl_until').value = addDaysStr(S.today, +e.currentTarget.getAttribute('data-d')); });
+    if ($('cl_spec')) $('cl_spec').addEventListener('change', function () { st.doc = ''; draw(); });
+    if ($('cl_save')) $('cl_save').addEventListener('click', save);
+  }
+  function save() {
+    cap();
+    var pl = { patientId: p.Id };
+    if (st.mode === 'answered') {
+      pl.outcome = 'answered'; pl.reason = st.reason;
+      if (st.reason === 'Awaiting clearance') {
+        var arr = clearances(p), hit = false;
+        arr = arr.map(function (c) { if (c.spec === st.spec) { hit = true; return { spec: c.spec, state: 'Requested', apptDate: st.appt || c.apptDate, doctor: st.doc || c.doctor }; } return c; });
+        if (!hit) arr.push({ spec: st.spec, state: 'Requested', apptDate: st.appt, doctor: st.doc });
+        pl.Clearances = JSON.stringify(arr);
+      } else if (st.reason) {
+        if (st.reason === 'Other' && !st.other.trim()) { toast('Write the reason', true); return; }
+        if (!st.until) { toast('Enter the date the patient will be ready', true); return; }
+        pl.until = st.until; pl.otherText = st.other;
+      }
+    } else if (st.mode === 'noanswer') pl.outcome = 'noanswer';
+    else { pl.outcome = 'wrong'; pl.number = st.num; if (!st.num) { toast('Choose which number is wrong', true); return; } }
+    $('cl_save').disabled = true;
+    call('logCall', pl).then(function (r) { upsertP(r.patient); m.close(); render(); toast('Call saved'); }).catch(function (e) { $('cl_save').disabled = false; fail(e); });
+  }
+  draw();
+  call('getContacts', { patientId: p.Id }).then(function (list) {
+    var calls = list.filter(function (c) { return /^Called|^Wrong/.test(c.Type); });
+    logHtml = calls.length ? calls.map(function (c) { return '<div class="log"><span class="muted small">' + esc(c.By || '') + ' · ' + esc(fmtDateTime(c.At)) + '</span><br>' + esc(c.Note || c.Type) + '</div>'; }).join('') : '<p class="muted small">No calls logged yet.</p>';
+    var t = $('cl_log'); if (t) t.innerHTML = logHtml;
+  }).catch(function () { logHtml = ''; var t = $('cl_log'); if (t) t.innerHTML = ''; });
+}
+
+// ---- patient page: two tabs
+function medStart(p, opts) {
+  if (opts && opts.focusMed) return 'NotFree';
+  if (!p) return '';
+  return p.MedicalStatus === 'Free' || p.MedicalStatus === 'NotFree' ? p.MedicalStatus : (tagsOf(p).length ? 'NotFree' : '');
+}
+function allTagList(p) {
+  var hidden = [], custom = [];
+  try { hidden = JSON.parse(S.d.settings.hiddenTags || '[]'); } catch (e) { hidden = []; }
+  try { custom = JSON.parse(S.d.settings.customTags || '[]'); } catch (e2) { custom = []; }
+  var l = TAGS.filter(function (t) { return hidden.indexOf(t) < 0; }).concat(custom.filter(function (t) { return TAGS.indexOf(t) < 0; }));
+  (p ? tagsOf(p) : []).forEach(function (t) { if (l.indexOf(t) < 0) l.push(t); });
+  return l;
+}
+function openPatient(id, opts) {
+  opts = opts || {};
+  var p = id ? getP(id) : null, isNew = !p, d = S.d;
+  var procs = d.procedures.filter(function (x) { return x.Active === 'Y' || (p && x.Id === p.ProcedureId); });
+  var cons = d.consultants.filter(function (c) { return c.Active === 'Y' || (p && c.Id === p.ConsultantId); });
+  var procSel = p ? (procById(p.ProcedureId) ? p.ProcedureId : (p.Procedure ? '__other' : '')) : '';
+  var dob = p && p.DOB ? p.DOB.split('-') : ['', '', ''];
+  var st = {
+    tab: opts.focusMed ? 2 : 1, sex: p ? p.Sex : '', lat: p ? p.Laterality : '', med: medStart(p, opts), cat: p ? p.Category : 'Minor',
+    admit: p ? !!p.NeedsAdmission : false, seen: p ? (p.SeenByConsultant || '') : '', tags: p ? tagsOf(p) : [], tnotes: p ? tagNotes(p) : {},
+    cl: p ? clearances(p) : [], ex: p ? extras(p) : [], showTargets: false, autoDob: !p,
+    v: {
+      mrn: p ? p.MRN : '', dd: dob[2] ? String(+dob[2]) : '', dm: dob[1] ? String(+dob[1]) : '', dy: dob[0] || '', name: p ? p.Name : '', g1: p ? p.Guardian : '', g2: p ? p.Guardian2 : '',
+      cons: p ? p.ConsultantId : (S.cons !== 'all' ? S.cons : ''), proc: procSel, procother: p && procSel === '__other' ? p.Procedure : '',
+      dx: p ? p.Diagnosis : '', admitdays: p ? p.AdmitDays : '', prio: p ? p.Priority : '', priorreason: p ? p.PriorityReason : '', spons: p ? p.Sponsorship : '',
+      notes: p ? p.Notes : '', twd: p ? p.TargetWaitDays : '', tam: p ? p.TargetAgeMonths : '', star: p ? !!p.Starred : false
+    }
+  };
+  var m = openModal('<div id="pt_body"></div>');
+  function capture() {
+    if (!$('pt_body')) return;
+    Object.keys(st.v).forEach(function (k) {
+      var e = $('f_' + k); if (!e) return;
+      st.v[k] = e.type === 'checkbox' ? e.checked : e.value;
+    });
+    var rows = m.el.querySelectorAll('.clcard');
+    for (var i = 0; i < rows.length && i < st.cl.length; i++) {
+      var dd = rows[i].querySelector('.cl_doc');
+      st.cl[i] = { spec: st.cl[i].spec, state: rows[i].querySelector('.cl_ok').checked ? 'Cleared' : 'Requested', apptDate: rows[i].querySelector('.cl_date').value, doctor: dd ? dd.value : '' };
+    }
+    var exr = m.el.querySelectorAll('.exrow');
+    st.ex = [];
+    for (var j = 0; j < exr.length; j++) { var pr = procById(exr[j].querySelector('.ex_proc').value); st.ex.push({ procedureId: pr ? pr.Id : '', procedure: pr ? pr.Name : '', laterality: exr[j].querySelector('.ex_lat').value }); }
+    var tn = m.el.querySelectorAll('.f_tnote');
+    for (var k2 = 0; k2 < tn.length; k2++) { var t = tn[k2].getAttribute('data-t'); if (tn[k2].value.trim()) st.tnotes[t] = tn[k2].value.trim(); else delete st.tnotes[t]; }
+  }
+  function btns(key, items, cls) {
+    return '<div class="tags ' + (cls || '') + '">' + items.map(function (it) { return '<button type="button" class="opt' + (st[key] === it[0] ? ' on' : '') + '" data-k="' + key + '" data-val="' + esc(it[0]) + '">' + esc(it[1]) + '</button>'; }).join('') + '</div>';
+  }
+  function curProc() { return procById(st.v.proc); }
+  function needsSide() { var pr = curProc(); return (pr && pr.Laterality === 'Y') || st.v.proc === '__other'; }
+  function getDob() {
+    var y = +st.v.dy, mo = +st.v.dm, dd = +st.v.dd;
+    if (!(y >= 1990 && y <= +S.today.slice(0, 4)) || !(mo >= 1 && mo <= 12) || !(dd >= 1 && dd <= 31)) return '';
+    var dt = new Date(Date.UTC(y, mo - 1, dd));
+    if (dt.getUTCMonth() !== mo - 1) return '';
+    return dt.toISOString().slice(0, 10);
+  }
+  function tagSpecsNeeded() {
+    var out = [];
+    st.tags.forEach(function (t) { var s = tagSpec(t); if (s && out.indexOf(s) < 0) out.push(s); });
+    return out;
+  }
+  function draw() {
+    capture();
+    var v = st.v, si = '';
+    if (p) { var sinfo = statusInfo(p); si = '<span class="chip ' + sinfo.cls + '">' + esc(sinfo.booked ? 'Scheduled ' + sinfo.label : sinfo.label) + '</span>' + (sinfo.sub ? '<span class="muted small"> ' + esc(sinfo.sub) + '</span>' : ''); }
+    var h = '<div class="spread"><h2>' + (isNew ? 'Add patient' : esc(p.Name)) + '</h2><button id="f_close">Close</button></div>' + (p ? '<div style="margin-bottom:8px">' + si + '</div>' : '') +
+      '<div class="ptabs"><button type="button" class="ptab' + (st.tab === 1 ? ' on' : '') + '" data-pt="1">1 Essentials</button><button type="button" class="ptab' + (st.tab === 2 ? ' on' : '') + '" data-pt="2">2 Details</button></div>';
+    if (st.tab === 1) {
+      h += '<div class="grid2">' +
+        '<div class="field"><label for="f_mrn">MRN * (9 digits, or T and digits)</label><input type="text" id="f_mrn" value="' + esc(v.mrn) + '" autocomplete="off" inputmode="text"></div>' +
+        '<div class="field"><label>Date of birth * <span class="muted">(day, month, year)</span></label><div class="dobrow"><input type="text" id="f_dd" inputmode="numeric" maxlength="2" placeholder="Day" value="' + esc(v.dd) + '"><select id="f_dm">' + opt('', 'Month', !v.dm) + MONTHS.map(function (n, i) { return opt(String(i + 1), n, String(v.dm) === String(i + 1)); }).join('') + '</select><input type="text" id="f_dy" inputmode="numeric" maxlength="4" placeholder="Year" value="' + esc(v.dy) + '"></div></div>' +
+        '<div class="field"><label for="f_name">Name *</label><input type="text" id="f_name" value="' + esc(v.name) + '"></div>' +
+        '<div class="field"><label>Sex *</label>' + btns('sex', [['M', 'Male'], ['F', 'Female']]) + '</div>' +
+        '<div class="field"><label for="f_g1">Contact number * (8 digits)</label><input type="text" id="f_g1" inputmode="tel" value="' + esc(v.g1) + '"></div>' +
+        '<div class="field"><label for="f_g2">Second contact number</label><input type="text" id="f_g2" inputmode="tel" value="' + esc(v.g2) + '"></div>' +
+        '<div class="field"><label for="f_cons">Consultant *</label><select id="f_cons">' + opt('', 'Choose…', !v.cons) + cons.map(function (c) { return opt(c.Id, c.Name, c.Id === v.cons); }).join('') + '</select></div>' +
+        '<div class="field"><label for="f_proc">Procedure *</label><select id="f_proc">' + opt('', 'Choose…', !v.proc) + procs.map(function (x) { return opt(x.Id, x.Name, x.Id === v.proc); }).join('') + opt('__other', 'Other (type the name)', v.proc === '__other') + '</select></div>' +
+        (v.proc === '__other' ? '<div class="field"><label for="f_procother">Procedure name *</label><input type="text" id="f_procother" value="' + esc(v.procother) + '"></div>' : '') + '</div>' +
+        (needsSide() ? '<div class="field"><label>Side *</label>' + btns('lat', [['Left', 'Left'], ['Bilateral', 'Both'], ['Right', 'Right']]) + '</div>' : '') +
+        '<div class="field"><label>Medical status *</label>' + btns('med', [['Free', 'Medically free'], ['NotFree', 'Not medically free']]) + '</div>';
+    } else {
+      h += '<div class="field"><label>Category</label>' + btns('cat', CATS.map(function (c) { return [c, c]; })) + '</div>' +
+        '<div class="field"><label class="check"><input type="checkbox" id="f_admitchk"' + (st.admit ? ' checked' : '') + '> Needs prior admission</label>' +
+        (st.admit ? '<div class="row" style="margin-top:6px"><input type="number" id="f_admitdays" min="1" inputmode="numeric" style="width:90px" placeholder="Days" value="' + esc(v.admitdays) + '"><span class="muted small">days before surgery *</span></div>' : '') + '</div>';
+      if (st.med === 'NotFree') {
+        var avail = allTagList(p).filter(function (t) { return st.tags.indexOf(t) < 0; });
+        h += '<div class="sect"><h3>Disease tags *</h3><div class="tags">' + st.tags.map(function (t) {
+          return '<span class="chip tagchip">' + esc(t) + (tagSpec(t) ? ' <span class="muted">(' + esc(tagSpec(t).toLowerCase()) + ')</span>' : '') + ' <button type="button" class="tagx" data-tx="' + esc(t) + '" aria-label="Remove">&times;</button></span>';
+        }).join('') + '<button type="button" id="f_addtag"' + (avail.length ? '' : ' disabled') + '>+ Add tag</button></div>' +
+          st.tags.map(function (t) { return '<div class="field" style="margin-top:6px"><input type="text" class="f_tnote" data-t="' + esc(t) + '" placeholder="' + esc(t) + ': details (optional)" value="' + esc(st.tnotes[t] || '') + '"></div>'; }).join('') + '</div>' +
+          '<div class="sect"><h3>Clearances</h3>' + (st.cl.length ? st.cl.map(function (c, i) {
+            var docs = specConsultants(c.spec);
+            return '<div class="clcard"><div class="spread"><strong>' + esc(c.spec) + '</strong><button type="button" class="cl_x" data-i="' + i + '">Remove</button></div>' +
+              '<div class="grid2">' + (c.spec !== 'Anesthesia' ? '<div class="field"><label>Consultant</label><select class="cl_doc">' + opt('', 'Not chosen', !c.doctor) + docs.map(function (x) { return opt(x.Name, x.Name, x.Name === c.doctor); }).join('') + (c.doctor && !docs.some(function (x) { return x.Name === c.doctor; }) ? opt(c.doctor, c.doctor, true) : '') + '</select></div>' : '<div></div>') +
+              '<div class="field"><label>Appointment date</label><input type="date" class="cl_date" value="' + esc(c.apptDate || '') + '"></div></div>' +
+              '<label class="check"><input type="checkbox" class="cl_ok"' + (c.state === 'Cleared' ? ' checked' : '') + '> Already cleared</label></div>';
+          }).join('') : '<p class="muted small" style="margin:0 0 6px">No specialty reviews yet. Adding a tag adds its review.</p>') + '<button type="button" id="f_addspec">+ Add specialty</button></div>';
+      }
+      h += '<div class="sect"><h3>Priority and sponsorship</h3><div class="grid2">' +
+        '<div class="field"><label for="f_prio">Priority tag</label><select id="f_prio">' + PRIORITY.map(function (s) { return opt(s, s || 'None', v.prio === s); }).join('') + '</select></div>' +
+        '<div class="field"><label for="f_priorreason">Priority reason</label><input type="text" id="f_priorreason" value="' + esc(v.priorreason) + '"></div>' +
+        '<div class="field"><label for="f_spons">Sponsorship</label><select id="f_spons">' + opt('', '', !v.spons) + SPONSOR.map(function (s) { return opt(s, s, v.spons === s); }).join('') + '</select></div>' +
+        '<div class="field"><label>Seen by consultant</label>' + btns('seen', [['Y', 'Yes'], ['N', 'No'], ['', 'Not registered']]) + '</div></div></div>' +
+        '<div class="sect"><div class="field"><label for="f_dx">Diagnosis</label><input type="text" id="f_dx" value="' + esc(v.dx) + '"></div>' +
+        '<label>Additional procedures in the same sitting</label><div id="f_ex">' + (st.ex.length ? st.ex.map(function (x, i) {
+          var act = S.d.procedures.filter(function (q) { return q.Active === 'Y'; });
+          return '<div class="exrow"><select class="ex_proc">' + act.map(function (pr) { return opt(pr.Id, pr.Name, pr.Id === x.procedureId); }).join('') + '</select><select class="ex_lat">' + opt('', 'Side', !x.laterality) + ['Right', 'Left', 'Bilateral'].map(function (z) { return opt(z, z, x.laterality === z); }).join('') + '</select><button type="button" class="ex_x" data-i="' + i + '">Remove</button></div>';
+        }).join('') : '<p class="muted small" style="margin:0 0 6px">None.</p>') + '</div><button type="button" id="f_addex">Add procedure</button></div>' +
+        '<div class="sect"><div class="field"><label for="f_notes">Notes</label><textarea id="f_notes">' + esc(v.notes) + '</textarea></div>' +
+        '<label class="check"><input type="checkbox" id="f_star"' + (v.star ? ' checked' : '') + '> Star: interesting case for a report</label>' +
+        '<p class="small muted" style="margin-top:8px">Targets: ' + esc(targetLine()) + ' <button type="button" class="link" id="f_tgl">tap to change</button></p>' +
+        (st.showTargets ? '<div class="grid2"><div class="field"><label for="f_twd">Target wait (days)</label><input type="number" id="f_twd" min="0" value="' + esc(v.twd) + '"></div><div class="field"><label for="f_tam">Do before age (months)</label><input type="number" id="f_tam" min="0" value="' + esc(v.tam) + '"></div></div>' : '') +
+        (p ? '<p class="small muted">Added ' + esc(fmtDate(p.DateAdded)) + '</p>' : '') + '</div>' +
+        (p ? '<div class="sect"><h3>Actions</h3><div id="f_actions" class="row"></div><div id="f_info" class="small muted" style="margin-top:8px"></div></div>' : '');
+    }
+    h += '<div class="psave"><button class="primary" id="f_save">' + (isNew ? (st.tab === 1 ? 'Next' : 'Add to list') : 'Save changes') + '</button>' + (isNew && st.tab === 2 ? '<button id="f_back">Back</button>' : '') + '<button id="f_cancel">Cancel</button></div>';
+    $('pt_body').innerHTML = h;
+    bind();
+    if (p && st.tab === 2) drawActions();
+  }
+  function targetLine() {
+    var pr = curProc(), w = pr && Number(pr.TargetDays) ? Number(pr.TargetDays) : (Number(S.d.settings['waitDays' + st.cat]) || 0);
+    var a = pr && Number(pr.MaxAgeMonths) ? pr.MaxAgeMonths : '';
+    return 'wait ' + (st.v.twd || w || 'none') + (st.v.twd ? '' : ' d (default)') + ' · do before age ' + (st.v.tam || a || 'none') + (st.v.tam || !a ? '' : ' mo (default)');
+  }
+  function addTag(t) {
+    capture();
+    if (st.tags.indexOf(t) < 0) st.tags.push(t);
+    var s = tagSpec(t);
+    if (s && !st.cl.some(function (c) { return c.spec === s; })) st.cl.push({ spec: s, state: 'Requested', apptDate: '', doctor: '' });
+    draw();
+  }
+  function bind() {
+    $('f_close').addEventListener('click', m.close);
+    $('f_cancel').addEventListener('click', m.close);
+    on(m.el, '.ptab', 'click', function (e) { capture(); st.tab = +e.currentTarget.getAttribute('data-pt'); draw(); });
+    on(m.el, '[data-k]', 'click', function (e) {
+      capture();
+      var k = e.currentTarget.getAttribute('data-k'), val_ = e.currentTarget.getAttribute('data-val');
+      if (k === 'seen' && st.seen === val_ && val_ !== '') val_ = '';
+      st[k] = val_; draw();
+    });
+    if (st.tab === 1) {
+      $('f_mrn').addEventListener('input', function () {
+        var s = this.value.trim();
+        if (/^\d{9}$/.test(s) && +s.slice(2, 4) >= 1 && +s.slice(2, 4) <= 12 && (st.autoDob || !$('f_dy').value)) {
+          $('f_dy').value = '20' + s.slice(0, 2); $('f_dm').value = String(+s.slice(2, 4)); st.autoDob = true;
+        }
+      });
+      ['f_dd', 'f_dm', 'f_dy'].forEach(function (i) { $(i).addEventListener('change', function () { if (i !== 'f_dd') st.autoDob = false; }); });
+      $('f_proc').addEventListener('change', function () {
+        capture();
+        var pr = curProc();
+        if (pr) { st.cat = pr.DefaultCategory || st.cat; st.v.twd = ''; st.v.tam = ''; if (!st.v.dx || st.v.dx === st.prevDx) st.v.dx = pr.DefaultDiagnosis || ''; st.prevDx = pr.DefaultDiagnosis || ''; if (pr.Laterality !== 'Y') st.lat = ''; }
+        draw();
+      });
+    } else {
+      $('f_admitchk').addEventListener('change', function () { capture(); st.admit = this.checked; draw(); });
+      if ($('f_addtag')) $('f_addtag').addEventListener('click', function () {
+        capture();
+        var avail = allTagList(p).filter(function (t) { return st.tags.indexOf(t) < 0; });
+        pickMenu('Add tag', avail.map(function (t) { return { label: t + (tagSpec(t) ? ' (' + tagSpec(t).toLowerCase() + ')' : ''), fn: function () { addTag(t); } }; }));
+      });
+      on(m.el, '.tagx', 'click', function (e) {
+        capture();
+        var t = e.currentTarget.getAttribute('data-tx'), s = tagSpec(t);
+        st.tags = st.tags.filter(function (x) { return x !== t; }); delete st.tnotes[t];
+        if (s && !st.tags.some(function (x) { return tagSpec(x) === s; })) st.cl = st.cl.filter(function (c) { return !(c.spec === s && c.state === 'Requested'); });
+        draw();
+      });
+      on(m.el, '.cl_x', 'click', function (e) { capture(); st.cl.splice(+e.currentTarget.getAttribute('data-i'), 1); draw(); });
+      if ($('f_addspec')) $('f_addspec').addEventListener('click', function () {
+        capture();
+        var left = SPECIALTIES.filter(function (s) { return !st.cl.some(function (c) { return c.spec === s; }); });
+        pickMenu('Add specialty', left.map(function (s) { return { label: s, fn: function () { st.cl.push({ spec: s, state: 'Requested', apptDate: '', doctor: '' }); draw(); } }; }));
+      });
+      on(m.el, '.ex_x', 'click', function (e) { capture(); st.ex.splice(+e.currentTarget.getAttribute('data-i'), 1); draw(); });
+      $('f_addex').addEventListener('click', function () {
+        capture();
+        var first = S.d.procedures.filter(function (x) { return x.Active === 'Y'; })[0];
+        if (!first) { toast('Add a procedure in Settings first', true); return; }
+        st.ex.push({ procedureId: first.Id, procedure: first.Name, laterality: '' }); draw();
+      });
+      $('f_tgl').addEventListener('click', function () { capture(); st.showTargets = !st.showTargets; draw(); });
+    }
+    $('f_save').addEventListener('click', onSave);
+    if ($('f_back')) $('f_back').addEventListener('click', function () { capture(); st.tab = 1; draw(); });
+  }
+  function essentialsError() {
+    var v = st.v;
+    if (!/^(\d{9}|T\d+)$/i.test(v.mrn.trim())) return 'Enter the MRN: 9 digits, or T and digits.';
+    if (!getDob()) return 'Enter the full date of birth (day, month and year).';
+    if (!v.name.trim()) return 'Enter the patient\'s name.';
+    if (st.sex !== 'M' && st.sex !== 'F') return 'Choose the sex.';
+    if (!/^\d{8}$/.test(String(v.g1).replace(/[\s\-()]/g, '').replace(/^\+?(00)?973/, ''))) return 'The contact number must be 8 digits.';
+    if (!v.cons) return 'Choose a consultant.';
+    if (!v.proc) return 'Choose the procedure.';
+    if (v.proc === '__other' && !v.procother.trim()) return 'Type the procedure name.';
+    if (needsSide() && !st.lat) return 'Choose the side.';
+    if (!st.med && (isNew || opts.focusMed)) return 'Choose the medical status.';
+    return '';
+  }
+  function onSave() {
+    capture();
+    var err = essentialsError();
+    if (err) { st.tab = 1; draw(); toast(err, true); return; }
+    if (isNew && st.tab === 1) { st.tab = 2; draw(); return; }
+    var v = st.v, pr = curProc();
+    if (st.admit && !(Number(v.admitdays) >= 1)) { toast('Enter how many days before surgery the patient is admitted', true); return; }
+    if (st.med === 'NotFree' && !st.tags.length) { toast('Add at least one disease tag, or choose medically free', true); return; }
+    var notes = {}; st.tags.forEach(function (t) { if (st.tnotes[t]) notes[t] = st.tnotes[t]; });
+    var free = st.med === 'Free';
+    var o = {
+      Id: p ? p.Id : '', Name: v.name.trim(), MRN: v.mrn.trim(), DOB: getDob(), Sex: st.sex, Guardian: v.g1, Guardian2: v.g2,
+      ConsultantId: v.cons, SeenByConsultant: st.seen, DateAdded: p ? p.DateAdded : S.today,
+      ProcedureId: pr ? v.proc : '', Procedure: pr ? pr.Name : (v.proc === '__other' ? v.procother.trim() : ''),
+      Laterality: needsSide() ? st.lat : '', Diagnosis: v.dx, Category: st.cat,
+      NeedsAdmission: st.admit ? 'Y' : '', AdmitDays: st.admit ? v.admitdays : '', TargetWaitDays: v.twd, TargetAgeMonths: v.tam,
+      MedicalStatus: st.med || 'Unknown', Tags: free ? '' : st.tags.join(','), TagNotes: JSON.stringify(free ? {} : notes),
+      Clearances: JSON.stringify(free ? [] : st.cl.filter(function (c) { return c.spec; })),
+      Priority: v.prio, PriorityReason: v.priorreason, Sponsorship: v.spons, Starred: v.star ? 'Y' : '', Notes: v.notes, Extra: JSON.stringify(st.ex)
+    };
+    var hadList = !!(p && p.ListId);
+    if (hadList && o.Clearances.indexOf('"Requested"') >= 0 && !window.confirm('This patient is scheduled on an OT list. A pending clearance takes them off it until cleared. Continue?')) return;
+    $('f_save').disabled = true;
+    function send(extra) {
+      call('savePatient', Object.assign({}, o, extra || {})).then(function (saved) {
+        upsertP(saved); m.close(); render(); toast(isNew ? 'Patient added' : (hadList && !saved.ListId ? 'Saved. Taken off the OT list until cleared.' : 'Saved'));
+      }).catch(function (e) {
+        if (e && e.message && e.message.indexOf('MRN_EXISTS') === 0) {
+          if (window.confirm(e.message.replace('MRN_EXISTS: ', '') + ' Add this one as well?')) { send({ confirmMrn: true }); return; }
+          $('f_save').disabled = false; return;
+        }
+        $('f_save').disabled = false; fail(e);
+      });
+    }
+    send();
+  }
+  var cur = p;
+  function drawActions() {
+    var h = '';
+    if (isActive(cur)) {
+      h += '<button id="a_call">' + ico('phone') + ' Call window</button>';
+      if (cur.ListId) h += '<button id="a_off">Take off theatre list</button>';
+      if (canSend(cur)) h += '<button id="a_send" class="primary btn-sched">Schedule</button>';
+      h += cur.Status === 'Not ready' ? '<button id="a_back2">Back on the list now</button>' : '<button id="a_nr">Mark not ready</button>';
+      h += '<button id="a_done">Mark done</button><button id="a_rem" class="danger">Remove from list</button>';
+    } else { h += '<button id="a_restore">Restore to waiting list</button>'; }
+    h += '<button id="a_del" class="danger">Delete whole entry…</button>';
+    $('f_actions').innerHTML = h;
+    var info = '';
+    if (cur.Status === 'Done') info = 'Done on ' + fmtDate(cur.DoneDate) + (cur.DoneNotes ? ': ' + cur.DoneNotes : '');
+    if (cur.Status === 'Removed') info = 'Removed on ' + fmtDate(cur.RemovedDate) + ': ' + cur.RemovedReason + (cur.RemovedNote ? ' (' + cur.RemovedNote + ')' : '');
+    if (cur.ListId && listById(cur.ListId)) info = 'On the theatre list of ' + fmtDay(listById(cur.ListId).Date) + ' (' + listTitle(listById(cur.ListId)) + '). ';
+    if (cur.Status === 'Not ready') info = 'Hold until ' + fmtDate(cur.NotReadyUntil) + ': ' + cur.NotReadyReason + '. The patient returns to the active list automatically after this date.';
+    $('f_info').textContent = info;
+    var bind2 = function (id, fn) { var b = $(id); if (b) b.addEventListener('click', fn); };
+    bind2('a_call', function () { dlgCall(cur); });
+    bind2('a_nr', function () { dlgNotReady(cur, m); });
+    bind2('a_off', function () { dlgTakeOff(cur, function () { m.close(); }); });
+    bind2('a_send', function () { dlgSendToList(cur, function () { m.close(); }); });
+    bind2('a_done', function () { dlgDone(cur, function () { m.close(); }); });
+    bind2('a_rem', function () { dlgRemove(cur, m); });
+    bind2('a_del', function () { dlgDelete(cur, m); });
+    bind2('a_back2', function () { call('clearNotReady', { patientId: cur.Id }).then(function (r) { upsertP(r.patient); m.close(); render(); toast('Back on the list'); }).catch(fail); });
+    bind2('a_restore', function () { call('restorePatient', { patientId: cur.Id }).then(function (r) { upsertP(r); m.close(); render(); toast('Restored to the waiting list'); }).catch(fail); });
+  }
+  draw();
+}
+
+// ---- OT schedule (the calendar)
+function surgeonPool() {
+  var seen = {}, out = [];
+  function add(n) { n = String(n || '').trim(); if (n && !seen[n.toLowerCase()]) { seen[n.toLowerCase()] = true; out.push(n); } }
+  S.d.consultants.forEach(function (c) { if (c.Active === 'Y') add(c.Name); });
+  (S.d.residents || []).forEach(function (r) { if (r.Active === 'Y') add(r.Name); });
+  return out;
+}
+function weekStart(ds) { var dow = new Date(utc(ds)).getUTCDay(); return addDaysStr(ds, -dow); }
+function listCases(l) { return ordered(l); }
+function listsOn(ds) {
+  return (S.d.lists || []).filter(function (l) { return l.Date === ds; }).sort(function (a, b) {
+    var sa = listShared(a) ? 1 : 0, sb = listShared(b) ? 1 : 0;
+    return sa - sb || listTitle(a).localeCompare(listTitle(b));
+  });
+}
+function jmhCounts(pts) {
+  var o = {}; pts.forEach(function (p) { o[consInit(p.ConsultantId)] = (o[consInit(p.ConsultantId)] || 0) + 1; });
+  return Object.keys(o).sort().map(function (k) { return k + ' ' + o[k]; }).join(' · ');
+}
+function caseTarget(l) { var r = roomObj(l.RoomId); return r && Number(r.CaseTarget) ? Number(r.CaseTarget) : 0; }
+function otBlock(l, full) {
+  var pts = listCases(l), n = pts.length, shared = listShared(l), cancelled = l.Status !== 'Open';
+  var past = l.Date < S.today, doneN = pts.filter(function (p) { return p.Status === 'Done'; }).length;
+  var bg = shared ? JMH_COLOR : consColor(l.ConsultantId);
+  var cls = 'lst' + (cancelled ? ' cancelled' : '');
+  var h = '<strong>' + esc(shared ? (roomName(l.RoomId) || 'Shared') + ' · shared' : consName(l.ConsultantId)) + '</strong>' + (!shared && l.RoomId ? ' <span class="small">· ' + esc(roomName(l.RoomId)) + '</span>' : '') + '<br>';
+  if (cancelled) h += '<span class="small">Cancelled' + (l.CancelReason ? ': ' + esc(l.CancelReason) : '') + '</span>';
+  else if (shared) {
+    var t = caseTarget(l);
+    h += '<span class="small' + (t && n > t ? ' over' : '') + '">' + n + (t ? ' of ' + t : '') + (n === 1 && !t ? ' case' : ' cases') + '</span>' + (n ? '<br><span class="small">' + esc(jmhCounts(pts)) + '</span>' : '');
+  } else if (past) h += '<span class="small">' + (n ? doneN + ' of ' + n + ' done' : 'No cases') + '</span>';
+  else if (!n) { cls += ' empty'; h += '<span class="small amberTxt">Empty, in ' + daysBetween(S.today, l.Date) + ' d</span>'; }
+  else h += '<span class="small">' + n + (n === 1 ? ' case' : ' cases') + '</span>';
+  if (full && !cancelled && !shared && n) {
+    h += '<ol class="blist">' + pts.slice(0, 6).map(function (p) { return '<li>' + esc(pStr(p)) + '</li>'; }).join('') + '</ol>' + (n > 6 ? '<span class="small">+' + (n - 6) + ' more</span>' : '');
+  }
+  return '<div class="' + cls + '" style="background:' + esc(bg) + '" data-list="' + esc(l.Id) + '">' + h + '</div>';
+}
+function calRange() {
+  if (S.calMode === 'month') {
+    var m = S.calMonth || S.today.slice(0, 7);
+    return { from: m + '-01', to: addDaysStr(m + '-01', 40).slice(0, 7) === m ? m + '-31' : m + '-' + ('0' + new Date(Date.UTC(+m.slice(0, 4), +m.slice(5, 7), 0)).getUTCDate()).slice(-2) };
+  }
+  var ws = S.calWeek || weekStart(S.today);
+  return { from: ws, to: addDaysStr(ws, 6) };
+}
+function viewCalendar() {
+  if (!S.calMode) S.calMode = useTable() ? 'week' : 'agenda';
+  if (!useTable() && S.calMode !== 'agenda') S.calMode = 'agenda';
+  if (!S.calWeek) S.calWeek = weekStart(S.today);
+  var mode = S.calMode, body = '', title = '';
+  if (mode === 'week') {
+    var ws = S.calWeek;
+    title = fmtDate(ws) + ' to ' + fmtDate(addDaysStr(ws, 6));
+    body = '<div class="weekgrid">';
+    for (var i = 0; i < 7; i++) {
+      var ds = addDaysStr(ws, i), ls = listsOn(ds);
+      body += '<div class="wday' + (ds === S.today ? ' today' : '') + (i >= 5 ? ' wk' : '') + '"><div class="wdh"><button class="link wdbtn" data-day="' + ds + '">' + WD[i] + ' ' + (+ds.slice(8)) + '</button><button class="link" data-add="' + ds + '" aria-label="Add a list">+</button></div>' +
+        (ls.map(function (l) { return otBlock(l, true); }).join('') || '<span class="muted small">No list</span>') + '</div>';
+    }
+    body += '</div>';
+  } else if (mode === 'month') {
+    var m = S.calMonth || S.today.slice(0, 7); S.calMonth = m;
+    var y = +m.slice(0, 4), mo = +m.slice(5, 7);
+    title = LONGM[mo - 1] + ' ' + y;
+    var startDow = new Date(Date.UTC(y, mo - 1, 1)).getUTCDay(), dim = new Date(Date.UTC(y, mo, 0)).getUTCDate();
+    body = '<div class="calgrid">' + WD.map(function (d) { return '<div class="calh">' + d + '</div>'; }).join('');
+    for (var b = 0; b < startDow; b++) body += '<div class="cday blank"></div>';
+    for (var d = 1; d <= dim; d++) {
+      var ds2 = m + '-' + ('0' + d).slice(-2), dow = (startDow + d - 1) % 7;
+      body += '<div class="cday' + (ds2 === S.today ? ' today' : '') + (dow === 5 || dow === 6 ? ' wk' : '') + '"><div class="dn"><button class="link wdbtn" data-day="' + ds2 + '">' + d + '</button><button class="link" data-add="' + ds2 + '">+</button></div>' + listsOn(ds2).map(function (l) { return otBlock(l, false); }).join('') + '</div>';
+    }
+    body += '</div>';
+  } else {
+    title = 'Coming lists';
+    var days = {};
+    (S.d.lists || []).forEach(function (l) { if (l.Date >= S.today && l.Date <= addDaysStr(S.today, 60)) (days[l.Date] = days[l.Date] || []).push(l); });
+    var keys = Object.keys(days).sort();
+    body = keys.length ? keys.map(function (ds3) {
+      return '<div class="panel"><div class="spread"><button class="link wdbtn" data-day="' + ds3 + '"><strong>' + esc(fmtDay(ds3)) + '</strong></button><button class="link" data-add="' + ds3 + '">Add list</button></div>' + listsOn(ds3).map(function (l) { return otBlock(l, true); }).join('') + '</div>';
+    }).join('') : '<p class="muted">No lists coming up.</p>';
+  }
+  $('view').innerHTML =
+    '<div class="spread"><h2>OT schedule</h2><div class="row"><button id="cal_share">Share week</button><button class="primary" id="cal_add">Add list</button></div></div>' +
+    '<div class="row" style="margin:8px 0">' + (mode !== 'agenda' ? '<button id="cal_prev" aria-label="Previous">&lsaquo;</button><strong style="min-width:190px;text-align:center">' + esc(title) + '</strong><button id="cal_next" aria-label="Next">&rsaquo;</button><button id="cal_today">Today</button>' +
+      '<span class="segwrap"><button type="button" class="seg' + (mode === 'week' ? ' on' : '') + '" data-mode="week">Week</button><button type="button" class="seg' + (mode === 'month' ? ' on' : '') + '" data-mode="month">Month</button></span>' :
+      '<button class="primary" id="cal_next_list">Next list</button>') + '</div>' + body;
+  function shift(n) {
+    if (S.calMode === 'month') {
+      var m2 = S.calMonth, t = new Date(Date.UTC(+m2.slice(0, 4), +m2.slice(5, 7) - 1 + n, 1));
+      S.calMonth = t.getUTCFullYear() + '-' + ('0' + (t.getUTCMonth() + 1)).slice(-2);
+    } else S.calWeek = addDaysStr(S.calWeek, 7 * n);
+    viewCalendar();
+  }
+  if ($('cal_prev')) {
+    $('cal_prev').addEventListener('click', function () { shift(-1); });
+    $('cal_next').addEventListener('click', function () { shift(1); });
+    $('cal_today').addEventListener('click', function () { S.calWeek = weekStart(S.today); S.calMonth = S.today.slice(0, 7); viewCalendar(); });
+    on($('view'), '[data-mode]', 'click', function (e) { S.calMode = e.currentTarget.getAttribute('data-mode'); viewCalendar(); });
+  }
+  if ($('cal_next_list')) $('cal_next_list').addEventListener('click', function () {
+    var nx = (S.d.lists || []).filter(function (l) { return l.Status === 'Open' && l.Date >= S.today; }).sort(function (a, b) { return a.Date.localeCompare(b.Date); })[0];
+    if (nx) openList(nx.Id); else toast('No coming lists');
+  });
+  $('cal_add').addEventListener('click', function () { listForm(null, S.today); });
+  $('cal_share').addEventListener('click', shareWeek);
+  on($('view'), '[data-list]', 'click', function (e) { openList(e.currentTarget.getAttribute('data-list')); });
+  on($('view'), '[data-add]', 'click', function (e) { e.stopPropagation(); listForm(null, e.currentTarget.getAttribute('data-add')); });
+  on($('view'), '[data-day]', 'click', function (e) { e.stopPropagation(); dlgDay(e.currentTarget.getAttribute('data-day')); });
+}
+function daySheet(dates, title) {
+  var rows = [];
+  dates.forEach(function (ds) {
+    listsOn(ds).forEach(function (l) {
+      var pts = listCases(l);
+      if (l.Status !== 'Open') { rows.push([fmtDay(ds), listTitle(l), '', 'Cancelled' + (l.CancelReason ? ': ' + l.CancelReason : ''), '', '']); return; }
+      if (!pts.length) { rows.push([fmtDay(ds), listTitle(l), '', 'No cases', '', '']); return; }
+      pts.forEach(function (p, i) { rows.push([i === 0 ? fmtDay(ds) : '', i === 0 ? listTitle(l) : '', String(i + 1), p.Name + ' · ' + p.MRN, procLabel(p), ageText(p.DOB) + ' · ' + p.Category]); });
+    });
+  });
+  return { title: title, lines: [dates.length > 1 ? fmtDate(dates[0]) + ' to ' + fmtDate(dates[dates.length - 1]) : fmtDay(dates[0])],
+    cols: [{ h: 'Day', w: 0.13 }, { h: 'List', w: 0.17 }, { h: '#', w: 0.05 }, { h: 'Patient', w: 0.25, bold: true }, { h: 'Procedure', w: 0.25 }, { h: 'Age · category', w: 0.15 }],
+    rows: rows, footer: 'Contains patient information. Handle according to hospital policy.' };
+}
+function shareSheet(d, base) {
+  var txt = d.title + '\n' + d.lines.join('\n') + '\n\n' + d.rows.map(function (r) { return r.filter(Boolean).join(' | '); }).join('\n');
+  var m = openModal('<div class="spread"><h2>' + esc(d.title) + '</h2><button id="sh_close">Close</button></div><p class="muted small">Contact numbers are not included.</p>' +
+    '<div class="row" style="margin-bottom:8px"><button class="primary" id="sh_pdf">PDF</button><button id="sh_img">Image</button><button id="sh_txt">Copy text</button></div><textarea id="sh_ta" readonly rows="9" style="font-size:13px">' + esc(txt) + '</textarea>', { narrow: true });
+  $('sh_close').addEventListener('click', m.close);
+  $('sh_txt').addEventListener('click', function () { copyText(txt); });
+  $('sh_pdf').addEventListener('click', function () { shareOrSave(pdfFromCanvases(renderTableDoc(d, 1754)), base + '.pdf'); });
+  $('sh_img').addEventListener('click', function () { canvasBlob(renderTableDoc(d, null)[0], function (b) { shareOrSave(b, base + '.png'); }); });
+}
+function shareWeek() {
+  var ws = S.calMode === 'month' ? weekStart(S.today) : (S.calWeek || weekStart(S.today)), ds = [];
+  for (var i = 0; i < 7; i++) ds.push(addDaysStr(ws, i));
+  shareSheet(daySheet(ds, 'OT schedule'), 'ot-schedule-' + ws);
+}
+function dlgDay(ds) {
+  var ls = listsOn(ds);
+  var m = openModal('<div class="spread"><h2>' + esc(fmtDay(ds)) + '</h2><button id="dy_x">Close</button></div>' +
+    (ls.length ? ls.map(function (l) {
+      var pts = listCases(l), shared = listShared(l), t = caseTarget(l);
+      return '<div class="panel" style="border-left:6px solid ' + esc(shared ? JMH_COLOR : consColor(l.ConsultantId)) + '"><div class="spread"><strong>' + esc(listTitle(l)) + '</strong><button type="button" data-list="' + esc(l.Id) + '">Open list</button></div>' +
+        '<p class="small muted" style="margin:2px 0">' + (l.Status !== 'Open' ? 'Cancelled: ' + esc(l.CancelReason) : pts.length + (t ? ' of ' + t : '') + (pts.length === 1 && !t ? ' case' : ' cases')) + '</p>' +
+        pts.map(function (p, i) { return '<div class="log"><strong>' + (i + 1) + '. ' + esc(p.Name) + '</strong> <span class="muted small">' + esc(p.MRN) + ' · ' + esc(ageText(p.DOB)) + (shared ? ' · ' + esc(consInit(p.ConsultantId)) : '') + '</span><br>' + esc(procLabel(p)) + ' <span class="muted small">· ' + esc(p.Category) + '</span></div>'; }).join('') + '</div>';
+    }).join('') : '<p class="muted">No lists on this day.</p>') +
+    '<div class="row" style="margin-top:8px"><button class="primary" id="dy_share"' + (ls.length ? '' : ' disabled') + '>Share day</button><button id="dy_add">Add list</button></div>', { narrow: true });
+  $('dy_x').addEventListener('click', m.close);
+  $('dy_share').addEventListener('click', function () { shareSheet(daySheet([ds], 'OT list'), 'ot-' + ds); });
+  $('dy_add').addEventListener('click', function () { m.close(); listForm(null, ds); });
+  on(m.el, '[data-list]', 'click', function (e) { m.close(); openList(e.currentTarget.getAttribute('data-list')); });
+}
+function nextDow(ds, dayName) {
+  for (var k = 0; k < 7; k++) { var x = addDaysStr(ds, k); if (DAYS[new Date(utc(x)).getUTCDay() + 1] === dayName) return x; }
+  return ds;
+}
+function listForm(l, presetDate) {
+  var isNew = !l;
+  var cons = S.d.consultants.filter(function (c) { return c.Active === 'Y' || (l && c.Id === l.ConsultantId); });
+  var rooms = (S.d.rooms || []).filter(function (r) { return r.Active === 'Y' || (l && r.Id === l.RoomId); });
+  l = l || { Date: presetDate || S.today, ConsultantId: '', RoomId: '', Notes: '' };
+  var m = openModal('<h2>' + (isNew ? 'Add theatre list' : 'Edit theatre list') + '</h2>' +
+    '<div class="field"><label for="l_room">Operating room</label><select id="l_room">' + opt('', 'Not set', !l.RoomId) + rooms.map(function (r) { return opt(r.Id, r.Name + (r.Shared === 'Y' ? ' (shared)' : ''), r.Id === l.RoomId); }).join('') + '</select></div>' +
+    '<div class="field"><label for="l_date">Date</label><input type="date" id="l_date" value="' + esc(l.Date) + '"></div>' +
+    '<div class="field" id="l_consf"><label for="l_cons">Consultant</label><select id="l_cons">' + opt('', 'Choose…', !l.ConsultantId) + cons.map(function (c) { return opt(c.Id, c.Name, c.Id === l.ConsultantId); }).join('') + '</select></div>' +
+    '<div class="field"><label for="l_notes">Notes</label><input type="text" id="l_notes" value="' + esc(l.Notes) + '"></div>' +
+    '<div class="row"><button class="primary" id="l_save">Save</button><button id="l_cancel">Cancel</button></div>', { narrow: true });
+  function sync() { $('l_consf').style.display = roomShared($('l_room').value) ? 'none' : ''; }
+  sync();
+  $('l_room').addEventListener('change', function () {
+    sync();
+    var r = roomObj(this.value);
+    if (r && r.Shared === 'Y' && isNew) $('l_date').value = nextDow(val('l_date') || S.today, r.Day || 'Thursday');
+  });
+  $('l_cons').addEventListener('change', function () {
+    var c = consById(this.value);
+    if (c && isNew) {
+      $('l_room').value = c.DefaultRoomId || ''; sync();
+      if (c.OTDay) $('l_date').value = nextDow(val('l_date') || S.today, c.OTDay);
+    }
+  });
+  $('l_cancel').addEventListener('click', m.close);
+  $('l_save').addEventListener('click', function () {
+    call('saveList', { Id: l.Id || '', Date: val('l_date'), ConsultantId: val('l_cons'), RoomId: val('l_room'), Notes: val('l_notes') }).then(function (r) {
+      S.d.lists = r.lists; r.patients.forEach(upsertP); m.close(); render(); toast('List saved');
+    }).catch(fail);
+  });
+}
+
+// ---- schedule one patient (care type is chosen here)
+function listFitsPatient(l, p) {
+  if (!listShared(l)) return true;
+  var pr = procById(p.ProcedureId);
+  return !!(pr && pr.JMH === 'Y');
+}
+function listCountText(l) {
+  var n = listUsed(l).n, t = listShared(l) ? caseTarget(l) : 0;
+  return n + (t ? ' of ' + t : '') + (n === 1 && !t ? ' case' : ' cases');
+}
+function dlgSendToList(p, after) {
+  if (!p) return;
+  var all = S.d.lists.filter(function (l) { return l.Status === 'Open' && l.Date >= S.today && listFitsPatient(l, p); }).sort(function (a, b) { return a.Date.localeCompare(b.Date); });
+  var mine = all.filter(function (l) { return l.ConsultantId === p.ConsultantId || listShared(l); });
+  var showAll = !mine.filter(function (l) { return !listShared(l); }).length;
+  var care = p.CareType || '';
+  var m = openModal('<div id="sl_body"></div>', { narrow: true });
+  function draw() {
+    var rows = (showAll ? all : mine).slice(0, 40);
+    var html = '<div class="spread"><h2>Schedule</h2><button id="sl_close">Close</button></div>' +
+      '<p style="margin:4px 0"><strong>' + esc(p.Name) + '</strong> <span class="muted small">' + esc(ageText(p.DOB)) + ' · ' + esc(p.MRN) + '</span><br>' + esc(procLabel(p)) + ' <span class="muted small">· ' + esc(consName(p.ConsultantId)) + (admitText(p) ? ' · ' + esc(admitText(p)) : '') + '</span></p>' +
+      '<p class="muted small">Check with the family before booking.' + (p.Sponsorship ? ' Sponsorship: ' + esc(p.Sponsorship) + '.' : ' Sponsorship is not recorded.') + '</p>' +
+      '<div class="field"><label>Day-case or inpatient *</label><div class="tags"><button type="button" class="opt' + (care === 'Day-case' ? ' on' : '') + '" data-care="Day-case">Day-case</button><button type="button" class="opt' + (care === 'Inpatient' ? ' on' : '') + '" data-care="Inpatient">Inpatient</button></div></div>' +
+      '<label class="check"><input type="checkbox" id="sl_all"' + (showAll ? ' checked' : '') + '> Show lists of all consultants</label>';
+    html += rows.length ? rows.map(function (l) {
+      var t = listShared(l) ? caseTarget(l) : 0, over = t && listUsed(l).n >= t;
+      return '<div class="log"><div class="spread"><div><strong>' + esc(fmtDay(l.Date)) + '</strong> <span class="muted small">' + esc(listTitle(l)) + '</span><br>' +
+        '<span class="small' + (over ? ' over' : '') + '">' + esc(listCountText(l)) + ' booked</span></div>' +
+        '<button class="primary" data-l="' + esc(l.Id) + '">Book here</button></div></div>';
+    }).join('') : '<p class="muted small">No open lists coming up. Set an operating day for the consultant in Settings, or add a list from the OT schedule.</p>';
+    $('sl_body').innerHTML = html;
+    $('sl_close').addEventListener('click', m.close);
+    $('sl_all').addEventListener('change', function () { showAll = this.checked; draw(); });
+    on($('sl_body'), '[data-care]', 'click', function (e) { care = e.currentTarget.getAttribute('data-care'); draw(); });
+    on($('sl_body'), '[data-l]', 'click', function (e) {
+      if (!care) { toast('Choose day-case or inpatient first', true); return; }
+      var l = listById(e.currentTarget.getAttribute('data-l'));
+      call('addToList', { listId: l.Id, patientIds: [p.Id], careType: care }).then(function (r) {
+        if (r.skipped.length) { toast(r.skipped[0].reason, true); return; }
+        r.patients.forEach(upsertP); m.close(); render(); toast('Booked on ' + fmtDay(l.Date) + ' (' + listTitle(l) + ')');
+        if (after) after();
+      }).catch(fail);
+    });
+  }
+  draw();
+}
+function dlgMoveCase(p, after) {
+  var all = S.d.lists.filter(function (l) { return l.Status === 'Open' && l.Date >= S.today && l.Id !== p.ListId && listFitsPatient(l, p); }).sort(function (a, b) { return a.Date.localeCompare(b.Date); });
+  var mine = all.filter(function (l) { return l.ConsultantId === p.ConsultantId || listShared(l); });
+  var showAll = false;
+  var m = openModal('<div id="mv_body"></div>', { narrow: true });
+  function draw() {
+    var rows = (showAll ? all : mine).slice(0, 40);
+    $('mv_body').innerHTML = '<div class="spread"><h2>Move to another list</h2><button id="mv_x">Close</button></div><p class="muted small">' + esc(p.Name) + ' · ' + esc(procLabel(p)) + '</p>' +
+      '<label class="check"><input type="checkbox" id="mv_all"' + (showAll ? ' checked' : '') + '> Show lists of all consultants</label>' +
+      (rows.length ? rows.map(function (l) { return '<div class="log"><div class="spread"><div><strong>' + esc(fmtDay(l.Date)) + '</strong> <span class="muted small">' + esc(listTitle(l)) + '</span><br><span class="small">' + esc(listCountText(l)) + '</span></div><button class="primary" data-l="' + esc(l.Id) + '">Move here</button></div></div>'; }).join('') : '<p class="muted small">No other open lists.</p>');
+    $('mv_x').addEventListener('click', m.close);
+    $('mv_all').addEventListener('change', function () { showAll = this.checked; draw(); });
+    on($('mv_body'), '[data-l]', 'click', function (e) {
+      call('addToList', { listId: e.currentTarget.getAttribute('data-l'), patientIds: [p.Id], move: true }).then(function (r) {
+        if (r.skipped.length) { toast(r.skipped[0].reason, true); return; }
+        r.patients.forEach(upsertP); m.close(); render(); toast('Moved'); if (after) after();
+      }).catch(fail);
+    });
+  }
+  draw();
+}
+
+// ---- Done page: missing surgeons
+function missingSurgeons() { return S.d.patients.filter(function (p) { return p.Status === 'Done' && !surgeonIn(p, 'Primary surgeon'); }); }
+function dlgSurgeons(p) {
+  var pool = surgeonPool();
+  var cur = {}; surgeonsOf(p).forEach(function (x) { cur[x.role] = x.name; });
+  var m = openModal('<div class="spread"><h2>Add surgeons</h2><button id="sg_x">Close</button></div><p class="muted small">' + esc(p.Name) + ' · ' + esc(p.MRN) + ' · ' + esc(procLabel(p)) + ' · ' + esc(fmtDate(p.DoneDate)) + '</p>' +
+    SURGEON_ROLES.map(function (r, i) {
+      var v = cur[r] || '';
+      return '<div class="field"><label for="sg_' + i + '">' + esc(r) + (i === 0 ? ' *' : '') + '</label><select id="sg_' + i + '">' + opt('', '—', !v) + pool.map(function (n) { return opt(n, n, n === v); }).join('') + (v && pool.indexOf(v) < 0 ? opt(v, v, true) : '') + '</select></div>';
+    }).join('') +
+    '<div class="row"><button class="primary" id="sg_save">Save</button><button id="sg_next">Save and next missing</button></div>', { narrow: true });
+  $('sg_x').addEventListener('click', m.close);
+  function save(next) {
+    var out = [];
+    SURGEON_ROLES.forEach(function (r, i) { if (val('sg_' + i)) out.push({ role: r, name: val('sg_' + i) }); });
+    if (!out.some(function (x) { return x.role === 'Primary surgeon'; })) { toast('Choose the primary surgeon', true); return; }
+    call('saveDone', { patientId: p.Id, surgeons: out }).then(function (r) {
+      upsertP(r); m.close(); render(); toast('Surgeons saved');
+      if (next) { var n = missingSurgeons()[0]; if (n) dlgSurgeons(n); }
+    }).catch(fail);
+  }
+  $('sg_save').addEventListener('click', function () { save(false); });
+  $('sg_next').addEventListener('click', function () { save(true); });
+}
+function doneList() {
+  var q = S.doneQ.toLowerCase(), f = S.dn;
+  return S.d.patients.filter(function (p) {
+    return p.Status === 'Done' && (!q || (p.Name + ' ' + p.MRN).toLowerCase().indexOf(q) >= 0) && (!S.doneStar || p.Starred) && (!S.doneMissing || !surgeonIn(p, 'Primary surgeon')) &&
+      (!f.proc || p.ProcedureId === f.proc) && (!f.cons || p.ConsultantId === f.cons) && (!f.year || (p.DoneDate || '').slice(0, 4) === f.year);
+  }).sort(function (a, b) { return (b.DoneDate || '').localeCompare(a.DoneDate || ''); });
+}
+function surgeonsHtml(p) {
+  var a = surgeonIn(p, 'Primary surgeon'), b = surgeonIn(p, 'First assistant');
+  if (!a) return '<button type="button" class="amberbtn" data-addsg="' + esc(p.Id) + '">Add surgeons</button>';
+  return '<div class="small"><span class="muted">Primary</span> ' + esc(a) + '</div>' + (b ? '<div class="small"><span class="muted">1st assistant</span> ' + esc(b) + '</div>' : '');
+}
+function viewDone() {
+  var miss = missingSurgeons().length;
+  $('view').innerHTML = '<div class="spread"><h2>Done cases</h2><div class="row"><button id="dn_x">Export Excel</button></div></div>' +
+    '<div class="filters"><input type="text" id="dq" placeholder="Search name or MRN" value="' + esc(S.doneQ) + '">' +
+    '<label class="check" style="padding-top:8px"><input type="checkbox" id="dstar"' + (S.doneStar ? ' checked' : '') + '> Starred for case report</label>' +
+    '<button type="button" class="schip' + (S.doneMissing ? ' on' : '') + '" id="dmiss"' + (miss ? '' : ' disabled') + '>Missing surgeons <b>' + miss + '</b></button></div>' +
+    '<div id="doneBody"></div>';
+  $('dq').addEventListener('input', function () { S.doneQ = this.value; doneBody(); });
+  $('dstar').addEventListener('change', function () { S.doneStar = this.checked; doneBody(); });
+  $('dmiss').addEventListener('click', function () { S.doneMissing = !S.doneMissing; viewDone(); });
+  $('dn_x').addEventListener('click', function () { exportPatients('done-cases', doneList()); });
+  doneBody();
+}
+
+// ---- Logbook page
+function logYears(name) {
+  var y = {}; S.d.patients.forEach(function (p) { if (p.Status === 'Done' && p.DoneDate && (!name || surgeonsOf(p).some(function (x) { return x.name === name; }))) y[p.DoneDate.slice(0, 4)] = true; });
+  return Object.keys(y).sort().reverse();
+}
+function viewLogbook() {
+  var pool = surgeonPool(), mine = S.user.SurgeonName && pool.indexOf(S.user.SurgeonName) >= 0 ? S.user.SurgeonName : '';
+  if (!S.lb) S.lb = { name: '', year: S.today.slice(0, 4), team: false };
+  var st = S.lb;
+  if (S.lbName) { st.name = S.lbName; st.team = false; S.lbName = ''; }
+  if (!st.name && !st.team) st.name = mine || pool[0] || '';
+  var inYear = function (p) { return p.Status === 'Done' && (!st.year || (p.DoneDate || '').slice(0, 4) === st.year); };
+  var miss = missingSurgeons().length;
+  var h = '<div class="spread"><h2>Logbook</h2><div class="row" id="lb_exp"></div></div>' +
+    '<div class="chiprow scrollx">' + (mine ? '<button type="button" class="schip' + (!st.team && st.name === mine ? ' on' : '') + '" data-who="' + esc(mine) + '">My logbook</button>' : '') +
+    pool.map(function (n) { return '<button type="button" class="schip' + (!st.team && st.name === n && n !== mine ? ' on' : '') + '" data-who="' + esc(n) + '">' + esc(n) + '</button>'; }).join('') +
+    '<button type="button" class="schip' + (st.team ? ' on' : '') + '" data-team="1">Team</button></div>' +
+    '<div class="row" style="margin:6px 0"><label for="lb_year" style="margin:0">Year</label><select id="lb_year" style="width:auto">' + opt('', 'All years', !st.year) + logYears('').map(function (y) { return opt(y, y, y === st.year); }).join('') + '</select></div>' +
+    (miss ? '<div class="banner">' + miss + ' done case' + (miss === 1 ? ' has' : 's have') + ' no surgeons yet. <button type="button" class="amberbtn" id="lb_add">Add surgeons</button></div>' : '');
+  var rowsX = null, sheetX = null, pdfInfo = null;
+  if (st.team) {
+    var per = {};
+    S.d.patients.filter(inYear).forEach(function (p) { surgeonsOf(p).forEach(function (x) { if (pool.indexOf(x.name) < 0) return; var o = per[x.name] = per[x.name] || { primary: 0, assist: 0 }; if (x.role === 'Primary surgeon') o.primary++; else o.assist++; }); });
+    var names = Object.keys(per).sort(function (a, b) { return (per[b].primary + per[b].assist) - (per[a].primary + per[a].assist); });
+    h += names.length ? '<table class="tbl"><thead><tr><th>Surgeon</th><th>Primary</th><th>Assisted</th><th>Total</th></tr></thead><tbody>' + names.map(function (n) { return '<tr class="click" data-who="' + esc(n) + '"><td>' + esc(n) + '</td><td>' + per[n].primary + '</td><td>' + per[n].assist + '</td><td>' + (per[n].primary + per[n].assist) + '</td></tr>'; }).join('') + '</tbody></table>' : '<p class="muted">No cases with surgeons in this period.</p>';
+    sheetX = [{ name: 'Team', rows: [['Surgeon', 'Primary', 'Assisted', 'Total']].concat(names.map(function (n) { return [n, per[n].primary, per[n].assist, per[n].primary + per[n].assist]; })) }];
+  } else {
+    var es = [];
+    S.d.patients.filter(inYear).forEach(function (p) { surgeonsOf(p).forEach(function (x) { if (x.name === st.name) es.push({ p: p, role: x.role }); }); });
+    es.sort(function (a, b) { return (b.p.DoneDate || '').localeCompare(a.p.DoneDate || ''); });
+    var byRole = {}, byProc = {}, byMonth = {};
+    es.forEach(function (e) {
+      byRole[e.role] = (byRole[e.role] || 0) + 1;
+      var o = byProc[e.p.Procedure] = byProc[e.p.Procedure] || { pri: 0, ast: 0 }; if (e.role === 'Primary surgeon') o.pri++; else o.ast++;
+      var mk = (e.p.DoneDate || '').slice(0, 7); byMonth[mk] = (byMonth[mk] || 0) + 1;
+    });
+    var pk = Object.keys(byProc).sort(function (a, b) { return (byProc[b].pri + byProc[b].ast) - (byProc[a].pri + byProc[a].ast); });
+    var top = pk.length ? byProc[pk[0]].pri + byProc[pk[0]].ast : 1;
+    var months = Object.keys(byMonth).sort(), mtop = Math.max.apply(null, [1].concat(months.map(function (k) { return byMonth[k]; })));
+    function withWho(p) { return surgeonsOf(p).filter(function (x) { return x.name !== st.name; }).map(function (x) { return x.name; }).join(', '); }
+    h += es.length ? '<div class="tiles"><div class="tile"><div class="n">' + es.length + '</div><div class="l">Cases</div></div>' + SURGEON_ROLES.map(function (r) { return '<div class="tile"><div class="n">' + (byRole[r] || 0) + '</div><div class="l">' + esc(r) + '</div></div>'; }).join('') + '</div>' +
+      '<div class="grid2"><div class="panel"><h3>By procedure</h3>' + pk.map(function (k) {
+        var o = byProc[k]; return '<div class="bar2row"><span class="bl">' + esc(k) + '</span><span class="bt"><i class="b1" style="width:' + (o.pri / top * 100) + '%"></i><i class="b2" style="width:' + (o.ast / top * 100) + '%"></i></span><b>' + (o.pri + o.ast) + '</b></div>';
+      }).join('') + '<p class="small muted">Dark: primary. Light: assisted.</p></div>' +
+      '<div class="panel"><h3>Cases per month</h3><div class="mbars">' + months.map(function (k) { return '<div class="mb"><i style="height:' + Math.max(4, byMonth[k] / mtop * 70) + 'px"></i><span class="small">' + MONTHS[+k.slice(5) - 1] + '</span><b class="small">' + byMonth[k] + '</b></div>'; }).join('') + '</div></div></div>' +
+      '<h3 style="margin-top:12px">Cases</h3><table class="tbl"><thead><tr><th>Date</th><th>MRN</th><th>Age</th><th>Procedure</th><th>Role</th><th>Operated with</th></tr></thead><tbody>' +
+      es.map(function (e) { return '<tr class="click" data-dn="' + esc(e.p.Id) + '"><td>' + esc(fmtDate(e.p.DoneDate)) + '</td><td>' + esc(e.p.MRN) + '</td><td>' + esc(ageAt(e.p, e.p.DoneDate)) + '</td><td>' + esc(procLabel(e.p)) + '</td><td>' + esc(e.role) + '</td><td>' + esc(withWho(e.p)) + '</td></tr>'; }).join('') + '</tbody></table>'
+      : '<p class="muted">No cases in the logbook of ' + esc(st.name || 'this surgeon') + ' for this period.</p>';
+    var data = es.map(function (e) { return [e.p.DoneDate, e.p.MRN, ageAt(e.p, e.p.DoneDate), procLabel(e.p), e.role, withWho(e.p)]; });
+    sheetX = [{ name: 'Logbook', rows: [['Date', 'MRN', 'Age', 'Procedure', 'Role', 'Operated with']].concat(data) }];
+    pdfInfo = { title: 'Surgeon logbook', lines: [st.name + (st.year ? ' · ' + st.year : ''), es.length + ' cases · ' + SURGEON_ROLES.map(function (r) { return (byRole[r] || 0) + ' ' + r.toLowerCase(); }).join(' · ')],
+      cols: [{ h: 'Date', w: 0.12 }, { h: 'MRN', w: 0.15 }, { h: 'Age', w: 0.07 }, { h: 'Procedure', w: 0.32 }, { h: 'Role', w: 0.17 }, { h: 'With', w: 0.17 }],
+      rows: data.map(function (r) { var c = r.slice(); c[0] = fmtDate(c[0]); return c; }), footer: 'Generated ' + fmtDate(S.today) + ' · MRN and age only' };
+  }
+  $('view').innerHTML = h;
+  var ex = $('lb_exp');
+  ex.innerHTML = '<button id="lb_xl">Export Excel</button>' + (pdfInfo ? '<button id="lb_pdf">Export PDF</button>' : '');
+  $('lb_xl').addEventListener('click', function () { exportXlsx('logbook-' + (st.team ? 'team' : st.name.replace(/[^A-Za-z0-9]+/g, '-')), sheetX); });
+  if ($('lb_pdf')) $('lb_pdf').addEventListener('click', function () { shareOrSave(pdfFromCanvases(renderTableDoc(pdfInfo, 1754)), 'logbook-' + st.name.replace(/[^A-Za-z0-9]+/g, '-') + '.pdf'); });
+  on($('view'), '[data-who]', 'click', function (e) { st.name = e.currentTarget.getAttribute('data-who'); st.team = false; viewLogbook(); });
+  on($('view'), '[data-team]', 'click', function () { st.team = true; viewLogbook(); });
+  $('lb_year').addEventListener('change', function () { st.year = this.value; viewLogbook(); });
+  if ($('lb_add')) $('lb_add').addEventListener('click', function () { var n = missingSurgeons()[0]; if (n) dlgSurgeons(n); });
+  on($('view'), '[data-dn]', 'click', function (e) { dlgDone(getP(e.currentTarget.getAttribute('data-dn')), function () { viewLogbook(); }, true); });
+}
+
+// ---- Removed page
+var FINAL_REASONS = ['Transferred to adult services', 'Done in private'];
+function remList() {
+  var q = S.removedQ.toLowerCase(), r = S.rm;
+  return S.d.patients.filter(function (p) {
+    return p.Status === 'Removed' && (!q || (p.Name + ' ' + p.MRN).toLowerCase().indexOf(q) >= 0) && (!r.reason || p.RemovedReason === r.reason) &&
+      (!r.year || (p.RemovedDate || '').slice(0, 4) === r.year) && (!S.rmCons || S.rmCons === 'all' || p.ConsultantId === S.rmCons);
+  }).sort(function (a, b) { return (b.RemovedDate || '').localeCompare(a.RemovedDate || ''); });
+}
+function viewRemoved() {
+  var base = S.d.patients.filter(function (p) { return p.Status === 'Removed' && (!S.rmCons || S.rmCons === 'all' || p.ConsultantId === S.rmCons) && (!S.rm.year || (p.RemovedDate || '').slice(0, 4) === S.rm.year); });
+  var cnt = {}; base.forEach(function (p) { cnt[p.RemovedReason] = (cnt[p.RemovedReason] || 0) + 1; });
+  var cons = S.d.consultants.filter(function (c) { return c.Active === 'Y'; }), ys = {};
+  S.d.patients.forEach(function (p) { if (p.Status === 'Removed' && p.RemovedDate) ys[p.RemovedDate.slice(0, 4)] = true; });
+  if (!S.rmCons) S.rmCons = 'all';
+  $('view').innerHTML = '<div class="spread"><h2>Removed from the list</h2><button id="rm_x">Export Excel</button></div>' +
+    '<div class="row" style="margin:6px 0"><span class="segwrap"><button type="button" class="seg' + (S.rmCons === 'all' ? ' on' : '') + '" data-rc="all">All</button>' + cons.map(function (c) { return '<button type="button" class="seg' + (S.rmCons === c.Id ? ' on' : '') + '" data-rc="' + esc(c.Id) + '">' + esc(c.Name) + '</button>'; }).join('') + '</span>' +
+    '<select id="rm_year" style="width:auto">' + opt('', 'All years', !S.rm.year) + Object.keys(ys).sort().reverse().map(function (y) { return opt(y, y, S.rm.year === y); }).join('') + '</select>' +
+    '<input type="text" id="rq" placeholder="Search name or MRN" value="' + esc(S.removedQ) + '" style="width:200px"></div>' +
+    '<div class="sttabs"><div class="sttabs-in scrollx"><button type="button" class="sttab' + (!S.rm.reason ? ' on' : '') + '" data-rr="">All <b>' + base.length + '</b></button>' +
+    REMOVE_REASONS.filter(function (r) { return cnt[r]; }).map(function (r) { return '<button type="button" class="sttab' + (S.rm.reason === r ? ' on' : '') + '" data-rr="' + esc(r) + '">' + esc(r) + ' <b>' + cnt[r] + '</b></button>'; }).join('') + '</div></div><div id="remBody"></div>';
+  $('rq').addEventListener('input', function () { S.removedQ = this.value; remBody(); });
+  $('rm_year').addEventListener('change', function () { S.rm.year = this.value; viewRemoved(); });
+  on($('view'), '[data-rc]', 'click', function (e) { S.rmCons = e.currentTarget.getAttribute('data-rc'); viewRemoved(); });
+  on($('view'), '[data-rr]', 'click', function (e) { S.rm.reason = e.currentTarget.getAttribute('data-rr'); viewRemoved(); });
+  $('rm_x').addEventListener('click', function () { exportPatients('removed', remList()); });
+  remBody();
+}
+function remDetail(p) {
+  var bits = [];
+  if (p.RemovedReason === 'Called multiple times, no response') bits.push((Number(p.CallCount) || 0) + ' unanswered calls' + (p.LastContact ? ', last ' + fmtDate(p.LastContact) : ''));
+  if (p.RemovedNote) bits.push(p.RemovedNote);
+  return bits.length ? '<br><span class="muted small">' + esc(bits.join(' · ')) + '</span>' : '';
+}
+function remBody() {
+  var list = remList(), all = S.rmCons === 'all';
+  function waited(p) { var d = daysBetween(p.DateAdded || p.RemovedDate, p.RemovedDate || S.today); var mo = Math.floor(d / 30.44); return mo >= 2 ? mo + ' mo' : d + ' d'; }
+  $('remBody').innerHTML = '<p class="muted small">' + list.length + (list.length === 1 ? ' patient' : ' patients') + '</p>' +
+    (!list.length ? '<p class="muted">Nobody has been removed.</p>' : useTable() ?
+      '<table class="tbl rm"><thead><tr><th>Patient</th><th>Age</th><th>Procedure</th><th>Reason</th><th>Removed</th><th>Waited</th><th>By</th><th></th></tr></thead><tbody>' +
+      list.map(function (p) {
+        return '<tr class="click" data-id="' + esc(p.Id) + '"><td><strong>' + esc(p.Name) + '</strong><br><span class="muted small">' + esc(p.MRN) + '</span>' + (all ? ' ' + iniChip(p.ConsultantId) : '') + '</td><td>' + esc(ageAt(p, p.RemovedDate)) + '</td>' +
+          '<td>' + procCell(p) + '</td><td>' + esc(p.RemovedReason) + remDetail(p) + '</td><td>' + esc(fmtDate(p.RemovedDate)) + '</td><td>' + esc(waited(p)) + '</td><td class="small">' + esc(p.UpdatedBy) + '</td><td><button data-rest="' + esc(p.Id) + '" aria-label="Restore">&#8943;</button></td></tr>';
+      }).join('') + '</tbody></table>' :
+      '<div class="cards">' + list.map(function (p) {
+        return '<div class="card" data-id="' + esc(p.Id) + '"><div class="spread"><div class="name">' + esc(p.Name) + ' <span class="muted small">· ' + esc(ageAt(p, p.RemovedDate)) + '</span></div><span class="muted small">' + esc(fmtDate(p.RemovedDate)) + '</span></div>' +
+          '<div class="muted small">' + esc(p.MRN) + (all ? ' ' + iniChip(p.ConsultantId) : '') + ' · waited ' + esc(waited(p)) + '</div>' + procCell(p) + '<div class="small">' + esc(p.RemovedReason) + remDetail(p) + '</div><div class="row" style="margin-top:6px"><button data-rest="' + esc(p.Id) + '">Restore…</button></div></div>';
+      }).join('') + '</div>');
+  bindRows($('remBody'));
+  on($('remBody'), '[data-rest]', 'click', function (e) {
+    e.stopPropagation();
+    var p = getP(e.currentTarget.getAttribute('data-rest'));
+    pickMenu(p.Name, [{ label: 'Restore to the waiting list', fn: function () {
+      if (FINAL_REASONS.indexOf(p.RemovedReason) >= 0 && !window.confirm('This patient was removed as "' + p.RemovedReason + '". Restore anyway?')) return;
+      call('restorePatient', { patientId: p.Id }).then(function (r) { upsertP(r); render(); toast('Patient restored to the list'); }).catch(fail);
+    } }]);
+  });
+}
+
+// ---- Warnings page
+var WARN_TABS = [['wait', 'Wait target'], ['age14', 'Age 14'], ['age', 'Age target'], ['contact', 'No contact'], ['clearance', 'Clearance'], ['booked', 'Booked date passed'], ['calls', 'Unanswered calls'], ['med', 'Medical status'], ['admit', 'Admission days']];
+var WARN_ACTION = { wait: 'Set priority', age14: 'Adult services', age: 'Set priority', contact: 'Log call', clearance: 'Mark cleared / new date', booked: 'Done or reschedule', calls: 'Log call', med: 'Set medical status', admit: 'Set days' };
+function warnRows() {
+  var out = [];
+  S.d.patients.forEach(function (p) {
+    if (S.wcons && S.wcons !== 'all' && p.ConsultantId !== S.wcons) return;
+    var dis = discardedOf(p);
+    warningsAll(p).forEach(function (w) { out.push({ p: p, w: w, discarded: !!dis[w.kind], dis: dis[w.kind] }); });
+  });
+  return out;
+}
+function viewWarn() {
+  if (!S.wtab) S.wtab = '';
+  if (!S.wcons) S.wcons = 'all';
+  var rows = warnRows(), cons = S.d.consultants.filter(function (c) { return c.Active === 'Y'; });
+  var cnt = {}, nd = 0;
+  rows.forEach(function (r) { if (r.discarded) nd++; else cnt[r.w.kind] = (cnt[r.w.kind] || 0) + 1; });
+  var total = rows.length - nd;
+  var shown = rows.filter(function (r) { return S.wtab === 'discarded' ? r.discarded : (!r.discarded && (!S.wtab || r.w.kind === S.wtab)); });
+  shown.sort(function (a, b) { return (a.w.sev === 'high' ? 0 : 1) - (b.w.sev === 'high' ? 0 : 1) || a.p.Name.localeCompare(b.p.Name); });
+  $('view').innerHTML = '<div class="spread"><h2>Warnings</h2><button id="wn_x">Export Excel</button></div>' +
+    '<div class="row" style="margin:6px 0"><span class="segwrap"><button type="button" class="seg' + (S.wcons === 'all' ? ' on' : '') + '" data-wc="all">All</button>' + cons.map(function (c) { return '<button type="button" class="seg' + (S.wcons === c.Id ? ' on' : '') + '" data-wc="' + esc(c.Id) + '">' + esc(c.Name) + '</button>'; }).join('') + '</span></div>' +
+    '<div class="sttabs"><div class="sttabs-in scrollx"><button type="button" class="sttab' + (!S.wtab ? ' on' : '') + '" data-wt="">All <b>' + total + '</b></button>' +
+    WARN_TABS.filter(function (t) { return cnt[t[0]]; }).map(function (t) { return '<button type="button" class="sttab' + (S.wtab === t[0] ? ' on' : '') + '" data-wt="' + t[0] + '">' + esc(t[1]) + ' <b>' + cnt[t[0]] + '</b></button>'; }).join('') +
+    '<button type="button" class="sttab' + (S.wtab === 'discarded' ? ' on' : '') + '" data-wt="discarded">Discarded <b>' + nd + '</b></button></div></div>' +
+    (!shown.length ? '<p class="muted">' + (S.wtab === 'discarded' ? 'No discarded warnings.' : 'No warnings. Nice.') + '</p>' : useTable() ?
+      '<table class="tbl"><thead><tr><th>Patient</th><th>Age</th><th>Procedure</th><th>Warning</th><th></th></tr></thead><tbody>' + shown.map(function (r, i) {
+        return '<tr class="click" data-id="' + esc(r.p.Id) + '"><td><strong>' + esc(r.p.Name) + '</strong><br><span class="muted small">' + esc(r.p.MRN) + '</span> ' + iniChip(r.p.ConsultantId) + '</td><td>' + ageCell(r.p) + '</td><td>' + procCell(r.p) + '</td>' +
+          '<td><span class="chip ' + (r.w.sev === 'high' ? 'red' : 'amber') + '">' + esc(r.w.text) + '</span>' + (r.discarded ? '<br><span class="muted small">Discarded by ' + esc(r.dis.by) + ', ' + esc(fmtDate(r.dis.at)) + '</span>' : '') + '</td>' +
+          '<td class="acts"><div class="actw">' + (r.discarded ? '<button data-wr="' + i + '">Restore</button>' : '<button class="primary" data-wa="' + i + '">' + esc(WARN_ACTION[r.w.kind]) + '</button><button data-wd="' + i + '">Discard</button>') + '</div></td></tr>';
+      }).join('') + '</tbody></table>' :
+      '<div class="cards">' + shown.map(function (r, i) {
+        return '<div class="card" data-id="' + esc(r.p.Id) + '"><div class="spread"><div class="name">' + esc(r.p.Name) + ' <span class="muted small">· ' + ageCell(r.p) + '</span></div>' + iniChip(r.p.ConsultantId) + '</div><div class="muted small">' + esc(r.p.MRN) + '</div>' + procCell(r.p) +
+          '<div style="margin-top:4px"><span class="chip ' + (r.w.sev === 'high' ? 'red' : 'amber') + '">' + esc(r.w.text) + '</span></div><div class="actw" style="margin-top:6px">' + (r.discarded ? '<button data-wr="' + i + '">Restore</button>' : '<button class="primary" data-wa="' + i + '">' + esc(WARN_ACTION[r.w.kind]) + '</button><button data-wd="' + i + '">Discard</button>') + '</div></div>';
+      }).join('') + '</div>');
+  on($('view'), '[data-wc]', 'click', function (e) { S.wcons = e.currentTarget.getAttribute('data-wc'); viewWarn(); });
+  on($('view'), '[data-wt]', 'click', function (e) { S.wtab = e.currentTarget.getAttribute('data-wt'); viewWarn(); });
+  $('wn_x').addEventListener('click', function () {
+    exportXlsx('warnings', [{ name: 'Warnings', rows: [['MRN', 'Name', 'Consultant', 'Procedure', 'Warning', 'Status']].concat(shown.map(function (r) { return [r.p.MRN, r.p.Name, consName(r.p.ConsultantId), procLabel(r.p), r.w.text, r.discarded ? 'Discarded' : 'Active']; })) }]);
+  });
+  function disc(i, restore) {
+    var r = shown[i];
+    call('discardWarning', { patientId: r.p.Id, kind: r.w.kind, restore: restore }).then(function (p) { upsertP(p); render(); toast(restore ? 'Warning restored' : 'Warning discarded'); }).catch(fail);
+  }
+  on($('view'), '[data-wa]', 'click', function (e) { e.stopPropagation(); var r = shown[+e.currentTarget.getAttribute('data-wa')]; flagAction(r.p, r.w.kind); });
+  on($('view'), '[data-wd]', 'click', function (e) { e.stopPropagation(); disc(+e.currentTarget.getAttribute('data-wd'), false); });
+  on($('view'), '[data-wr]', 'click', function (e) { e.stopPropagation(); disc(+e.currentTarget.getAttribute('data-wr'), true); });
+  on($('view'), '[data-id]', 'click', function (e) { if (e.target.closest('button')) return; openPatient(e.currentTarget.getAttribute('data-id')); });
+}
+
+// ---- theme (per user, stored on this device)
+var ACCENTS = { charcoal: ['#444441', '#ecebe6'], green: ['#3d5a3a', '#b8dc97'], blue: ['#3a5a78', '#a9cdf2'], plum: ['#5f4766', '#e0c8e6'], teal: ['#2f5f5a', '#a7ddd6'] };
+function prefKey() { return 'psw_prefs_' + ((S.user && S.user.Username) || fetchStored('psw_user') || ''); }
+function getPrefs() {
+  var d = { theme: 'auto', density: 'comfortable', text: 'normal', accent: 'charcoal' }, o = {};
+  try { o = JSON.parse(localStorage.getItem(prefKey()) || '{}') || {}; } catch (e) { o = {}; }
+  if (!Object.keys(o).length && S.memPrefs) o = S.memPrefs;
+  Object.keys(d).forEach(function (k) { if (o[k]) d[k] = o[k]; });
+  return d;
+}
+function setPref(k, v) {
+  var p = getPrefs(); p[k] = v; S.memPrefs = p;
+  try { localStorage.setItem(prefKey(), JSON.stringify(p)); } catch (e) { /* ignore */ }
+  applyTheme();
+}
+function applyTheme() {
+  var pr = getPrefs(), root = document.documentElement;
+  root.setAttribute('data-theme', pr.theme); root.setAttribute('data-density', pr.density); root.setAttribute('data-text', pr.text);
+  var dark = pr.theme === 'dark' || (pr.theme === 'auto' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+  var a = ACCENTS[pr.accent] || ACCENTS.charcoal;
+  root.style.setProperty('--ink', dark ? a[1] : a[0]);
+  root.style.setProperty('--onink', dark ? '#191918' : '#ffffff');
+}
+
+// ---- settings: grouped menu
+var SET_GROUPS = [
+  ['People', [['consultants', 'Consultants', 'set'], ['residents', 'Residents', 'set'], ['users', 'Users', 'admin']]],
+  ['Clinical', [['procedures', 'Procedures', 'set'], ['tags', 'Tags and reviews', 'set'], ['warnings', 'Warnings', 'set']]],
+  ['Hospital', [['rooms', 'Operating rooms', 'set']]],
+  ['Data', [['import', 'Import and export', 'set'], ['backup', 'Backup', 'admin'], ['audit', 'Audit log', 'admin']]],
+  ['Account', [['account', 'My account', 'all']]]
+];
+function setAllowed(t) { return t[2] === 'all' || (t[2] === 'admin' ? S.user.Admin : S.user.SettingsAccess); }
+function viewSettings() {
+  var groups = SET_GROUPS.map(function (g) { return [g[0], g[1].filter(setAllowed)]; }).filter(function (g) { return g[1].length; });
+  var flat = []; groups.forEach(function (g) { flat = flat.concat(g[1]); });
+  if (!flat.some(function (t) { return t[0] === S.setTab; })) S.setTab = flat[0][0];
+  $('view').innerHTML = '<h2>Settings</h2><div class="setlayout"><nav class="setmenu scrollx" id="s_menu">' + groups.map(function (g) {
+    return '<div class="setgrp"><div class="setgt">' + esc(g[0]) + '</div>' + g[1].map(function (t) { return '<button type="button" class="setitem' + (S.setTab === t[0] ? ' on' : '') + '" data-t="' + t[0] + '">' + esc(t[1]) + '</button>'; }).join('') + '</div>';
+  }).join('') + '</nav><div class="setmain" id="s_main"></div></div>';
+  on($('s_menu'), '.setitem', 'click', function (e) { S.setTab = e.currentTarget.getAttribute('data-t'); viewSettings(); });
+  drawSetPanel();
+}
+function sw(id, on_, label) { return '<label class="swt"><input type="checkbox" ' + id + (on_ ? ' checked' : '') + '><span class="swk"></span>' + (label ? '<span>' + esc(label) + '</span>' : '') + '</label>'; }
+function drawSetPanel() {
+  var t = S.setTab, el = $('s_main');
+  if (t === 'consultants') {
+    var kind = S.consKind || 'surgery';
+    el.innerHTML = '<div class="spread"><div class="segwrap"><button type="button" class="seg' + (kind === 'surgery' ? ' on' : '') + '" data-ck="surgery">Surgery</button><button type="button" class="seg' + (kind === 'specialty' ? ' on' : '') + '" data-ck="specialty">Specialty</button></div>' +
+      '<button id="s_addcons">' + (kind === 'surgery' ? 'Add consultant' : 'Add specialty doctor') + '</button></div>' +
+      (kind === 'surgery' ? '<p class="muted small">Pediatric surgery consultants. Initials and colour are used on the OT schedule and the waiting list.</p><div id="s_cons"></div>' :
+        '<p class="muted small">Chosen when a medical review is requested. Anesthesia has no consultant name.</p><div id="s_sc"></div>');
+    on(el, '[data-ck]', 'click', function (e) { S.consKind = e.currentTarget.getAttribute('data-ck'); drawSetPanel(); });
+    if (kind === 'surgery') { drawCons(); $('s_addcons').addEventListener('click', function () { consModal(null); }); }
+    else {
+      drawSC();
+      $('s_addcons').addEventListener('click', function () {
+        var m = openModal('<h2>Add specialty doctor</h2><div class="field"><label for="sc_name">Name</label><input type="text" id="sc_name"></div><div class="field"><label for="sc_spec">Specialty</label><select id="sc_spec">' + SPECIALTIES.filter(function (x) { return x !== 'Anesthesia'; }).map(function (x) { return opt(x, x); }).join('') + '</select></div><div class="row"><button class="primary" id="sc_ok">Add</button><button id="sc_x">Cancel</button></div>', { narrow: true });
+        $('sc_x').addEventListener('click', m.close);
+        $('sc_ok').addEventListener('click', function () { call('saveSpecialtyConsultant', { Name: val('sc_name'), Specialty: val('sc_spec') }).then(function (l) { S.d.specialtyConsultants = l; m.close(); drawSetPanel(); toast('Added'); }).catch(fail); });
+      });
+    }
+  } else if (t === 'residents') {
+    el.innerHTML = '<h3>Residents</h3><div id="s_res"></div><div class="row" style="margin-top:8px"><input type="text" id="s_resname" placeholder="Resident name" style="max-width:260px"><button id="s_addres">Add resident</button></div>';
+    drawRes();
+    $('s_addres').addEventListener('click', function () { call('saveResident', { Name: val('s_resname') }).then(function (l) { S.d.residents = l; drawSetPanel(); toast('Resident added'); }).catch(fail); });
+  } else if (t === 'users') {
+    el.innerHTML = '<div class="spread"><h3>Users</h3><button id="u_add">Add user</button></div><div id="u_list"><p class="muted small">Loading…</p></div>';
+    $('u_add').addEventListener('click', function () { userModal(); });
+    drawUsers();
+  } else if (t === 'procedures') {
+    el.innerHTML = '<div class="spread"><h3>Procedures</h3><button id="s_addproc">Add procedure</button></div><p class="muted small">"At JMH" marks a procedure that can be booked in the shared JMH room.</p><div id="s_procs"></div>';
+    drawProcs(); $('s_addproc').addEventListener('click', function () { procModal(null); });
+  } else if (t === 'tags') {
+    el.innerHTML = '<h3>Tags and the review each one adds</h3><p class="muted small">When a tag is added to a patient, its specialty review is added as not cleared. Hide a tag to remove it from the menu.</p><div id="s_tags"></div>' +
+      '<div class="row" style="margin-top:8px"><input type="text" id="tg_new" placeholder="New tag" style="max-width:240px"><button id="tg_add">Add tag</button></div><button id="tg_save" class="primary" style="margin-top:8px">Save</button>';
+    drawTags();
+  } else if (t === 'warnings') drawWarnPanel(el);
+  else if (t === 'rooms') { el.innerHTML = '<div class="spread"><h3>Operating rooms</h3><button id="s_addroom">Add room</button></div><div id="s_rooms"></div>'; drawRooms(); $('s_addroom').addEventListener('click', function () { roomModal(null); }); }
+  else if (t === 'import') {
+    el.innerHTML = '<h3>Import and export</h3><div class="row"><button id="x_import" class="primary">Import from Excel or CSV</button></div><div class="row" style="margin-top:8px"><button id="x_wait">Export waiting list (Excel)</button><button id="x_done">Export done cases (Excel)</button><button id="x_rem">Export removed (Excel)</button></div>';
+    $('x_import').addEventListener('click', openImport);
+    $('x_wait').addEventListener('click', function () { exportPatients('waiting-list', S.d.patients.filter(isActive)); });
+    $('x_done').addEventListener('click', function () { exportPatients('done-cases', S.d.patients.filter(function (p) { return p.Status === 'Done'; })); });
+    $('x_rem').addEventListener('click', function () { exportPatients('removed', S.d.patients.filter(function (p) { return p.Status === 'Removed'; })); });
+  } else if (t === 'backup') drawBackupPanel(el);
+  else if (t === 'audit') drawAuditPanel(el);
+  else drawAccountPanel(el);
+}
+// ---- consultants and procedures tables
+function drawCons() {
+  var l = S.d.consultants;
+  $('s_cons').innerHTML = '<table class="tbl"><thead><tr><th>Consultant</th><th>Initials</th><th>Colour</th><th>Operating day</th><th>Usual room</th><th>Active</th><th></th></tr></thead><tbody>' +
+    l.map(function (c) {
+      return '<tr><td>' + esc(c.Name) + '</td><td><span class="ini" style="background:' + esc(consColor(c.Id)) + '">' + esc(consInit(c.Id)) + '</span></td><td><span class="swatch" style="background:' + esc(consColor(c.Id)) + '"></span></td><td>' + esc(c.OTDay) + '</td><td>' + esc(roomName(c.DefaultRoomId)) + '</td><td>' + sw('data-act="' + esc(c.Id) + '"', c.Active === 'Y') + '</td><td><button data-e="' + esc(c.Id) + '">Edit</button></td></tr>';
+    }).join('') + '</tbody></table>';
+  on($('s_cons'), '[data-e]', 'click', function (e) { consModal(consById(e.currentTarget.getAttribute('data-e'))); });
+  on($('s_cons'), '[data-act]', 'change', function (e) {
+    var c = consById(e.currentTarget.getAttribute('data-act'));
+    saveCons(c, { Active: e.currentTarget.checked ? 'Y' : 'N' }, null);
+  });
+}
+function saveCons(c, over, m) {
+  var pl = { Id: c.Id || '', Name: c.Name, OTDay: c.OTDay, DefaultRoomId: c.DefaultRoomId, Active: c.Active, Initials: c.Initials, Color: c.Color };
+  Object.keys(over).forEach(function (k) { pl[k] = over[k]; });
+  call('saveConsultant', pl).then(function (r) { S.d.consultants = r.consultants; S.d.lists = r.lists; if (m) m.close(); drawSetPanel(); toast('Saved'); }).catch(function (e) { drawSetPanel(); fail(e); });
+}
+function consModal(c) {
+  var isNew = !c; c = c || { OTDay: '', Active: 'Y', Initials: '', Color: '' };
+  var used = {}; S.d.consultants.forEach(function (x) { if (x.Id !== c.Id && x.Active === 'Y' && x.Color) used[x.Color.toLowerCase()] = x.Name; });
+  var color = c.Color || PASTELS.filter(function (x) { return !used[x.toLowerCase()]; })[0] || PASTELS[0];
+  var m = openModal('<h2>' + (isNew ? 'Add consultant' : 'Edit consultant') + '</h2>' +
+    '<div class="field"><label for="c_name">Name</label><input type="text" id="c_name" value="' + esc(c.Name || '') + '"></div>' +
+    '<div class="field"><label for="c_ini">Initials (2 to 4 letters, empty = made from the name)</label><input type="text" id="c_ini" maxlength="4" value="' + esc(c.Initials || '') + '" style="text-transform:uppercase"></div>' +
+    '<div class="field"><label>Colour</label><div class="tags" id="c_cols">' + PASTELS.map(function (x) { return '<button type="button" class="colbtn' + (x.toLowerCase() === color.toLowerCase() ? ' on' : '') + '" data-col="' + x + '" style="background:' + x + '"' + (used[x.toLowerCase()] ? ' disabled title="Used by ' + esc(used[x.toLowerCase()]) + '"' : '') + '></button>'; }).join('') + '</div></div>' +
+    '<div class="field"><label for="c_day">Operating day</label><select id="c_day">' + DAYS.map(function (s) { return opt(s, s, c.OTDay === s); }).join('') + '</select></div>' +
+    '<div class="field"><label for="c_room">Usual operating room</label><select id="c_room">' + opt('', 'None', !c.DefaultRoomId) + (S.d.rooms || []).filter(function (r) { return r.Shared !== 'Y' && (r.Active === 'Y' || r.Id === c.DefaultRoomId); }).map(function (r) { return opt(r.Id, r.Name, r.Id === c.DefaultRoomId); }).join('') + '</select></div>' +
+    '<label class="check"><input type="checkbox" id="c_act"' + (c.Active === 'Y' ? ' checked' : '') + '> Active</label>' +
+    '<div class="row" style="margin-top:12px"><button class="primary" id="c_save">Save</button><button id="c_cancel">Cancel</button></div>', { narrow: true });
+  on(m.el, '[data-col]', 'click', function (e) { color = e.currentTarget.getAttribute('data-col'); var bs = m.el.querySelectorAll('.colbtn'); for (var i = 0; i < bs.length; i++) bs[i].classList.toggle('on', bs[i].getAttribute('data-col') === color); });
+  $('c_cancel').addEventListener('click', m.close);
+  $('c_save').addEventListener('click', function () {
+    saveCons({ Id: c.Id || '', Name: val('c_name'), OTDay: val('c_day'), DefaultRoomId: val('c_room'), Active: checked('c_act') ? 'Y' : 'N', Initials: val('c_ini'), Color: color }, {}, m);
+  });
+}
+function drawProcs() {
+  var l = S.d.procedures;
+  $('s_procs').innerHTML = '<table class="tbl"><thead><tr><th>Procedure</th><th>Category</th><th>Side</th><th>At JMH</th><th>Wait target</th><th>Age target</th><th>Active</th><th></th></tr></thead><tbody>' +
+    l.map(function (p) {
+      return '<tr><td>' + esc(p.Name) + '<br><span class="muted small">' + esc(p.DefaultDiagnosis) + '</span></td><td>' + esc(p.DefaultCategory) + '</td><td>' + sw('data-pf="Laterality" data-pid="' + esc(p.Id) + '"', p.Laterality === 'Y') + '</td><td>' + sw('data-pf="JMH" data-pid="' + esc(p.Id) + '"', p.JMH === 'Y') + '</td>' +
+        '<td>' + (p.TargetDays ? esc(p.TargetDays) + ' d' : '-') + '</td><td>' + (p.MaxAgeMonths ? esc(p.MaxAgeMonths) + ' mo' : '-') + '</td><td>' + sw('data-pf="Active" data-pid="' + esc(p.Id) + '"', p.Active === 'Y') + '</td><td><button data-e="' + esc(p.Id) + '">Edit</button></td></tr>';
+    }).join('') + '</tbody></table>';
+  on($('s_procs'), '[data-e]', 'click', function (e) { procModal(procById(e.currentTarget.getAttribute('data-e'))); });
+  on($('s_procs'), '[data-pf]', 'change', function (e) {
+    var el = e.currentTarget, pr = procById(el.getAttribute('data-pid')), f = el.getAttribute('data-pf');
+    saveProc(pr, f, el.checked ? 'Y' : (f === 'Active' ? 'N' : ''), null);
+  });
+}
+function saveProc(pr, field, value, m) {
+  var pl = { Id: pr.Id || '', Name: pr.Name, DefaultDiagnosis: pr.DefaultDiagnosis, DefaultCategory: pr.DefaultCategory, DefaultCare: pr.DefaultCare, Laterality: pr.Laterality, JMH: pr.JMH, PriceDay: pr.PriceDay, PriceInpatient: pr.PriceInpatient, TargetDays: pr.TargetDays, MaxAgeMonths: pr.MaxAgeMonths, WarnMonthsBefore: pr.WarnMonthsBefore, Active: pr.Active };
+  if (field) pl[field] = value;
+  call('saveProcedure', pl).then(function (l) { S.d.procedures = l; if (m) m.close(); drawSetPanel(); toast('Saved'); }).catch(function (e) { drawSetPanel(); fail(e); });
+}
+function procModal(pr) {
+  var isNew = !pr; pr = pr || { DefaultCategory: 'Minor', DefaultCare: 'Day-case', Active: 'Y', WarnMonthsBefore: '3' };
+  var m = openModal('<h2>' + (isNew ? 'Add procedure' : 'Edit procedure') + '</h2><div class="grid2">' +
+    '<div class="field"><label for="p_name">Name</label><input type="text" id="p_name" value="' + esc(pr.Name || '') + '"></div>' +
+    '<div class="field"><label for="p_dx">Default diagnosis</label><input type="text" id="p_dx" value="' + esc(pr.DefaultDiagnosis || '') + '"></div>' +
+    '<div class="field"><label for="p_cat">Default category</label><select id="p_cat">' + CATS.map(function (s) { return opt(s, s, pr.DefaultCategory === s); }).join('') + '</select></div>' +
+    '<div class="field"><label for="p_care">Usual care (price only)</label><select id="p_care">' + ['Day-case', 'Inpatient'].map(function (s) { return opt(s, s, pr.DefaultCare === s); }).join('') + '</select></div>' +
+    '<div class="field"><label>&nbsp;</label><label class="check"><input type="checkbox" id="p_lat"' + (pr.Laterality === 'Y' ? ' checked' : '') + '> Needs side (left, both, right)</label></div>' +
+    '<div class="field"><label>&nbsp;</label><label class="check"><input type="checkbox" id="p_jmh"' + (pr.JMH === 'Y' ? ' checked' : '') + '> Can be done at JMH</label></div>' +
+    '<div class="field"><label for="p_pd">Price, day-case (BHD)</label><input type="number" id="p_pd" min="0" step="any" value="' + esc(pr.PriceDay || '') + '"></div>' +
+    '<div class="field"><label for="p_pi">Price, inpatient (BHD)</label><input type="number" id="p_pi" min="0" step="any" value="' + esc(pr.PriceInpatient || '') + '"></div>' +
+    '<div class="field"><label for="p_td">Default target wait (days, empty = none)</label><input type="number" id="p_td" min="0" value="' + esc(pr.TargetDays || '') + '"></div>' +
+    '<div class="field"><label for="p_ma">Default target age: done before (months, empty = none)</label><input type="number" id="p_ma" min="0" value="' + esc(pr.MaxAgeMonths || '') + '"></div>' +
+    '<div class="field"><label for="p_wm">Warn this many months before that age</label><input type="number" id="p_wm" min="0" value="' + esc(pr.WarnMonthsBefore || '3') + '"></div>' +
+    '<div class="field"><label>&nbsp;</label><label class="check"><input type="checkbox" id="p_act"' + (pr.Active === 'Y' ? ' checked' : '') + '> In use</label></div></div>' +
+    '<div class="row"><button class="primary" id="p_save">Save</button><button id="p_cancel">Cancel</button></div>');
+  $('p_cancel').addEventListener('click', m.close);
+  $('p_save').addEventListener('click', function () {
+    saveProc({ Id: pr.Id || '', Name: val('p_name'), DefaultDiagnosis: val('p_dx'), DefaultCategory: val('p_cat'), DefaultCare: val('p_care'), Laterality: checked('p_lat') ? 'Y' : '', JMH: checked('p_jmh') ? 'Y' : '',
+      PriceDay: val('p_pd'), PriceInpatient: val('p_pi'), TargetDays: val('p_td'), MaxAgeMonths: val('p_ma'), WarnMonthsBefore: val('p_wm'), Active: checked('p_act') ? 'Y' : 'N' }, null, null, m);
+  });
+}
+// ---- rooms
+function drawRooms() {
+  var l = S.d.rooms || [];
+  $('s_rooms').innerHTML = '<table class="tbl"><thead><tr><th>Room</th><th>Shared by all consultants</th><th>Case target</th><th>Day</th><th>Active</th><th></th></tr></thead><tbody>' +
+    l.map(function (r) {
+      return '<tr><td>' + esc(r.Name) + '</td><td>' + (r.Shared === 'Y' ? 'Yes' : '-') + '</td><td>' + (r.Shared === 'Y' ? esc(r.CaseTarget || '') : '-') + '</td><td>' + (r.Shared === 'Y' ? esc(r.Day || 'Thursday') : '-') + '</td><td>' + sw('data-ra="' + esc(r.Id) + '"', r.Active === 'Y') + '</td><td><button data-re="' + esc(r.Id) + '">Edit</button></td></tr>';
+    }).join('') + '</tbody></table>';
+  on($('s_rooms'), '[data-re]', 'click', function (e) { roomModal(roomObj(e.currentTarget.getAttribute('data-re'))); });
+  on($('s_rooms'), '[data-ra]', 'change', function (e) {
+    var r = roomObj(e.currentTarget.getAttribute('data-ra'));
+    call('saveRoom', { Id: r.Id, Name: r.Name, Shared: r.Shared, CaseTarget: r.CaseTarget, Day: r.Day, Active: e.currentTarget.checked ? 'Y' : 'N' }).then(function (rs) { S.d.rooms = rs; drawSetPanel(); }).catch(function (er) { drawSetPanel(); fail(er); });
+  });
+}
+function roomModal(r) {
+  var isNew = !r; r = r || { Active: 'Y', Shared: '', CaseTarget: '9', Day: 'Thursday' };
+  var m = openModal('<h2>' + (isNew ? 'Add operating room' : 'Edit operating room') + '</h2>' +
+    '<div class="field"><label for="r_name">Name</label><input type="text" id="r_name" value="' + esc(r.Name || '') + '"></div>' +
+    '<label class="check"><input type="checkbox" id="r_sh"' + (r.Shared === 'Y' ? ' checked' : '') + '> Shared by all consultants (one list a week, like JMH)</label>' +
+    '<div id="r_shbox"><div class="grid2" style="margin-top:8px"><div class="field"><label for="r_t">Case target</label><input type="number" id="r_t" min="1" value="' + esc(r.CaseTarget || '9') + '"></div>' +
+    '<div class="field"><label for="r_day">Day of the week</label><select id="r_day">' + DAYS.filter(Boolean).map(function (d) { return opt(d, d, (r.Day || 'Thursday') === d); }).join('') + '</select></div></div></div>' +
+    '<label class="check" style="margin-top:8px"><input type="checkbox" id="r_act"' + (r.Active === 'Y' ? ' checked' : '') + '> Active</label>' +
+    '<div class="row" style="margin-top:12px"><button class="primary" id="r_save">Save</button><button id="r_cancel">Cancel</button></div>', { narrow: true });
+  function sync() { $('r_shbox').style.display = checked('r_sh') ? '' : 'none'; }
+  sync(); $('r_sh').addEventListener('change', sync);
+  $('r_cancel').addEventListener('click', m.close);
+  $('r_save').addEventListener('click', function () {
+    call('saveRoom', { Id: r.Id || '', Name: val('r_name'), Shared: checked('r_sh') ? 'Y' : '', CaseTarget: val('r_t'), Day: val('r_day'), Active: checked('r_act') ? 'Y' : 'N' }).then(function (rs) { S.d.rooms = rs; m.close(); drawSetPanel(); toast('Saved'); }).catch(fail);
+  });
+}
+// ---- tags
+function setJson(k, def) { try { var v = JSON.parse(S.d.settings[k] || ''); return v || def; } catch (e) { return def; } }
+function drawTags() {
+  var specs = SPECIALTIES.filter(function (x) { return x !== 'Anesthesia'; });
+  var hidden = setJson('hiddenTags', []), custom = setJson('customTags', []);
+  var all = TAGS.filter(function (t) { return t !== 'Other'; }).concat(custom.filter(function (t) { return TAGS.indexOf(t) < 0; }));
+  $('s_tags').innerHTML = all.map(function (t) {
+    var cur = tagSpec(t);
+    return '<div class="tagrow" style="margin:4px 0"><span style="min-width:240px">' + esc(t) + '</span><select class="tg_sel" data-t="' + esc(t) + '" style="max-width:200px">' + opt('', 'No review', !cur) + specs.map(function (x) { return opt(x, x, x === cur); }).join('') + '</select>' + sw('class="tg_vis" data-t="' + esc(t) + '"', hidden.indexOf(t) < 0, 'Shown') + '</div>';
+  }).join('');
+  $('tg_add').addEventListener('click', function () {
+    var n = val('tg_new'); if (!n) return;
+    if (all.indexOf(n) >= 0) { toast('That tag exists', true); return; }
+    custom.push(n); saveTags(custom, hidden, null);
+  });
+  $('tg_save').addEventListener('click', function () {
+    var o = {}, sels = document.querySelectorAll('.tg_sel'), hid = [], vis = document.querySelectorAll('.tg_vis');
+    for (var i = 0; i < sels.length; i++) o[sels[i].getAttribute('data-t')] = sels[i].value;
+    for (var j = 0; j < vis.length; j++) if (!vis[j].checked) hid.push(vis[j].getAttribute('data-t'));
+    saveTags(custom, hid, o);
+  });
+}
+function saveTags(custom, hidden, links) {
+  var pl = { customTags: JSON.stringify(custom), hiddenTags: JSON.stringify(hidden) };
+  if (links) pl.tagLinks = JSON.stringify(links);
+  call('saveSettings', pl).then(function (st) { S.d.settings = st; drawSetPanel(); toast('Saved'); }).catch(fail);
+}
+// ---- warnings
+var WARN_DEFAULTS = { waitDaysMinor: '180', waitDaysIntermediate: '120', waitDaysMajor: '90', noContactDays: '30', targetWarnDays: '14', warn14Months: '6' };
+function drawWarnPanel(el) {
+  var st = S.d.settings;
+  function f(id, key, label, unit) { return '<div class="field"><label for="' + id + '">' + esc(label) + '</label><div class="row" style="flex-wrap:nowrap"><input type="number" id="' + id + '" min="0" value="' + esc(st[key]) + '" style="max-width:110px"><span class="muted small">' + unit + '</span></div></div>'; }
+  el.innerHTML = '<h3>Warnings</h3><p class="muted small">Wait targets by category apply when a procedure has no wait target of its own. A patient can also have their own targets.</p>' +
+    '<div class="setgt">Wait targets</div><div class="grid3">' + f('t_min', 'waitDaysMinor', 'Minor', 'days') + f('t_int', 'waitDaysIntermediate', 'Intermediate', 'days') + f('t_maj', 'waitDaysMajor', 'Major', 'days') + '</div>' +
+    '<div class="setgt">Reminders</div><div class="grid3">' + f('t_nc', 'noContactDays', 'No contact for', 'days') + f('t_tg', 'targetWarnDays', 'Warn before the wait target', 'days') + f('t_14', 'warn14Months', 'Notice before age 14', 'months') + '</div>' +
+    '<div class="row" style="margin-top:8px"><button class="primary" id="t_save">Save</button><button id="t_reset">Reset to defaults</button></div>';
+  $('t_save').addEventListener('click', function () {
+    call('saveSettings', { waitDaysMinor: val('t_min'), waitDaysIntermediate: val('t_int'), waitDaysMajor: val('t_maj'), noContactDays: val('t_nc'), targetWarnDays: val('t_tg'), warn14Months: val('t_14') }).then(function (s) { S.d.settings = s; toast('Saved'); }).catch(fail);
+  });
+  $('t_reset').addEventListener('click', function () {
+    if (!window.confirm('Reset all warning settings to the defaults?')) return;
+    call('saveSettings', WARN_DEFAULTS).then(function (s) { S.d.settings = s; drawSetPanel(); toast('Defaults restored'); }).catch(fail);
+  });
+}
+// ---- backup, sample data, audit
+function drawBackupPanel(el) {
+  el.innerHTML = '<h3>Backup</h3><p class="muted small">Makes a copy of the whole Google Sheet in a Drive folder called "Waiting list backups" (the newest 14 are kept). The copies stay in the same Google account and contain patient data, so they follow the same data-location rules as the Sheet.</p><p id="bk_info" class="small">Loading…</p><div class="row"><button id="bk_now">Back up now</button><button id="bk_daily">Daily backup</button></div>' +
+    '<div class="danger-area"><h3>Sample data</h3><p class="muted small">Sample patients are for testing only. Remove them before real use.</p><div class="row"><button id="x_sample">Add sample patients</button><button id="x_clear" class="danger">Remove all sample patients</button></div></div>';
+  function bkDraw() {
+    var b = S.backup; if (!b) return;
+    $('bk_info').textContent = 'Last backup: ' + (b.lastBackup || 'never') + ' · Daily backup: ' + (b.daily ? 'on (about 2 am)' : 'off');
+    $('bk_daily').textContent = b.daily ? 'Turn daily backup off' : 'Turn daily backup on';
+  }
+  call('getBackupInfo').then(function (b) { S.backup = b; bkDraw(); }).catch(function (e) { $('bk_info').textContent = 'Could not read backup status: ' + e.message; });
+  $('bk_now').addEventListener('click', function () {
+    $('bk_now').disabled = true;
+    call('backupNow').then(function (r) { S.backup = S.backup || {}; S.backup.lastBackup = r.lastBackup; $('bk_now').disabled = false; bkDraw(); toast('Backup saved in Drive'); }).catch(function (e) { $('bk_now').disabled = false; fail(e); });
+  });
+  $('bk_daily').addEventListener('click', function () { call('setDailyBackup', { on: !(S.backup && S.backup.daily) }).then(function (r) { S.backup = S.backup || {}; S.backup.daily = r.daily; bkDraw(); }).catch(fail); });
+  $('x_sample').addEventListener('click', function () { call('loadSample').then(function (n) { return load().then(function () { S.view = 'list'; render(); toast(n + ' sample patients added'); }); }).catch(fail); });
+  $('x_clear').addEventListener('click', function () {
+    if (!window.confirm('Remove all sample patients? Real patients are not affected.')) return;
+    call('clearSample').then(function (n) { return load().then(function () { toast(n + ' sample patients removed'); }); }).catch(fail);
+  });
+}
+function drawAuditPanel(el) {
+  el.innerHTML = '<div class="spread"><h3>Audit log</h3><button id="a_x">Export Excel</button></div><div class="row" style="margin:6px 0"><input type="text" id="a_user" placeholder="User" style="max-width:140px"><input type="text" id="a_act" placeholder="Action" style="max-width:160px"><input type="text" id="a_q" placeholder="Search details" style="max-width:220px"><button id="a_go">Filter</button></div><div id="a_list"><p class="muted small">Loading…</p></div>';
+  var rowsNow = [];
+  function load_() {
+    call('getAudit', { user: val('a_user'), action: val('a_act'), q: val('a_q'), limit: 300 }).then(function (rows) {
+      rowsNow = rows;
+      $('a_list').innerHTML = rows.length ? '<table class="tbl"><thead><tr><th>When</th><th>Who</th><th>What</th><th>Details</th></tr></thead><tbody>' + rows.map(function (r) {
+        return '<tr><td class="small">' + esc(r.At ? new Date(r.At).toLocaleString() : '') + '</td><td class="small">' + esc(r.User) + '</td><td class="small">' + esc(r.Action) + '</td><td class="small">' + esc(r.Details) + '</td></tr>';
+      }).join('') + '</tbody></table>' : '<p class="muted small">Nothing matches.</p>';
+    }).catch(fail);
+  }
+  $('a_go').addEventListener('click', load_);
+  $('a_x').addEventListener('click', function () { exportXlsx('audit-log', [{ name: 'Audit log', rows: [['When', 'Who', 'What', 'Details']].concat(rowsNow.map(function (r) { return [r.At ? new Date(r.At).toLocaleString() : '', r.User, r.Action, r.Details]; })) }]); });
+  load_();
+}
+// ---- account and appearance
+function drawAccountPanel(el) {
+  var pr = getPrefs();
+  function grp(key, label, items) { return '<div class="field"><label>' + esc(label) + '</label><div class="tags">' + items.map(function (it) { return '<button type="button" class="opt' + (pr[key] === it[0] ? ' on' : '') + '" data-pk="' + key + '" data-pv="' + it[0] + '">' + esc(it[1]) + '</button>'; }).join('') + '</div></div>'; }
+  var srv = S.d.version || '';
+  el.innerHTML = '<h3>My account</h3><p class="muted small">' + esc(S.user.Name) + ' · username ' + esc(S.user.Username) + ' · ' + esc(S.user.Type || '') + (S.user.Admin ? ' · admin' : '') + (S.user.SettingsAccess ? ' · settings access' : '') + '</p>' +
+    '<div class="grid3"><div class="field"><label for="m_old">Current PIN</label><input type="password" id="m_old"></div><div class="field"><label for="m_new">New PIN</label><input type="password" id="m_new"></div><div class="field"><label>&nbsp;</label><button id="m_go">Change PIN</button></div></div>' +
+    '<div class="sect"><h3>Appearance</h3><p class="muted small">Saved on this device for your account.</p>' +
+    grp('theme', 'Theme', [['light', 'Light'], ['dark', 'Dark'], ['auto', 'Auto']]) + grp('density', 'Density', [['comfortable', 'Comfortable'], ['compact', 'Compact']]) + grp('text', 'Text size', [['normal', 'Normal'], ['large', 'Large']]) +
+    '<div class="field"><label>Accent colour</label><div class="tags">' + Object.keys(ACCENTS).map(function (k) { return '<button type="button" class="colbtn' + (pr.accent === k ? ' on' : '') + '" data-pk="accent" data-pv="' + k + '" style="background:' + ACCENTS[k][0] + '" title="' + k + '"></button>'; }).join('') + '</div></div></div>' +
+    (S.user.Admin ? '<div class="sect"><h3>Admin</h3><p class="small">App v' + esc(VERSION) + ' · Server v' + esc(srv) + ' · ' + (srv === VERSION ? '<span class="chip green">App and server match</span>' : '<span class="chip red">Versions differ: deploy Code.gs as a new version and refresh the page</span>') + '</p>' +
+      '<div class="field"><label for="t_idle">Sign out after idle (minutes, 0 = never)</label><div class="row"><input type="number" id="t_idle" min="0" value="' + esc(S.d.settings.idleMinutes) + '" style="max-width:110px"><button id="t_idlesave">Save</button></div></div></div>' : '');
+  $('m_go').addEventListener('click', function () { call('changePin', { oldPin: $('m_old').value, newPin: $('m_new').value }).then(function () { $('m_old').value = ''; $('m_new').value = ''; toast('PIN changed'); }).catch(fail); });
+  on(el, '[data-pk]', 'click', function (e) { setPref(e.currentTarget.getAttribute('data-pk'), e.currentTarget.getAttribute('data-pv')); drawAccountPanel(el); });
+  if ($('t_idlesave')) $('t_idlesave').addEventListener('click', function () { call('saveSettings', { idleMinutes: val('t_idle') }).then(function (s) { S.d.settings = s; resetIdle(); toast('Saved'); }).catch(fail); });
 }
 
 init();
