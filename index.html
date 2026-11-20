@@ -311,7 +311,13 @@ table.wl td:nth-child(6){white-space:normal}
 .tags{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
 .opt{border-radius:16px;padding:5px 14px;min-height:34px;background:var(--card)}
 .opt.on{background:var(--ink);color:var(--onink);border-color:var(--ink)}
-.dobrow{display:grid;grid-template-columns:70px minmax(0,1fr) 90px;gap:6px}
+.dobrow{display:grid;grid-template-columns:1fr 1fr 1.4fr;gap:6px}
+.pgroup{margin:0 0 16px}
+.pgroup h3{margin:0 0 8px;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.pgroup .field{margin-bottom:10px}
+.pgroup input[type=text],.pgroup select{height:42px;box-sizing:border-box}
+.field.span2{grid-column:1/-1}
+.pgroup .opt{min-height:42px;padding:6px 16px}
 .clcard{border:1px solid var(--line2);border-radius:10px;padding:10px;margin-bottom:8px;background:var(--bg)}
 .tagchip{padding:4px 6px 4px 10px;font-size:13px}
 .tagx{border:none;background:none;min-height:0;padding:0 4px;font-size:16px;line-height:1;color:var(--muted)}
@@ -406,7 +412,7 @@ button.primary{background:var(--ink);color:var(--onink);border-color:var(--ink)}
     };
   }
   window.google = { script: { run: run() } };
-  window.APP_VERSION = '0.12.4';
+  window.APP_VERSION = '0.13.0';
   window.APP_HOST = 'GitHub Pages';
 })();
 
@@ -430,7 +436,10 @@ var ALL_RIGHTS = [
   ['people', 'Manage people and rights'], ['audit', 'See the audit log'], ['backup', 'Backups'], ['sample', 'Sample data']
 ];
 function can(k) { return !!(S.user && (S.user.Rights || []).indexOf(k) >= 0); }
-function askKind(pr) { if (!pr) return ''; var a = pr.AskFor || (pr.Laterality === 'Y' ? 'side' : (pr.Laterality === 'H' ? 'hypospadias' : '')); return a === 'side' ? 'side' : (a === 'hypospadias' ? 'hypo' : ''); }
+function askKind(pr) { if (!pr) return ''; var a = pr.AskFor || (pr.Laterality === 'Y' ? 'side' : (pr.Laterality === 'H' ? 'hypospadias' : '')); return a === 'side' ? 'side' : (a === 'hypospadias' ? 'hypo' : (a === 'anaesthesia' ? 'anaes' : '')); }
+function latWord(l) { return l === 'LA' || l === 'GA' ? l : String(l || '').toLowerCase(); }
+function maleProc(n) { return /circumcision|hypospadias|chordee|orchid?opexy|orchiopexy/i.test(String(n || '')); }
+function byName(a, b) { return String(a.Name || '').toLowerCase().localeCompare(String(b.Name || '').toLowerCase()); }
 function idShow(p) { return p.MRN && !/^T\d+$/i.test(p.MRN) ? p.MRN : (p.TNumber || p.MRN || ''); }
 var NOT_READY_REASONS = ['Sick', 'Traveling', 'Busy (exams)', 'Other'];
 var CONTACT_TYPES = ['Called - reached', 'Called - no answer', 'Called - call back later', 'Called - wrong number', 'Booked', 'Note'];
@@ -579,8 +588,8 @@ function priceFor(p) {
 }
 function extras(p) { try { var a = JSON.parse(p.Extra || '[]'); return Array.isArray(a) ? a : []; } catch (e) { return []; } }
 function procLabel(p) {
-  var s = p.Procedure + (p.Laterality ? ', ' + p.Laterality.toLowerCase() : '');
-  extras(p).forEach(function (x) { s += ' + ' + x.procedure + (x.laterality ? ', ' + x.laterality.toLowerCase() : ''); });
+  var s = p.Procedure + (p.Laterality ? ', ' + latWord(p.Laterality) : '');
+  extras(p).forEach(function (x) { s += ' + ' + x.procedure + (x.laterality ? ', ' + latWord(x.laterality) : ''); });
   return s;
 }
 var WD = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
@@ -1623,7 +1632,7 @@ function openPatient(id, opts) {
   drawEx();
   $('f_addex').addEventListener('click', function () {
     ex = readEx();
-    var first = S.d.procedures.filter(function (x) { return x.Active === 'Y'; })[0];
+    var first = S.d.procedures.filter(function (x) { return x.Active === 'Y'; }).sort(byName)[0];
     if (!first) { toast('Add a procedure in Settings first', true); return; }
     ex.push({ procedureId: first.Id, procedure: first.Name, laterality: '' });
     drawEx();
@@ -1821,6 +1830,23 @@ function dlgRemove(p, parent) {
   });
 }
 
+
+// ---- v0.13.0: move a patient between Done and Removed
+function dlgMoveCase(p, parent) {
+  var toDone = p.Status === 'Removed';
+  var m = openModal('<h2>' + (toDone ? 'Move to Done' : 'Move to Removed') + '</h2><p class="muted small">' + esc(p.Name) + ' · ' + esc(procLabel(p)) + '</p>' +
+    (toDone ? '<div class="field"><label for="mv_date">Operation date *</label><input type="date" id="mv_date" value="' + esc(S.today) + '"></div><p class="muted small">Add the surgeons afterwards from the Done page.</p>' :
+      '<div class="field"><label for="mv_reason">Reason *</label><select id="mv_reason">' + REMOVE_REASONS.map(function (x) { return opt(x, x); }).join('') + '</select></div><div class="field"><label for="mv_note">Details (optional)</label><input type="text" id="mv_note"></div>') +
+    '<div class="row"><button class="primary" id="mv_go">Move</button><button id="mv_cancel">Cancel</button></div>', { narrow: true });
+  $('mv_cancel').addEventListener('click', m.close);
+  $('mv_go').addEventListener('click', function () {
+    var pl = { patientId: p.Id, to: toDone ? 'Done' : 'Removed' };
+    if (toDone) { pl.date = val('mv_date'); if (!pl.date) { toast('Enter the operation date', true); return; } } else { pl.reason = val('mv_reason'); pl.note = val('mv_note'); }
+    $('mv_go').disabled = true;
+    call('moveCase', pl).then(function (r) { upsertP(r); m.close(); if (parent && parent.close) parent.close(); render(); toast('Moved to ' + pl.to); }).catch(function (e) { $('mv_go').disabled = false; fail(e); });
+  });
+}
+
 // ---------------------------------------------------------------- settings
 function viewSettings() {
   var d = S.d, st = d.settings, admin = S.user.Admin;
@@ -1953,7 +1979,7 @@ function drawSC() {
   });
 }
 function drawProcs() {
-  var l = S.d.procedures;
+  var l = S.d.procedures.slice().sort(byName);
   $('s_procs').innerHTML = '<table class="tbl"><thead><tr><th>Procedure</th><th>Category</th><th>Care</th><th>Price day / in</th><th></th></tr></thead><tbody>' +
     l.map(function (p) {
       return '<tr><td>' + esc(p.Name) + (p.Active !== 'Y' ? ' <span class="chip">retired</span>' : '') + '<br><span class="muted small">' + esc(p.DefaultDiagnosis) + '</span></td><td>' + esc(p.DefaultCategory) +
@@ -3283,7 +3309,7 @@ function allTagList(p) {
 function openPatient(id, opts) {
   opts = opts || {};
   var p = id ? getP(id) : null, isNew = !p, d = S.d;
-  var procs = d.procedures.filter(function (x) { return x.Active === 'Y' || (p && x.Id === p.ProcedureId); });
+  var procs = d.procedures.filter(function (x) { return x.Active === 'Y' || (p && x.Id === p.ProcedureId); }).sort(byName);
   var cons = d.consultants.filter(function (c) { return c.Active === 'Y' || (p && c.Id === p.ConsultantId); });
   var procSel = p ? (procById(p.ProcedureId) ? p.ProcedureId : (p.Procedure ? '__other' : '')) : '';
   var dob = p && p.DOB ? p.DOB.split('-') : ['', '', ''];
@@ -3292,7 +3318,7 @@ function openPatient(id, opts) {
     admit: p ? !!p.NeedsAdmission : false, seen: p ? (p.SeenByConsultant || '') : '', tags: p ? tagsOf(p) : [], tnotes: p ? tagNotes(p) : {},
     cl: p ? clearances(p) : [], ex: p ? extras(p) : [], showTargets: false, autoDob: !p,
     v: {
-      mrn: p && /^\d{9}$/.test(p.MRN) ? p.MRN : '', tn: p ? (p.TNumber || '') : '', dd: dob[2] ? String(+dob[2]) : '', dm: dob[1] ? String(+dob[1]) : '', dy: dob[0] || '', name: p ? p.Name : '', g1: p ? p.Guardian : '', g2: p ? p.Guardian2 : '',
+      mrn: p && /^\d{9}$/.test(p.MRN) ? p.MRN : '', tn: p ? (p.TNumber || '') : '', dd: dob[2] || '', dm: dob[1] || '', dy: dob[0] || '', name: p ? p.Name : '', g1: p ? p.Guardian : '', g2: p ? p.Guardian2 : '',
       cons: p ? p.ConsultantId : (S.cons !== 'all' ? S.cons : ''), proc: procSel, procother: p && procSel === '__other' ? p.Procedure : '',
       dx: p ? p.Diagnosis : '', admitdays: p ? p.AdmitDays : '', prio: p ? p.Priority : '', priorreason: p ? p.PriorityReason : '', spons: p ? p.Sponsorship : '',
       notes: p ? p.Notes : '', twd: p ? p.TargetWaitDays : '', tam: p ? p.TargetAgeMonths : '', star: p ? !!p.Starred : false
@@ -3338,22 +3364,28 @@ function openPatient(id, opts) {
     capture();
     var v = st.v, si = '';
     if (p) { var sinfo = statusInfo(p); si = '<span class="chip ' + sinfo.cls + '">' + esc(sinfo.booked ? 'Scheduled ' + sinfo.label : sinfo.label) + '</span>' + (sinfo.sub ? '<span class="muted small"> ' + esc(sinfo.sub) + '</span>' : ''); }
-    var h = '<div class="spread"><h2>' + (isNew ? 'Add patient' : esc(p.Name)) + '</h2><button id="f_close">Close</button></div>' + (p ? '<div style="margin-bottom:8px">' + si + '</div>' : '') +
+    var h = '<div class="spread"><h2>' + (isNew ? 'Add patient' : esc(p.Name)) + '</h2><div class="row" style="gap:6px">' + (isNew && can('importPaste') ? '<button id="f_paste">Paste from Excel</button>' : '') + '<button id="f_close">Close</button></div></div>' + (p ? '<div style="margin-bottom:8px">' + si + '</div>' : '') +
       '<div class="ptabs"><button type="button" class="ptab' + (st.tab === 1 ? ' on' : '') + '" data-pt="1">1 Essentials</button><button type="button" class="ptab' + (st.tab === 2 ? ' on' : '') + '" data-pt="2">2 Details</button></div>';
     if (st.tab === 1) {
-      h += '<div class="grid2">' +
+      var pk = askK();
+      h += '<div class="pgroup"><h3>Patient</h3><div class="grid2">' +
+        '<div class="field span2"><label for="f_name">Name *</label><input type="text" id="f_name" value="' + esc(v.name) + '"></div>' +
         '<div class="field"><label for="f_mrn">CPR (9 digits)</label><input type="text" id="f_mrn" value="' + esc(v.mrn) + '" autocomplete="off" inputmode="numeric" maxlength="9"></div>' +
-        '<div class="field"><label for="f_tn">T number (T and digits) <span class="muted">· CPR or T number, at least one</span></label><input type="text" id="f_tn" value="' + esc(v.tn) + '" autocomplete="off" autocapitalize="characters"></div>' +
-        '<div class="field"><label>Date of birth * <span class="muted">(day, month, year)</span></label><div class="dobrow"><input type="text" id="f_dd" inputmode="numeric" maxlength="2" placeholder="Day" value="' + esc(v.dd) + '"><select id="f_dm">' + opt('', 'Month', !v.dm) + MONTHS.map(function (n, i) { return opt(String(i + 1), n, String(v.dm) === String(i + 1)); }).join('') + '</select><input type="text" id="f_dy" inputmode="numeric" maxlength="4" placeholder="Year" value="' + esc(v.dy) + '"></div></div>' +
-        '<div class="field"><label for="f_name">Name *</label><input type="text" id="f_name" value="' + esc(v.name) + '"></div>' +
-        '<div class="field"><label>Sex *</label>' + btns('sex', [['M', 'Male'], ['F', 'Female']]) + '</div>' +
-        '<div class="field"><label for="f_g1">Contact number * (8 digits)</label><input type="text" id="f_g1" inputmode="tel" value="' + esc(v.g1) + '"></div>' +
-        '<div class="field"><label for="f_g2">Second contact number</label><input type="text" id="f_g2" inputmode="tel" value="' + esc(v.g2) + '"></div>' +
-        '<div class="field"><label for="f_cons">Consultant *</label><select id="f_cons">' + opt('', 'Choose…', !v.cons) + cons.map(function (c) { return opt(c.Id, c.Name, c.Id === v.cons); }).join('') + '</select></div>' +
+        '<div class="field"><label for="f_tn">T number <span class="muted">(CPR or T number, at least one)</span></label><input type="text" id="f_tn" value="' + esc(v.tn) + '" autocomplete="off" autocapitalize="characters"></div>' +
+        '<div class="field"><label>Date of birth * <span class="muted">day, month, year</span></label><div class="dobrow"><input type="text" id="f_dd" inputmode="numeric" maxlength="2" placeholder="DD" value="' + esc(v.dd) + '"><input type="text" id="f_dm" inputmode="numeric" maxlength="2" placeholder="MM" value="' + esc(v.dm) + '"><input type="text" id="f_dy" inputmode="numeric" maxlength="4" placeholder="YYYY" value="' + esc(v.dy) + '"></div></div>' +
+        '<div class="field"><label>Sex *</label>' + btns('sex', [['M', 'Male'], ['F', 'Female']]) + '</div></div></div>' +
+        '<div class="pgroup"><h3>Contact</h3><div class="grid2">' +
+        '<div class="field"><label for="f_g1">Contact number * <span class="muted">(8 digits)</span></label><input type="text" id="f_g1" inputmode="tel" value="' + esc(v.g1) + '"></div>' +
+        '<div class="field"><label for="f_g2">Second contact number</label><input type="text" id="f_g2" inputmode="tel" value="' + esc(v.g2) + '"></div></div></div>' +
+        '<div class="pgroup"><h3>Surgery</h3>' +
+        '<div class="field"><label>Consultant *</label><div class="tags">' + cons.map(function (c) { return '<button type="button" class="opt' + (v.cons === c.Id ? ' on' : '') + '" data-cons="' + esc(c.Id) + '">' + esc(c.Name) + '</button>'; }).join('') + '</div></div>' +
         '<div class="field"><label for="f_proc">Procedure *</label><select id="f_proc">' + opt('', 'Choose…', !v.proc) + procs.map(function (x) { return opt(x.Id, x.Name, x.Id === v.proc); }).join('') + opt('__other', 'Other (type the name)', v.proc === '__other') + '</select></div>' +
-        (v.proc === '__other' ? '<div class="field"><label for="f_procother">Procedure name *</label><input type="text" id="f_procother" value="' + esc(v.procother) + '"></div>' : '') + '</div>' +
-        (askK() === 'side' ? '<div class="field"><label>Side *</label>' + btns('lat', [['Left', 'Left'], ['Bilateral', 'Both'], ['Right', 'Right']]) + '</div>' : (askK() === 'hypo' ? '<div class="field"><label>Hypospadias type *</label>' + btns('lat', HYPO_TYPES.map(function (t) { return [t, t]; })) + '</div>' : '')) +
-        '<div class="field"><label>Medical status *</label>' + btns('med', [['Free', 'Medically free'], ['NotFree', 'Not medically free']]) + '</div>';
+        (v.proc === '__other' ? '<div class="field"><label for="f_procother">Procedure name *</label><input type="text" id="f_procother" value="' + esc(v.procother) + '"></div>' : '') +
+        (pk === 'side' ? '<div class="field"><label>Side *</label>' + btns('lat', [['Left', 'Left'], ['Bilateral', 'Both'], ['Right', 'Right']]) + '</div>' :
+          (pk === 'anaes' ? '<div class="field"><label>Anaesthesia *</label>' + btns('lat', [['LA', 'LA (local)'], ['GA', 'GA (general)']]) + '</div>' :
+            (pk === 'hypo' ? '<div class="field"><label for="f_hypo">Hypospadias type *</label><select id="f_hypo">' + opt('', 'Choose…', !st.lat) + HYPO_TYPES.map(function (t) { return opt(t, t, st.lat === t); }).join('') + '</select></div>' : ''))) +
+        '</div>' +
+        '<div class="pgroup"><h3>Medical status *</h3>' + btns('med', [['Free', 'Medically free'], ['NotFree', 'Not medically free']]) + '</div>';
     } else {
       h += '<div class="field"><label>Category</label>' + btns('cat', CATS.map(function (c) { return [c, c]; })) + '</div>' +
         '<div class="field"><label class="check"><input type="checkbox" id="f_admitchk"' + (st.admit ? ' checked' : '') + '> Needs prior admission</label>' +
@@ -3379,7 +3411,7 @@ function openPatient(id, opts) {
         '<div class="field"><label>Seen by consultant</label>' + btns('seen', [['Y', 'Yes'], ['N', 'No'], ['', 'Not registered']]) + '</div></div></div>' +
         '<div class="sect"><div class="field"><label for="f_dx">Diagnosis</label><input type="text" id="f_dx" value="' + esc(v.dx) + '"></div>' +
         '<label>Additional procedures in the same sitting</label><div id="f_ex">' + (st.ex.length ? st.ex.map(function (x, i) {
-          var act = S.d.procedures.filter(function (q) { return q.Active === 'Y'; });
+          var act = S.d.procedures.filter(function (q) { return q.Active === 'Y'; }).sort(byName);
           return '<div class="exrow"><select class="ex_proc">' + act.map(function (pr) { return opt(pr.Id, pr.Name, pr.Id === x.procedureId); }).join('') + '</select><select class="ex_lat">' + opt('', 'Side', !x.laterality) + ['Right', 'Left', 'Bilateral'].map(function (z) { return opt(z, z, x.laterality === z); }).join('') + '</select><button type="button" class="ex_x" data-i="' + i + '">Remove</button></div>';
         }).join('') : '<p class="muted small" style="margin:0 0 6px">None.</p>') + '</div><button type="button" id="f_addex">Add procedure</button></div>' +
         '<div class="sect"><div class="field"><label for="f_notes">Notes</label><textarea id="f_notes">' + esc(v.notes) + '</textarea></div>' +
@@ -3408,6 +3440,7 @@ function openPatient(id, opts) {
   }
   function bind() {
     $('f_close').addEventListener('click', m.close);
+    if ($('f_paste')) $('f_paste').addEventListener('click', function () { m.close(); openImport('paste'); });
     $('f_cancel').addEventListener('click', m.close);
     on(m.el, '.ptab', 'click', function (e) { capture(); st.tab = +e.currentTarget.getAttribute('data-pt'); draw(); });
     on(m.el, '[data-k]', 'click', function (e) {
@@ -3417,17 +3450,29 @@ function openPatient(id, opts) {
       st[k] = val_; draw();
     });
     if (st.tab === 1) {
+      on(m.el, '[data-cons]', 'click', function (e) { capture(); st.v.cons = e.currentTarget.getAttribute('data-cons'); draw(); });
+      if ($('f_hypo')) $('f_hypo').addEventListener('change', function () { st.lat = this.value; });
       $('f_mrn').addEventListener('input', function () {
         var s = this.value.trim();
         if (/^\d{9}$/.test(s) && +s.slice(2, 4) >= 1 && +s.slice(2, 4) <= 12 && (st.autoDob || !$('f_dy').value)) {
-          $('f_dy').value = '20' + s.slice(0, 2); $('f_dm').value = String(+s.slice(2, 4)); st.autoDob = true;
+          $('f_dy').value = '20' + s.slice(0, 2); $('f_dm').value = s.slice(2, 4); st.autoDob = true;
+          if (!$('f_dd').value || st.autoDay) { $('f_dd').value = '01'; st.autoDay = true; }   // the CPR has no day: 01 is assumed, change it if known
         }
       });
-      ['f_dd', 'f_dm', 'f_dy'].forEach(function (i) { $(i).addEventListener('change', function () { if (i !== 'f_dd') st.autoDob = false; }); });
+      // typed date of birth: only digits, the cursor moves on when a box is full
+      [['f_dd', 2, 'f_dm'], ['f_dm', 2, 'f_dy'], ['f_dy', 4, '']].forEach(function (x) {
+        $(x[0]).addEventListener('input', function () {
+          this.value = this.value.replace(/\D/g, '').slice(0, x[1]);
+          if (x[0] === 'f_dd') st.autoDay = false;
+          if (x[0] !== 'f_dd') st.autoDob = false;
+          if (this.value.length === x[1] && x[2]) $(x[2]).focus();
+        });
+        $(x[0]).addEventListener('blur', function () { if (x[1] === 2 && this.value.length === 1) this.value = '0' + this.value; });
+      });
       $('f_proc').addEventListener('change', function () {
         capture();
         var pr = curProc();
-        if (pr) { st.cat = pr.DefaultCategory || st.cat; st.v.twd = ''; st.v.tam = ''; if (!st.v.dx || st.v.dx === st.prevDx) st.v.dx = pr.DefaultDiagnosis || ''; st.prevDx = pr.DefaultDiagnosis || ''; if (askKind(pr) === 'side' && ['Left', 'Right', 'Bilateral'].indexOf(st.lat) < 0) st.lat = ''; if (askKind(pr) === 'hypo' && HYPO_TYPES.indexOf(st.lat) < 0) st.lat = ''; if (!askKind(pr)) st.lat = ''; }
+        if (pr) { st.cat = pr.DefaultCategory || st.cat; st.v.twd = ''; st.v.tam = ''; if (!st.v.dx || st.v.dx === st.prevDx) st.v.dx = pr.DefaultDiagnosis || ''; st.prevDx = pr.DefaultDiagnosis || ''; if (askKind(pr) === 'side' && ['Left', 'Right', 'Bilateral'].indexOf(st.lat) < 0) st.lat = ''; if (askKind(pr) === 'hypo' && HYPO_TYPES.indexOf(st.lat) < 0) st.lat = ''; if (askKind(pr) === 'anaes' && ['LA', 'GA'].indexOf(st.lat) < 0) st.lat = ''; if (!askKind(pr)) st.lat = ''; if (!st.sex && maleProc(pr.Name)) st.sex = 'M'; }
         draw();
       });
     } else {
@@ -3477,6 +3522,7 @@ function openPatient(id, opts) {
     if (v.proc === '__other' && !v.procother.trim()) return 'Type the procedure name.';
     if (askK() === 'side' && !st.lat) return 'Choose the side.';
     if (askK() === 'hypo' && !st.lat) return 'Choose the hypospadias type.';
+    if (askK() === 'anaes' && !st.lat) return 'Choose local (LA) or general (GA) anaesthesia.';
     if (!st.med && (isNew || opts.focusMed)) return 'Choose the medical status.';
     return '';
   }
@@ -3525,7 +3571,7 @@ function openPatient(id, opts) {
       if (canSend(cur)) h += '<button id="a_send" class="primary btn-sched">Schedule</button>';
       h += cur.Status === 'Not ready' ? '<button id="a_back2">Back on the list now</button>' : '<button id="a_nr">Mark not ready</button>';
       h += '<button id="a_done">Mark done</button><button id="a_rem" class="danger">Remove from list</button>';
-    } else { h += '<button id="a_restore">Restore to waiting list</button>'; }
+    } else { h += '<button id="a_restore">Restore to waiting list</button>'; if (can(cur.Status === 'Done' ? 'remove' : 'done')) h += '<button id="a_move">' + (cur.Status === 'Done' ? 'Move to Removed' : 'Move to Done') + '</button>'; }
     h += '<button id="a_del" class="danger">Delete whole entry…</button>';
     $('f_actions').innerHTML = h;
     var info = '';
@@ -3543,6 +3589,7 @@ function openPatient(id, opts) {
     bind2('a_rem', function () { dlgRemove(cur, m); });
     bind2('a_del', function () { dlgDelete(cur, m); });
     bind2('a_back2', function () { call('clearNotReady', { patientId: cur.Id }).then(function (r) { upsertP(r.patient); m.close(); render(); toast('Back on the list'); }).catch(fail); });
+    bind2('a_move', function () { dlgMoveCase(cur, m); });
     bind2('a_restore', function () { call('restorePatient', { patientId: cur.Id }).then(function (r) { upsertP(r); m.close(); render(); toast('Restored to the waiting list'); }).catch(fail); });
   }
   draw();
@@ -3743,7 +3790,7 @@ function listForm(l, presetDate) {
 function listFitsPatient(l, p) {
   if (!listShared(l)) return true;
   var pr = procById(p.ProcedureId);
-  return !!(pr && pr.JMH === 'Y');
+  return !!(pr && pr.JMH === 'Y' && (askKind(pr) !== 'anaes' || p.Laterality === 'LA'));
 }
 function listCountText(l) {
   var n = listUsed(l).n, t = listShared(l) ? caseTarget(l) : 0;
@@ -3975,7 +4022,7 @@ function remBody() {
   on($('remBody'), '[data-rest]', 'click', function (e) {
     e.stopPropagation();
     var p = getP(e.currentTarget.getAttribute('data-rest'));
-    pickMenu(p.Name, [{ label: 'Restore to the waiting list', fn: function () {
+    pickMenu(p.Name, [{ label: 'Move to Done…', fn: function () { if (can('done')) dlgMoveCase(p, null); else toast('You do not have the right to mark cases done', true); } }, { label: 'Restore to the waiting list', fn: function () {
       if (FINAL_REASONS.indexOf(p.RemovedReason) >= 0 && !window.confirm('This patient was removed as "' + p.RemovedReason + '". Restore anyway?')) return;
       call('restorePatient', { patientId: p.Id }).then(function (r) { upsertP(r); render(); toast('Patient restored to the list'); }).catch(fail);
     } }]);
@@ -4162,7 +4209,7 @@ function drawProcs() {
   var l = S.d.procedures;
   $('s_procs').innerHTML = '<table class="tbl"><thead><tr><th>Procedure</th><th>Category</th><th>Asks for</th><th>At JMH</th><th>Wait target</th><th>Age target</th><th>Active</th><th></th></tr></thead><tbody>' +
     l.map(function (p) {
-      return '<tr><td>' + esc(p.Name) + '<br><span class="muted small">' + esc(p.DefaultDiagnosis) + '</span></td><td>' + esc(p.DefaultCategory) + '</td><td class="small">' + ({ side: 'Side', hypo: 'Hypospadias type' }[askKind(p)] || '-') + '</td><td>' + sw('data-pf="JMH" data-pid="' + esc(p.Id) + '"', p.JMH === 'Y') + '</td>' +
+      return '<tr><td>' + esc(p.Name) + '<br><span class="muted small">' + esc(p.DefaultDiagnosis) + '</span></td><td>' + esc(p.DefaultCategory) + '</td><td class="small">' + ({ side: 'Side', hypo: 'Hypospadias type', anaes: 'LA or GA' }[askKind(p)] || '-') + '</td><td>' + sw('data-pf="JMH" data-pid="' + esc(p.Id) + '"', p.JMH === 'Y') + '</td>' +
         '<td>' + (p.TargetDays ? esc(p.TargetDays) + ' d' : '-') + '</td><td>' + (p.MaxAgeMonths ? esc(p.MaxAgeMonths) + ' mo' : '-') + '</td><td>' + sw('data-pf="Active" data-pid="' + esc(p.Id) + '"', p.Active === 'Y') + '</td><td><button data-e="' + esc(p.Id) + '">Edit</button></td></tr>';
     }).join('') + '</tbody></table>';
   on($('s_procs'), '[data-e]', 'click', function (e) { procModal(procById(e.currentTarget.getAttribute('data-e'))); });
@@ -4183,7 +4230,7 @@ function procModal(pr) {
     '<div class="field"><label for="p_dx">Default diagnosis</label><input type="text" id="p_dx" value="' + esc(pr.DefaultDiagnosis || '') + '"></div>' +
     '<div class="field"><label for="p_cat">Default category</label><select id="p_cat">' + CATS.map(function (s) { return opt(s, s, pr.DefaultCategory === s); }).join('') + '</select></div>' +
     '<div class="field"><label for="p_care">Usual care (price only)</label><select id="p_care">' + ['Day-case', 'Inpatient'].map(function (s) { return opt(s, s, pr.DefaultCare === s); }).join('') + '</select></div>' +
-    '<div class="field"><label for="p_ask">Asks for</label><select id="p_ask">' + opt('', 'Nothing', !askKind(pr)) + opt('side', 'Side (right, left, both)', askKind(pr) === 'side') + opt('hypospadias', 'Hypospadias type', askKind(pr) === 'hypo') + '</select></div>' +
+    '<div class="field"><label for="p_ask">Asks for</label><select id="p_ask">' + opt('', 'Nothing', !askKind(pr)) + opt('side', 'Side (right, left, both)', askKind(pr) === 'side') + opt('hypospadias', 'Hypospadias type', askKind(pr) === 'hypo') + opt('anaesthesia', 'Local or general (LA / GA)', askKind(pr) === 'anaes') + '</select></div>' +
     '<div class="field"><label>&nbsp;</label><label class="check"><input type="checkbox" id="p_jmh"' + (pr.JMH === 'Y' ? ' checked' : '') + '> Can be done at JMH</label></div>' +
     '<div class="field"><label for="p_pd">Price, day-case (BHD)</label><input type="number" id="p_pd" min="0" step="any" value="' + esc(pr.PriceDay || '') + '"></div>' +
     '<div class="field"><label for="p_pi">Price, inpatient (BHD)</label><input type="number" id="p_pi" min="0" step="any" value="' + esc(pr.PriceInpatient || '') + '"></div>' +
@@ -4337,6 +4384,7 @@ function xlsIssues(p) {
   if (!p.ProcedureId && p.Procedure) o.push('Procedure not in the list: choose one');
   var fl = String(p.ImportFlags || '');
   if (/cons/.test(fl)) o.push('Consultant to confirm (the default was used)');
+  if (/check/.test(fl)) o.push('Check the notes: the Excel comments or dates left a doubt');
   if (/dob/.test(fl)) o.push('Date of birth missing (placeholder set)');
   if (active && (p.MedicalStatus || 'Unknown') === 'Unknown') o.push(p.ListId ? 'Scheduled without a medical status' : 'Medical status not set');
   if (p.Status === 'Done') {
@@ -4621,6 +4669,7 @@ function openImport() {
 // ================================================================ v0.11.0: rights, People, T number, import v3
 // ---- menu: paste import for everyone who has the right
 function importMenuHook(m) {
+  return;   // v0.13.0: pasting cells now lives on the Add patient page
   if (!can('importPaste') || !m.el.querySelector('.menulist')) return;
   var b = document.createElement('button'); b.id = 'mm_imp'; b.innerHTML = ico('plus') + '<span>Import by pasting from Excel</span>';
   var ref = $('mm_ref'); ref.parentNode.insertBefore(b, ref);
@@ -4859,6 +4908,11 @@ openImport = function (mode) {
     for (var r = sh.header + 1; r < sh.rows.length; r++) {
       var row = sh.rows[r], o = { _n: row._n };
       IMP3.forEach(function (f) { var i = sh.map[f.k]; o[f.k] = i === undefined ? '' : String(row[i] === undefined ? '' : row[i]).trim(); });
+      // columns the app does not use are sent along, so their text is kept in the notes
+      var used = {}; Object.keys(sh.map).forEach(function (k2) { used[sh.map[k2]] = true; });
+      var heads = sh.header >= 0 ? sh.rows[sh.header] : [], oth = [];
+      for (var ci = 0; ci < row.length; ci++) { var cv = String(row[ci] === undefined ? '' : row[ci]).trim(); if (!used[ci] && cv) oth.push((String(heads[ci] || '').trim() || 'Column ' + (ci + 1)) + ': ' + cv); }
+      o.Other = oth.join('; ');
       if (!o.Name && !o.MRN && !o.TNumber && !o.Procedure) continue;
       if (/^(no\.?|#)$/i.test(o.Name) || /^firm\b|waiting list|^pediatric/i.test(o.Name) && !o.Procedure) continue;
       var fx = st.fix[sh.idx + ':' + o._n]; if (fx) { if (fx.MRN !== undefined) o.MRN = fx.MRN; if (fx.TNumber !== undefined) o.TNumber = fx.TNumber; if (fx.Name !== undefined) o.Name = fx.Name; }
@@ -4993,7 +5047,13 @@ openImport = function (mode) {
     on(el, '.im_fix', 'change', function (e) {
       var inp = e.currentTarget, k = sh.idx + ':' + inp.getAttribute('data-fr'), f = inp.getAttribute('data-ff');
       st.fix[k] = st.fix[k] || {}; st.fix[k][f] = inp.value.trim().toUpperCase() === inp.value.trim() || f === 'Name' ? inp.value.trim() : inp.value.trim().toUpperCase();
-      sh.plan = null; drawSheet();
+      // nothing is re-checked by itself: the user taps Re-check when all the corrections are typed
+      inp.style.borderColor = '#c58a00';
+      if (!$('im_dirty')) {
+        var cr = el.querySelector('.chiprow');
+        if (cr) cr.insertAdjacentHTML('afterend', '<div class="banner" id="im_dirty" style="display:block">You changed some rows. <button type="button" class="primary" id="im_recheck">Re-check</button></div>');
+        if ($('im_recheck')) $('im_recheck').addEventListener('click', function () { sh.plan = null; drawSheet(); });
+      }
     });
     on(el, '[data-ap]', 'change', function (e) { st.apply[sh.idx + ':' + e.currentTarget.getAttribute('data-ap')] = e.currentTarget.checked; });
     if ($('im_tick')) { $('im_tick').addEventListener('click', function () { sugg.forEach(function (i) { st.apply[sh.idx + ':' + i.rowId] = true; }); drawPlan(); }); $('im_untick').addEventListener('click', function () { sugg.forEach(function (i) { st.apply[sh.idx + ':' + i.rowId] = false; }); drawPlan(); }); }
@@ -5061,6 +5121,41 @@ function skipDates() { try { var a = JSON.parse((S.d.settings || {}).otSkipDates
   };
 })();
 
+
+// ---- v0.12.5: type to search the procedure instead of scrolling the drop-down
+(function () {
+  function enhance(sel) {
+    if (!sel || sel.getAttribute('data-q')) return;
+    sel.setAttribute('data-q', '1');
+    var opts = [].slice.call(sel.options).filter(function (o) { return o.value !== ''; });
+    var dl = document.createElement('datalist'); dl.id = 'f_proc_dl';
+    dl.innerHTML = opts.map(function (o) { return '<option value="' + esc(o.text) + '"></option>'; }).join('');
+    var inp = document.createElement('input'); inp.type = 'text'; inp.id = 'f_procq'; inp.setAttribute('list', 'f_proc_dl');
+    inp.setAttribute('autocomplete', 'off'); inp.placeholder = 'Type to search the procedure…';
+    function cur() { var o = sel.options[sel.selectedIndex]; return o && o.value !== '' ? o.text : ''; }
+    inp.value = cur();
+    function pick(o) { if (sel.value !== o.value) { sel.value = o.value; sel.dispatchEvent(new Event('change', { bubbles: true })); } }
+    function find(t, loose) {
+      t = t.trim().toLowerCase(); if (!t) return null;
+      var ex = opts.filter(function (o) { return o.text.toLowerCase() === t; })[0]; if (ex) return ex;
+      if (!loose) return null;
+      var m = opts.filter(function (o) { return o.text.toLowerCase().indexOf(t) >= 0; });
+      return m.length === 1 ? m[0] : null;
+    }
+    inp.addEventListener('input', function () { var o = find(inp.value, false); if (o) pick(o); });
+    inp.addEventListener('change', function () {
+      var o = find(inp.value, true);
+      if (o) { pick(o); inp.value = o.text; }
+      else { sel.value = ''; sel.dispatchEvent(new Event('change', { bubbles: true })); if (inp.value.trim()) toast('No single procedure matches. Keep typing, or pick from the suggestions.'); }
+    });
+    inp.addEventListener('focus', function () { inp.select(); });
+    sel.addEventListener('change', function () { if (document.activeElement !== inp) inp.value = cur(); });
+    sel.style.display = 'none';
+    sel.parentNode.insertBefore(dl, sel); sel.parentNode.insertBefore(inp, sel);
+    var lb = sel.parentNode.querySelector('label[for="f_proc"]'); if (lb) lb.setAttribute('for', 'f_procq');
+  }
+  new MutationObserver(function () { var s = document.getElementById('f_proc'); if (s && s.tagName === 'SELECT') enhance(s); }).observe(document.body, { childList: true, subtree: true });
+})();
 init();
 })();
 </script>
