@@ -380,6 +380,8 @@ button.primary{background:var(--ink);color:var(--onink);border-color:var(--ink)}
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Pediatric Surgery">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="shortcut icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 </head>
 <body>
@@ -404,7 +406,7 @@ button.primary{background:var(--ink);color:var(--onink);border-color:var(--ink)}
     };
   }
   window.google = { script: { run: run() } };
-  window.APP_VERSION = '0.12.0';
+  window.APP_VERSION = '0.12.1';
   window.APP_HOST = 'GitHub Pages';
 })();
 
@@ -5033,13 +5035,13 @@ function skipDates() { try { var a = JSON.parse((S.d.settings || {}).otSkipDates
   var oldDraw2 = drawSetPanel;
   drawSetPanel = function () {
     oldDraw2();
-    if (S.setTab !== 'rooms' || !$('s_main')) return;
+    if ((S.setTab !== 'rooms' && S.setTab !== 'consultants') || !$('s_main')) return;
     var box = document.createElement('div'); box.className = 'sect'; box.id = 'sk_box';
     $('s_main').appendChild(box);
     function paint() {
       var l = skipDates().filter(function (x) { return x.date >= S.today; });
-      box.innerHTML = '<h3>Theatre lists are created automatically</h3><p class="muted small">Every consultant gets a list on their operating day, and each shared room on its day, for the next 6 months. The lists are topped up every night. Dates below get no list (holidays, leave). Lists that already hold patients, and lists you added yourself, are never changed or removed.</p>' +
-        '<div class="row"><input type="date" id="sk_date" style="max-width:170px"><input type="text" id="sk_note" placeholder="Note (optional)" style="max-width:220px"><button id="sk_add">Add date</button><button id="sk_fill">Create lists now</button></div>' +
+      box.innerHTML = '<h3>Theatre lists are created automatically</h3><p class="muted small">Press Refresh schedule after changing operating days or rooms. Lists with patients are never touched. Every consultant gets a list on their operating day, and each shared room on its day, for the next 6 months. The lists are topped up every night. Dates below get no list (holidays, leave). Lists that already hold patients, and lists you added yourself, are never changed or removed.</p>' +
+        '<div class="row"><input type="date" id="sk_date" style="max-width:170px"><input type="text" id="sk_note" placeholder="Note (optional)" style="max-width:220px"><button id="sk_add">Add date</button><button id="sk_fill">Refresh schedule</button></div>' +
         '<div id="sk_list" style="margin-top:8px">' + (l.length ? l.map(function (x) { return '<div class="spread log"><span>' + esc(fmtDate(x.date)) + (x.note ? ' <span class="muted small">' + esc(x.note) + '</span>' : '') + '</span><button data-skd="' + esc(x.date) + '">Remove</button></div>'; }).join('') : '<p class="muted small">No dates without lists.</p>') + '</div>';
       function save(arr) {
         call('saveSkipDates', { dates: arr }).then(function (r) { S.d.settings.otSkipDates = JSON.stringify(r.skip); S.d.lists = r.lists; paint(); toast(r.removed ? r.removed + ' empty list(s) removed' : 'Saved'); }).catch(fail);
@@ -5049,7 +5051,7 @@ function skipDates() { try { var a = JSON.parse((S.d.settings || {}).otSkipDates
         var cur = skipDates().filter(function (x) { return x.date !== d; }); cur.push({ date: d, note: val('sk_note') }); save(cur);
       });
       on(box, '[data-skd]', 'click', function (e) { var d = e.currentTarget.getAttribute('data-skd'); save(skipDates().filter(function (x) { return x.date !== d; })); });
-      $('sk_fill').addEventListener('click', function () { call('fillSchedule', {}).then(function (r) { S.d.lists = r.lists; toast(r.created ? r.created + ' list(s) created' : 'Everything is already created'); }).catch(fail); });
+      $('sk_fill').addEventListener('click', function () { call('refreshSchedule', {}).then(function (r) { S.d.lists = r.lists; toast('Schedule refreshed: ' + r.created + ' created, ' + r.removed + ' empty removed'); render(); }).catch(fail); });
       if (!can('lists')) { $('sk_add').disabled = true; $('sk_fill').disabled = true; }
     }
     paint();
