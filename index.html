@@ -70,10 +70,9 @@ label{display:block;font-size:12px;color:var(--muted);margin:0 0 3px}
 .filters{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin:8px 0}
 .panel{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:12px}
 
-table.tbl{width:100%;border-collapse:collapse;font-size:13px;background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+table.tbl{width:100%;border-collapse:collapse;font-size:13px;background:var(--card);border:1px solid var(--line)}
 table.tbl th{font-weight:500;text-align:left;color:var(--muted);padding:8px 8px;border-bottom:1px solid var(--line2);white-space:nowrap}
 table.tbl td{padding:8px;border-bottom:1px solid var(--line);vertical-align:top}
-table.tbl td:nth-child(4),table.tbl td:nth-child(6){white-space:nowrap}
 table.tbl tr.click{cursor:pointer}
 table.tbl tr.click:hover td{background:var(--bg)}
 .cards .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:8px;cursor:pointer}
@@ -201,11 +200,20 @@ html,body{height:100%}
 .hbtn .car{font-size:10px}
 .hbtn.fon{color:var(--focus);font-weight:600}
 .hbtn.fon::after{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--focus);margin-left:4px;vertical-align:middle}
-table.wl td:nth-child(1){min-width:150px}
+table.wl{table-layout:auto}
+table.wl th{white-space:normal}
 table.wl td:nth-child(2),table.wl td:nth-child(6){white-space:nowrap}
-table.wl td:nth-child(3){min-width:120px}
-table.wl td:nth-child(4){white-space:nowrap}
-table.wl td.acts{white-space:nowrap;text-align:right}
+table.wl .chip,table.wl .tagbtn{white-space:normal;text-align:left}
+table.wl td{overflow-wrap:anywhere}
+table.wl td.acts{white-space:nowrap;text-align:right;width:1%}
+.actw{display:inline-flex;align-items:center;justify-content:flex-end;gap:6px}
+.actw>button{height:36px;min-height:36px;padding:0 12px;display:inline-flex;align-items:center;justify-content:center;margin:0;box-sizing:border-box}
+.actw>.phbtn{width:40px;padding:0}
+table.dntbl td:nth-child(7){min-width:150px}
+.ptabs{display:flex;gap:4px;border-bottom:1px solid var(--line);margin:0 0 12px}
+.ptab{border:none;border-bottom:3px solid transparent;border-radius:0;background:none;padding:8px 12px;min-height:0;font-weight:500;color:var(--muted);cursor:pointer;flex:1}
+.ptab.on{color:var(--text);border-bottom-color:var(--focus);font-weight:600}
+.psave{position:sticky;bottom:-16px;background:var(--card);display:flex;gap:8px;padding:10px 0 6px;margin-top:12px;border-top:1px solid var(--line);z-index:2}
 .wred{color:var(--red);font-weight:600}
 .phbtn{padding:5px 9px;min-height:34px}
 .phbtn .ico{width:16px;height:16px}
@@ -244,6 +252,9 @@ details.fold[open]>summary::before{content:"\25BE  "}
   .sgrow{grid-template-columns:1fr auto}
   .sgrow .sg_role{grid-column:1 / -1}
 }
+.syncbtn{display:block;width:100%;border:none;background:none;min-height:0;padding:4px 0 0;text-align:left;font-size:12px;color:var(--muted);cursor:pointer}
+.syncbtn:hover{color:var(--text)}
+@media (max-width:1099px){table.wl .actw{flex-direction:column;align-items:stretch}.actw>.phbtn{width:auto}}
 </style>
 <link rel="manifest" href="data:application/manifest+json;base64,eyJuYW1lIjogIlBlZGlhdHJpYyBTdXJnZXJ5IFdhaXRpbmcgTGlzdCIsICJzaG9ydF9uYW1lIjogIldhaXRpbmcgbGlzdCIsICJzdGFydF91cmwiOiAiLiIsICJkaXNwbGF5IjogInN0YW5kYWxvbmUiLCAiYmFja2dyb3VuZF9jb2xvciI6ICIjZjZmNmY0IiwgInRoZW1lX2NvbG9yIjogIiMxZjFmMWQiLCAiaWNvbnMiOiBbeyJzcmMiOiAiZGF0YTppbWFnZS9wbmc7YmFzZTY0LGlWQk9SdzBLR2dvQUFBQU5TVWhFVWdBQUFNQUFBQURBQ0FJQUFBRGR2dnRRQUFBQzhVbEVRVlI0WHUzZFVXcmJRQlJBVWFkMEcyMnkvMVdGcnFTRWxHQkM2Z1pkaGI3eG5QT3ZBVDJ1Qm4zSTQ0Zkh4eDhYT09yYjBRdmhoWUJJQkVRaUlCSUJrUWlJUkVBa0FpSVJFSW1BU0FSRUlpQVNBWkVJaUVSQUpBSWlFUkNKZ0VnRVJDSWdFZ0dSQ0loRVFDUUNJaEVRaVlCSUJFUWlJQklCa1FpSVJFQWtBaUlSRUltQVNBUkVJaUFTQVpFSWlFUkFKQUlpRVJDSmdFZ0VSUEk5WFgybm5wOS8vZTNPbnA1KzN1bE5IL1RnejFhdTNVam5tb3plQ09pUFQ2WWpvM2U4QTcwNFVNL2hxKzZNZ0E3VzgrcFllZmRrOTRCNkFYMkZwZTBlRU5IV0FaMjFlWnkxem9xMkRvaHUzNERPM1RiT1hXMGgrd2JFS1FSRUlpQVNBWkVJaUVSQUpBSWlFUkNKZ0VnRVJDSWdFZ0dSQ0loRVFDUUNJaEVRaVlCSUJFUWlJQklCa1FpSVJFQWtBaUlSRUltQVNBUkVJaUFTQVpFSWlHVDZJWnZibm5weGJmS2hzSE1Ea3M0N016T2FHSkIwYnBpVzBiaDNJUFhjTm0wK3N3S2FOcDJaUmsxcFVFQ2o1akxjbkZrTkNvZ1ZUUWxvemlPMWlpRVRteElRaXhvUjBKQ0hhVGtUNWpZaUlOWWxJQklCa1FpSVJFQWtBaUlSRUltQVNFWUVOTzBibDFWTW1OdUlnRmpYbElBbVBFeHJHVEt4S1FHeHFFRUJEWG1rbGpCblZvTUN1bHdHeldXeU9mVmNMc01DMHRBL2phcm5jaG41czU1WEV6NTJHV1ZhT3E4bS9pN3Ntb3lHNzhyVEEvbzZwNmM1YzRmNGFyTmVvbG1PZ0VnRVJDSWdFZ0dSQ0loRVFDUUNJaEVRaVlCSUJFUWlJQklCa1FpSVJFQWtBaUlSRUltQVNBUkVJaUFTQVpFSWlFUkFKQUlpRVJDSmdFZ0VSQ0lnRWdHUjdCdlF1WWRwbkx2YVF2WU5pRk5zSGRCWjI4Wlo2NnhvNjREb2RnK29ieDU5aGFYdEhsQThnWER6ZWlZZTgvdGZIT3ZnMkZWM1p0OUROai8weVpNM3BmTkdRQis0a1pGMDNoRVFpWmRvRWdHUkNJaEVRQ1FDSWhFUWlZQklCRVFpSUJJQmtRaUlSRUFrQWlJUkVJbUFTQVJFSWlBU0FaRUlpRVJBSkFJaUVSQ0pnRWdFUkNJZ0VnR1JDSWhFUUNRQ0loRVFpWUJJQkVRaUlCSUJrUWlJUkVBa0FpSVJFSW1BU0FSRUlpQVNBWkg4QmhGR1lydW1qbFlkQUFBQUFFbEZUa1N1UW1DQyIsICJzaXplcyI6ICIxOTJ4MTkyIiwgInR5cGUiOiAiaW1hZ2UvcG5nIn0sIHsic3JjIjogImRhdGE6aW1hZ2UvcG5nO2Jhc2U2NCxpVkJPUncwS0dnb0FBQUFOU1VoRVVnQUFBZ0FBQUFJQUNBSUFBQUI3R2tPdEFBQUpYMGxFUVZSNFh1M2FVV29jUnhSQVVTdGtHOUxNL2xjMWFDVWhHSUtKc0pCbHErdFYzWE8rSFZRZHF0N3RhdWJwZG52K0JrRFBYNzFIQnVCZkFnQVFKUUFBVVFJQUVDVUFBRkVDQUJBbEFBQlJBZ0FRSlFBQVVRSUFFQ1VBQUZFQ0FCQWxBQUJSQWdBUUpRQUFVUUlBRUNVQUFGRUNBQkFsQUFCUkFnQVFKUUFBVVFJQUVDVUFBRkVDQUJBbEFBQlJBZ0FRSlFBQVVRSUFFQ1VBQUZFQ0FCQWxBQUJSQWdBUUpRQUFVUUlBRUNVQUFGRUNBQkFsQUFCUkFnQVFKUUFBVVFJQUVDVUFBRkVDQUJBbEFBQlJBZ0FRSlFBQVVRSUFFQ1VBQUZFQ0FCQWxBQUJSQWdBUUpRQUFVUUlBRUNVQUFGRUNBQkFsQUFCUkFnQVFKUUFBVVFJQUVDVUFBRkVDQUJBbEFBQlJBZ0FRSlFBQVVRSUFFQ1VBQUZFQ0FCQWxBQUJSQWdBUUpRQUFVUUlBRUNVQUFGRUNBQkFsQUFCUkFnQVFKUUFBVVFJQUVDVUFBRkVDQUJBbEFBQlJBZ0FRSlFBQVVRSUFFQ1VBQUZFQ0FCQWxBQUJSQWdBUUpRQUFVUUlBRUNVQUFGRUNBQkFsQUFCUkFnQVFKUUFBVVFJQUVDVUFBRkVDQUJBbEFBQlJBZ0FRSlFBQVVRSUFFQ1VBQUZFQ0FCQWxBQUJSQWdBUUpRQUFVUUlBRUNVQUFGRUNBQkFsQUFCUkFnQVFKUUFBVVFJQUVDVUFBRkVDQUJBbEFBQlJBZ0FRSlFBQVVYOUhuNXVTeCtQMWM0OTd2Nzk4N2orRUxUemRiczliTEJSK3lhZUgvcytJQWVjUkFJN3l4K2YrVzByQU1RU0FRMXd3K244a0F4eEFBTmpleGFOZkJqaUdYd0d4dDRYVC85dTN4WDhkZnBNYkFMdGFPL3IveHhjaGR1UUd3SlpHVFg5WEFUWWxBT3huMnZUL2J1YXE0QjBDd0dZbXo5bkphNE8zQklDZHpKK3c4MWNJL3hFQXRySExiTjFsblNBQTdHR3ZxYnJYYXNrU0FEYXc0enpkY2MzVUNBQkFsQUF3M2I2djB2dXVuQWdCWUxUZForanU2K2RzQWdBUUpRRE1kY2JyOHhsUHdaRUVBQ0JLQUJqcXBCZm5rNTZGa3dnQVFKUUFBRVFKQUJPZDk4M2t2Q2ZpQUFJQUVDVUFBRkVDQUJBbEFJeHo2dWZ5VTUrTGZRa0FRSlFBQUVRSkFFQ1VBQUJFQ1FCQWxBQUFSQWtBUUpRQUFFUUpBRUNVQUFCRUNRQkFsQUFBUkFrQVFKUUFBRVFKQUVDVUFBQkVDUUJBbEFBQVJBa0FRSlFBQUVRSkFFQ1VBQUJFQ1FCQWxBQUFSQWtBUUpRQUFFUUpBRUNVQUFCRUNRQkFsQUFBUkFrQVFKUUFBRVFKQUVDVUFBQkVDUUJBbEFBQVJBa0FRSlFBQUVRSkFFQ1VBQUJFQ1FCQWxBQUFSQWtBUUpRQUFFUUpBRUNVQUFCRUNRQkFsQUFBUkFrQVFKUUFBRVFKQUVDVUFBQkVDUUJBbEFBQVJBa0FRSlFBQUVRSkFFQ1VBQUJFQ1FCQWxBQUFSQWtBUUpRQUFFUUpBRUNVQUFCRUNRQkFsQUFBUkFrQVFKUUFBRVFKQUVDVUFBQkVDUUJBbEFBQVJBa0FRSlFBQUVROTNXN1AwVWZmMXVQeHV1M2FPZHo5L25MNEU1NUZBUFpnNkxNZE1aaFBBRVl6OXptQUVvd2xBRU1aL1J4R0JnWVNnSEdNZmc0bUE2UDRGZEFzcGo5bnM4TkhjUU9Zd3NFZ3hWVmdBamVBRVV4L2F1ejVDUVJnUFNlQkpqdC9PUUZZekJtZ3pQNWZTd0JXc3Z2QktWaElBSmF4NytFN1oyRVZBVmpEam9jZk9SRkxDTUFDOWpxODVWeGNUd0FBb2dUZ2FsNXo0R2Vjam9zSndLWHNiM2lmTTNJbEFRQ0lFb0RyZUxXQmozQlNMaU1BQUZFQ2NCRXZOZkJ4enNzMUJBQWdTZ0FBb2dUZ0N1Nno4S3VjbWdzSUFFQ1VBQUJFQ1FCQWxBQjhPWjh5NFhPY25hOG1BQUJSQWdBUUpRQUFVUUlBRUNVQUFGRUNBQkFsQUFCUkFnQVFKUUFBVVFJQUVDVUFBRkVDQUJBbEFBQlJBZ0FRSlFBQVVRSUFFQ1VBQUZFQ0FCQWxBRi91Zm4vNThyOEJKM0oydnBvQUFFUUpBRUNVQUFCRUNjQVZmTXFFWCtYVVhFQUFBS0lFQUNCS0FDN2lQZ3NmNTd4Y1F3QUFvZ1RnT2w1cTRDT2NsTXNJQUVDVUFGektxdzI4enhtNWtnQmN6ZjZHbjNFNkxpWUFBRkVDc0lEWEhIakx1YmllQUt4aHI4T1BuSWdsQkdBWk94NitjeFpXRVlDVjdIdHdDaFlTZ01Yc2ZzcnMvN1VFWUQxbmdDWTdmemtCR01GSm9NYWVuK0RwZG51ZXNBNitlenhlL2EvZ2JFYi9IRzRBc3pnYm5NME9IOFVOWUNoWEFRNWo5QThrQUtQSkFBY3crc2NTZ0Qwb0Fkc3g5K2NUZ1AySUFXTVorbnNSQU1ZNXVIRG1JNlA0RlJCQWxBQUFSQWtBUUpRQUFFUUpBRUNVQUFCRUNRQkFsQUFBUkFrQVFKUUFBRVFKQUVDVUFBQkVDUUJBbEFBQVJBa0FRSlFBQUVRSkFFQ1VBQUJFQ1FCQWxBQUFSQWtBUUpRQUFFUUpBRUNVQUFCRUNRQkFsQUFBUkFrQVFKUUFBRVFKQUVDVUFBQkVDUUJBbEFBQVJBa0FRSlFBQUVRSkFFQ1VBQUJFQ1FCQWxBQUFSQWtBUUpRQUFFUUpBRUNVQUFCRUNRQkFsQUFBUkFrQVFKUUFBRVFKQUVDVUFBQkVDUUJBbEFBQVJBa0FRSlFBQUVRSkFFQ1VBQUJFQ1FCQWxBQUFSQWtBUUpRQUFFUUpBRUNVQUFCRUNRQkFsQUFBUkFrQVFKUUFBRVFKQUVDVUFBQkVDUUJBbEFBQVJBa0FRSlFBQUVRSkFFQ1VBQUJFQ1FCQWxBQUFSQWtBNDl6dkwrUFc5Q2VjK2x6c1N3QUFvZ1FBSUVvQUFLSUVnSW5PKzF4KzNoTnhBQUVBaUJJQWdDZ0JZS2lUdnBtYzlDeWNSQUFBb2dTQXVjNTRjVDdqS1RpU0FBQkVDUUNqN2Y3NnZQdjZPWnNBTU4yK00zVGZsUk1oQUFCUkFzQUdkbnlWM25ITjFBZ0FlOWhybnU2MVdySUVnRzNzTWxWM1dTY0lBRHVaUDF2bnJ4RCtJd0JzWnZLRW5idzJlRXNBMk0vTU9UdHpWZkFPQVdCTDA2YnR0UFhBUnp6ZGJzOGYrWGN3MCtQeHVuWmhSai83Y2dOZ2Iydm43OXEvRHIvSkRZQkRYSHdWTVBvNWdBQndsQXN5WVBSekRBSGdUSCs4Qk9ZKzV4RUF6dmZwR0JqNm5FMEFBS0w4Q2dnZ1NnQUFvZ1FBSUVvQUFLSUVBQ0JLQUFDaUJBQWdTZ0FBb2dRQUlFb0FBS0lFQUNCS0FBQ2lCQUFnU2dBQW9nUUFJRW9BQUtJRUFDQktBQUNpQkFBZ1NnQUFvZ1FBSUVvQUFLSUVBQ0JLQUFDaUJBQWdTZ0FBb2dRQUlFb0FBS0lFQUNCS0FBQ2lCQUFnU2dBQW9nUUFJRW9BQUtJRUFDQktBQUNpQkFBZ1NnQUFvZ1FBSUVvQUFLSUVBQ0JLQUFDaUJBQWdTZ0FBb2dRQUlFb0FBS0lFQUNCS0FBQ2lCQUFnU2dBQW9nUUFJRW9BQUtJRUFDQktBQUNpQkFBZ1NnQUFvZ1FBSUVvQUFLSUVBQ0JLQUFDaUJBQWdTZ0FBb2dRQUlFb0FBS0lFQUNCS0FBQ2lCQUFnU2dBQW9nUUFJRW9BQUtJRUFDQktBQUNpQkFBZ1NnQUFvZ1FBSUVvQUFLSUVBQ0JLQUFDaUJBQWdTZ0FBb2dRQUlFb0FBS0lFQUNCS0FBQ2lCQUFnU2dBQW9nUUFJRW9BQUtJRUFDQktBQUNpQkFBZ1NnQUFvZ1FBSUVvQUFLSUVBQ0JLQUFDaUJBQWdTZ0FBb2dRQUlFb0FBS0lFQUNCS0FBQ2lCQUFnU2dBQW9nUUFJRW9BQUtJRUFDQktBQUNpQkFBZ1NnQUFvZ1FBSUVvQUFLSUVBQ0JLQUFDaUJBQWdTZ0FBb3Y0QjlVdjVjMDZlVzNVQUFBQUFTVVZPUks1Q1lJST0iLCAic2l6ZXMiOiAiNTEyeDUxMiIsICJ0eXBlIjogImltYWdlL3BuZyJ9XX0=">
 <meta name="theme-color" content="#1f1f1d">
@@ -275,7 +286,7 @@ details.fold[open]>summary::before{content:"\25BE  "}
     };
   }
   window.google = { script: { run: run() } };
-  window.APP_VERSION = '0.7.0';
+  window.APP_VERSION = '0.8.0';
   window.APP_HOST = 'GitHub Pages';
 })();
 
@@ -288,7 +299,7 @@ var TAGS = ['Congenital heart disease', 'Asthmatic', 'Chronic lung disease', 'Ki
 // the specialty review a tag adds ('' = none); older tag names kept so existing records still work
 var TAG_SPEC_DEFAULT = { 'Congenital heart disease': 'Cardiology', 'Asthmatic': 'Pulmonology', 'Chronic lung disease': 'Pulmonology', 'Kidney disease': 'Nephrology', 'Bleeding or clotting disorder': 'Hematology', 'Sickle cell or thalassemia': 'Hematology', 'Epilepsy': 'Neurology', 'Developmental delay or cerebral palsy': 'Neurology', 'Diabetes': 'Endocrinology', 'Metabolic or endocrine disorder': 'Endocrinology', 'Immunodeficiency': 'Immunology', 'Syndromic': 'General pediatrics', 'Prematurity or low weight': 'General pediatrics', 'Trisomy 21': '', 'Other': '', 'Cardiac': 'Cardiology', 'Asthma': 'Pulmonology', 'Renal': 'Nephrology', 'Hematologic': 'Hematology', 'Neurologic': 'Neurology', 'Prematurity': 'General pediatrics' };
 var SPONSOR = ['Bahraini', 'Family of Bahraini', 'Family of government worker', 'Exempted', 'Self-payment', 'Covered by insurance'];
-var SURGEON_ROLES = ['Primary surgeon', 'First assistant', 'Second assistant', 'Supervising consultant'];
+var SURGEON_ROLES = ['Primary surgeon', 'First assistant', 'Second assistant', 'Supervising trainer'];
 var PRIORITY = ['', 'Clinical', 'Social', 'Age-sensitive', 'Other'];
 var REMOVE_REASONS = ['Patient refused procedure', 'Done in private', 'Not needed', 'Booked and did not attend', 'Called multiple times, no response', 'Transferred to adult services', 'Other'];
 var NOT_READY_REASONS = ['Sick', 'Traveling', 'Busy (exams)', 'Other'];
@@ -418,7 +429,11 @@ function waitText(p) {
   if (w.d) out.push(w.d + 'd');
   return out.length ? out.join(' ') : '0d';
 }
-function waitLimit(p) { return Number(S.d.settings['waitDays' + p.Category]) || 0; }
+function waitLimit(p) {
+  var pr = procById(p.ProcedureId);
+  return Number(p.TargetWaitDays) || (pr && Number(pr.TargetDays)) || Number(S.d.settings['waitDays' + p.Category]) || 0;
+}
+function ageLimit(p) { var pr = procById(p.ProcedureId); return Number(p.TargetAgeMonths) || (pr && Number(pr.MaxAgeMonths)) || 0; }
 function waitOver(p) { var l = waitLimit(p); return l > 0 && waitDays(p) > l; }
 function medOf(p) { return p.MedicalStatus === 'Free' || p.MedicalStatus === 'NotFree' ? p.MedicalStatus : (p.MedicalStatus === 'Unknown' ? 'Unknown' : (tagsOf(p).length ? 'NotFree' : 'Unknown')); }
 function tagNotes(p) { try { var o = JSON.parse(p.TagNotes || '{}'); return o && typeof o === 'object' ? o : {}; } catch (e) { return {}; } }
@@ -432,7 +447,6 @@ function priceFor(p) {
   return v === '' ? '' : v;
 }
 function extras(p) { try { var a = JSON.parse(p.Extra || '[]'); return Array.isArray(a) ? a : []; } catch (e) { return []; } }
-function totalMin(p) { return (Number(p.ExpMinutes) || 0) + extras(p).reduce(function (s, x) { return s + (Number(x.minutes) || 0); }, 0); }
 function procLabel(p) {
   var s = p.Procedure + (p.Laterality ? ', ' + p.Laterality.toLowerCase() : '');
   extras(p).forEach(function (x) { s += ' + ' + x.procedure + (x.laterality ? ', ' + x.laterality.toLowerCase() : ''); });
@@ -445,7 +459,7 @@ function listById(id) { var l = S.d.lists || []; for (var i = 0; i < l.length; i
 function fmtDay(s) { var p = s.split('-'); return WD[new Date(Date.UTC(+p[0], +p[1] - 1, +p[2])).getUTCDay()] + ' ' + fmtDate(s); }
 function listTitle(l) { return consName(l.ConsultantId) + (l.RoomId ? ' · ' + roomName(l.RoomId) : ''); }
 function onList(l) { return S.d.patients.filter(function (p) { return p.ListId === l.Id && p.Status !== 'Removed'; }); }
-function listUsed(l) { var pts = onList(l); return { n: pts.length, min: pts.reduce(function (s, p) { return s + totalMin(p); }, 0) }; }
+function listUsed(l) { return { n: onList(l).length }; }
 function upsertLists(l) { S.d.lists = l; }
 
 function statusInfo(p) {
@@ -471,23 +485,21 @@ function warnings(p) {
   if (!isActive(p)) return w;
   var st = S.d.settings, t = S.today, pr = procById(p.ProcedureId);
   var wait = waitDays(p);
-  var lim = Number(st['waitDays' + p.Category]) || 0;
-  if (lim > 0 && wait > lim) w.push({ kind: 'wait', sev: 'high', text: 'Waiting ' + waitText(p) + ' (limit ' + lim + ' d)' });
+  var lim = waitLimit(p), tw = Number(st.targetWarnDays) || 14;
+  if (lim > 0) {
+    if (wait > lim) w.push({ kind: 'wait', sev: 'high', text: 'Waiting ' + waitText(p) + ' (target ' + lim + ' d)' });
+    else if (lim - wait <= tw) w.push({ kind: 'wait', sev: 'med', text: 'Wait target in ' + (lim - wait) + ' d' });
+  }
   var m14 = 168 - ageMonths(p.DOB, t), w14 = Number(st.warn14Months);
   if (isNaN(w14)) w14 = 6;
   if (m14 <= 0) w.push({ kind: 'age14', sev: 'high', text: 'Age 14: adult services' });
   else if (m14 <= w14) w.push({ kind: 'age14', sev: 'med', text: '14 years in ' + m14 + ' mo' });
-  if (pr && Number(pr.MaxAgeMonths) > 0) {
-    var rem = Number(pr.MaxAgeMonths) - ageMonths(p.DOB, t);
-    var wm = Number(pr.WarnMonthsBefore) || 3;
-    if (rem < 0) w.push({ kind: 'age', sev: 'high', text: 'Past age limit' });
-    else if (rem <= wm) w.push({ kind: 'age', sev: 'high', text: rem === 0 ? 'Age limit this month' : 'Age limit in ' + rem + ' mo' });
-  }
-  var target = p.TargetDate || (pr && Number(pr.TargetDays) > 0 ? addDaysStr(p.DateAdded, Number(pr.TargetDays)) : '');
-  if (target) {
-    var left = daysBetween(t, target), tw = Number(st.targetWarnDays) || 14;
-    if (left < 0) w.push({ kind: 'target', sev: 'high', text: 'Past target date by ' + (-left) + ' d' });
-    else if (left <= tw) w.push({ kind: 'target', sev: 'med', text: 'Target date in ' + left + ' d' });
+  var al = ageLimit(p);
+  if (al > 0) {
+    var rem = al - ageMonths(p.DOB, t);
+    var wm = Number(p.TargetAgeMonths) ? 3 : (Number(pr && pr.WarnMonthsBefore) || 3);
+    if (rem < 0) w.push({ kind: 'age', sev: 'high', text: 'Past age target (' + al + ' mo)' });
+    else if (rem <= wm) w.push({ kind: 'age', sev: 'high', text: rem === 0 ? 'Must be done this month (age ' + al + ' mo)' : 'Do before age ' + al + ' mo (' + rem + ' mo left)' });
   }
   var nc = Number(st.noContactDays) || 0;
   if (nc > 0 && p.Status !== 'Not ready') {
@@ -547,21 +559,22 @@ function showLogin(msg) {
   $('app').innerHTML =
     '<div class="login"><h2>Pediatric Surgery</h2><p class="muted small" style="margin:4px 0 14px">Waiting list · v' + esc(VERSION) + '</p>' +
     (msg ? '<p class="small" style="color:var(--red)">' + esc(msg) + '</p>' : '') +
-    '<div class="field"><label for="l_email">Email</label><input type="email" id="l_email" autocomplete="username"></div>' +
+    '<div class="field"><label for="l_user">Username</label><input type="text" id="l_user" autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false" value="' + esc(fetchStored('psw_user') || '') + '"></div>' +
     '<div class="field"><label for="l_pin">PIN</label><input type="password" id="l_pin" autocomplete="current-password"></div>' +
     '<button class="primary" id="l_go" style="width:100%">Sign in</button></div>';
   function go() {
-    var email = val('l_email'), pin = $('l_pin').value;
-    if (!email || !pin) { toast('Enter your email and PIN', true); return; }
+    var uname = val('l_user').toLowerCase(), pin = $('l_pin').value;
+    if (!uname || !pin) { toast('Enter your username and PIN', true); return; }
     $('l_go').disabled = true;
-    call('login', { email: email, pin: pin }).then(function (r) {
-      S.token = r.token; store('psw_token', r.token);
+    call('login', { username: uname, pin: pin }).then(function (r) {
+      store('psw_user', uname); S.token = r.token; store('psw_token', r.token);
       return load();
     }).catch(function (e) { $('l_go').disabled = false; toast(e.message, true); });
   }
   $('l_go').addEventListener('click', go);
   $('l_pin').addEventListener('keydown', function (e) { if (e.key === 'Enter') go(); });
-  $('l_email').addEventListener('keydown', function (e) { if (e.key === 'Enter') $('l_pin').focus(); });
+  $('l_user').addEventListener('keydown', function (e) { if (e.key === 'Enter') $('l_pin').focus(); });
+  if ($('l_user').value) $('l_pin').focus();
 }
 function idleMs() { var m = Number(S.d && S.d.settings && S.d.settings.idleMinutes); if (isNaN(m)) m = 20; return m > 0 ? m * 60000 : 0; }
 function resetIdle() {
@@ -618,6 +631,14 @@ function ico(n) { return '<svg class="ico" viewBox="0 0 24 24" fill="none" strok
 var NAV = [['list', 'Waiting list'], ['cal', 'Calendar'], ['dash', 'Dashboard'], ['warn', 'Warnings'], ['done', 'Done'], ['removed', 'Removed'], ['settings', 'Settings']];
 var TABS = ['list', 'cal', 'dash', 'warn'];
 function navTitle(v) { for (var i = 0; i < NAV.length; i++) if (NAV[i][0] === v) return NAV[i][1]; return ''; }
+function syncText() {
+  if (!S.loadedAt) return '';
+  var d = new Date(S.loadedAt), pad = function (n) { return (n < 10 ? '0' : '') + n; };
+  var mins = Math.floor((Date.now() - S.loadedAt) / 60000);
+  return 'Updated ' + pad(d.getHours()) + ':' + pad(d.getMinutes()) + (mins >= 5 ? ' (' + mins + ' min ago)' : '');
+}
+function syncShow() { var e = $('syncinfo'); if (e) e.textContent = syncText(); }
+setInterval(syncShow, 30000);
 function doRefresh() { load().then(function () { toast('Data reloaded'); }).catch(fail); }
 function doLogout() {
   call('logout').catch(function () { /* ignore */ }).then(function () { S.token = null; S.d = null; store('psw_token', null); store('psw_view', null); clearTimeout(S.idleTimer); showLogin(); });
@@ -631,6 +652,7 @@ function buildShell() {
     '<aside class="side"><div class="brand"><strong>Pediatric Surgery</strong><span class="muted small">v' + esc(VERSION) + '</span></div>' +
     '<nav class="sidenav">' + NAV.map(function (n) { return '<button data-v="' + n[0] + '">' + ico(n[0]) + '<span>' + esc(n[1]) + '</span><em class="badge" data-b="' + n[0] + '"></em></button>'; }).join('') + '</nav>' +
     '<div class="sidefoot"><div class="muted small">' + esc(S.user.Name) + '</div>' +
+    '<button type="button" class="syncbtn" id="syncinfo" title="Tap to reload"></button>' +
     '<div class="row" style="margin-top:6px"><button id="refresh" title="Reload data">Refresh</button><button id="logout">Sign out</button></div></div></aside>' +
     '<div class="main"><header class="top"><div class="ttl" id="ttl"></div>' +
     '<label class="gsearch">' + ico('search') + '<input type="search" id="gq" placeholder="Search name or MRN   ( / )" value="' + esc(S.f.q) + '" autocomplete="off"></label>' +
@@ -641,6 +663,7 @@ function buildShell() {
     '<button id="tabmore" data-more="1">' + ico('more') + '<span>More</span></button></nav></div>';
   on(document, '.sidenav button, .tabbar button[data-v]', 'click', function (e) { go(e.currentTarget.getAttribute('data-v')); });
   $('refresh').addEventListener('click', doRefresh);
+  $('syncinfo').addEventListener('click', doRefresh);
   $('logout').addEventListener('click', doLogout);
   $('addp').addEventListener('click', function () { openPatient(null); });
   $('gq').addEventListener('input', function () {
@@ -650,7 +673,7 @@ function buildShell() {
   function more() {
     var m = openModal('<div class="spread"><h2>Menu</h2><button id="mm_x">Close</button></div><div class="menulist">' +
       ['done', 'removed', 'settings'].map(function (v) { return '<button data-v="' + v + '">' + ico(v) + '<span>' + esc(navTitle(v)) + '</span></button>'; }).join('') +
-      '<button id="mm_ref">' + ico('dash') + '<span>Reload data</span></button><button id="mm_out">' + ico('removed') + '<span>Sign out (' + esc(S.user.Name) + ')</span></button></div>' +
+      '<button id="mm_ref">' + ico('dash') + '<span>Reload data · ' + esc(syncText()) + '</span></button><button id="mm_out">' + ico('removed') + '<span>Sign out (' + esc(S.user.Name) + ')</span></button></div>' +
       '<p class="muted small" style="margin-top:10px">v' + esc(VERSION) + '</p>', { narrow: true });
     $('mm_x').addEventListener('click', m.close);
     on(m.el, '[data-v]', 'click', function (e) { m.close(); go(e.currentTarget.getAttribute('data-v')); });
@@ -670,7 +693,7 @@ function render() {
   if (tm) tm.classList.toggle('on', TABS.indexOf(S.view) < 0);
   var bs = document.querySelectorAll('[data-b="warn"]');
   for (var j = 0; j < bs.length; j++) { bs[j].textContent = nw ? String(nw) : ''; bs[j].style.display = nw ? '' : 'none'; }
-  $('ttl').textContent = navTitle(S.view);
+  $('ttl').textContent = navTitle(S.view); syncShow();
   var g = $('gq'); if (g && document.activeElement !== g && g.value !== S.f.q) g.value = S.f.q;
   if (S.view === 'list') viewList();
   else if (S.view === 'cal') viewCalendar();
@@ -685,9 +708,8 @@ function useTable() { return window.innerWidth >= 860; }
 
 // ---------------------------------------------------------------- waiting list
 var WAIT_RANGES = [['u3', 'Under 3 months', 0, 92], ['3-6', '3 to 6 months', 92, 183], ['6-12', '6 to 12 months', 183, 365], ['o12', 'Over a year', 365, 99999]];
-var TIME_RANGES = [['u30', 'Up to 30 min', 0, 30], ['30-60', '31 to 60 min', 31, 60], ['60-120', '61 to 120 min', 61, 120], ['o120', 'Over 120 min', 121, 9999]];
 var AGE_RANGES = [['u1', 'Under 1 year', 0, 11], ['1-2', '1 to 2 years', 12, 35], ['2-5', '2 to 5 years', 36, 71], ['5-10', '5 to 10 years', 72, 131], ['o10', '10 years and over', 132, 9999]];
-var FLAG_KINDS = [['contact', 'No contact'], ['clearance', 'Clearance date passed'], ['age14', 'Turning 14'], ['age', 'Age limit'], ['target', 'Target date'], ['calls', 'Unanswered calls'], ['booked', 'Booked date passed'], ['med', 'Medical status not set'], ['prio', 'Priority']];
+var FLAG_KINDS = [['contact', 'No contact'], ['clearance', 'Clearance date passed'], ['age14', 'Turning 14'], ['age', 'Age target'], ['wait', 'Wait target'], ['calls', 'Unanswered calls'], ['booked', 'Booked date passed'], ['med', 'Medical status not set'], ['prio', 'Priority']];
 
 function activeList() {
   return S.d.patients.filter(function (p) {
@@ -719,7 +741,6 @@ function applyFilters(list) {
       if (f.wait === 'over') { if (!waitOver(p)) return false; }
       else if (!inRange(waitDays(p), WAIT_RANGES, f.wait)) return false;
     }
-    if (f.time && !inRange(totalMin(p), TIME_RANGES, f.time)) return false;
     var am = ageMonths(p.DOB, S.today);
     if (f.age && !inRange(am, AGE_RANGES, f.age)) return false;
     if (f.ageFrom !== '' && am < Number(f.ageFrom) * 12) return false;
@@ -741,7 +762,6 @@ function sortList(list, key, dir) {
     if (k === 'name') return a.Name.localeCompare(b.Name) * mul;
     if (k === 'procedure') return (a.Procedure.localeCompare(b.Procedure) || waitDays(b) - waitDays(a)) * mul;
     if (k === 'age') return (ageMonths(a.DOB, S.today) - ageMonths(b.DOB, S.today)) * mul;
-    if (k === 'time') return (totalMin(a) - totalMin(b)) * mul;
     if (k === 'category') return (CATS.indexOf(a.Category) - CATS.indexOf(b.Category)) * mul;
     if (k === 'care') return a.CareType.localeCompare(b.CareType) * mul;
     var pa = a.Priority ? 1 : 0, pb = b.Priority ? 1 : 0;
@@ -753,7 +773,7 @@ function sortList(list, key, dir) {
 }
 function filtersOn() {
   var f = S.f;
-  return !!(f.cat || f.care || f.proc || f.prio || f.wait || f.time || f.age || f.flag || f.med || f.ageFrom !== '' || f.ageTo !== '' || f.chip);
+  return !!(f.cat || f.care || f.proc || f.prio || f.wait || f.age || f.flag || f.med || f.ageFrom !== '' || f.ageTo !== '' || f.chip);
 }
 function clearFilters() {
   var q = S.f.q;
@@ -792,7 +812,7 @@ function statusHtml(p) {
   return '<span class="chip ' + si.cls + '">' + esc(si.label) + '</span>';
 }
 function typeHtml(p) {
-  return '<strong>' + careShort(p) + '</strong><br>' + esc(p.Category) + '<br><span class="muted small">' + totalMin(p) + ' min</span>';
+  return '<strong>' + careShort(p) + '</strong><br>' + esc(p.Category) + '';
 }
 function thf(col, label, on_) { return '<th><button type="button" class="hbtn' + (on_ ? ' fon' : '') + '" data-col="' + col + '">' + label + ' <span class="car">&#9662;</span></button></th>'; }
 function patientRowsHtml(list) {
@@ -803,7 +823,7 @@ function patientRowsHtml(list) {
     return '<table class="tbl wl"><thead><tr><th>Patient</th>' +
       thf('age', 'Age', f.age || f.ageFrom !== '' || f.ageTo !== '' || sorted('age')) +
       thf('procedure', 'Procedure', f.proc || sorted('procedure')) +
-      '<th><button type="button" class="hbtn hs' + (f.care ? ' fon' : '') + '" data-col="care">DCU/INP <span class="car">&#9662;</span></button> <button type="button" class="hbtn hs' + (f.cat || sorted('category') ? ' fon' : '') + '" data-col="category">Category <span class="car">&#9662;</span></button> <button type="button" class="hbtn hs' + (f.time || sorted('time') ? ' fon' : '') + '" data-col="time">Time <span class="car">&#9662;</span></button></th>' +
+      '<th><button type="button" class="hbtn hs' + (f.care ? ' fon' : '') + '" data-col="care">DCU/INP <span class="car">&#9662;</span></button> <button type="button" class="hbtn hs' + (f.cat || sorted('category') ? ' fon' : '') + '" data-col="category">Category <span class="car">&#9662;</span></button></th>' +
       thf('status', 'Status', f.chip) +
       thf('wait', 'Wait', f.wait || sorted('wait')) +
       thf('flags', 'Flags', f.flag || f.prio) +
@@ -816,16 +836,16 @@ function patientRowsHtml(list) {
           '<td>' + typeHtml(p) + '</td>' +
           '<td>' + statusHtml(p) + '</td>' +
           '<td class="' + (waitOver(p) ? 'wred' : '') + '">' + esc(waitText(p)) + '</td>' +
-          '<td>' + flagsHtml(p) + '</td><td class="acts"><button type="button" class="phbtn" data-call="' + esc(p.Id) + '" title="Log a call">' + ico('phone') + '</button> ' + sendBtn(p) + '</td></tr>';
+          '<td>' + flagsHtml(p) + '</td><td class="acts"><div class="actw"><button type="button" class="phbtn" data-call="' + esc(p.Id) + '" title="Log a call">' + ico('phone') + '</button>' + sendBtn(p) + '</div></td></tr>';
       }).join('') + '</tbody></table>';
   }
   return '<div class="cards">' + list.map(function (p) {
     return '<div class="card" data-id="' + esc(p.Id) + '">' +
       '<div class="spread"><div class="name">' + (p.Starred ? '★ ' : '') + esc(p.Name) + ' <span class="muted small">· ' + esc(ageText(p.DOB)) + '</span></div><div>' + statusHtml(p) + '</div></div>' +
       '<div class="muted small">' + esc(p.MRN) + ' · ' + esc(consName(p.ConsultantId)) + '</div>' +
-      '<div class="small" style="margin-top:2px">' + esc(procLabel(p)) + ' · ' + careShort(p) + ' · ' + esc(p.Category) + ' · ' + totalMin(p) + ' min</div>' +
+      '<div class="small" style="margin-top:2px">' + esc(procLabel(p)) + ' · ' + careShort(p) + ' · ' + esc(p.Category) + '</div>' +
       '<div style="margin-top:4px"><span class="chip' + (waitOver(p) ? ' red' : '') + '">Wait ' + esc(waitText(p)) + '</span>' + flagsHtml(p) + '</div>' +
-      '<div class="row" style="margin-top:6px"><button type="button" class="phbtn" data-call="' + esc(p.Id) + '" title="Log a call">' + ico('phone') + '</button>' + sendBtn(p) + '</div></div>';
+      '<div class="actw" style="margin-top:6px"><button type="button" class="phbtn" data-call="' + esc(p.Id) + '" title="Log a call">' + ico('phone') + '</button>' + sendBtn(p) + '</div></div>';
   }).join('') + '</div>';
 }
 function canSend(p) { return p.Status === 'Ready' && !p.ListId && medOf(p) !== 'Unknown'; }
@@ -876,7 +896,6 @@ function activeFilterChips() {
   if (f.proc) add('Procedure: ' + (procById(f.proc) ? procById(f.proc).Name : f.proc), 'proc', '');
   if (f.care) add(f.care === 'Inpatient' ? 'INP' : 'DCU', 'care', '');
   if (f.cat) add(f.cat, 'cat', '');
-  if (f.time) add(TIME_RANGES.filter(function (x) { return x[0] === f.time; })[0][1], 'time', '');
   if (f.age) add('Age: ' + AGE_RANGES.filter(function (x) { return x[0] === f.age; })[0][1], 'age', '');
   if (f.ageFrom !== '' || f.ageTo !== '') add('Age ' + (f.ageFrom !== '' ? f.ageFrom : '0') + ' to ' + (f.ageTo !== '' ? f.ageTo : 'any') + ' y', 'ageFrom', '');
   if (f.wait) add(f.wait === 'over' ? 'Wait over the limit' : 'Wait: ' + WAIT_RANGES.filter(function (x) { return x[0] === f.wait; })[0][1], 'wait', '');
@@ -947,10 +966,6 @@ function headerMenu(col) {
     title = 'Category'; sorts = [['category', 'asc', 'Minor first'], ['category', 'desc', 'Major first']];
     pick('All categories', !f.cat, function () { f.cat = ''; });
     CATS.forEach(function (c) { pick(c, f.cat === c, function () { f.cat = c; }); });
-  } else if (col === 'time') {
-    title = 'Time'; sorts = [['time', 'asc', 'Shortest first'], ['time', 'desc', 'Longest first']];
-    pick('Any time', !f.time, function () { f.time = ''; });
-    TIME_RANGES.forEach(function (r) { pick(r[1], f.time === r[0], function () { f.time = r[0]; }); });
   } else if (col === 'status') {
     title = 'Status'; sorts = [];
     [['', 'All'], ['Ready', 'Ready (not yet scheduled)'], ['Booked', 'Booked'], ['Awaiting clearance', 'Awaiting clearance'], ['Not ready', 'Not ready']].forEach(function (r) { pick(r[1], f.chip === r[0], function () { f.chip = r[0]; }); });
@@ -1139,7 +1154,7 @@ function doneBody() {
   var rowsHtml;
   if (!list.length) rowsHtml = '<p class="muted">No done cases match.</p>';
   else if (useTable()) {
-    rowsHtml = '<table class="tbl dn"><thead><tr>' + th('year', 'Date', f.year) + '<th>Patient</th><th>Age</th>' + th('proc', 'Procedure', f.proc) + '<th>Type</th>' + th('cons', 'Consultant', f.cons) + '<th>Surgeons</th><th></th></tr></thead><tbody>' +
+    rowsHtml = '<table class="tbl dntbl"><thead><tr>' + th('year', 'Date', f.year) + '<th>Patient</th><th>Age</th>' + th('proc', 'Procedure', f.proc) + '<th>Type</th>' + th('cons', 'Consultant', f.cons) + '<th>Surgeons</th><th></th></tr></thead><tbody>' +
       list.map(function (p) {
         return '<tr class="click" data-dn="' + esc(p.Id) + '"><td>' + esc(fmtDate(p.DoneDate)) + '</td>' +
           '<td><strong>' + esc(p.Name) + '</strong><br><span class="muted small">' + esc(p.MRN) + '</span></td><td>' + esc(ageAt(p, p.DoneDate)) + '</td><td>' + esc(procLabel(p)) + '</td><td>' + typeHtml(p) + '</td>' +
@@ -1342,7 +1357,8 @@ function openPatient(id, opts) {
   var html =
     '<div class="spread"><h2>' + (isNew ? 'Add patient' : esc(p.Name)) + '</h2><button id="f_close">Close</button></div>' +
     (p ? '<div style="margin-bottom:8px">' + statusLine + '</div>' : '') +
-    '<div class="grid2">' +
+    '<div class="ptabs"><button type="button" class="ptab on" data-pt="1">1 Essentials</button><button type="button" class="ptab" data-pt="2">2 Clinical</button><button type="button" class="ptab" data-pt="3">3 More</button></div>' +
+    '<div class="ptp" data-pt="1"><div class="grid2">' +
     '<div class="field"><label for="f_name">Name *</label><input type="text" id="f_name" value="' + esc(p ? p.Name : '') + '"></div>' +
     '<div class="field"><label for="f_mrn">MRN * (9 digits, or T and digits)</label><input type="text" id="f_mrn" value="' + esc(p ? p.MRN : '') + '" autocomplete="off"></div>' +
     '<div class="field"><label for="f_dob">Date of birth *</label><input type="date" id="f_dob" value="' + esc(p ? p.DOB : '') + '"></div>' +
@@ -1352,7 +1368,7 @@ function openPatient(id, opts) {
     '<div class="field"><label for="f_proc">Procedure *</label><select id="f_proc">' + opt('', 'Choose…', !procSel) + procs.map(function (x) { return opt(x.Id, x.Name, x.Id === procSel); }).join('') + opt('__other', 'Other (type the name)', procSel === '__other') + '</select></div>' +
     '<div class="field" id="r_procother"><label for="f_procother">Procedure name</label><input type="text" id="f_procother" value="' + esc(p && procSel === '__other' ? p.Procedure : '') + '"></div>' +
     '<div class="field" id="r_lat"><label for="f_lat">Side *</label><select id="f_lat">' + opt('', 'Choose…', !p || !p.Laterality) + ['Right', 'Left', 'Bilateral'].map(function (s) { return opt(s, s, p && p.Laterality === s); }).join('') + '</select></div>' +
-    '<div class="field"><label for="f_added">Date added</label><input type="date" id="f_added" value="' + esc(p ? p.DateAdded : S.today) + '"></div></div>' +
+    '</div>' +
 
     '<div class="sect"><h3>Medical status *</h3><div class="field"><select id="f_med">' + opt('Unknown', 'Unknown', medNow === 'Unknown') + opt('Free', 'Medically free', medNow === 'Free') + opt('NotFree', 'Not medically free', medNow === 'NotFree') + '</select></div>' +
     '<div id="f_medbox"><label>Conditions (each adds its specialty review as not cleared)</label><div class="tagrows">' +
@@ -1360,44 +1376,65 @@ function openPatient(id, opts) {
       var on_ = tags.indexOf(t) >= 0;
       return '<div class="tagrow"><label class="check"><input type="checkbox" class="f_tag" value="' + esc(t) + '"' + (on_ ? ' checked' : '') + '> ' + esc(t) + (tagSpec(t) ? ' <span class="muted small">(' + esc(tagSpec(t).toLowerCase()) + ')</span>' : '') + '</label>' +
         '<input type="text" class="f_tnote" data-t="' + esc(t) + '" placeholder="Details, for example TOF" value="' + esc(tnotes[t] || '') + '"' + (on_ ? '' : ' style="display:none"') + '></div>';
-    }).join('') + '</div></div></div>' +
+    }).join('') + '</div><p class="small muted" id="f_tagnote"></p></div></div></div>' +
 
-    '<details class="fold" id="fd_cl"' + (p && clearances(p).length ? ' open' : '') + '><summary>Medical clearance</summary><div id="f_cl"></div><button id="f_addcl" type="button">Add clearance</button></details>' +
+    '<div class="ptp" data-pt="2" style="display:none">' +
+    '<div class="sect" id="fd_cl" style="margin-top:0"><h3>Medical clearance</h3><div id="f_cl"></div><button id="f_addcl" type="button">Add clearance</button></div>' +
 
-    '<details class="fold"' + (isNew ? '' : '') + '><summary>Procedure details</summary><div class="grid2">' +
+    '<div class="sect"><h3>Procedure details</h3><div class="grid2">' +
     '<div class="field"><label for="f_dx">Diagnosis</label><input type="text" id="f_dx" value="' + esc(p ? p.Diagnosis : '') + '"></div>' +
     '<div class="field"><label for="f_cat">Category</label><select id="f_cat">' + CATS.map(function (s) { return opt(s, s, p && p.Category === s); }).join('') + '</select></div>' +
-    '<div class="field"><label for="f_min">Expected time (minutes)</label><input type="number" id="f_min" min="0" value="' + esc(p ? p.ExpMinutes : '') + '"></div>' +
     '<div class="field"><label for="f_care">Day-case or inpatient</label><select id="f_care">' + ['Day-case', 'Inpatient'].map(function (s) { return opt(s, s, p && p.CareType === s); }).join('') + '</select></div>' +
     '<div class="field"><label>&nbsp;</label><label class="check"><input type="checkbox" id="f_admit"' + (p && p.NeedsAdmission ? ' checked' : '') + '> Needs prior admission</label></div>' +
-    '<div class="field"><label for="f_target">Target date (optional)</label><input type="date" id="f_target" value="' + esc(p ? p.TargetDate : '') + '"></div>' +
     '<div class="field"><label for="f_sched">Scheduled on OT list</label><input type="date" id="f_sched" value="' + esc(p ? p.ScheduledDate : '') + '" disabled></div></div>' +
-    '<label>Additional procedures in the same sitting</label><div id="f_ex"></div><button type="button" id="f_addex">Add procedure</button><p class="small muted" id="f_total"></p></details>' +
+    '<label>Additional procedures in the same sitting</label><div id="f_ex"></div><button type="button" id="f_addex">Add procedure</button></div>' +
 
-    '<details class="fold"' + (p && p.Priority ? ' open' : '') + '><summary>Priority</summary><div class="grid2">' +
+    '<div class="sect"><h3>Dates and targets</h3><div class="grid2">' +
+    '<div class="field"><label for="f_added">Date added</label><input type="date" id="f_added" value="' + esc(p ? p.DateAdded : S.today) + '"></div>' +
+    '<div class="field"><label for="f_twd">Target wait (days)</label><input type="number" id="f_twd" min="0" inputmode="numeric" value="' + esc(p ? p.TargetWaitDays : '') + '"></div>' +
+    '<div class="field"><label for="f_tam">Do before age (months)</label><input type="number" id="f_tam" min="0" inputmode="numeric" value="' + esc(p ? p.TargetAgeMonths : '') + '"></div></div>' +
+    '<p class="small muted" id="f_thint"></p></div>' +
+
+    '<div class="sect"><h3>Priority</h3><div class="grid2">' +
     '<div class="field"><label for="f_prio">Priority tag</label><select id="f_prio">' + PRIORITY.map(function (s) { return opt(s, s || 'None', p ? p.Priority === s : s === ''); }).join('') + '</select></div>' +
-    '<div class="field"><label for="f_prior">Priority reason</label><input type="text" id="f_prior" value="' + esc(p ? p.PriorityReason : '') + '"></div></div></details>' +
+    '<div class="field"><label for="f_prior">Priority reason</label><input type="text" id="f_prior" value="' + esc(p ? p.PriorityReason : '') + '"></div></div></div></div>' +
 
-    '<details class="fold"><summary>Sponsorship and price</summary><div class="field"><label for="f_spons">Sponsorship</label><select id="f_spons">' + opt('', '', !p || !p.Sponsorship) + SPONSOR.map(function (s) { return opt(s, s, p && p.Sponsorship === s); }).join('') + '</select></div>' +
-    '<p class="small" id="f_sponsorhint" style="color:var(--amber)"></p><p class="small muted" id="f_price"></p></details>' +
+    '<div class="ptp" data-pt="3" style="display:none">' +
+    '<div class="sect" style="margin-top:0"><h3>Sponsorship and price</h3><div class="field"><label for="f_spons">Sponsorship</label><select id="f_spons">' + opt('', '', !p || !p.Sponsorship) + SPONSOR.map(function (s) { return opt(s, s, p && p.Sponsorship === s); }).join('') + '</select></div>' +
+    '<p class="small" id="f_sponsorhint" style="color:var(--amber)"></p><p class="small muted" id="f_price"></p></div>' +
 
-    '<details class="fold"><summary>More: sex, seen by consultant, notes</summary><div class="grid2">' +
+    '<div class="sect"><h3>Other details</h3><div class="grid2">' +
     '<div class="field"><label for="f_sex">Sex</label><select id="f_sex">' + opt('', '', !p || !p.Sex) + opt('M', 'Male', p && p.Sex === 'M') + opt('F', 'Female', p && p.Sex === 'F') + '</select></div>' +
     '<div class="field"><label for="f_seen">Seen by consultant</label><select id="f_seen">' + opt('', '', !p || !p.SeenByConsultant) + opt('Y', 'Yes', p && p.SeenByConsultant === 'Y') + opt('N', 'No', p && p.SeenByConsultant === 'N') + '</select></div></div>' +
     '<label class="check" style="margin-bottom:8px"><input type="checkbox" id="f_star"' + (p && p.Starred ? ' checked' : '') + '> Star: interesting case for a report</label>' +
-    '<div class="field"><label for="f_notes">Notes</label><textarea id="f_notes">' + esc(p ? p.Notes : '') + '</textarea></div></details>' +
-
-    '<div class="row" style="margin-top:10px"><button class="primary" id="f_save">' + (isNew ? 'Add to list' : 'Save changes') + '</button><button id="f_cancel">Cancel</button></div>' +
+    '<div class="field"><label for="f_notes">Notes</label><textarea id="f_notes">' + esc(p ? p.Notes : '') + '</textarea></div></div>' +
     (p ? '<div class="sect"><h3>Contact log</h3>' +
       '<div class="row" style="margin-bottom:8px"><button type="button" id="c_call">' + ico('phone') + ' Log a call</button></div>' +
       '<div class="grid3"><div class="field"><label for="c_type">Type</label><select id="c_type">' + CONTACT_TYPES.map(function (s) { return opt(s, s, s === 'Called - reached'); }).join('') + '</select></div>' +
       '<div class="field"><label for="c_date">Date</label><input type="date" id="c_date" value="' + esc(S.today) + '"></div>' +
       '<div class="field"><label for="c_note">Note</label><input type="text" id="c_note" placeholder="Called, sick, call back in 2 weeks"></div></div>' +
       '<button id="c_add">Add to log</button><div id="c_list" style="margin-top:8px"><p class="muted small">Loading…</p></div></div>' +
-      '<div class="sect"><h3>Actions</h3><div id="f_actions" class="row"></div><div id="f_info" class="small muted" style="margin-top:8px"></div></div>' : '');
+      '<div class="sect"><h3>Actions</h3><div id="f_actions" class="row"></div><div id="f_info" class="small muted" style="margin-top:8px"></div></div>' : '') +
+    '</div>' +
+    '<div class="psave"><button class="primary" id="f_save">' + (isNew ? 'Add to list' : 'Save changes') + '</button><button id="f_cancel">Cancel</button></div>';
 
   var m = openModal(html);
   var cl = p ? clearances(p) : [];
+  function showTab(n) {
+    var bs = m.el.querySelectorAll('.ptab'), ps = m.el.querySelectorAll('.ptp'), i;
+    for (i = 0; i < bs.length; i++) bs[i].className = 'ptab' + (bs[i].getAttribute('data-pt') === String(n) ? ' on' : '');
+    for (i = 0; i < ps.length; i++) ps[i].style.display = ps[i].getAttribute('data-pt') === String(n) ? '' : 'none';
+    var sc = m.el.querySelector('.ptabs'); if (sc && sc.scrollIntoView && n !== 1) { /* keep header visible */ }
+  }
+  on(m.el, '.ptab', 'click', function (e) { showTab(e.currentTarget.getAttribute('data-pt')); });
+  function targetHint() {
+    var pr = procById($('f_proc').value), bits = [];
+    var w = pr && Number(pr.TargetDays) ? Number(pr.TargetDays) : (Number(S.d.settings['waitDays' + $('f_cat').value]) || 0);
+    $('f_twd').placeholder = w ? String(w) : 'none';
+    $('f_tam').placeholder = pr && Number(pr.MaxAgeMonths) ? String(pr.MaxAgeMonths) : 'none';
+    if (w) bits.push('wait ' + w + ' days'); if (pr && Number(pr.MaxAgeMonths)) bits.push('done before age ' + pr.MaxAgeMonths + ' months');
+    $('f_thint').textContent = 'Leave empty to use the default' + (bits.length ? ' (' + bits.join(', ') + ')' : ' (none set for this procedure)') + '. Defaults are set in Settings, Procedures.';
+  }
 
   function readCl() {
     var rows = m.el.querySelectorAll('.clrow'), out = [];
@@ -1435,45 +1472,31 @@ function openPatient(id, opts) {
     var rows = m.el.querySelectorAll('.exrow'), out = [];
     for (var i = 0; i < rows.length; i++) {
       var r = rows[i], sel = r.querySelector('.ex_proc'), pr = procById(sel.value);
-      out.push({ procedureId: pr ? pr.Id : '', procedure: pr ? pr.Name : '', laterality: r.querySelector('.ex_lat').value, minutes: r.querySelector('.ex_min').value });
+      out.push({ procedureId: pr ? pr.Id : '', procedure: pr ? pr.Name : '', laterality: r.querySelector('.ex_lat').value});
     }
     return out;
-  }
-  function totalText() {
-    var t = Number($('f_min').value) || 0;
-    readEx().forEach(function (x) { t += Number(x.minutes) || 0; });
-    $('f_total').textContent = 'Total time for the list: ' + t + ' min';
   }
   function drawEx() {
     var act = S.d.procedures.filter(function (x) { return x.Active === 'Y'; });
     $('f_ex').innerHTML = ex.map(function (x, i) {
-      return '<div class="exrow" style="display:grid;gap:6px;margin-bottom:6px;grid-template-columns:minmax(0,2fr) minmax(0,1fr) minmax(0,1fr) auto">' +
+      return '<div class="exrow" style="display:grid;gap:6px;margin-bottom:6px;grid-template-columns:minmax(0,2fr) minmax(0,1fr) auto">' +
         '<select class="ex_proc">' + act.map(function (pr) { return opt(pr.Id, pr.Name, pr.Id === x.procedureId); }).join('') + '</select>' +
         '<select class="ex_lat">' + opt('', 'Side', !x.laterality) + ['Right', 'Left', 'Bilateral'].map(function (z) { return opt(z, z, x.laterality === z); }).join('') + '</select>' +
-        '<input type="number" class="ex_min" min="0" placeholder="Minutes" value="' + esc(x.minutes || '') + '">' +
         '<button type="button" class="ex_x" data-i="' + i + '">Remove</button></div>';
     }).join('') || '<p class="muted small" style="margin:0 0 6px">None.</p>';
     on($('f_ex'), '.ex_x', 'click', function (e) { ex = readEx(); ex.splice(+e.currentTarget.getAttribute('data-i'), 1); drawEx(); });
-    on($('f_ex'), '.ex_proc', 'change', function (e) {
-      var pr = procById(e.currentTarget.value), row = e.currentTarget.closest('.exrow');
-      if (pr) row.querySelector('.ex_min').value = pr.DefaultMinutes;
-      totalText();
-    });
-    on($('f_ex'), '.ex_min', 'input', totalText);
-    totalText();
   }
   drawEx();
-  $('f_min').addEventListener('input', totalText);
   $('f_addex').addEventListener('click', function () {
     ex = readEx();
     var first = S.d.procedures.filter(function (x) { return x.Active === 'Y'; })[0];
     if (!first) { toast('Add a procedure in Settings first', true); return; }
-    ex.push({ procedureId: first.Id, procedure: first.Name, laterality: '', minutes: first.DefaultMinutes });
+    ex.push({ procedureId: first.Id, procedure: first.Name, laterality: '' });
     drawEx();
   });
   $('f_addcl').addEventListener('click', function () {
     cl = readCl(); cl.push({ spec: 'Cardiology', state: 'Requested', apptDate: '', doctor: '' }); drawCl();
-    $('fd_cl').open = true;
+    showTab(2);
   });
 
   function checkedTags() {
@@ -1498,7 +1521,7 @@ function openPatient(id, opts) {
       var other = checkedTags().some(function (x) { return tagSpec(x) === spec; });
       if (!other) cl = cl.filter(function (c) { return !(c.spec === spec && c.state === 'Requested'); });
     }
-    drawCl(); $('fd_cl').open = true;
+    drawCl(); $('f_tagnote').textContent = 'Review added in the Clinical tab.';
   });
 
   var prevDx = '';
@@ -1508,14 +1531,14 @@ function openPatient(id, opts) {
     $('r_lat').style.display = (pr && pr.Laterality === 'Y') || sel === '__other' || (p && p.Laterality) ? '' : 'none';
     if (fill && pr) {
       $('f_cat').value = pr.DefaultCategory;
-      $('f_min').value = pr.DefaultMinutes;
+      $('f_twd').value = ''; $('f_tam').value = '';
       $('f_care').value = pr.DefaultCare;
       var dx = $('f_dx');
       if (!dx.value.trim() || dx.value === prevDx) dx.value = pr.DefaultDiagnosis;
       prevDx = pr.DefaultDiagnosis;
       if (pr.Laterality !== 'Y') $('f_lat').value = '';
     } else if (pr) { prevDx = pr.DefaultDiagnosis; }
-    priceChanged();
+    priceChanged(); targetHint();
   }
   function priceChanged() {
     var pr = procById($('f_proc').value), care = $('f_care').value, txt = '';
@@ -1528,6 +1551,7 @@ function openPatient(id, opts) {
   function sponsorHint() { $('f_sponsorhint').textContent = $('f_spons').value === 'Self-payment' ? 'No exemption records' : ''; }
   $('f_proc').addEventListener('change', function () { procChanged(true); });
   $('f_care').addEventListener('change', priceChanged);
+  $('f_cat').addEventListener('change', targetHint);
   $('f_spons').addEventListener('change', sponsorHint);
   procChanged(false); sponsorHint();
   if (opts.focusMed) { var fm = $('f_med'); if (fm.scrollIntoView) fm.scrollIntoView(); }
@@ -1543,8 +1567,8 @@ function openPatient(id, opts) {
       ConsultantId: val('f_cons'), SeenByConsultant: val('f_seen'), DateAdded: val('f_added'),
       ProcedureId: pr ? sel : '', Procedure: pr ? pr.Name : (sel === '__other' ? val('f_procother') : ''),
       Laterality: $('r_lat').style.display === 'none' ? '' : val('f_lat'),
-      Diagnosis: val('f_dx'), Category: val('f_cat'), ExpMinutes: val('f_min'), CareType: val('f_care'),
-      NeedsAdmission: checked('f_admit') ? 'Y' : '', TargetDate: val('f_target'),
+      Diagnosis: val('f_dx'), Category: val('f_cat'), CareType: val('f_care'),
+      NeedsAdmission: checked('f_admit') ? 'Y' : '', TargetWaitDays: val('f_twd'), TargetAgeMonths: val('f_tam'),
       MedicalStatus: med, Tags: tagList.join(','), TagNotes: JSON.stringify(notes),
       Clearances: JSON.stringify(readCl().filter(function (c) { return c.spec; })),
       Priority: val('f_prio'), PriorityReason: val('f_prior'), Sponsorship: val('f_spons'),
@@ -1561,7 +1585,7 @@ function openPatient(id, opts) {
           if (window.confirm(e.message.replace('MRN_EXISTS: ', '') + ' Add this one as well?')) { send({ confirmMrn: true }); return; }
           $('f_save').disabled = false; return;
         }
-        $('f_save').disabled = false; fail(e);
+        $('f_save').disabled = false; showTab(1); fail(e);
       });
     }
     send();
@@ -1583,6 +1607,7 @@ function openPatient(id, opts) {
         h += cur.Status === 'Not ready' ? '<button id="a_back">Back on the list now</button>' : '<button id="a_nr">Mark not ready</button>';
         h += '<button id="a_done">Mark done</button><button id="a_rem" class="danger">Remove from list</button>';
       } else { h += '<button id="a_restore">Restore to waiting list</button>'; }
+      h += '<button id="a_del" class="danger">Delete whole entry…</button>';
       $('f_actions').innerHTML = h;
       var info = '';
       if (cur.Status === 'Done') info = 'Done on ' + fmtDate(cur.DoneDate) + (cur.DoneNotes ? ': ' + cur.DoneNotes : '');
@@ -1596,6 +1621,7 @@ function openPatient(id, opts) {
       bind('a_send', function () { dlgSendToList(cur, function () { m.close(); }); });
       bind('a_done', function () { dlgDone(cur, function () { m.close(); }); });
       bind('a_rem', function () { dlgRemove(cur, m); });
+      bind('a_del', function () { dlgDelete(cur, m); });
       bind('a_back', function () {
         call('clearNotReady', { patientId: cur.Id }).then(function (r) { upsertP(r.patient); m.close(); render(); toast('Back on the list'); }).catch(fail);
       });
@@ -1630,6 +1656,24 @@ function dlgNotReady(p, parent) {
     }).catch(fail);
   });
 }
+function dlgDelete(p, parent) {
+  var m = openModal('<h2>Delete this patient entry?</h2>' +
+    '<p style="color:var(--red)"><strong>This permanently deletes ' + esc(p.Name) + ' (MRN ' + esc(p.MRN) + ') and the whole contact log.</strong> It cannot be undone, and the entry will not appear on the Done or Removed pages. Use "Remove from list" instead if you may need the record again.</p>' +
+    (p.ListId ? '<p class="small">The patient is on a theatre list and will be taken off it.</p>' : '') +
+    '<div class="field"><label for="d_mrn">Type the MRN to confirm</label><input type="text" id="d_mrn" autocomplete="off" autocapitalize="characters"></div>' +
+    '<div class="row"><button class="danger" id="d_go" disabled>Delete permanently</button><button id="d_cancel">Cancel</button></div>', { narrow: true });
+  function match() { return val('d_mrn').toUpperCase() === String(p.MRN).toUpperCase(); }
+  $('d_mrn').addEventListener('input', function () { $('d_go').disabled = !match(); });
+  $('d_cancel').addEventListener('click', m.close);
+  $('d_go').addEventListener('click', function () {
+    if (!match()) return;
+    $('d_go').disabled = true;
+    call('deletePatient', { patientId: p.Id, mrn: val('d_mrn') }).then(function () {
+      S.d.patients = S.d.patients.filter(function (x) { return x.Id !== p.Id; });
+      m.close(); parent.close(); render(); toast('Patient entry deleted');
+    }).catch(function (e) { $('d_go').disabled = false; fail(e); });
+  });
+}
 function dlgRemove(p, parent) {
   var m = openModal('<h2>Remove from the list</h2><p class="muted small">You can restore the patient later from the Removed page.</p>' +
     '<div class="field"><label for="r_reason">Reason</label><select id="r_reason">' + REMOVE_REASONS.map(function (s) { return opt(s, s); }).join('') + '</select></div>' +
@@ -1645,9 +1689,11 @@ function dlgRemove(p, parent) {
 
 // ---------------------------------------------------------------- settings
 function viewSettings() {
-  var d = S.d, st = d.settings, admin = S.user.Role === 'admin';
+  var d = S.d, st = d.settings, admin = S.user.Admin;
+  var tabs = SET_TABS.filter(function (t) { return t[2] === 'all' || (t[2] === 'admin' ? admin : (S.user.SettingsAccess || (t[0] === 'data' && admin))); });
+  if (!tabs.some(function (t) { return t[0] === S.setTab; })) S.setTab = tabs[0][0];
   $('view').innerHTML =
-    '<h2>Settings</h2><div class="stabs scrollx" id="s_tabs">' + SET_TABS.map(function (t) { return '<span class="pill' + (S.setTab === t[0] ? ' on' : '') + '" data-t="' + t[0] + '">' + esc(t[1]) + '</span>'; }).join('') + '</div>' +
+    '<h2>Settings</h2><div class="stabs scrollx" id="s_tabs">' + tabs.map(function (t) { return '<span class="pill' + (S.setTab === t[0] ? ' on' : '') + '" data-t="' + t[0] + '">' + esc(t[1]) + '</span>'; }).join('') + '</div>' +
     '<div class="panel stab" data-t="procedures"><div class="spread"><h3>Procedures</h3><button id="s_addproc">Add procedure</button></div><div id="s_procs"></div></div>' +
     '<div class="panel stab" data-t="consultants"><div class="spread"><h3>Pediatric surgery consultants and operating days</h3><button id="s_addcons">Add consultant</button></div><div id="s_cons"></div></div>' +
     '<div class="panel stab" data-t="consultants"><h3>Specialty consultants (pediatrics and other specialties)</h3><p class="muted small">Chosen when a medical review is requested. Anesthesia has no consultant name.</p><div id="s_sc"></div>' +
@@ -1657,22 +1703,21 @@ function viewSettings() {
     '<div class="row" style="margin-top:8px"><input type="text" id="s_roomname" placeholder="Room name, for example OT 1" style="max-width:260px"><button id="s_addroom">Add room</button></div></div>' +
     '<div class="panel stab" data-t="consultants"><div class="spread"><h3>Residents</h3></div><div id="s_res"></div>' +
     '<div class="row" style="margin-top:8px"><input type="text" id="s_resname" placeholder="Resident name" style="max-width:260px"><button id="s_addres">Add resident</button></div></div>' +
-    '<div class="panel stab" data-t="warnings"><h3>Warning thresholds</h3><p class="muted small">Days in the list before a patient is flagged, by category.</p>' +
+    '<div class="panel stab" data-t="warnings"><h3>Warning thresholds</h3><p class="muted small">Wait targets by category apply when a procedure has no default target wait of its own. A patient can also have their own targets.</p>' +
     '<div class="grid3"><div class="field"><label for="t_min">Minor (days)</label><input type="number" id="t_min" min="0" value="' + esc(st.waitDaysMinor) + '"></div>' +
     '<div class="field"><label for="t_int">Intermediate (days)</label><input type="number" id="t_int" min="0" value="' + esc(st.waitDaysIntermediate) + '"></div>' +
     '<div class="field"><label for="t_maj">Major (days)</label><input type="number" id="t_maj" min="0" value="' + esc(st.waitDaysMajor) + '"></div>' +
     '<div class="field"><label for="t_nc">No contact for (days)</label><input type="number" id="t_nc" min="0" value="' + esc(st.noContactDays) + '"></div>' +
-    '<div class="field"><label for="t_tg">Warn before target date (days)</label><input type="number" id="t_tg" min="0" value="' + esc(st.targetWarnDays) + '"></div>' +
+    '<div class="field"><label for="t_tg">Warn before the wait target (days)</label><input type="number" id="t_tg" min="0" value="' + esc(st.targetWarnDays) + '"></div>' +
     '<div class="field"><label for="t_14">Warn before age 14, adult services (months)</label><input type="number" id="t_14" min="0" value="' + esc(st.warn14Months) + '"></div></div>' +
-    '<div class="grid3"><div class="field"><label for="t_idle">Sign out after idle (minutes, 0 = never)</label><input type="number" id="t_idle" min="0" value="' + esc(st.idleMinutes) + '"></div>' +
-    '<div class="field"><label for="t_ahead">Create OT-day lists this many weeks ahead (0 = off)</label><input type="number" id="t_ahead" min="0" max="52" value="' + esc(st.listsAheadWeeks) + '"></div></div>' +
+    '<div class="grid3"><div class="field"><label for="t_idle">Sign out after idle (minutes, 0 = never)</label><input type="number" id="t_idle" min="0" value="' + esc(st.idleMinutes) + '"></div></div>' +
     '<button id="t_save">Save thresholds</button></div>' +
     '<div class="panel stab" data-t="data"><h3>Data</h3><div class="row"><button id="x_import" class="primary">Import from Excel or CSV</button></div><div class="row" style="margin-top:8px"><button id="x_wait">Export waiting list (Excel)</button><button id="x_done">Export done cases (Excel)</button><button id="x_rem">Export removed (Excel)</button></div>' +
     (admin ? '<div class="row"><button id="x_sample">Add sample patients</button><button id="x_clear" class="danger">Remove all sample patients</button></div>' : '') + '</div>' +
     (admin ? '<div class="panel stab" data-t="users"><h3>Backup</h3><p class="muted small">Makes a copy of the whole Google Sheet in a Drive folder called "Waiting list backups" (the newest 14 are kept). The copies stay in the same Google account and contain patient data, so they follow the same data-location rules as the Sheet.</p><p id="bk_info" class="small">Loading…</p><div class="row"><button id="bk_now">Back up now</button><button id="bk_daily">Daily backup</button></div></div>' : '') +
-    (admin ? '<div class="panel stab" data-t="users"><div class="spread"><h3>Users</h3><button id="u_add">Add doctor</button></div><div id="u_list"><p class="muted small">Loading…</p></div></div>' +
+    (admin ? '<div class="panel stab" data-t="users"><div class="spread"><h3>Users</h3><button id="u_add">Add user</button></div><div id="u_list"><p class="muted small">Loading…</p></div></div>' +
       '<div class="panel stab" data-t="users"><div class="spread"><h3>Audit log</h3><div class="row"><button id="a_load">Show recent changes</button><button id="a_x">Export Excel</button></div></div><div id="a_list"></div></div>' : '') +
-    '<div class="panel stab" data-t="users"><h3>My account</h3><p class="muted small">' + esc(S.user.Name) + ' · ' + esc(S.user.Email) + ' · ' + esc(S.user.Role) + ' · app v' + esc(VERSION) + '</p>' +
+    '<div class="panel stab" data-t="account"><h3>My account</h3><p class="muted small">' + esc(S.user.Name) + ' · username ' + esc(S.user.Username) + ' · ' + esc(S.user.Type || '') + (S.user.Admin ? ' · admin' : '') + (S.user.SettingsAccess ? ' · settings access' : '') + ' · app v' + esc(VERSION) + '</p>' +
     '<div class="grid3"><div class="field"><label for="m_old">Current PIN</label><input type="password" id="m_old"></div>' +
     '<div class="field"><label for="m_new">New PIN</label><input type="password" id="m_new"></div>' +
     '<div class="field"><label>&nbsp;</label><button id="m_go">Change PIN</button></div></div></div>';
@@ -1697,7 +1742,7 @@ function viewSettings() {
     call('saveResident', { Name: val('s_resname') }).then(function (l) { S.d.residents = l; viewSettings(); toast('Resident added'); }).catch(fail);
   });
   $('t_save').addEventListener('click', function () {
-    call('saveSettings', { waitDaysMinor: val('t_min'), waitDaysIntermediate: val('t_int'), waitDaysMajor: val('t_maj'), noContactDays: val('t_nc'), targetWarnDays: val('t_tg'), warn14Months: val('t_14'), idleMinutes: val('t_idle'), listsAheadWeeks: val('t_ahead') })
+    call('saveSettings', { waitDaysMinor: val('t_min'), waitDaysIntermediate: val('t_int'), waitDaysMajor: val('t_maj'), noContactDays: val('t_nc'), targetWarnDays: val('t_tg'), warn14Months: val('t_14'), idleMinutes: val('t_idle') })
       .then(function (s) { S.d.settings = s; resetIdle(); toast('Saved'); }).catch(fail);
   });
   $('x_wait').addEventListener('click', function () { exportPatients('waiting-list', S.d.patients.filter(isActive)); });
@@ -1745,7 +1790,7 @@ function viewSettings() {
     });
   }
 }
-var SET_TABS = [['consultants', 'Consultants'], ['procedures', 'Procedures'], ['tags', 'Tags'], ['warnings', 'Warnings'], ['rooms', 'Operating rooms'], ['users', 'Users and backup'], ['data', 'Data']];
+var SET_TABS = [['consultants', 'Consultants', 'set'], ['procedures', 'Procedures', 'set'], ['tags', 'Tags', 'set'], ['warnings', 'Warnings', 'set'], ['rooms', 'Operating rooms', 'set'], ['data', 'Data', 'set'], ['users', 'Users and backup', 'admin'], ['account', 'My account', 'all']];
 function drawTags() {
   var specs = SPECIALTIES.filter(function (x) { return x !== 'Anesthesia'; });
   $('s_tags').innerHTML = TAGS.filter(function (t) { return t !== 'Other'; }).map(function (t) {
@@ -1770,33 +1815,32 @@ function drawSC() {
 }
 function drawProcs() {
   var l = S.d.procedures;
-  $('s_procs').innerHTML = '<table class="tbl"><thead><tr><th>Procedure</th><th>Time</th><th>Category</th><th>Care</th><th>Price day / in</th><th></th></tr></thead><tbody>' +
+  $('s_procs').innerHTML = '<table class="tbl"><thead><tr><th>Procedure</th><th>Category</th><th>Care</th><th>Price day / in</th><th></th></tr></thead><tbody>' +
     l.map(function (p) {
-      return '<tr><td>' + esc(p.Name) + (p.Active !== 'Y' ? ' <span class="chip">retired</span>' : '') + '<br><span class="muted small">' + esc(p.DefaultDiagnosis) + '</span></td><td>' + esc(p.DefaultMinutes) + ' min</td><td>' + esc(p.DefaultCategory) +
+      return '<tr><td>' + esc(p.Name) + (p.Active !== 'Y' ? ' <span class="chip">retired</span>' : '') + '<br><span class="muted small">' + esc(p.DefaultDiagnosis) + '</span></td><td>' + esc(p.DefaultCategory) +
         '</td><td>' + esc(p.DefaultCare) + '</td><td>' + esc(p.PriceDay || '-') + ' / ' + esc(p.PriceInpatient || '-') + '</td><td><button data-e="' + esc(p.Id) + '">Edit</button></td></tr>';
     }).join('') + '</tbody></table>';
   on($('s_procs'), '[data-e]', 'click', function (e) { procModal(procById(e.currentTarget.getAttribute('data-e'))); });
 }
 function procModal(pr) {
-  var isNew = !pr; pr = pr || { DefaultMinutes: '30', DefaultCategory: 'Minor', DefaultCare: 'Day-case', Active: 'Y', WarnMonthsBefore: '3' };
+  var isNew = !pr; pr = pr || { DefaultCategory: 'Minor', DefaultCare: 'Day-case', Active: 'Y', WarnMonthsBefore: '3' };
   var m = openModal('<h2>' + (isNew ? 'Add procedure' : 'Edit procedure') + '</h2><div class="grid2">' +
     '<div class="field"><label for="p_name">Name</label><input type="text" id="p_name" value="' + esc(pr.Name || '') + '"></div>' +
     '<div class="field"><label for="p_dx">Default diagnosis</label><input type="text" id="p_dx" value="' + esc(pr.DefaultDiagnosis || '') + '"></div>' +
-    '<div class="field"><label for="p_min">Default time (minutes)</label><input type="number" id="p_min" min="0" value="' + esc(pr.DefaultMinutes) + '"></div>' +
     '<div class="field"><label for="p_cat">Default category</label><select id="p_cat">' + CATS.map(function (s) { return opt(s, s, pr.DefaultCategory === s); }).join('') + '</select></div>' +
     '<div class="field"><label for="p_care">Default care</label><select id="p_care">' + ['Day-case', 'Inpatient'].map(function (s) { return opt(s, s, pr.DefaultCare === s); }).join('') + '</select></div>' +
     '<div class="field"><label>&nbsp;</label><label class="check"><input type="checkbox" id="p_lat"' + (pr.Laterality === 'Y' ? ' checked' : '') + '> Needs side (right, left, bilateral)</label></div>' +
     '<div class="field"><label for="p_pd">Price, day-case (BHD)</label><input type="number" id="p_pd" min="0" step="any" value="' + esc(pr.PriceDay || '') + '"></div>' +
     '<div class="field"><label for="p_pi">Price, inpatient (BHD)</label><input type="number" id="p_pi" min="0" step="any" value="' + esc(pr.PriceInpatient || '') + '"></div>' +
-    '<div class="field"><label for="p_td">Target: days from date added (0 = none)</label><input type="number" id="p_td" min="0" value="' + esc(pr.TargetDays || '') + '"></div>' +
-    '<div class="field"><label for="p_ma">Age limit in months (0 = none)</label><input type="number" id="p_ma" min="0" value="' + esc(pr.MaxAgeMonths || '') + '"></div>' +
-    '<div class="field"><label for="p_wm">Warn this many months before the age limit</label><input type="number" id="p_wm" min="0" value="' + esc(pr.WarnMonthsBefore || '3') + '"></div>' +
+    '<div class="field"><label for="p_td">Default target wait (days, empty = none)</label><input type="number" id="p_td" min="0" value="' + esc(pr.TargetDays || '') + '"></div>' +
+    '<div class="field"><label for="p_ma">Default target age: done before (months, empty = none)</label><input type="number" id="p_ma" min="0" value="' + esc(pr.MaxAgeMonths || '') + '"></div>' +
+    '<div class="field"><label for="p_wm">Warn this many months before that age</label><input type="number" id="p_wm" min="0" value="' + esc(pr.WarnMonthsBefore || '3') + '"></div>' +
     '<div class="field"><label>&nbsp;</label><label class="check"><input type="checkbox" id="p_act"' + (pr.Active === 'Y' ? ' checked' : '') + '> In use</label></div></div>' +
     '<div class="row"><button class="primary" id="p_save">Save</button><button id="p_cancel">Cancel</button></div>');
   $('p_cancel').addEventListener('click', m.close);
   $('p_save').addEventListener('click', function () {
     call('saveProcedure', {
-      Id: pr.Id || '', Name: val('p_name'), DefaultDiagnosis: val('p_dx'), DefaultMinutes: val('p_min'), DefaultCategory: val('p_cat'),
+      Id: pr.Id || '', Name: val('p_name'), DefaultDiagnosis: val('p_dx'), DefaultCategory: val('p_cat'),
       DefaultCare: val('p_care'), Laterality: checked('p_lat') ? 'Y' : '', PriceDay: val('p_pd'), PriceInpatient: val('p_pi'),
       TargetDays: val('p_td'), MaxAgeMonths: val('p_ma'), WarnMonthsBefore: val('p_wm'), Active: checked('p_act') ? 'Y' : 'N'
     }).then(function (l) { S.d.procedures = l; m.close(); viewSettings(); toast('Procedure saved'); }).catch(fail);
@@ -1804,24 +1848,23 @@ function procModal(pr) {
 }
 function drawCons() {
   var l = S.d.consultants;
-  $('s_cons').innerHTML = '<table class="tbl"><thead><tr><th>Consultant</th><th>Operating day</th><th>Usual room</th><th>List length</th><th></th></tr></thead><tbody>' +
+  $('s_cons').innerHTML = '<table class="tbl"><thead><tr><th>Consultant</th><th>Operating day</th><th>Usual room</th><th></th></tr></thead><tbody>' +
     l.map(function (c) {
-      return '<tr><td>' + esc(c.Name) + (c.Active !== 'Y' ? ' <span class="chip">inactive</span>' : '') + '</td><td>' + esc(c.OTDay) + '</td><td>' + esc(roomName(c.DefaultRoomId)) + '</td><td>' + esc(c.SlotMinutes) + ' min</td><td><button data-e="' + esc(c.Id) + '">Edit</button></td></tr>';
+      return '<tr><td>' + esc(c.Name) + (c.Active !== 'Y' ? ' <span class="chip">inactive</span>' : '') + '</td><td>' + esc(c.OTDay) + '</td><td>' + esc(roomName(c.DefaultRoomId)) + '</td><td><button data-e="' + esc(c.Id) + '">Edit</button></td></tr>';
     }).join('') + '</tbody></table>';
   on($('s_cons'), '[data-e]', 'click', function (e) { consModal(consById(e.currentTarget.getAttribute('data-e'))); });
 }
 function consModal(c) {
-  var isNew = !c; c = c || { OTDay: '', SlotMinutes: '240', Active: 'Y' };
+  var isNew = !c; c = c || { OTDay: '', Active: 'Y' };
   var m = openModal('<h2>' + (isNew ? 'Add consultant' : 'Edit consultant') + '</h2>' +
     '<div class="field"><label for="c_name">Name</label><input type="text" id="c_name" value="' + esc(c.Name || '') + '"></div>' +
     '<div class="field"><label for="c_day">Operating day</label><select id="c_day">' + DAYS.map(function (s) { return opt(s, s, c.OTDay === s); }).join('') + '</select></div>' +
     '<div class="field"><label for="c_room">Usual operating room</label><select id="c_room">' + opt('', 'None', !c.DefaultRoomId) + (S.d.rooms || []).filter(function (r) { return r.Active === 'Y' || r.Id === c.DefaultRoomId; }).map(function (r) { return opt(r.Id, r.Name, r.Id === c.DefaultRoomId); }).join('') + '</select></div>' +
-    '<div class="field"><label for="c_slot">List length (minutes)</label><input type="number" id="c_slot" min="0" value="' + esc(c.SlotMinutes) + '"></div>' +
     '<label class="check"><input type="checkbox" id="c_act"' + (c.Active === 'Y' ? ' checked' : '') + '> Active</label>' +
     '<div class="row" style="margin-top:12px"><button class="primary" id="c_save">Save</button><button id="c_cancel">Cancel</button></div>', { narrow: true });
   $('c_cancel').addEventListener('click', m.close);
   $('c_save').addEventListener('click', function () {
-    call('saveConsultant', { Id: c.Id || '', Name: val('c_name'), OTDay: val('c_day'), DefaultRoomId: val('c_room'), SlotMinutes: val('c_slot'), Active: checked('c_act') ? 'Y' : 'N' })
+    call('saveConsultant', { Id: c.Id || '', Name: val('c_name'), OTDay: val('c_day'), DefaultRoomId: val('c_room'), Active: checked('c_act') ? 'Y' : 'N' })
       .then(function (r) { S.d.consultants = r.consultants; S.d.lists = r.lists; m.close(); viewSettings(); toast('Consultant saved. Lists for the coming weeks are in the Calendar.'); }).catch(fail);
   });
 }
@@ -1837,37 +1880,40 @@ function drawRes() {
 }
 function drawUsers() {
   call('listUsers').then(function (users) {
-    $('u_list').innerHTML = '<table class="tbl"><thead><tr><th>Doctor</th><th>Role</th><th>Status</th><th></th></tr></thead><tbody>' +
+    var box = $('u_list'); if (!box) return;
+    box.innerHTML = '<table class="tbl"><thead><tr><th>User</th><th>Type</th><th>Rights</th><th>Status</th><th></th></tr></thead><tbody>' +
       users.map(function (u) {
-        return '<tr><td>' + esc(u.Name) + '<br><span class="muted small">' + esc(u.Email) + '</span></td><td>' + esc(u.Role) + '</td><td>' + (u.Active === 'Y' ? 'Active' : 'Disabled') + (u.MustChange === 'Y' ? ' · temporary PIN' : '') +
-          '</td><td><button data-edit="' + esc(u.Email) + '">Edit</button> <button data-reset="' + esc(u.Email) + '">Reset PIN</button></td></tr>';
+        var rights = [u.SettingsAccess ? 'Settings' : '', u.Admin ? 'Admin' : ''].filter(Boolean).join(', ') || 'None';
+        return '<tr><td>' + esc(u.Name) + '<br><span class="muted small">' + esc(u.Username) + '</span></td><td>' + esc(u.Type || '') + '</td><td>' + esc(rights) + '</td><td>' + (u.Active === 'Y' ? 'Active' : 'Disabled') + (u.MustChange === 'Y' ? '<br><span class="muted small">temporary PIN</span>' : '') +
+          '</td><td><button data-edit="' + esc(u.Username) + '">Edit</button> <button data-reset="' + esc(u.Username) + '">Reset PIN</button></td></tr>';
       }).join('') + '</tbody></table>';
-    on($('u_list'), '[data-edit]', 'click', function (e) {
-      var em = e.currentTarget.getAttribute('data-edit');
-      userModal(users.filter(function (u) { return u.Email === em; })[0]);
+    on(box, '[data-edit]', 'click', function (e) {
+      var un = e.currentTarget.getAttribute('data-edit');
+      userModal(users.filter(function (u) { return u.Username === un; })[0]);
     });
-    on($('u_list'), '[data-reset]', 'click', function (e) {
-      var em = e.currentTarget.getAttribute('data-reset');
-      call('resetUserPin', { Email: em }).then(showPin).catch(fail);
+    on(box, '[data-reset]', 'click', function (e) {
+      call('resetUserPin', { Username: e.currentTarget.getAttribute('data-reset') }).then(showPin).catch(fail);
     });
-  }).catch(fail);
+  }).catch(function (e) { if ($('u_list')) fail(e); });
 }
 function showPin(r) {
-  var m = openModal('<h2>Temporary PIN</h2><p>Give this to <strong>' + esc(r.email) + '</strong> privately. They will be asked to choose their own at first sign-in.</p>' +
+  var m = openModal('<h2>Temporary PIN</h2><p>Give this to <strong>' + esc(r.username) + '</strong> privately. They will be asked to choose their own at first sign-in.</p>' +
     '<p style="font-size:22px;font-family:monospace;letter-spacing:1px">' + esc(r.tempPin) + '</p><p class="muted small">It is shown only once.</p><button class="primary" id="tp_ok">Done</button>', { narrow: true, locked: true });
   $('tp_ok').addEventListener('click', function () { m.close(); drawUsers(); });
 }
 function userModal(u) {
-  var isNew = !u; u = u || { Role: 'doctor', Active: 'Y' };
-  var m = openModal('<h2>' + (isNew ? 'Add doctor' : 'Edit doctor') + '</h2>' +
-    '<div class="field"><label for="u_email">Email</label><input type="email" id="u_email" value="' + esc(u.Email || '') + '"' + (isNew ? '' : ' readonly') + '></div>' +
+  var isNew = !u; u = u || { Type: '', Active: 'Y' };
+  var m = openModal('<h2>' + (isNew ? 'Add user' : 'Edit user') + '</h2>' +
+    '<div class="field"><label for="u_user">Username (letters and numbers, no spaces)</label><input type="text" id="u_user" autocapitalize="none" autocorrect="off" spellcheck="false" value="' + esc(u.Username || '') + '"' + (isNew ? '' : ' readonly') + '></div>' +
     '<div class="field"><label for="u_name">Name</label><input type="text" id="u_name" value="' + esc(u.Name || '') + '"></div>' +
-    '<div class="field"><label for="u_role">Role</label><select id="u_role">' + opt('doctor', 'Doctor', u.Role !== 'admin') + opt('admin', 'Admin (manages users, sample data, audit log)', u.Role === 'admin') + '</select></div>' +
+    '<div class="field"><label for="u_type">Type</label><select id="u_type">' + opt('', 'Choose…', !u.Type) + opt('Consultant', 'Consultant', u.Type === 'Consultant') + opt('Surgical team', 'Surgical team (resident)', u.Type === 'Surgical team') + '</select></div>' +
+    '<label class="check" style="margin-bottom:6px"><input type="checkbox" id="u_set"' + (u.SettingsAccess ? ' checked' : '') + '> Can open Settings (procedures, consultants, rooms, tags, import)</label>' +
+    '<label class="check" style="margin-bottom:6px"><input type="checkbox" id="u_adm"' + (u.Admin ? ' checked' : '') + '> Admin (users, backup, audit log, sample data)</label>' +
     '<label class="check"><input type="checkbox" id="u_act"' + (u.Active === 'Y' ? ' checked' : '') + '> Can sign in</label>' +
     '<div class="row" style="margin-top:12px"><button class="primary" id="u_save">Save</button><button id="u_cancel">Cancel</button></div>', { narrow: true });
   $('u_cancel').addEventListener('click', m.close);
   $('u_save').addEventListener('click', function () {
-    call('saveUser', { Email: val('u_email'), Name: val('u_name'), Role: val('u_role'), Active: checked('u_act') ? 'Y' : 'N' }).then(function (r) {
+    call('saveUser', { Username: val('u_user'), Name: val('u_name'), Type: val('u_type'), SettingsAccess: checked('u_set') ? 'Y' : '', Admin: checked('u_adm') ? 'Y' : '', Active: checked('u_act') ? 'Y' : 'N' }).then(function (r) {
       m.close();
       if (r.tempPin) showPin(r); else { drawUsers(); toast('Saved'); }
     }).catch(fail);
@@ -1887,9 +1933,9 @@ function viewCalendar() {
     if (l.Status === 'Open' && l.RoomId) { var k = l.Date + '|' + l.RoomId; clash[k] = (clash[k] || 0) + 1; }
   });
   function block(l) {
-    var u = listUsed(l), cap = Number(l.Minutes) || 0;
-    var cls = l.Status !== 'Open' ? 'gray' : (u.min > cap ? 'red' : (u.n === 0 ? '' : (u.min >= cap * 0.8 ? 'green' : 'blue')));
-    var line2 = l.Status !== 'Open' ? 'Cancelled' : (u.n + (u.n === 1 ? ' case · ' : ' cases · ') + u.min + '/' + cap + ' min' + (l.RoomId && clash[l.Date + '|' + l.RoomId] > 1 ? ' · room clash' : ''));
+    var u = listUsed(l);
+    var cls = l.Status !== 'Open' ? 'gray' : (u.n === 0 ? '' : 'blue');
+    var line2 = l.Status !== 'Open' ? 'Cancelled' : (u.n + (u.n === 1 ? ' case' : ' cases') + (l.RoomId && clash[l.Date + '|' + l.RoomId] > 1 ? ' · room clash' : ''));
     return '<div class="lst ' + cls + '" data-list="' + esc(l.Id) + '"><strong>' + esc(consName(l.ConsultantId)) + '</strong>' + (l.RoomId ? ' · ' + esc(roomName(l.RoomId)) : '') + '<br><span class="small">' + esc(line2) + '</span></div>';
   }
   var body = '';
@@ -1909,7 +1955,7 @@ function viewCalendar() {
     }).join('') : '<p class="muted">No lists this month.</p>';
   }
   $('view').innerHTML =
-    '<div class="spread"><h2>Calendar</h2><div class="row"><button id="cal_gen">Create month lists</button><button class="primary" id="cal_add">Add list</button></div></div>' +
+    '<div class="spread"><h2>Calendar</h2><div class="row"><button class="primary" id="cal_add">Add list</button></div></div>' +
     '<div class="row" style="margin:8px 0"><button id="cal_prev" aria-label="Previous month">&lsaquo;</button><strong style="min-width:150px;text-align:center">' + LONGM[mo - 1] + ' ' + y + '</strong><button id="cal_next" aria-label="Next month">&rsaquo;</button><button id="cal_today">Today</button></div>' +
     '<p class="muted small">Each block is one consultant\'s list: name, room, cases and minutes used of the list length. Tap a block to build or review the list.</p>' + body;
   function shift(n) {
@@ -1921,10 +1967,6 @@ function viewCalendar() {
   $('cal_next').addEventListener('click', function () { shift(1); });
   $('cal_today').addEventListener('click', function () { S.calMonth = S.today.slice(0, 7); viewCalendar(); });
   $('cal_add').addEventListener('click', function () { listForm(null, m === S.today.slice(0, 7) ? S.today : m + '-01'); });
-  $('cal_gen').addEventListener('click', function () {
-    if (!window.confirm('Create each consultant\'s list on their operating day for ' + LONGM[mo - 1] + ' ' + y + '? Existing lists are kept and past dates are skipped.')) return;
-    call('generateLists', { month: m }).then(function (r) { S.d.lists = r.lists; render(); toast(r.created + ' lists created'); }).catch(fail);
-  });
   on($('view'), '[data-list]', 'click', function (e) { openList(e.currentTarget.getAttribute('data-list')); });
   on($('view'), '[data-add]', 'click', function (e) { e.stopPropagation(); listForm(null, e.currentTarget.getAttribute('data-add')); });
 }
@@ -1933,18 +1975,17 @@ function listForm(l, presetDate) {
   var isNew = !l;
   var cons = S.d.consultants.filter(function (c) { return c.Active === 'Y' || (l && c.Id === l.ConsultantId); });
   var rooms = (S.d.rooms || []).filter(function (r) { return r.Active === 'Y' || (l && r.Id === l.RoomId); });
-  l = l || { Date: presetDate || S.today, ConsultantId: '', RoomId: '', Minutes: '', Notes: '' };
+  l = l || { Date: presetDate || S.today, ConsultantId: '', RoomId: '', Notes: '' };
   var m = openModal('<h2>' + (isNew ? 'Add theatre list' : 'Edit theatre list') + '</h2>' +
     '<div class="field"><label for="l_date">Date</label><input type="date" id="l_date" value="' + esc(l.Date) + '"></div>' +
     '<div class="field"><label for="l_cons">Consultant</label><select id="l_cons">' + opt('', 'Choose…', !l.ConsultantId) + cons.map(function (c) { return opt(c.Id, c.Name, c.Id === l.ConsultantId); }).join('') + '</select></div>' +
     '<div class="field"><label for="l_room">Operating room</label><select id="l_room">' + opt('', 'Not set', !l.RoomId) + rooms.map(function (r) { return opt(r.Id, r.Name, r.Id === l.RoomId); }).join('') + '</select></div>' +
-    '<div class="field"><label for="l_min">List length (minutes)</label><input type="number" id="l_min" min="0" value="' + esc(l.Minutes) + '"></div>' +
     '<div class="field"><label for="l_notes">Notes</label><input type="text" id="l_notes" value="' + esc(l.Notes) + '"></div>' +
     '<div class="row"><button class="primary" id="l_save">Save</button><button id="l_cancel">Cancel</button></div>', { narrow: true });
   $('l_cons').addEventListener('change', function () {
     var c = consById(this.value);
     if (c && isNew) {
-      $('l_min').value = c.SlotMinutes; $('l_room').value = c.DefaultRoomId || '';
+      $('l_room').value = c.DefaultRoomId || '';
       if (c.OTDay) {
         var ds = val('l_date') || S.today;
         for (var k = 0; k < 7; k++) { var x = addDaysStr(ds, k), wd = DAYS[new Date(utc(x)).getUTCDay() + 1]; if (wd === c.OTDay) { $('l_date').value = x; break; } }
@@ -1953,7 +1994,7 @@ function listForm(l, presetDate) {
   });
   $('l_cancel').addEventListener('click', m.close);
   $('l_save').addEventListener('click', function () {
-    call('saveList', { Id: l.Id || '', Date: val('l_date'), ConsultantId: val('l_cons'), RoomId: val('l_room'), Minutes: val('l_min'), Notes: val('l_notes') }).then(function (r) {
+    call('saveList', { Id: l.Id || '', Date: val('l_date'), ConsultantId: val('l_cons'), RoomId: val('l_room'), Notes: val('l_notes') }).then(function (r) {
       S.d.lists = r.lists; r.patients.forEach(upsertP); m.close(); render(); toast('List saved');
     }).catch(fail);
   });
@@ -1965,27 +2006,24 @@ function dlgSendToList(p, after) {
   var all = S.d.lists.filter(function (l) { return l.Status === 'Open' && l.Date >= S.today; }).sort(function (a, b) { return a.Date.localeCompare(b.Date); });
   var mine = all.filter(function (l) { return l.ConsultantId === p.ConsultantId; });
   var showAll = !mine.length;
-  var need = totalMin(p);
   var m = openModal('<div id="sl_body"></div>', { narrow: true });
   function draw() {
     var rows = (showAll ? all : mine).slice(0, 40);
     var html = '<div class="spread"><h2>Schedule</h2><button id="sl_close">Close</button></div>' +
-      '<p style="margin:4px 0"><strong>' + esc(p.Name) + '</strong> <span class="muted small">' + esc(ageText(p.DOB)) + ' · ' + esc(p.MRN) + '</span><br>' + esc(procLabel(p)) + ' <span class="muted small">· ' + need + ' min · ' + esc(p.CareType) + ' · ' + esc(consName(p.ConsultantId)) + '</span></p>' +
+      '<p style="margin:4px 0"><strong>' + esc(p.Name) + '</strong> <span class="muted small">' + esc(ageText(p.DOB)) + ' · ' + esc(p.MRN) + '</span><br>' + esc(procLabel(p)) + ' <span class="muted small">· ' + esc(p.CareType) + ' · ' + esc(consName(p.ConsultantId)) + '</span></p>' +
       '<p class="muted small">Check with the family before booking.' + (p.Sponsorship ? ' Sponsorship: ' + esc(p.Sponsorship) + '.' : ' Sponsorship is not recorded.') + '</p>' +
       '<label class="check"><input type="checkbox" id="sl_all"' + (showAll ? ' checked' : '') + '> Show lists of all consultants</label>';
     html += rows.length ? rows.map(function (l) {
-      var u = listUsed(l), cap = Number(l.Minutes) || 0, free = cap - u.min, fits = need <= free;
+      var u = listUsed(l);
       return '<div class="log"><div class="spread"><div><strong>' + esc(fmtDay(l.Date)) + '</strong> <span class="muted small">' + esc(listTitle(l)) + '</span><br>' +
-        '<span class="small">' + u.n + (u.n === 1 ? ' case' : ' cases') + ' · ' + free + ' min free of ' + cap + '</span> ' +
-        '<span class="chip ' + (fits ? 'green' : 'red') + '">' + (fits ? 'Fits' : 'Over by ' + (need - free) + ' min') + '</span></div>' +
+        '<span class="small">' + u.n + (u.n === 1 ? ' case' : ' cases') + ' booked</span></div>' +
         '<button class="primary" data-l="' + esc(l.Id) + '">Book here</button></div></div>';
     }).join('') : '<p class="muted small">No open lists coming up. Set an operating day for the consultant in Settings, or add a list from the Calendar.</p>';
     $('sl_body').innerHTML = html;
     $('sl_close').addEventListener('click', m.close);
     $('sl_all').addEventListener('change', function () { showAll = this.checked; draw(); });
     on($('sl_body'), '[data-l]', 'click', function (e) {
-      var l = listById(e.currentTarget.getAttribute('data-l')), u = listUsed(l), free = (Number(l.Minutes) || 0) - u.min;
-      if (need > free && !window.confirm('This goes over the list time by ' + (need - free) + ' minutes. Book anyway?')) return;
+      var l = listById(e.currentTarget.getAttribute('data-l'));
       call('addToList', { listId: l.Id, patientIds: [p.Id] }).then(function (r) {
         if (r.skipped.length) { toast(r.skipped[0].reason, true); return; }
         r.patients.forEach(upsertP); m.close(); render(); toast('Booked on ' + fmtDay(l.Date) + ' (' + listTitle(l) + ')');
@@ -1999,19 +2037,18 @@ function dlgSendToList(p, after) {
 // ---------------------------------------------------------------- print a theatre list
 function printList(l) {
   var pts = ordered(l);
-  var used = pts.reduce(function (s, p) { return s + totalMin(p); }, 0);
   var m = openModal('<div class="row noprint" style="margin-bottom:8px"><button class="primary" id="pr_go">Print</button><button id="pr_close">Close</button></div>' +
     '<div class="printable"><h2>Theatre list: ' + esc(fmtDay(l.Date)) + '</h2>' +
-    '<p><strong>' + esc(consName(l.ConsultantId)) + '</strong>' + (l.RoomId ? ' · ' + esc(roomName(l.RoomId)) : '') + ' · ' + (Number(l.Minutes) || 0) + ' min list · ' + pts.length + ' cases · ' + used + ' min planned</p>' +
+    '<p><strong>' + esc(consName(l.ConsultantId)) + '</strong>' + (l.RoomId ? ' · ' + esc(roomName(l.RoomId)) : '') + ' · ' + pts.length + (pts.length === 1 ? ' case' : ' cases') + '</p>' +
     (l.Notes ? '<p>' + esc(l.Notes) + '</p>' : '') +
-    (pts.length ? '<table class="tbl"><thead><tr><th>#</th><th>Patient</th><th>Age</th><th>MRN</th><th>Procedure</th><th>Min</th><th>Care</th><th>Notes</th></tr></thead><tbody>' +
+    (pts.length ? '<table class="tbl"><thead><tr><th>#</th><th>Patient</th><th>Age</th><th>MRN</th><th>Procedure</th><th>Care</th><th>Notes</th></tr></thead><tbody>' +
       pts.map(function (p, i) {
         var notes = [];
         tagsOf(p).forEach(function (t) { notes.push(t); });
         if (p.TagsOther) notes.push(p.TagsOther);
         clearances(p).forEach(function (c) { notes.push(c.spec + ' ' + (c.state === 'Requested' ? 'pending' : 'cleared')); });
         if (p.NeedsAdmission) notes.push('Admit before');
-        return '<tr><td>' + (i + 1) + '</td><td><strong>' + esc(p.Name) + '</strong><br><span class="small">' + esc(p.Guardian) + '</span></td><td>' + esc(ageText(p.DOB)) + '</td><td>' + esc(p.MRN) + '</td><td>' + esc(procLabel(p)) + '<br><span class="small">' + esc(p.Diagnosis) + '</span></td><td>' + totalMin(p) + '</td><td>' + esc(p.CareType) + '</td><td class="small">' + esc(notes.join(', ')) + '</td></tr>';
+        return '<tr><td>' + (i + 1) + '</td><td><strong>' + esc(p.Name) + '</strong><br><span class="small">' + esc(p.Guardian) + '</span></td><td>' + esc(ageText(p.DOB)) + '</td><td>' + esc(p.MRN) + '</td><td>' + esc(procLabel(p)) + '<br><span class="small">' + esc(p.Diagnosis) + '</span></td><td>' + esc(p.CareType) + '</td><td class="small">' + esc(notes.join(', ')) + '</td></tr>';
       }).join('') + '</tbody></table>' : '<p>Nobody on this list.</p>') +
     '<p class="small" style="margin-top:16px">Printed ' + esc(fmtDate(S.today)) + ' by ' + esc(S.user.Name) + '. Contains patient information: handle and dispose of it according to hospital policy.</p></div>');
   m.el.style.maxWidth = '980px';
@@ -2041,9 +2078,8 @@ function viewDashboard() {
   act.forEach(function (p) { var w = waitDays(p); buckets[w <= 30 ? '0 to 30 days' : w <= 90 ? '31 to 90 days' : w <= 180 ? '91 to 180 days' : w <= 365 ? '181 to 365 days' : 'Over a year']++; });
   var end = addDaysStr(S.today, 28);
   var up = d.lists.filter(function (l) { return l.Status === 'Open' && l.Date >= S.today && l.Date <= end && (S.dashCons === 'all' || l.ConsultantId === S.dashCons); });
-  var cap = 0, usedMin = 0, empty = 0;
-  up.forEach(function (l) { var u = listUsed(l); cap += Number(l.Minutes) || 0; usedMin += u.min; if (!u.n) empty++; });
-  var util = cap ? Math.min(100, Math.round(usedMin / cap * 100)) : 0;
+  var nCases = 0, empty = 0;
+  up.forEach(function (l) { var u = listUsed(l); nCases += u.n; if (!u.n) empty++; });
   var months = [], t = S.today.slice(0, 7);
   for (var i = 11; i >= 0; i--) { var y = +t.slice(0, 4), mo = +t.slice(5, 7) - i; while (mo < 1) { mo += 12; y--; } months.push(y + '-' + ('0' + mo).slice(-2)); }
   var addedM = countBy(all.filter(function (p) { return p.DateAdded; }), function (p) { return monthKey(p.DateAdded); });
@@ -2068,8 +2104,8 @@ function viewDashboard() {
     '<div class="grid2"><div class="panel"><h3>Waiting by procedure</h3>' + barsHtml(countBy(act, function (p) { return p.Procedure; })) + '</div>' +
     '<div class="panel"><h3>Waiting by consultant</h3>' + barsHtml(countBy(act, function (p) { return consName(p.ConsultantId); })) +
     '<h3 style="margin-top:14px">Waiting time</h3>' + barsHtml(buckets, Math.max(1, act.length)) + '</div></div>' +
-    '<div class="panel"><h3>Theatre time, next 4 weeks</h3><div class="tbar" style="height:12px"><i class="' + (util >= 85 ? 'g' : 'b') + '" style="width:' + util + '%"></i></div>' +
-    '<p class="small" style="margin:4px 0 0"><strong>' + usedMin + ' of ' + cap + ' min</strong> used (' + util + '%) · ' + up.length + ' lists · ' + empty + ' empty</p></div>' +
+    '<div class="panel"><h3>Theatre lists, next 4 weeks</h3>' +
+    '<p class="small" style="margin:4px 0 0"><strong>' + up.length + ' lists</strong> · ' + nCases + ' cases booked · ' + empty + ' empty</p></div>' +
     '<div class="panel"><h3>Trend</h3>' + trend + '</div>' +
     '<div class="panel"><h3>Cases per surgeon, ' + esc(yr) + '</h3>' + (pn.length ? '<table class="tbl"><thead><tr><th>Surgeon</th><th>Primary</th><th>Assisted</th><th>Total</th></tr></thead><tbody>' +
       pn.map(function (n) { return '<tr class="click" data-lb="' + esc(n) + '"><td>' + esc(n) + '</td><td>' + per[n].primary + '</td><td>' + per[n].assist + '</td><td>' + (per[n].primary + per[n].assist) + '</td></tr>'; }).join('') + '</tbody></table>' : '<p class="muted small">No done cases with surgeons this year yet.</p>') + '</div>';
@@ -2179,7 +2215,7 @@ function dlgShare(l) {
 }
 
 function openList(id) {
-  var F = { open: false, filt: false, allCons: false, awaiting: false, noMajor: false, noAdmit: false, medFree: false, fit: true, care: '', minAge: '', minUnit: 'y', maxAge: '', maxUnit: 'y', excl: {} };
+  var F = { open: false, filt: false, allCons: false, awaiting: false, noMajor: false, noAdmit: false, medFree: false, care: '', minAge: '', minUnit: 'y', maxAge: '', maxUnit: 'y', excl: {} };
   var T = {}, dragId = null;
   var m = openModal('<div id="ls_body"></div>');
   m.el.style.maxWidth = '980px';
@@ -2214,29 +2250,25 @@ function openList(id) {
   function draw() {
     var l = listById(id);
     if (!l) { m.close(); return; }
-    var cap = Number(l.Minutes) || 0;
     var pts = ordered(l);
-    var used = pts.reduce(function (s, p) { return s + totalMin(p); }, 0), rem = cap - used;
     var open = l.Status === 'Open', past = l.Date < S.today;
-    var pct = cap ? Math.min(100, Math.round(used / cap * 100)) : 0, tcls = used > cap ? 'r' : pct >= 85 ? 'g' : 'b';
     var html = '<div class="spread"><div class="lhead"><strong>' + esc(fmtDay(l.Date)) + '</strong> · ' + esc(consName(l.ConsultantId)) + (l.RoomId ? ' · ' + esc(roomName(l.RoomId)) : '') + '</div>' +
       '<div class="row"><button id="ls_share">Share</button>' + '<button id="ls_more" aria-label="More">&#8943;</button><button id="ls_close">Close</button></div></div>' +
-      '<div class="tbar" title="' + used + ' of ' + cap + ' min"><i class="' + tcls + '" style="width:' + pct + '%"></i></div>' +
-      '<p class="small" style="margin:3px 0 8px">' + (rem >= 0 ? '<strong>' + used + ' of ' + cap + ' min</strong> · ' + pts.length + (pts.length === 1 ? ' case' : ' cases') : '<strong style="color:var(--red)">' + used + ' of ' + cap + ' min (' + (-rem) + ' over)</strong> · ' + pts.length + ' cases') +
+      '<p class="small" style="margin:3px 0 8px"><strong>' + pts.length + (pts.length === 1 ? ' case' : ' cases') + '</strong>' +
       (l.Status !== 'Open' ? ' · <span class="chip red">Cancelled: ' + esc(l.CancelReason) + '</span>' : '') + (l.Notes ? ' · <span class="muted">' + esc(l.Notes) + '</span>' : '') + '</p>';
     html += pts.length ? '<div class="lhdr"><span>#</span><span>Patient</span><span>Age</span><span>Procedure</span><span>Type</span><span></span></div>' + pts.map(function (p, i) { return rowHtml(p, i, pts.length, open); }).join('') : '<p class="muted small">Nobody on this list yet.</p>';
 
     if (open && !past) {
-      var cs = cands(l, rem);
+      var cs = cands(l);
       var procs = S.d.procedures.filter(function (x) { return x.Active === 'Y'; });
       html += '<details class="fold" id="ls_add"' + (F.open ? ' open' : '') + '><summary>+ Add patients</summary>' +
         (cs.length ? cs.map(function (p) {
           return '<div class="log cand"><label class="check" style="align-items:flex-start;flex:1"><input type="checkbox" class="b_chk" data-id="' + esc(p.Id) + '"' + (T[p.Id] ? ' checked' : '') + '><span><strong>' + (p.Starred ? '★ ' : '') + esc(p.Name) + '</strong> <span class="muted small">' + esc(ageText(p.DOB)) + ' · ' + esc(p.MRN) + (F.allCons ? ' · ' + esc(consName(p.ConsultantId)) : '') + '</span><br>' +
-            esc(procLabel(p)) + ' <span class="muted small">· ' + totalMin(p) + ' min · ' + esc(p.Category) + ' · ' + careShort(p) + '</span>' + (totalMin(p) > rem ? ' <span class="chip red">Longer than the free time</span>' : '') + '</span></label>' +
+            esc(procLabel(p)) + ' <span class="muted small">· ' + esc(p.Category) + ' · ' + careShort(p) + '</span></span></label>' +
             '<button type="button" class="primary" data-addone="' + esc(p.Id) + '">Add</button></div>';
         }).join('') : '<p class="muted small">No patients match these filters.</p>') +
-        '<div class="row" style="margin:8px 0"><button id="b_suggest">Suggest a full list</button><button class="primary" id="b_add">Add ticked</button><span class="muted small" id="b_tot"></span></div>' +
-        '<div class="row">' + chk('b_free', F.medFree, 'Only medically free') + chk('b_fit', F.fit, 'Fits the free time') + '<button type="button" class="link" id="b_filt">' + (F.filt ? 'Hide filters' : 'Filters') + '</button></div>' +
+        '<div class="row" style="margin:8px 0"><button class="primary" id="b_add">Add ticked</button><span class="muted small" id="b_tot"></span></div>' +
+        '<div class="row">' + chk('b_free', F.medFree, 'Only medically free') + '<button type="button" class="link" id="b_filt">' + (F.filt ? 'Hide filters' : 'Filters') + '</button></div>' +
         (F.filt ? '<div class="tags" style="margin:8px 0">' + chk('b_all', F.allCons, 'All consultants') + chk('b_nomaj', F.noMajor, 'No major cases') + chk('b_noadm', F.noAdmit, 'No prior admission needed') + '</div>' +
         '<div class="grid3"><div class="field"><label for="b_care">Care</label><select id="b_care">' + opt('', 'Day-case and inpatient', !F.care) + opt('Day-case', 'Day-case', F.care === 'Day-case') + opt('Inpatient', 'Inpatient', F.care === 'Inpatient') + '</select></div>' +
         '<div class="field"><label for="b_min">Age from</label><div class="row" style="flex-wrap:nowrap"><input type="number" id="b_min" min="0" value="' + esc(F.minAge) + '"><select id="b_minu" style="width:auto">' + opt('y', 'years', F.minUnit === 'y') + opt('m', 'months', F.minUnit === 'm') + '</select></div></div>' +
@@ -2279,7 +2311,7 @@ function openList(id) {
     if (open && !past) {
       $('ls_add').addEventListener('toggle', function () { F.open = this.open; });
       $('b_filt').addEventListener('click', function () { F.filt = !F.filt; F.open = true; draw(); });
-      [['b_free', 'medFree'], ['b_fit', 'fit'], ['b_all', 'allCons'], ['b_nomaj', 'noMajor'], ['b_noadm', 'noAdmit']].forEach(function (x) {
+      [['b_free', 'medFree'], ['b_all', 'allCons'], ['b_nomaj', 'noMajor'], ['b_noadm', 'noAdmit']].forEach(function (x) {
         var el = $(x[0]); if (el) el.addEventListener('change', function () { F[x[1]] = this.checked; F.open = true; T = {}; draw(); });
       });
       if (F.filt) {
@@ -2295,42 +2327,32 @@ function openList(id) {
       on(body, '.b_chk', 'change', function (e) {
         var pid = e.currentTarget.getAttribute('data-id');
         if (e.currentTarget.checked) T[pid] = true; else delete T[pid];
-        tot(rem);
+        tot();
       });
       function addIds(ids) {
-        var sum = ids.reduce(function (s, x) { return s + totalMin(getP(x)); }, 0);
-        if (sum > rem && !window.confirm('This goes over the list time by ' + (sum - rem) + ' minutes. Add anyway?')) return;
         call('addToList', { listId: id, patientIds: ids }).then(function (r) {
           r.patients.forEach(upsertP); T = {}; F.open = true; render();
           toast(r.patients.length + ' added' + (r.skipped.length ? ', ' + r.skipped.length + ' skipped (' + r.skipped[0].reason + ')' : ''), r.skipped.length > 0);
         }).catch(fail);
       }
       on(body, '[data-addone]', 'click', function (e) { addIds([e.currentTarget.getAttribute('data-addone')]); });
-      $('b_suggest').addEventListener('click', function () {
-        T = {}; F.open = true;
-        var left = rem;
-        cands(listById(id), rem).forEach(function (p) { var t = totalMin(p); if (t <= left) { T[p.Id] = true; left -= t; } });
-        draw();
-        if (!Object.keys(T).length) toast('Nothing fits the free time with these filters');
-      });
       $('b_add').addEventListener('click', function () {
         var ids = Object.keys(T);
         if (!ids.length) { toast('Tick at least one patient', true); return; }
         addIds(ids);
       });
-      tot(rem);
+      tot();
     }
   }
   function chk(idd, on_, label, cls) {
     var nm = idd.indexOf('b_ex_') === 0 ? ' data-name="' + esc(label) + '"' : '';
     return '<label class="check"><input type="checkbox" id="' + esc(idd) + '"' + (cls ? ' class="' + cls + '"' : '') + nm + (on_ ? ' checked' : '') + '> ' + esc(label) + '</label>';
   }
-  function tot(rem) {
-    var ids = Object.keys(T), sum = ids.reduce(function (s, x) { var p = getP(x); return s + (p ? totalMin(p) : 0); }, 0);
-    var e = $('b_tot');
-    if (e) e.textContent = ids.length ? ids.length + ' ticked · ' + sum + ' of ' + rem + ' min free' : '';
+  function tot() {
+    var ids = Object.keys(T), e = $('b_tot');
+    if (e) e.textContent = ids.length ? ids.length + ' ticked' : '';
   }
-  function cands(l, rem) {
+  function cands(l) {
     var base = S.d.patients.filter(function (p) {
       if (p.ListId) return false;
       if (p.Status !== 'Ready' || medOf(p) === 'Unknown') return false;
@@ -2344,7 +2366,6 @@ function openList(id) {
       var am = ageMonths(p.DOB, S.today);
       if (F.minAge !== '' && am < Number(F.minAge) * (F.minUnit === 'y' ? 12 : 1)) return false;
       if (F.maxAge !== '' && am > Number(F.maxAge) * (F.maxUnit === 'y' ? 12 : 1)) return false;
-      if (F.fit && totalMin(p) > rem) return false;
       return true;
     });
     return sortList(base, 'priority');
@@ -2530,8 +2551,17 @@ function openImport() {
 function drawRooms() {
   var l = S.d.rooms || [];
   $('s_rooms').innerHTML = l.length ? l.map(function (r) {
-    return '<div class="spread log"><span>' + esc(r.Name) + (r.Active !== 'Y' ? ' <span class="chip">not in use</span>' : '') + '</span><button data-r="' + esc(r.Id) + '">Edit</button></div>';
+    return '<div class="spread log"><span>' + esc(r.Name) + (r.Active !== 'Y' ? ' <span class="chip">not in use</span>' : '') + '</span><span><button data-r="' + esc(r.Id) + '">Edit</button> <button class="danger" data-rd="' + esc(r.Id) + '">Delete</button></span></div>';
   }).join('') : '<p class="muted small">No rooms yet.</p>';
+  on($('s_rooms'), '[data-rd]', 'click', function (e) {
+    var id = e.currentTarget.getAttribute('data-rd'), r = S.d.rooms.filter(function (x) { return x.Id === id; })[0];
+    var m = openModal('<h2>Delete ' + esc(r.Name) + '?</h2><p class="muted small">Past and cancelled lists keep their dates but lose the room name. A room used by a coming theatre list cannot be deleted; change those lists first. To keep the history, untick "In use" in Edit instead.</p>' +
+      '<div class="row"><button class="danger" id="rd_go">Delete room</button><button id="rd_cancel">Cancel</button></div>', { narrow: true });
+    $('rd_cancel').addEventListener('click', m.close);
+    $('rd_go').addEventListener('click', function () {
+      call('deleteRoom', { Id: id }).then(function (x) { S.d.rooms = x.rooms; S.d.lists = x.lists; S.d.consultants = x.consultants; m.close(); viewSettings(); toast('Room deleted'); }).catch(function (er) { m.close(); fail(er); });
+    });
+  });
   on($('s_rooms'), '[data-r]', 'click', function (e) {
     var id = e.currentTarget.getAttribute('data-r'), r = S.d.rooms.filter(function (x) { return x.Id === id; })[0];
     var m = openModal('<h2>Edit room</h2><div class="field"><label for="rm_name">Name</label><input type="text" id="rm_name" value="' + esc(r.Name) + '"></div>' +
@@ -2635,14 +2665,14 @@ function exportXlsx(name, sheets) {
 function surgeonsOf(p) { try { var a = JSON.parse(p.Surgeons || '[]'); return Array.isArray(a) ? a : []; } catch (e) { return []; } }
 function surgeonIn(p, role) { var l = surgeonsOf(p).filter(function (x) { return x.role === role; }); return l.length ? l[0].name : ''; }
 function patientExportRows(list) {
-  var head = ['MRN', 'Name', 'Date of birth', 'Age', 'Consultant', 'Procedure', 'Side', 'Diagnosis', 'Category', 'Minutes', 'Care', 'Status', 'Medical status', 'Date added',
+  var head = ['MRN', 'Name', 'Date of birth', 'Age', 'Consultant', 'Procedure', 'Side', 'Diagnosis', 'Category', 'Care', 'Status', 'Medical status', 'Date added',
     'Days waiting', 'Booked date', 'Conditions', 'Clearances', 'Priority', 'Sponsorship', 'Contact 1', 'Contact 2', 'Done date', 'Primary surgeon', 'First assistant',
-    'Second assistant', 'Supervising consultant', 'Removed reason', 'Notes'];
+    'Second assistant', 'Supervising trainer', 'Removed reason', 'Notes'];
   var rows = list.map(function (p) {
-    return [p.MRN, p.Name, p.DOB, ageText(p.DOB), consName(p.ConsultantId), procLabel(p), p.Laterality, p.Diagnosis, p.Category, totalMin(p), p.CareType, p.Status, medOf(p), p.DateAdded,
+    return [p.MRN, p.Name, p.DOB, ageText(p.DOB), consName(p.ConsultantId), procLabel(p), p.Laterality, p.Diagnosis, p.Category, p.CareType, p.Status, medOf(p), p.DateAdded,
       waitDays(p), p.ScheduledDate, tagsOf(p).concat(p.TagsOther ? [p.TagsOther] : []).join('; '),
       clearances(p).map(function (c) { return c.spec + ' ' + c.state; }).join('; '), p.Priority, p.Sponsorship, p.Guardian, p.Guardian2, p.DoneDate,
-      surgeonIn(p, 'Primary surgeon'), surgeonIn(p, 'First assistant'), surgeonIn(p, 'Second assistant'), surgeonIn(p, 'Supervising consultant'), p.RemovedReason, p.Notes];
+      surgeonIn(p, 'Primary surgeon'), surgeonIn(p, 'First assistant'), surgeonIn(p, 'Second assistant'), surgeonIn(p, 'Supervising trainer'), p.RemovedReason, p.Notes];
   });
   return [head].concat(rows);
 }
