@@ -311,7 +311,14 @@ table.wl td:nth-child(6){white-space:normal}
 .tags{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
 .opt{border-radius:16px;padding:5px 14px;min-height:34px;background:var(--card)}
 .opt.on{background:var(--ink);color:var(--onink);border-color:var(--ink)}
-.dobrow{display:grid;grid-template-columns:1fr 1fr 1.4fr;gap:6px}
+.dobrow{display:grid;grid-template-columns:1fr 1fr 1.5fr;gap:4px}
+.cr{display:grid;gap:8px;align-items:end;margin:0 0 8px}
+.cr .field{margin:0;min-width:0}
+.cr.c2{grid-template-columns:1fr 1fr}.cr.c3{grid-template-columns:1fr 1fr 1.5fr}.cr.cNA{grid-template-columns:1fr auto}
+.cr input[type=text],.cr input[type=number],.cr select{height:40px;box-sizing:border-box;width:100%}
+.cr .opt{min-height:40px;padding:4px 10px;white-space:nowrap}
+.cr.cflex{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:flex-end}
+.cact button{padding:6px 10px;font-size:13px}
 .pgroup{margin:0 0 16px}
 .pgroup h3{margin:0 0 8px;font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);font-weight:600}
 .pgroup .field{margin-bottom:10px}
@@ -412,7 +419,7 @@ button.primary{background:var(--ink);color:var(--onink);border-color:var(--ink)}
     };
   }
   window.google = { script: { run: run() } };
-  window.APP_VERSION = '0.13.0';
+  window.APP_VERSION = '0.14.0';
   window.APP_HOST = 'GitHub Pages';
 })();
 
@@ -455,7 +462,7 @@ function tagSpec(t) {
 }
 var S = {
   token: null, user: null, d: null, today: '', view: 'list', cons: 'all', loadedAt: 0,
-  f: { q: '', chip: '', cat: '', care: '', proc: '', prio: false, wait: '', time: '', age: '', flag: '', med: '', ageFrom: '', ageTo: '' }, sort: 'priority', sortDir: 'asc',
+  f: { q: '', chip: '', cat: '', care: '', proc: '', prio: false, wait: '', time: '', age: '', flag: '', med: '', lat: '', ageFrom: '', ageTo: '' }, sort: 'priority', sortDir: 'asc',
   doneQ: '', doneStar: false, removedQ: '', dn: { proc: '', cons: '', year: '' }, rm: { reason: '' }, lbName: '', calMonth: '', redrawList: null,
   dashCons: 'all', dashYear: '', idleTimer: null, backup: null, setTab: 'consultants'
 };
@@ -796,7 +803,7 @@ function buildShell() {
     '<button type="button" class="syncbtn" id="syncinfo" title="Tap to reload"></button>' +
     '<div class="row" style="margin-top:6px"><button id="refresh" title="Reload data">Refresh</button><button id="logout">Sign out</button></div></div></aside>' +
     '<div class="main"><header class="top"><div class="ttl" id="ttl"></div><div class="consbar scrollx" id="consbar"></div>' +
-    '<label class="gsearch">' + ico('search') + '<input type="search" id="gq" placeholder="Search name, CPR or T number   ( / )" value="' + esc(S.f.q) + '" autocomplete="off"></label>' +
+    '<label class="gsearch">' + ico('search') + '<input type="search" id="gq" placeholder="Search name, CPR, T number, LA or GA   ( / )" value="' + esc(S.f.q) + '" autocomplete="off"></label>' +
     '<button class="primary addbtn" id="addp" title="Add patient (N)">' + ico('plus') + '<span>Add patient</span></button>' +
     '<button class="topmore" id="topmore" aria-label="Menu">' + ico('more') + '</button></header>' +
     '<div class="page" id="view"></div></div>' +
@@ -869,10 +876,24 @@ function chipMatch(p, chip) {
   if (chip === 'Warnings') return warnings(p).length > 0;
   return p.Status === chip;
 }
+// search: every word must match; "LA"/"GA" (and Left/Right/Both) match the stored choice exactly, other words match name, CPR, T number or procedure
+function searchMatch(p, q) {
+  var hay = (p.Name + ' ' + p.MRN + ' ' + (p.TNumber || '') + ' ' + (p.Procedure || '')).toLowerCase(), lat = String(p.Laterality || '').toLowerCase();
+  var toks = String(q).toLowerCase().split(/\s+/).filter(Boolean);
+  for (var i = 0; i < toks.length; i++) {
+    var t = toks[i];
+    if (t === 'la' || t === 'ga') { if (lat !== t) return false; }
+    else if (t === 'left' || t === 'right') { if (lat !== t) return false; }
+    else if (t === 'both') { if (lat !== 'bilateral' && hay.indexOf(t) < 0) return false; }
+    else if (hay.indexOf(t) < 0) return false;
+  }
+  return true;
+}
 function applyFilters(list) {
   var f = S.f, q = f.q.toLowerCase();
   return list.filter(function (p) {
-    if (q && (p.Name + ' ' + p.MRN + ' ' + (p.TNumber || '')).toLowerCase().indexOf(q) < 0) return false;
+    if (q && !searchMatch(p, q)) return false;
+    if (f.lat && p.Laterality !== f.lat) return false;
     if (!chipMatch(p, f.chip)) return false;
     if (f.cat && p.Category !== f.cat) return false;
     if (f.care && p.CareType !== f.care) return false;
@@ -919,7 +940,7 @@ function filtersOn() {
 }
 function clearFilters() {
   var q = S.f.q;
-  S.f = { q: q, chip: '', cat: '', care: '', proc: '', prio: false, wait: '', time: '', age: '', flag: '', med: '', ageFrom: '', ageTo: '' };
+  S.f = { q: q, chip: '', cat: '', care: '', proc: '', prio: false, wait: '', time: '', age: '', flag: '', med: '', lat: '', ageFrom: '', ageTo: '' };
   S.sort = 'priority'; S.sortDir = 'asc';
 }
 
@@ -1042,6 +1063,7 @@ function activeFilterChips() {
   if (f.ageFrom !== '' || f.ageTo !== '') add('Age ' + (f.ageFrom !== '' ? f.ageFrom : '0') + ' to ' + (f.ageTo !== '' ? f.ageTo : 'any') + ' y', 'ageFrom', '');
   if (f.wait) add(f.wait === 'over' ? 'Wait over the limit' : 'Wait: ' + WAIT_RANGES.filter(function (x) { return x[0] === f.wait; })[0][1], 'wait', '');
   if (f.flag) add('Flag: ' + FLAG_KINDS.filter(function (x) { return x[0] === f.flag; })[0][1], 'flag', '');
+  if (f.lat) add(f.lat === 'Bilateral' ? 'Both' : f.lat, 'lat', '');
   if (f.prio) add('Priority only', 'prio', false);
   if (f.med) add(f.med === 'NotFree' ? 'Not medically free' : (f.med === 'Free' ? 'Medically free' : 'Medical status unknown'), 'med', '');
   return out;
@@ -1270,7 +1292,7 @@ function doneYears() {
 function doneList() {
   var q = S.doneQ.toLowerCase(), f = S.dn;
   return S.d.patients.filter(function (p) {
-    return p.Status === 'Done' && (!q || (p.Name + ' ' + p.MRN + ' ' + (p.TNumber || '')).toLowerCase().indexOf(q) >= 0) && (!S.doneStar || p.Starred) &&
+    return p.Status === 'Done' && (!q || searchMatch(p, q)) && (!S.doneStar || p.Starred) &&
       (!f.proc || p.ProcedureId === f.proc) && (!f.cons || p.ConsultantId === f.cons) && (!f.year || (p.DoneDate || '').slice(0, 4) === f.year);
   }).sort(function (a, b) { return (b.DoneDate || '').localeCompare(a.DoneDate || ''); });
 }
@@ -1443,7 +1465,7 @@ function viewRemoved() {
 function remList() {
   var q = S.removedQ.toLowerCase();
   return S.d.patients.filter(function (p) {
-    return p.Status === 'Removed' && (!q || (p.Name + ' ' + p.MRN + ' ' + (p.TNumber || '')).toLowerCase().indexOf(q) >= 0) && (!S.rm.reason || p.RemovedReason === S.rm.reason);
+    return p.Status === 'Removed' && (!q || searchMatch(p, q)) && (!S.rm.reason || p.RemovedReason === S.rm.reason);
   }).sort(function (a, b) { return (b.RemovedDate || '').localeCompare(a.RemovedDate || ''); });
 }
 function remBody() {
@@ -3182,13 +3204,14 @@ function dlgFilters() {
   var m = openModal('<div class="spread"><h2>Filters</h2><button id="fl_x">Close</button></div>' +
     '<div class="field"><label for="fl_med">Medical status</label><select id="fl_med">' + opt('', 'Any', !f.med) + opt('Free', 'Medically free', f.med === 'Free') + opt('NotFree', 'Not medically free', f.med === 'NotFree') + opt('Unknown', 'Unknown', f.med === 'Unknown') + '</select></div>' +
     '<div class="field"><label for="fl_cat">Category</label><select id="fl_cat">' + opt('', 'Any', !f.cat) + CATS.map(function (c) { return opt(c, c, f.cat === c); }).join('') + '</select></div>' +
+    '<div class="field"><label for="fl_lat">LA / GA / side</label><select id="fl_lat">' + opt('', 'Any', !f.lat) + [['LA', 'LA'], ['GA', 'GA'], ['Left', 'Left'], ['Bilateral', 'Both'], ['Right', 'Right']].map(function (z) { return opt(z[0], z[1], f.lat === z[0]); }).join('') + '</select></div>' +
     '<div class="grid2"><div class="field"><label for="fl_af">Age from (years)</label><input type="number" id="fl_af" min="0" value="' + esc(f.ageFrom) + '"></div>' +
     '<div class="field"><label for="fl_at">Age up to (years)</label><input type="number" id="fl_at" min="0" value="' + esc(f.ageTo) + '"></div></div>' +
     '<label class="check"><input type="checkbox" id="fl_pr"' + (f.prio ? ' checked' : '') + '> Priority patients only</label>' +
     '<div class="row" style="margin-top:12px"><button class="primary" id="fl_ok">Apply</button><button id="fl_clr">Clear all filters</button></div>', { narrow: true });
   $('fl_x').addEventListener('click', m.close);
   $('fl_ok').addEventListener('click', function () {
-    f.med = val('fl_med'); f.cat = val('fl_cat'); f.ageFrom = val('fl_af'); f.ageTo = val('fl_at'); f.prio = checked('fl_pr');
+    f.med = val('fl_med'); f.cat = val('fl_cat'); f.lat = val('fl_lat'); f.ageFrom = val('fl_af'); f.ageTo = val('fl_at'); f.prio = checked('fl_pr');
     if (f.ageFrom !== '' || f.ageTo !== '') f.age = '';
     m.close(); listBody();
   });
@@ -3368,28 +3391,25 @@ function openPatient(id, opts) {
       '<div class="ptabs"><button type="button" class="ptab' + (st.tab === 1 ? ' on' : '') + '" data-pt="1">1 Essentials</button><button type="button" class="ptab' + (st.tab === 2 ? ' on' : '') + '" data-pt="2">2 Details</button></div>';
     if (st.tab === 1) {
       var pk = askK();
-      h += '<div class="pgroup"><h3>Patient</h3><div class="grid2">' +
-        '<div class="field span2"><label for="f_name">Name *</label><input type="text" id="f_name" value="' + esc(v.name) + '"></div>' +
-        '<div class="field"><label for="f_mrn">CPR (9 digits)</label><input type="text" id="f_mrn" value="' + esc(v.mrn) + '" autocomplete="off" inputmode="numeric" maxlength="9"></div>' +
-        '<div class="field"><label for="f_tn">T number <span class="muted">(CPR or T number, at least one)</span></label><input type="text" id="f_tn" value="' + esc(v.tn) + '" autocomplete="off" autocapitalize="characters"></div>' +
-        '<div class="field"><label>Date of birth * <span class="muted">day, month, year</span></label><div class="dobrow"><input type="text" id="f_dd" inputmode="numeric" maxlength="2" placeholder="DD" value="' + esc(v.dd) + '"><input type="text" id="f_dm" inputmode="numeric" maxlength="2" placeholder="MM" value="' + esc(v.dm) + '"><input type="text" id="f_dy" inputmode="numeric" maxlength="4" placeholder="YYYY" value="' + esc(v.dy) + '"></div></div>' +
-        '<div class="field"><label>Sex *</label>' + btns('sex', [['M', 'Male'], ['F', 'Female']]) + '</div></div></div>' +
-        '<div class="pgroup"><h3>Contact</h3><div class="grid2">' +
-        '<div class="field"><label for="f_g1">Contact number * <span class="muted">(8 digits)</span></label><input type="text" id="f_g1" inputmode="tel" value="' + esc(v.g1) + '"></div>' +
-        '<div class="field"><label for="f_g2">Second contact number</label><input type="text" id="f_g2" inputmode="tel" value="' + esc(v.g2) + '"></div></div></div>' +
-        '<div class="pgroup"><h3>Surgery</h3>' +
-        '<div class="field"><label>Consultant *</label><div class="tags">' + cons.map(function (c) { return '<button type="button" class="opt' + (v.cons === c.Id ? ' on' : '') + '" data-cons="' + esc(c.Id) + '">' + esc(c.Name) + '</button>'; }).join('') + '</div></div>' +
-        '<div class="field"><label for="f_proc">Procedure *</label><select id="f_proc">' + opt('', 'Choose…', !v.proc) + procs.map(function (x) { return opt(x.Id, x.Name, x.Id === v.proc); }).join('') + opt('__other', 'Other (type the name)', v.proc === '__other') + '</select></div>' +
-        (v.proc === '__other' ? '<div class="field"><label for="f_procother">Procedure name *</label><input type="text" id="f_procother" value="' + esc(v.procother) + '"></div>' : '') +
-        (pk === 'side' ? '<div class="field"><label>Side *</label>' + btns('lat', [['Left', 'Left'], ['Bilateral', 'Both'], ['Right', 'Right']]) + '</div>' :
-          (pk === 'anaes' ? '<div class="field"><label>Anaesthesia *</label>' + btns('lat', [['LA', 'LA (local)'], ['GA', 'GA (general)']]) + '</div>' :
-            (pk === 'hypo' ? '<div class="field"><label for="f_hypo">Hypospadias type *</label><select id="f_hypo">' + opt('', 'Choose…', !st.lat) + HYPO_TYPES.map(function (t) { return opt(t, t, st.lat === t); }).join('') + '</select></div>' : ''))) +
-        '</div>' +
-        '<div class="pgroup"><h3>Medical status *</h3>' + btns('med', [['Free', 'Medically free'], ['NotFree', 'Not medically free']]) + '</div>';
+      var side = pk === 'side' ? '<div class="field"><label>Side *</label>' + btns('lat', [['Left', 'Left'], ['Bilateral', 'Both'], ['Right', 'Right']]) + '</div>' :
+        (pk === 'anaes' ? '<div class="field"><label>Anaesthesia *</label>' + btns('lat', [['LA', 'LA'], ['GA', 'GA']]) + '</div>' :
+          (pk === 'hypo' ? '<div class="field"><label for="f_hypo">Hypospadias type *</label><select id="f_hypo">' + opt('', 'Choose…', !st.lat) + HYPO_TYPES.map(function (t) { return opt(t, t, st.lat === t); }).join('') + '</select></div>' : ''));
+      h += '<div class="cr cNA"><div class="field"><label for="f_name">Name *</label><input type="text" id="f_name" value="' + esc(v.name) + '"></div>' +
+        '<div class="field"><label>Sex *</label>' + btns('sex', [['M', 'M'], ['F', 'F']]) + '</div></div>' +
+        '<div class="cr c3"><div class="field"><label for="f_mrn">CPR</label><input type="text" id="f_mrn" value="' + esc(v.mrn) + '" autocomplete="off" inputmode="numeric" maxlength="9" placeholder="9 digits"></div>' +
+        '<div class="field"><label for="f_tn">T number</label><input type="text" id="f_tn" value="' + esc(v.tn) + '" autocomplete="off" autocapitalize="characters" placeholder="T…"></div>' +
+        '<div class="field"><label>Date of birth *</label><div class="dobrow"><input type="text" id="f_dd" inputmode="numeric" maxlength="2" placeholder="DD" value="' + esc(v.dd) + '"><input type="text" id="f_dm" inputmode="numeric" maxlength="2" placeholder="MM" value="' + esc(v.dm) + '"><input type="text" id="f_dy" inputmode="numeric" maxlength="4" placeholder="YYYY" value="' + esc(v.dy) + '"></div></div></div>' +
+        '<p class="muted small" style="margin:-4px 0 8px">CPR or T number: at least one.</p>' +
+        '<div class="cr c2"><div class="field"><label for="f_g1">Contact * <span class="muted">(8 digits)</span></label><input type="text" id="f_g1" inputmode="tel" value="' + esc(v.g1) + '"></div>' +
+        '<div class="field"><label for="f_g2">Second contact</label><input type="text" id="f_g2" inputmode="tel" value="' + esc(v.g2) + '"></div></div>' +
+        '<div class="cr cflex"><div class="field"><label>Consultant *</label><div class="tags">' + cons.map(function (c) { return '<button type="button" class="opt' + (v.cons === c.Id ? ' on' : '') + '" data-cons="' + esc(c.Id) + '" title="' + esc(c.Name) + '">' + esc(c.Initials || autoIni(c.Name)) + '</button>'; }).join('') + '</div></div>' +
+        '<div class="field"><label>Medical status *</label>' + btns('med', [['Free', 'Medically free'], ['NotFree', 'K/C/O']]) + '</div></div>' +
+        '<div class="cr c2"><div class="field"><label for="f_proc">Procedure *</label><select id="f_proc">' + opt('', 'Choose…', !v.proc) + procs.map(function (x) { return opt(x.Id, x.Name, x.Id === v.proc); }).join('') + opt('__other', 'Other (type the name)', v.proc === '__other') + '</select></div>' + (side || '<div></div>') + '</div>' +
+        (v.proc === '__other' ? '<div class="field"><label for="f_procother">Procedure name *</label><input type="text" id="f_procother" value="' + esc(v.procother) + '"></div>' : '');
     } else {
-      h += '<div class="field"><label>Category</label>' + btns('cat', CATS.map(function (c) { return [c, c]; })) + '</div>' +
-        '<div class="field"><label class="check"><input type="checkbox" id="f_admitchk"' + (st.admit ? ' checked' : '') + '> Needs prior admission</label>' +
-        (st.admit ? '<div class="row" style="margin-top:6px"><input type="number" id="f_admitdays" min="1" inputmode="numeric" style="width:90px" placeholder="Days" value="' + esc(v.admitdays) + '"><span class="muted small">days before surgery *</span></div>' : '') + '</div>';
+      h += '<div class="cr cNA"><div class="field"><label>Category</label>' + btns('cat', CATS.map(function (c) { return [c, c === 'Intermediate' ? 'Inter.' : c]; })) + '</div>' +
+        '<div class="field"><label class="check"><input type="checkbox" id="f_admitchk"' + (st.admit ? ' checked' : '') + '> Prior admission</label>' +
+        (st.admit ? '<input type="number" id="f_admitdays" min="1" inputmode="numeric" style="width:84px" placeholder="Days *" value="' + esc(v.admitdays) + '">' : '') + '</div></div>';
       if (st.med === 'NotFree') {
         var avail = allTagList(p).filter(function (t) { return st.tags.indexOf(t) < 0; });
         h += '<div class="sect"><h3>Disease tags *</h3><div class="tags">' + st.tags.map(function (t) {
@@ -3404,22 +3424,20 @@ function openPatient(id, opts) {
               '<label class="check"><input type="checkbox" class="cl_ok"' + (c.state === 'Cleared' ? ' checked' : '') + '> Already cleared</label></div>';
           }).join('') : '<p class="muted small" style="margin:0 0 6px">No specialty reviews yet. Adding a tag adds its review.</p>') + '<button type="button" id="f_addspec">+ Add specialty</button></div>';
       }
-      h += '<div class="sect"><h3>Priority and sponsorship</h3><div class="grid2">' +
-        '<div class="field"><label for="f_prio">Priority tag</label><select id="f_prio">' + PRIORITY.map(function (s) { return opt(s, s || 'None', v.prio === s); }).join('') + '</select></div>' +
-        '<div class="field"><label for="f_priorreason">Priority reason</label><input type="text" id="f_priorreason" value="' + esc(v.priorreason) + '"></div>' +
-        '<div class="field"><label for="f_spons">Sponsorship</label><select id="f_spons">' + opt('', '', !v.spons) + SPONSOR.map(function (s) { return opt(s, s, v.spons === s); }).join('') + '</select></div>' +
-        '<div class="field"><label>Seen by consultant</label>' + btns('seen', [['Y', 'Yes'], ['N', 'No'], ['', 'Not registered']]) + '</div></div></div>' +
-        '<div class="sect"><div class="field"><label for="f_dx">Diagnosis</label><input type="text" id="f_dx" value="' + esc(v.dx) + '"></div>' +
-        '<label>Additional procedures in the same sitting</label><div id="f_ex">' + (st.ex.length ? st.ex.map(function (x, i) {
+      h += '<div class="cr c2"><div class="field"><label for="f_prio">Priority tag</label><select id="f_prio">' + PRIORITY.map(function (s) { return opt(s, s || 'None', v.prio === s); }).join('') + '</select></div>' +
+        '<div class="field"><label for="f_priorreason">Reason</label><input type="text" id="f_priorreason" value="' + esc(v.priorreason) + '"></div></div>' +
+        '<div class="cr c2"><div class="field"><label for="f_spons">Sponsorship</label><select id="f_spons">' + opt('', '', !v.spons) + SPONSOR.map(function (s) { return opt(s, s, v.spons === s); }).join('') + '</select></div>' +
+        '<div class="field"><label>Seen by consultant</label>' + btns('seen', [['', '–'], ['Y', 'Y'], ['N', 'N']]) + '</div></div>' +
+        '<div class="cr cNA"><div class="field"><label for="f_dx">Diagnosis</label><input type="text" id="f_dx" value="' + esc(v.dx) + '"></div><button type="button" id="f_addex">+ Add procedure</button></div>' +
+        (st.ex.length ? '<div id="f_ex">' + st.ex.map(function (x, i) {
           var act = S.d.procedures.filter(function (q) { return q.Active === 'Y'; }).sort(byName);
           return '<div class="exrow"><select class="ex_proc">' + act.map(function (pr) { return opt(pr.Id, pr.Name, pr.Id === x.procedureId); }).join('') + '</select><select class="ex_lat">' + opt('', 'Side', !x.laterality) + ['Right', 'Left', 'Bilateral'].map(function (z) { return opt(z, z, x.laterality === z); }).join('') + '</select><button type="button" class="ex_x" data-i="' + i + '">Remove</button></div>';
-        }).join('') : '<p class="muted small" style="margin:0 0 6px">None.</p>') + '</div><button type="button" id="f_addex">Add procedure</button></div>' +
-        '<div class="sect"><div class="field"><label for="f_notes">Notes</label><textarea id="f_notes">' + esc(v.notes) + '</textarea></div>' +
-        '<label class="check"><input type="checkbox" id="f_star"' + (v.star ? ' checked' : '') + '> Star: interesting case for a report</label>' +
-        '<p class="small muted" style="margin-top:8px">Targets: ' + esc(targetLine()) + ' <button type="button" class="link" id="f_tgl">tap to change</button></p>' +
-        (st.showTargets ? '<div class="grid2"><div class="field"><label for="f_twd">Target wait (days)</label><input type="number" id="f_twd" min="0" value="' + esc(v.twd) + '"></div><div class="field"><label for="f_tam">Do before age (months)</label><input type="number" id="f_tam" min="0" value="' + esc(v.tam) + '"></div></div>' : '') +
-        (p ? '<p class="small muted">Added ' + esc(fmtDate(p.DateAdded)) + '</p>' : '') + '</div>' +
-        (p ? '<div class="sect"><h3>Actions</h3><div id="f_actions" class="row"></div><div id="f_info" class="small muted" style="margin-top:8px"></div></div>' : '');
+        }).join('') + '</div>' : '') +
+        '<div class="cr cNA"><div class="field"><label for="f_notes">Notes</label><textarea id="f_notes" rows="2">' + esc(v.notes) + '</textarea></div>' +
+        '<label class="check"><input type="checkbox" id="f_star"' + (v.star ? ' checked' : '') + '> ★</label></div>' +
+        '<p class="small muted" style="margin:0 0 6px">Targets: ' + esc(targetLine()) + ' <button type="button" class="link" id="f_tgl">change</button>' + (p ? ' · Added ' + esc(fmtDate(p.DateAdded)) : '') + '</p>' +
+        (st.showTargets ? '<div class="cr c2"><div class="field"><label for="f_twd">Target wait (days)</label><input type="number" id="f_twd" min="0" value="' + esc(v.twd) + '"></div><div class="field"><label for="f_tam">Before age (months)</label><input type="number" id="f_tam" min="0" value="' + esc(v.tam) + '"></div></div>' : '') +
+        (p ? '<div id="f_actions" class="row cact"></div><div id="f_info" class="small muted" style="margin-top:6px"></div>' : '');
     }
     h += '<div class="psave"><button class="primary" id="f_save">' + (isNew ? (st.tab === 1 ? 'Next' : 'Add to list') : 'Save changes') + '</button>' + (isNew && st.tab === 2 ? '<button id="f_back">Back</button>' : '') + '<button id="f_cancel">Cancel</button></div>';
     $('pt_body').innerHTML = h;
@@ -3566,13 +3584,13 @@ function openPatient(id, opts) {
   function drawActions() {
     var h = '';
     if (isActive(cur)) {
-      h += '<button id="a_call">' + ico('phone') + ' Call window</button>';
-      if (cur.ListId) h += '<button id="a_off">Take off theatre list</button>';
+      h += '<button id="a_call">' + ico('phone') + ' Call</button>';
+      if (cur.ListId) h += '<button id="a_off">Off list</button>';
       if (canSend(cur)) h += '<button id="a_send" class="primary btn-sched">Schedule</button>';
-      h += cur.Status === 'Not ready' ? '<button id="a_back2">Back on the list now</button>' : '<button id="a_nr">Mark not ready</button>';
-      h += '<button id="a_done">Mark done</button><button id="a_rem" class="danger">Remove from list</button>';
-    } else { h += '<button id="a_restore">Restore to waiting list</button>'; if (can(cur.Status === 'Done' ? 'remove' : 'done')) h += '<button id="a_move">' + (cur.Status === 'Done' ? 'Move to Removed' : 'Move to Done') + '</button>'; }
-    h += '<button id="a_del" class="danger">Delete whole entry…</button>';
+      h += cur.Status === 'Not ready' ? '<button id="a_back2">Back on list</button>' : '<button id="a_nr">Not ready</button>';
+      h += '<button id="a_done">Done</button><button id="a_rem" class="danger">Remove</button>';
+    } else { h += '<button id="a_restore">Restore</button>'; if (can(cur.Status === 'Done' ? 'remove' : 'done')) h += '<button id="a_move">' + (cur.Status === 'Done' ? 'To Removed' : 'To Done') + '</button>'; }
+    h += '<button id="a_del" class="danger">Delete…</button>';
     $('f_actions').innerHTML = h;
     var info = '';
     if (cur.Status === 'Done') info = 'Done on ' + ddText(cur.DoneDate) + (cur.DoneNotes ? ': ' + cur.DoneNotes : '');
@@ -3881,7 +3899,7 @@ function dlgSurgeons(p) {
 function doneList() {
   var q = S.doneQ.toLowerCase(), f = S.dn;
   return S.d.patients.filter(function (p) {
-    return p.Status === 'Done' && (!q || (p.Name + ' ' + p.MRN + ' ' + (p.TNumber || '')).toLowerCase().indexOf(q) >= 0) && (!S.doneStar || p.Starred) && (!S.doneMissing || !surgeonIn(p, 'Primary surgeon')) &&
+    return p.Status === 'Done' && (!q || searchMatch(p, q)) && (!S.doneStar || p.Starred) && (!S.doneMissing || !surgeonIn(p, 'Primary surgeon')) &&
       (!f.proc || p.ProcedureId === f.proc) && (!f.cons || p.ConsultantId === f.cons) && (!f.year || (p.DoneDate || '').slice(0, 4) === f.year);
   }).sort(function (a, b) { return (b.DoneDate || '').localeCompare(a.DoneDate || ''); });
 }
@@ -3975,7 +3993,7 @@ var FINAL_REASONS = ['Transferred to adult services', 'Done in private'];
 function remList() {
   var q = S.removedQ.toLowerCase(), r = S.rm;
   return S.d.patients.filter(function (p) {
-    return p.Status === 'Removed' && (!q || (p.Name + ' ' + p.MRN + ' ' + (p.TNumber || '')).toLowerCase().indexOf(q) >= 0) && (!r.reason || p.RemovedReason === r.reason) &&
+    return p.Status === 'Removed' && (!q || searchMatch(p, q)) && (!r.reason || p.RemovedReason === r.reason) &&
       (!r.year || (p.RemovedDate || '').slice(0, 4) === r.year) && (!S.rmCons || S.rmCons === 'all' || p.ConsultantId === S.rmCons);
   }).sort(function (a, b) { return (b.RemovedDate || '').localeCompare(a.RemovedDate || ''); });
 }
@@ -4739,6 +4757,17 @@ drawSetPanel = function () {
     var nb = $('x_import').cloneNode(true); $('x_import').parentNode.replaceChild(nb, $('x_import'));
     nb.addEventListener('click', function () { openImport(can('importFile') ? '' : 'paste'); });
     if (!can('importFile') && !can('importPaste')) nb.style.display = 'none';
+    if (can('importFile') && !$('x_attach')) {
+      nb.parentNode.insertAdjacentHTML('afterend', '<div class="row" style="margin-top:8px"><button id="x_attach">Attach done cases to lists</button></div><p class="muted small" style="margin:4px 0 0">Puts done cases that have an operation date on past theatre lists, so they show on the OT schedule. Cases already on a list are skipped. Nothing is duplicated.</p>');
+      $('x_attach').addEventListener('click', function () {
+        var btn = $('x_attach'); btn.disabled = true;
+        call('attachDoneCases', {}).then(function (r) {
+          S.d.lists = r.lists; (r.patients || []).forEach(upsertP);
+          btn.disabled = false; render();
+          toast(r.attached ? r.attached + ' case' + (r.attached === 1 ? '' : 's') + ' attached, ' + r.listsMade + ' list' + (r.listsMade === 1 ? '' : 's') + ' made' + (r.noDate ? '; ' + r.noDate + ' without an operation date skipped' : '') : 'Nothing to attach (' + r.alreadyOnList + ' already on a list, ' + r.noDate + ' without a date)');
+        }).catch(function (e) { btn.disabled = false; fail(e); });
+      });
+    }
     if (!can('export')) { ['x_wait', 'x_done', 'x_rem'].forEach(function (i) { if ($(i)) $(i).style.display = 'none'; }); }
     return;
   }
