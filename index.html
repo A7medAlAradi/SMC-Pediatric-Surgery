@@ -371,6 +371,8 @@ table.wl td:nth-child(6){white-space:normal}
 .login h2{font-size:22px}
 button.primary{background:var(--ink);color:var(--onink);border-color:var(--ink)}
 .page{padding-bottom:84px}
+.xls{display:inline-block;font-size:10px;line-height:14px;padding:0 5px;border-radius:8px;background:#ECEBE6;color:#6b6a63;border:1px solid #d8d6cf;cursor:pointer;margin-left:4px;font-weight:600;vertical-align:middle}
+:root[data-theme="dark"] .xls{background:#2c2c2a;color:#b4b2a9;border-color:#444441}
 </style>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#444441">
@@ -402,7 +404,7 @@ button.primary{background:var(--ink);color:var(--onink);border-color:var(--ink)}
     };
   }
   window.google = { script: { run: run() } };
-  window.APP_VERSION = '0.9.1';
+  window.APP_VERSION = '0.11.0';
   window.APP_HOST = 'GitHub Pages';
 })();
 
@@ -417,7 +419,17 @@ var TAG_SPEC_DEFAULT = { 'Congenital heart disease': 'Cardiology', 'Asthmatic': 
 var SPONSOR = ['Bahraini', 'Family of Bahraini', 'Family of government worker', 'Exempted', 'Self-payment', 'Covered by insurance'];
 var SURGEON_ROLES = ['Primary surgeon', 'First assistant', 'Second assistant', 'Supervising trainer'];
 var PRIORITY = ['', 'Clinical', 'Social', 'Age-sensitive', 'Other'];
-var REMOVE_REASONS = ['Patient refused procedure', 'Done in private', 'Not needed', 'Booked and did not attend', 'Called multiple times, no response', 'Transferred to adult services', 'Other'];
+var REMOVE_REASONS = ['Patient refused procedure', 'Done in private', 'Left Bahrain / surgery abroad', 'Patient died', 'Wants to postpone, not ready', 'Not needed', 'Booked and did not attend', 'Called multiple times, no response', 'Transferred to adult services', 'Other'];
+var HYPO_TYPES = ['Glanular', 'Coronal', 'Distal penile', 'Midpenile', 'Proximal penile', 'Penoscrotal', 'Scrotal', 'Perineal', 'Variant'];
+var ALL_RIGHTS = [
+  ['patients', 'Add and edit patients'], ['lists', 'Schedule and manage theatre lists'], ['done', 'Mark cases done and edit surgeons'],
+  ['remove', 'Remove and restore patients'], ['deletePatient', 'Delete a whole patient entry'], ['importPaste', 'Import by pasting cells (up to 100 rows)'],
+  ['importFile', 'Import whole Excel files'], ['export', 'Export to Excel'], ['teamLogbook', 'See the whole team logbook'], ['settings', 'Open Settings'],
+  ['people', 'Manage people and rights'], ['audit', 'See the audit log'], ['backup', 'Backups'], ['sample', 'Sample data']
+];
+function can(k) { return !!(S.user && (S.user.Rights || []).indexOf(k) >= 0); }
+function askKind(pr) { if (!pr) return ''; var a = pr.AskFor || (pr.Laterality === 'Y' ? 'side' : (pr.Laterality === 'H' ? 'hypospadias' : '')); return a === 'side' ? 'side' : (a === 'hypospadias' ? 'hypo' : ''); }
+function idShow(p) { return p.MRN && !/^T\d+$/i.test(p.MRN) ? p.MRN : (p.TNumber || p.MRN || ''); }
 var NOT_READY_REASONS = ['Sick', 'Traveling', 'Busy (exams)', 'Other'];
 var CONTACT_TYPES = ['Called - reached', 'Called - no answer', 'Called - call back later', 'Called - wrong number', 'Booked', 'Note'];
 var CATS = ['Minor', 'Intermediate', 'Major'];
@@ -449,6 +461,7 @@ function opt(value, label, selected) {
 }
 function val(id) { var e = $(id); return e ? e.value.trim() : ''; }
 function checked(id) { var e = $(id); return !!(e && e.checked); }
+function ddText(s) { return s ? fmtDate(s) : 'No date'; }
 function fmtDate(s) {
   if (!s) return '';
   var p = s.split('-');
@@ -772,7 +785,7 @@ function buildShell() {
     '<button type="button" class="syncbtn" id="syncinfo" title="Tap to reload"></button>' +
     '<div class="row" style="margin-top:6px"><button id="refresh" title="Reload data">Refresh</button><button id="logout">Sign out</button></div></div></aside>' +
     '<div class="main"><header class="top"><div class="ttl" id="ttl"></div><div class="consbar scrollx" id="consbar"></div>' +
-    '<label class="gsearch">' + ico('search') + '<input type="search" id="gq" placeholder="Search name or MRN   ( / )" value="' + esc(S.f.q) + '" autocomplete="off"></label>' +
+    '<label class="gsearch">' + ico('search') + '<input type="search" id="gq" placeholder="Search name, CPR or T number   ( / )" value="' + esc(S.f.q) + '" autocomplete="off"></label>' +
     '<button class="primary addbtn" id="addp" title="Add patient (N)">' + ico('plus') + '<span>Add patient</span></button>' +
     '<button class="topmore" id="topmore" aria-label="Menu">' + ico('more') + '</button></header>' +
     '<div class="page" id="view"></div></div>' +
@@ -848,7 +861,7 @@ function chipMatch(p, chip) {
 function applyFilters(list) {
   var f = S.f, q = f.q.toLowerCase();
   return list.filter(function (p) {
-    if (q && (p.Name + ' ' + p.MRN).toLowerCase().indexOf(q) < 0) return false;
+    if (q && (p.Name + ' ' + p.MRN + ' ' + (p.TNumber || '')).toLowerCase().indexOf(q) < 0) return false;
     if (!chipMatch(p, f.chip)) return false;
     if (f.cat && p.Category !== f.cat) return false;
     if (f.care && p.CareType !== f.care) return false;
@@ -948,7 +961,7 @@ function patientRowsHtml(list) {
       '<th></th></tr></thead><tbody>' +
       list.map(function (p) {
         return '<tr class="click" data-id="' + esc(p.Id) + '">' +
-          '<td>' + (p.Starred ? '<span class="chip amber">★</span>' : '') + '<strong>' + esc(p.Name) + '</strong><br><span class="muted small">' + esc(p.MRN) + '</span><br><span class="muted small">' + esc(consName(p.ConsultantId)) + '</span></td>' +
+          '<td>' + (p.Starred ? '<span class="chip amber">★</span>' : '') + '<strong>' + esc(p.Name) + '</strong><br><span class="muted small">' + esc(idShow(p)) + '</span><br><span class="muted small">' + esc(consName(p.ConsultantId)) + '</span></td>' +
           '<td>' + esc(ageText(p.DOB)) + '</td>' +
           '<td>' + esc(procLabel(p)) + '</td>' +
           '<td>' + typeHtml(p) + '</td>' +
@@ -960,7 +973,7 @@ function patientRowsHtml(list) {
   return '<div class="cards">' + list.map(function (p) {
     return '<div class="card" data-id="' + esc(p.Id) + '">' +
       '<div class="spread"><div class="name">' + (p.Starred ? '★ ' : '') + esc(p.Name) + ' <span class="muted small">· ' + esc(ageText(p.DOB)) + '</span></div><div>' + statusHtml(p) + '</div></div>' +
-      '<div class="muted small">' + esc(p.MRN) + ' · ' + esc(consName(p.ConsultantId)) + '</div>' +
+      '<div class="muted small">' + esc(idShow(p)) + ' · ' + esc(consName(p.ConsultantId)) + '</div>' +
       '<div class="small" style="margin-top:2px">' + esc(procLabel(p)) + ' · ' + careShort(p) + ' · ' + esc(p.Category) + '</div>' +
       '<div style="margin-top:4px"><span class="chip' + (waitOver(p) ? ' red' : '') + '">Wait ' + esc(waitText(p)) + '</span>' + flagsHtml(p) + '</div>' +
       '<div class="actw" style="margin-top:6px"><button type="button" class="phbtn" data-call="' + esc(p.Id) + '" title="Log a call">' + ico('phone') + '</button>' + sendBtn(p) + '</div></div>';
@@ -1135,7 +1148,7 @@ function dlgCall(p) {
   var outcome = 'Called - reached';
   var OUT = [['Called - reached', 'Answered'], ['Called - no answer', 'No answer'], ['Called - call back later', 'Call back later'], ['Called - wrong number', 'Wrong number']];
   var m = openModal('<div class="spread"><h2>' + esc(p.Name) + '</h2><button id="cl_x">Close</button></div>' +
-    '<p class="muted small" style="margin:0 0 8px">' + esc(p.MRN) + ' · ' + esc(consName(p.ConsultantId)) + '</p>' +
+    '<p class="muted small" style="margin:0 0 8px">' + esc(idShow(p)) + ' · ' + esc(consName(p.ConsultantId)) + '</p>' +
     (nums.length ? nums.map(function (n) { return '<div class="bignum">' + esc(phoneText(n)) + '</div>'; }).join('') : '<p class="muted">No contact number recorded.</p>') +
     '<p class="small" id="cl_last" style="margin:8px 0">Loading last contact…</p>' +
     '<div class="row" id="cl_out" style="margin-bottom:10px">' + OUT.map(function (o, i) { return '<button type="button" data-o="' + i + '"' + (i === 0 ? ' class="primary"' : '') + '>' + esc(o[1]) + '</button>'; }).join('') + '</div>' +
@@ -1165,7 +1178,7 @@ function dlgClearQuick(p, idx) {
   if (!c) { openPatient(p.Id); return; }
   var docs = specConsultants(c.spec);
   var m = openModal('<div class="spread"><h2>' + esc(c.spec) + ' review</h2><button id="cq_x">Close</button></div>' +
-    '<p class="muted small" style="margin:0 0 10px">' + esc(p.Name) + ' · ' + esc(p.MRN) + '</p>' +
+    '<p class="muted small" style="margin:0 0 10px">' + esc(p.Name) + ' · ' + esc(idShow(p)) + '</p>' +
     (c.spec !== 'Anesthesia' ? '<div class="field"><label for="cq_doc">Consultant</label><select id="cq_doc">' + opt('', 'Not chosen', !c.doctor) + docs.map(function (d) { return opt(d.Name, d.Name, d.Name === c.doctor); }).join('') + (c.doctor && !docs.some(function (d) { return d.Name === c.doctor; }) ? opt(c.doctor, c.doctor, true) : '') + '</select></div>' : '') +
     '<div class="field"><label for="cq_date">Appointment date</label><input type="date" id="cq_date" value="' + esc(c.apptDate || '') + '"></div>' +
     '<div class="row"><button class="primary" id="cq_ok">Cleared</button><button id="cq_save">Save changes</button><button id="cq_del" class="danger">Remove review</button></div>', { narrow: true });
@@ -1213,7 +1226,7 @@ function dlgPriority(p, o) {
 function dlgMedical(p) {
   if (!p) return;
   var m = openModal('<div class="spread"><h2>Medical status</h2><button id="mq_x">Close</button></div>' +
-    '<p class="muted small" style="margin:0 0 10px">' + esc(p.Name) + ' · ' + esc(p.MRN) + '</p>' +
+    '<p class="muted small" style="margin:0 0 10px">' + esc(p.Name) + ' · ' + esc(idShow(p)) + '</p>' +
     '<div class="menulist"><button id="mq_free" class="primary">Medically free</button><button id="mq_not">Not medically free (choose conditions)</button></div>', { narrow: true });
   $('mq_x').addEventListener('click', m.close);
   $('mq_free').addEventListener('click', function () { patchAndRefresh({ patientId: p.Id, MedicalStatus: 'Free', logNote: 'Medically free' }, 'Medical status saved', m.close); });
@@ -1231,7 +1244,7 @@ function viewWarn() {
     (rows.length ? rows.map(function (x) {
       var high = x.w.some(function (w) { return w.sev === 'high'; });
       return '<div class="panel warnrow ' + (high ? 'high' : '') + '" data-id="' + esc(x.p.Id) + '" style="cursor:pointer">' +
-        '<div class="spread"><strong>' + esc(x.p.Name) + '</strong><span class="muted small">' + esc(x.p.MRN) + ' · ' + esc(consName(x.p.ConsultantId)) + '</span></div>' +
+        '<div class="spread"><strong>' + esc(x.p.Name) + '</strong><span class="muted small">' + esc(idShow(x.p)) + ' · ' + esc(consName(x.p.ConsultantId)) + '</span></div>' +
         '<div class="small">' + esc(procLabel(x.p)) + '</div>' +
         '<div>' + x.w.map(function (w) { return '<span class="chip ' + (w.sev === 'high' ? 'red' : 'amber') + '">' + esc(w.text) + '</span>'; }).join('') + '</div></div>';
     }).join('') : '<p class="muted">No warnings. Nice.</p>');
@@ -1246,14 +1259,14 @@ function doneYears() {
 function doneList() {
   var q = S.doneQ.toLowerCase(), f = S.dn;
   return S.d.patients.filter(function (p) {
-    return p.Status === 'Done' && (!q || (p.Name + ' ' + p.MRN).toLowerCase().indexOf(q) >= 0) && (!S.doneStar || p.Starred) &&
+    return p.Status === 'Done' && (!q || (p.Name + ' ' + p.MRN + ' ' + (p.TNumber || '')).toLowerCase().indexOf(q) >= 0) && (!S.doneStar || p.Starred) &&
       (!f.proc || p.ProcedureId === f.proc) && (!f.cons || p.ConsultantId === f.cons) && (!f.year || (p.DoneDate || '').slice(0, 4) === f.year);
   }).sort(function (a, b) { return (b.DoneDate || '').localeCompare(a.DoneDate || ''); });
 }
 function ageAt(p, date) { var m = ageMonths(p.DOB, date || S.today); return m < 24 ? m + 'm' : Math.floor(m / 12) + 'y'; }
 function viewDone() {
   $('view').innerHTML = '<div class="spread"><h2>Done cases</h2><div class="row"><button id="dn_log">Surgeon logbook</button><button id="dn_x">Export Excel</button></div></div>' +
-    '<div class="filters"><input type="text" id="dq" placeholder="Search name or MRN" value="' + esc(S.doneQ) + '">' +
+    '<div class="filters"><input type="text" id="dq" placeholder="Search name, CPR or T number" value="' + esc(S.doneQ) + '">' +
     '<label class="check" style="padding-top:8px"><input type="checkbox" id="dstar"' + (S.doneStar ? ' checked' : '') + '> Starred for case report</label></div>' +
     '<div id="doneBody"></div>';
   $('dq').addEventListener('input', function () { S.doneQ = this.value; doneBody(); });
@@ -1274,14 +1287,14 @@ function doneBody() {
   else if (useTable()) {
     rowsHtml = '<table class="tbl dntbl"><thead><tr>' + th('year', 'Date', f.year) + '<th>Patient</th><th>Age</th>' + th('proc', 'Procedure', f.proc) + '<th>Type</th>' + th('cons', 'Consultant', f.cons) + '<th>Surgeons</th><th></th></tr></thead><tbody>' +
       list.map(function (p) {
-        return '<tr class="click" data-dn="' + esc(p.Id) + '"><td>' + esc(fmtDate(p.DoneDate)) + '</td>' +
-          '<td><strong>' + esc(p.Name) + '</strong><br><span class="muted small">' + esc(p.MRN) + '</span></td><td>' + esc(ageAt(p, p.DoneDate)) + '</td><td>' + esc(procLabel(p)) + '</td><td>' + typeHtml(p) + '</td>' +
+        return '<tr class="click" data-dn="' + esc(p.Id) + '"><td>' + esc(ddText(p.DoneDate)) + '</td>' +
+          '<td><strong>' + esc(p.Name) + '</strong><br><span class="muted small">' + esc(idShow(p)) + '</span>' + xlsChip(p) + '</td><td>' + esc(ageAt(p, p.DoneDate)) + '</td><td>' + esc(procLabel(p)) + '</td><td>' + typeHtml(p) + '</td>' +
           '<td>' + esc(consName(p.ConsultantId)) + '</td><td>' + surgeonsHtml(p) + '</td><td>' + (p.Starred ? '<span class="chip amber">★</span>' : '') + '</td></tr>';
       }).join('') + '</tbody></table>';
   } else {
     rowsHtml = '<div class="cards">' + list.map(function (p) {
-      return '<div class="card" data-dn="' + esc(p.Id) + '"><div class="spread"><div class="name">' + (p.Starred ? '★ ' : '') + esc(p.Name) + ' <span class="muted small">· ' + esc(ageAt(p, p.DoneDate)) + '</span></div><span class="muted small">' + esc(fmtDate(p.DoneDate)) + '</span></div>' +
-        '<div class="muted small">' + esc(p.MRN) + ' · ' + esc(consName(p.ConsultantId)) + '</div><div class="small">' + esc(procLabel(p)) + ' · ' + careShort(p) + '</div><div class="small" style="margin-top:4px">' + surgeonsHtml(p) + '</div></div>';
+      return '<div class="card" data-dn="' + esc(p.Id) + '"><div class="spread"><div class="name">' + (p.Starred ? '★ ' : '') + esc(p.Name) + ' <span class="muted small">· ' + esc(ageAt(p, p.DoneDate)) + '</span></div><span class="muted small">' + esc(ddText(p.DoneDate)) + '</span></div>' +
+        '<div class="muted small">' + esc(idShow(p)) + xlsChip(p) + ' · ' + esc(consName(p.ConsultantId)) + '</div><div class="small">' + esc(procLabel(p)) + ' · ' + careShort(p) + '</div><div class="small" style="margin-top:4px">' + surgeonsHtml(p) + '</div></div>';
     }).join('') + '</div>';
   }
   $('doneBody').innerHTML = (chips.length ? '<div class="afrow">' + chips.map(function (c) { return '<button type="button" class="chip afc" data-xf="' + c[0] + '">' + esc(c[1]) + ' &times;</button>'; }).join('') + '</div>' : '') +
@@ -1318,7 +1331,7 @@ function dlgDone(p, after, edit) {
   var sg = edit ? surgeonsOf(p).slice() : [];
   if (!sg.length) sg = [{ role: 'Primary surgeon', name: '' }, { role: 'First assistant', name: '' }];
   var pool = surgeonPool();
-  var m = openModal('<h2>' + (edit ? 'Done case' : 'Mark done') + '</h2><p class="muted small">' + esc(p.Name) + ' · ' + esc(p.MRN) + ' · ' + esc(procLabel(p)) + '</p>' +
+  var m = openModal('<h2>' + (edit ? 'Done case' : 'Mark done') + '</h2><p class="muted small">' + esc(p.Name) + ' · ' + esc(idShow(p)) + ' · ' + esc(procLabel(p)) + '</p>' +
     '<div class="field"><label for="d_date">Date of procedure</label><input type="date" id="d_date" value="' + esc(defDate) + '"></div>' +
     '<datalist id="d_pool">' + pool.map(function (n) { return '<option value="' + esc(n) + '">'; }).join('') + '</datalist>' +
     '<h3 style="margin-top:6px">Surgeons</h3><p class="muted small" style="margin:2px 0 6px">In order. Choose from the list or type a name. Can be added or corrected later from the Done page.</p><div id="d_sg"></div>' +
@@ -1385,13 +1398,13 @@ function dlgLogbook(preset) {
         '<h3>By procedure</h3><table class="tbl"><thead><tr><th>Procedure</th><th>Total</th>' + SURGEON_ROLES.map(function (r) { return '<th>' + esc(r) + '</th>'; }).join('') + '</tr></thead><tbody>' +
         Object.keys(byProc).sort(function (a, b) { return byProc[b].total - byProc[a].total; }).map(function (k) { return '<tr><td>' + esc(k) + '</td><td>' + byProc[k].total + '</td>' + SURGEON_ROLES.map(function (r) { return '<td>' + (byProc[k][r] || '') + '</td>'; }).join('') + '</tr>'; }).join('') + '</tbody></table>' +
         '<h3 style="margin-top:12px">Cases</h3><table class="tbl"><thead><tr><th>Date</th><th>MRN</th><th>Age</th><th>Procedure</th><th>Role</th></tr></thead><tbody>' +
-        es.map(function (e) { return '<tr class="click" data-dn="' + esc(e.p.Id) + '"><td>' + esc(fmtDate(e.p.DoneDate)) + '</td><td>' + esc(e.p.MRN) + '</td><td>' + esc(ageAt(e.p, e.p.DoneDate)) + '</td><td>' + esc(procLabel(e.p)) + '</td><td>' + esc(e.role) + '</td></tr>'; }).join('') + '</tbody></table>'
+        es.map(function (e) { return '<tr class="click" data-dn="' + esc(e.p.Id) + '"><td>' + esc(ddText(e.p.DoneDate)) + '</td><td>' + esc(idShow(e.p)) + '</td><td>' + esc(ageAt(e.p, e.p.DoneDate)) + '</td><td>' + esc(procLabel(e.p)) + '</td><td>' + esc(e.role) + '</td></tr>'; }).join('') + '</tbody></table>'
         : '<p class="muted">No cases in the logbook of ' + esc(st.name || 'this surgeon') + ' yet. Add surgeons when marking a case done, or from the Done page.</p>');
     $('lb_close').addEventListener('click', m.close);
     $('lb_who').addEventListener('change', function () { st.name = this.value; S.lbName = st.name; st.year = ''; draw(); });
     $('lb_year').addEventListener('change', function () { st.year = this.value; draw(); });
     on($('lb_body'), '[data-dn]', 'click', function (e) { dlgDone(getP(e.currentTarget.getAttribute('data-dn')), function () { draw(); }, true); });
-    var rowsFor = function () { return es.map(function (e) { return [e.p.DoneDate, e.p.MRN, ageAt(e.p, e.p.DoneDate), procLabel(e.p), e.role]; }); };
+    var rowsFor = function () { return es.map(function (e) { return [e.p.DoneDate, idShow(e.p), ageAt(e.p, e.p.DoneDate), procLabel(e.p), e.role]; }); };
     var fname = 'logbook-' + st.name.replace(/[^A-Za-z0-9]+/g, '-').replace(/^-|-$/g, '');
     if ($('lb_xl')) $('lb_xl').addEventListener('click', function () {
       var sum = [['Procedure', 'Total'].concat(SURGEON_ROLES)];
@@ -1401,7 +1414,7 @@ function dlgLogbook(preset) {
     if ($('lb_pdf')) $('lb_pdf').addEventListener('click', function () {
       var cvs = renderTableDoc({ title: 'Surgeon logbook', lines: [st.name + (st.year ? ' · ' + st.year : ''), es.length + ' cases · ' + SURGEON_ROLES.map(function (r) { return (byRole[r] || 0) + ' ' + r.toLowerCase(); }).join(' · ')],
         cols: [{ h: 'Date', w: 0.14 }, { h: 'MRN', w: 0.16 }, { h: 'Age', w: 0.08 }, { h: 'Procedure', w: 0.38 }, { h: 'Role', w: 0.24 }],
-        rows: rowsFor().map(function (r) { r[0] = fmtDate(r[0]); return r; }), footer: 'Generated ' + fmtDate(S.today) + ' · MRN and age only' }, 1754);
+        rows: rowsFor().map(function (r) { r[0] = ddText(r[0]); return r; }), footer: 'Generated ' + fmtDate(S.today) + ' · MRN and age only' }, 1754);
       shareOrSave(pdfFromCanvases(cvs), fname + '.pdf');
     });
   }
@@ -1411,7 +1424,7 @@ function dlgLogbook(preset) {
 // ---------------------------------------------------------------- removed
 function viewRemoved() {
   $('view').innerHTML = '<div class="spread"><h2>Removed from the list</h2><button id="rm_x">Export Excel</button></div>' +
-    '<div class="filters"><input type="text" id="rq" placeholder="Search name or MRN" value="' + esc(S.removedQ) + '"></div><div id="remBody"></div>';
+    '<div class="filters"><input type="text" id="rq" placeholder="Search name, CPR or T number" value="' + esc(S.removedQ) + '"></div><div id="remBody"></div>';
   $('rq').addEventListener('input', function () { S.removedQ = this.value; remBody(); });
   $('rm_x').addEventListener('click', function () { exportPatients('removed', remList()); });
   remBody();
@@ -1419,7 +1432,7 @@ function viewRemoved() {
 function remList() {
   var q = S.removedQ.toLowerCase();
   return S.d.patients.filter(function (p) {
-    return p.Status === 'Removed' && (!q || (p.Name + ' ' + p.MRN).toLowerCase().indexOf(q) >= 0) && (!S.rm.reason || p.RemovedReason === S.rm.reason);
+    return p.Status === 'Removed' && (!q || (p.Name + ' ' + p.MRN + ' ' + (p.TNumber || '')).toLowerCase().indexOf(q) >= 0) && (!S.rm.reason || p.RemovedReason === S.rm.reason);
   }).sort(function (a, b) { return (b.RemovedDate || '').localeCompare(a.RemovedDate || ''); });
 }
 function remBody() {
@@ -1430,13 +1443,13 @@ function remBody() {
     (!list.length ? '<p class="muted">Nobody has been removed.</p>' : useTable() ?
       '<table class="tbl rm"><thead><tr>' + head + '</tr></thead><tbody>' +
       list.map(function (p) {
-        return '<tr class="click" data-id="' + esc(p.Id) + '"><td><strong>' + esc(p.Name) + '</strong><br><span class="muted small">' + esc(p.MRN) + ' · ' + esc(consName(p.ConsultantId)) + '</span></td><td>' + esc(ageText(p.DOB)) + '</td>' +
+        return '<tr class="click" data-id="' + esc(p.Id) + '"><td><strong>' + esc(p.Name) + '</strong><br><span class="muted small">' + esc(idShow(p)) + ' · ' + esc(consName(p.ConsultantId)) + '</span></td><td>' + esc(ageText(p.DOB)) + '</td>' +
           '<td>' + esc(procLabel(p)) + '</td><td>' + esc(p.RemovedReason) + (p.RemovedNote ? '<br><span class="muted small">' + esc(p.RemovedNote) + '</span>' : '') + '</td>' +
           '<td>' + esc(fmtDate(p.RemovedDate)) + '</td><td class="small">' + esc(p.UpdatedBy) + '</td><td><button data-restore="' + esc(p.Id) + '">Restore</button></td></tr>';
       }).join('') + '</tbody></table>' :
       '<div class="cards">' + list.map(function (p) {
         return '<div class="card" data-id="' + esc(p.Id) + '"><div class="spread"><div class="name">' + esc(p.Name) + ' <span class="muted small">· ' + esc(ageText(p.DOB)) + '</span></div><span class="muted small">' + esc(fmtDate(p.RemovedDate)) + '</span></div>' +
-          '<div class="muted small">' + esc(p.MRN) + '</div><div class="small">' + esc(procLabel(p)) + '</div><div class="small">' + esc(p.RemovedReason) + '</div><div class="row" style="margin-top:6px"><button data-restore="' + esc(p.Id) + '">Restore</button></div></div>';
+          '<div class="muted small">' + esc(idShow(p)) + '</div><div class="small">' + esc(procLabel(p)) + '</div><div class="small">' + esc(p.RemovedReason) + '</div><div class="row" style="margin-top:6px"><button data-restore="' + esc(p.Id) + '">Restore</button></div></div>';
       }).join('') + '</div>');
   bindRows($('remBody'));
   on($('remBody'), '[data-xf]', 'click', function () { S.rm.reason = ''; remBody(); });
@@ -1479,7 +1492,7 @@ function openPatient(id, opts) {
     '<div class="ptabs"><button type="button" class="ptab on" data-pt="1">1 Essentials</button><button type="button" class="ptab" data-pt="2">2 Clinical</button><button type="button" class="ptab" data-pt="3">3 More</button></div>' +
     '<div class="ptp" data-pt="1"><div class="grid2">' +
     '<div class="field"><label for="f_name">Name *</label><input type="text" id="f_name" value="' + esc(p ? p.Name : '') + '"></div>' +
-    '<div class="field"><label for="f_mrn">MRN * (9 digits, or T and digits)</label><input type="text" id="f_mrn" value="' + esc(p ? p.MRN : '') + '" autocomplete="off"></div>' +
+    '<div class="field"><label for="f_mrn">CPR (9 digits)</label><input type="text" id="f_mrn" value="' + esc(p && /^\d{9}$/.test(p.MRN) ? p.MRN : '') + '" autocomplete="off"></div>' +
     '<div class="field"><label for="f_dob">Date of birth *</label><input type="date" id="f_dob" value="' + esc(p ? p.DOB : '') + '"></div>' +
     '<div class="field"><label for="f_cons">Consultant *</label><select id="f_cons">' + opt('', 'Choose…', !preCons) + cons.map(function (c) { return opt(c.Id, c.Name, c.Id === preCons); }).join('') + '</select></div>' +
     '<div class="field"><label for="f_guard">Contact number * (8 digits)</label><input type="text" id="f_guard" inputmode="tel" value="' + esc(p ? p.Guardian : '') + '"></div>' +
@@ -1570,7 +1583,7 @@ function openPatient(id, opts) {
     $('f_cl').innerHTML = cl.map(function (c, i) {
       var docs = specConsultants(c.spec);
       var docSel = c.spec === 'Anesthesia' ? '<span class="cl_nodoc"></span>' :
-        '<select class="cl_doc" title="Consultant">' + opt('', 'Consultant…', !c.doctor) + docs.map(function (x) { return opt(x.Name, x.Name, x.Name === c.doctor); }).join('') + (c.doctor && !docs.some(function (x) { return x.Name === c.doctor; }) ? opt(c.doctor, c.doctor, true) : '') + '</select>';
+        '<select class="cl_doc" title="Pediatrician">' + opt('', 'Pediatrician…', !c.doctor) + docs.map(function (x) { return opt(x.Name, x.Name, x.Name === c.doctor); }).join('') + (c.doctor && !docs.some(function (x) { return x.Name === c.doctor; }) ? opt(c.doctor, c.doctor, true) : '') + '</select>';
       return '<div class="clrow">' +
         '<select class="cl_spec">' + SPECIALTIES.map(function (s) { return opt(s, s, s === c.spec); }).join('') + '</select>' +
         '<select class="cl_state">' + opt('Requested', 'Not cleared', c.state !== 'Cleared') + opt('Cleared', 'Cleared', c.state === 'Cleared') + '</select>' +
@@ -1729,7 +1742,7 @@ function openPatient(id, opts) {
       h += '<button id="a_del" class="danger">Delete whole entry…</button>';
       $('f_actions').innerHTML = h;
       var info = '';
-      if (cur.Status === 'Done') info = 'Done on ' + fmtDate(cur.DoneDate) + (cur.DoneNotes ? ': ' + cur.DoneNotes : '');
+      if (cur.Status === 'Done') info = 'Done on ' + ddText(cur.DoneDate) + (cur.DoneNotes ? ': ' + cur.DoneNotes : '');
       if (cur.Status === 'Removed') info = 'Removed on ' + fmtDate(cur.RemovedDate) + ': ' + cur.RemovedReason + (cur.RemovedNote ? ' (' + cur.RemovedNote + ')' : '');
       if (cur.ListId && listById(cur.ListId)) info = 'On the theatre list of ' + fmtDay(listById(cur.ListId).Date) + ' (' + listTitle(listById(cur.ListId)) + '). ';
       if (cur.Status === 'Not ready') info = 'Hold until ' + fmtDate(cur.NotReadyUntil) + ': ' + cur.NotReadyReason + '. The patient returns to the active list automatically after this date.';
@@ -1777,11 +1790,11 @@ function dlgNotReady(p, parent) {
 }
 function dlgDelete(p, parent) {
   var m = openModal('<h2>Delete this patient entry?</h2>' +
-    '<p style="color:var(--red)"><strong>This permanently deletes ' + esc(p.Name) + ' (MRN ' + esc(p.MRN) + ') and the whole contact log.</strong> It cannot be undone, and the entry will not appear on the Done or Removed pages. Use "Remove from list" instead if you may need the record again.</p>' +
+    '<p style="color:var(--red)"><strong>This permanently deletes ' + esc(p.Name) + ' (MRN ' + esc(idShow(p)) + ') and the whole contact log.</strong> It cannot be undone, and the entry will not appear on the Done or Removed pages. Use "Remove from list" instead if you may need the record again.</p>' +
     (p.ListId ? '<p class="small">The patient is on a theatre list and will be taken off it.</p>' : '') +
     '<div class="field"><label for="d_mrn">Type the MRN to confirm</label><input type="text" id="d_mrn" autocomplete="off" autocapitalize="characters"></div>' +
     '<div class="row"><button class="danger" id="d_go" disabled>Delete permanently</button><button id="d_cancel">Cancel</button></div>', { narrow: true });
-  function match() { return val('d_mrn').toUpperCase() === String(p.MRN).toUpperCase(); }
+  function match() { return val('d_mrn').toUpperCase() === String(idShow(p)).toUpperCase(); }
   $('d_mrn').addEventListener('input', function () { $('d_go').disabled = !match(); });
   $('d_cancel').addEventListener('click', m.close);
   $('d_go').addEventListener('click', function () {
@@ -1831,7 +1844,7 @@ function viewSettings() {
     '<div class="field"><label for="t_14">Warn before age 14, adult services (months)</label><input type="number" id="t_14" min="0" value="' + esc(st.warn14Months) + '"></div></div>' +
     '<div class="grid3"><div class="field"><label for="t_idle">Sign out after idle (minutes, 0 = never)</label><input type="number" id="t_idle" min="0" value="' + esc(st.idleMinutes) + '"></div></div>' +
     '<button id="t_save">Save thresholds</button></div>' +
-    '<div class="panel stab" data-t="data"><h3>Data</h3><div class="row"><button id="x_import" class="primary">Import from Excel or CSV</button></div><div class="row" style="margin-top:8px"><button id="x_wait">Export waiting list (Excel)</button><button id="x_done">Export done cases (Excel)</button><button id="x_rem">Export removed (Excel)</button></div>' +
+    '<div class="panel stab" data-t="data"><h3>Data</h3><div class="row"><button id="x_import" class="primary">Import from Excel</button></div><div class="row" style="margin-top:8px"><button id="x_wait">Export waiting list (Excel)</button><button id="x_done">Export done cases (Excel)</button><button id="x_rem">Export removed (Excel)</button></div>' +
     (admin ? '<div class="row"><button id="x_sample">Add sample patients</button><button id="x_clear" class="danger">Remove all sample patients</button></div>' : '') + '</div>' +
     (admin ? '<div class="panel stab" data-t="users"><h3>Backup</h3><p class="muted small">Makes a copy of the whole Google Sheet in a Drive folder called "Waiting list backups" (the newest 14 are kept). The copies stay in the same Google account and contain patient data, so they follow the same data-location rules as the Sheet.</p><p id="bk_info" class="small">Loading…</p><div class="row"><button id="bk_now">Back up now</button><button id="bk_daily">Daily backup</button></div></div>' : '') +
     (admin ? '<div class="panel stab" data-t="users"><div class="spread"><h3>Users</h3><button id="u_add">Add user</button></div><div id="u_list"><p class="muted small">Loading…</p></div></div>' +
@@ -2130,7 +2143,7 @@ function dlgSendToList(p, after) {
   function draw() {
     var rows = (showAll ? all : mine).slice(0, 40);
     var html = '<div class="spread"><h2>Schedule</h2><button id="sl_close">Close</button></div>' +
-      '<p style="margin:4px 0"><strong>' + esc(p.Name) + '</strong> <span class="muted small">' + esc(ageText(p.DOB)) + ' · ' + esc(p.MRN) + '</span><br>' + esc(procLabel(p)) + ' <span class="muted small">· ' + esc(p.CareType) + ' · ' + esc(consName(p.ConsultantId)) + '</span></p>' +
+      '<p style="margin:4px 0"><strong>' + esc(p.Name) + '</strong> <span class="muted small">' + esc(ageText(p.DOB)) + ' · ' + esc(idShow(p)) + '</span><br>' + esc(procLabel(p)) + ' <span class="muted small">· ' + esc(p.CareType) + ' · ' + esc(consName(p.ConsultantId)) + '</span></p>' +
       '<p class="muted small">Check with the family before booking.' + (p.Sponsorship ? ' Sponsorship: ' + esc(p.Sponsorship) + '.' : ' Sponsorship is not recorded.') + '</p>' +
       '<label class="check"><input type="checkbox" id="sl_all"' + (showAll ? ' checked' : '') + '> Show lists of all consultants</label>';
     html += rows.length ? rows.map(function (l) {
@@ -2168,7 +2181,7 @@ function printList(l) {
         if (p.TagsOther) notes.push(p.TagsOther);
         clearances(p).forEach(function (c) { notes.push(c.spec + ' ' + (c.state === 'Requested' ? 'pending' : 'cleared')); });
         if (p.NeedsAdmission) notes.push('Admit before');
-        return '<tr><td>' + (i + 1) + '</td><td><strong>' + esc(p.Name) + '</strong><br><span class="small">' + esc(p.Guardian) + '</span></td><td>' + esc(ageText(p.DOB)) + '</td><td>' + esc(p.MRN) + '</td><td>' + esc(procLabel(p)) + '<br><span class="small">' + esc(p.Diagnosis) + '</span></td><td>' + esc(p.CareType) + '</td><td class="small">' + esc(notes.join(', ')) + '</td></tr>';
+        return '<tr><td>' + (i + 1) + '</td><td><strong>' + esc(p.Name) + '</strong><br><span class="small">' + esc(p.Guardian) + '</span></td><td>' + esc(ageText(p.DOB)) + '</td><td>' + esc(idShow(p)) + '</td><td>' + esc(procLabel(p)) + '<br><span class="small">' + esc(p.Diagnosis) + '</span></td><td>' + esc(p.CareType) + '</td><td class="small">' + esc(notes.join(', ')) + '</td></tr>';
       }).join('') + '</tbody></table>' : '<p>Nobody on this list.</p>') +
     '<p class="small" style="margin-top:16px">Printed ' + esc(fmtDate(S.today)) + ' by ' + esc(S.user.Name) + '. Contains patient information: handle and dispose of it according to hospital policy.</p></div>');
   m.el.style.maxWidth = '980px';
@@ -2313,7 +2326,7 @@ function shareData(l) {
     title: 'Theatre list',
     lines: [fmtDay(l.Date), 'OT: ' + (roomName(l.RoomId) || 'not set'), (l.ConsultantId ? 'Consultant: ' + consName(l.ConsultantId) : 'Shared list')],
     cols: [{ h: '#', w: 0.06 }, { h: 'Name', w: 0.24, bold: true }, { h: 'MRN', w: 0.16 }, { h: 'Age', w: 0.08 }, { h: 'Procedure', w: 0.38 }, { h: 'Type', w: 0.08 }],
-    rows: pts.map(function (p, i) { return [String(i + 1), p.Name, p.MRN, ageText(p.DOB), procLabel(p), careShort(p)]; }),
+    rows: pts.map(function (p, i) { return [String(i + 1), p.Name, idShow(p), ageText(p.DOB), procLabel(p), careShort(p)]; }),
     footer: 'Contains patient information. Handle according to hospital policy.'
   };
 }
@@ -2356,7 +2369,7 @@ function openList(id) {
     return '<div class="lrow' + (done ? ' ldone' : '') + '" data-id="' + esc(p.Id) + '"' + (open && !done ? ' draggable="true"' : '') + '>' +
       '<div class="lno">' + (open && !done ? '<span class="grip" title="Drag to reorder">&#8942;&#8942;</span>' : '') + '<b>' + (i + 1) + '</b>' +
       (open && !done ? '<span class="arr"><button type="button" class="mini" data-up="' + esc(p.Id) + '"' + (i === 0 ? ' disabled' : '') + ' aria-label="Move up">&#9650;</button><button type="button" class="mini" data-dn="' + esc(p.Id) + '"' + (i === n - 1 ? ' disabled' : '') + ' aria-label="Move down">&#9660;</button></span>' : '') + '</div>' +
-      '<div class="lpt"><strong>' + (p.Starred ? '★ ' : '') + esc(p.Name) + '</strong><br><span class="muted small">' + esc(p.MRN) + '</span>' + (medOf(p) === 'NotFree' ? ' <span class="chip amber">Not medically free</span>' : '') + '</div>' +
+      '<div class="lpt"><strong>' + (p.Starred ? '★ ' : '') + esc(p.Name) + '</strong><br><span class="muted small">' + esc(idShow(p)) + '</span>' + (medOf(p) === 'NotFree' ? ' <span class="chip amber">Not medically free</span>' : '') + '</div>' +
       '<div class="lage">' + esc(ageText(p.DOB)) + '</div>' +
       '<div class="lpr">' + esc(procLabel(p)) + (admitText(p) ? '<div class="small muted">' + esc(admitText(p)) + '</div>' : '') + (done ? '<div class="small muted">' + surgeonsLine(p) + '</div>' : '') + '</div>' +
       '<div class="lty">' + typeHtml(p) + '</div>' +
@@ -2383,7 +2396,7 @@ function openList(id) {
       var procs = S.d.procedures.filter(function (x) { return x.Active === 'Y'; });
       html += '<details class="fold" id="ls_add"' + (F.open ? ' open' : '') + '><summary>+ Add patients</summary>' +
         (cs.length ? cs.map(function (p) {
-          return '<div class="log cand"><label class="check" style="align-items:flex-start;flex:1"><input type="checkbox" class="b_chk" data-id="' + esc(p.Id) + '"' + (T[p.Id] ? ' checked' : '') + '><span><strong>' + (p.Starred ? '★ ' : '') + esc(p.Name) + '</strong> <span class="muted small">' + esc(ageText(p.DOB)) + ' · ' + esc(p.MRN) + (F.allCons ? ' · ' + esc(consName(p.ConsultantId)) : '') + '</span><br>' +
+          return '<div class="log cand"><label class="check" style="align-items:flex-start;flex:1"><input type="checkbox" class="b_chk" data-id="' + esc(p.Id) + '"' + (T[p.Id] ? ' checked' : '') + '><span><strong>' + (p.Starred ? '★ ' : '') + esc(p.Name) + '</strong> <span class="muted small">' + esc(ageText(p.DOB)) + ' · ' + esc(idShow(p)) + (F.allCons ? ' · ' + esc(consName(p.ConsultantId)) : '') + '</span><br>' +
             esc(procLabel(p)) + ' <span class="muted small">· ' + esc(p.Category) + ' · ' + careShort(p) + '</span></span></label>' +
             '<button type="button" class="primary" data-addone="' + esc(p.Id) + '">Add</button></div>';
         }).join('') : '<p class="muted small">No patients match these filters.</p>') +
@@ -2788,11 +2801,11 @@ function exportXlsx(name, sheets) {
 function surgeonsOf(p) { try { var a = JSON.parse(p.Surgeons || '[]'); return Array.isArray(a) ? a : []; } catch (e) { return []; } }
 function surgeonIn(p, role) { var l = surgeonsOf(p).filter(function (x) { return x.role === role; }); return l.length ? l[0].name : ''; }
 function patientExportRows(list) {
-  var head = ['MRN', 'Name', 'Date of birth', 'Age', 'Consultant', 'Procedure', 'Side', 'Diagnosis', 'Category', 'Care', 'Status', 'Medical status', 'Date added',
+  var head = ['CPR', 'T number', 'Name', 'Date of birth', 'Age', 'Consultant', 'Procedure', 'Side', 'Diagnosis', 'Category', 'Care', 'Status', 'Medical status', 'Date added',
     'Days waiting', 'Booked date', 'Conditions', 'Clearances', 'Priority', 'Sponsorship', 'Contact 1', 'Contact 2', 'Done date', 'Primary surgeon', 'First assistant',
     'Second assistant', 'Supervising trainer', 'Removed reason', 'Notes'];
   var rows = list.map(function (p) {
-    return [p.MRN, p.Name, p.DOB, ageText(p.DOB), consName(p.ConsultantId), procLabel(p), p.Laterality, p.Diagnosis, p.Category, p.CareType, p.Status, medOf(p), p.DateAdded,
+    return [p.MRN && !/^T\d+$/i.test(p.MRN) ? p.MRN : '', p.TNumber || '', p.Name, p.DOB, ageText(p.DOB), consName(p.ConsultantId), procLabel(p), p.Laterality, p.Diagnosis, p.Category, p.CareType, p.Status, medOf(p), p.DateAdded,
       waitDays(p), p.ScheduledDate, tagsOf(p).concat(p.TagsOther ? [p.TagsOther] : []).join('; '),
       clearances(p).map(function (c) { return c.spec + ' ' + c.state; }).join('; '), p.Priority, p.Sponsorship, p.Guardian, p.Guardian2, p.DoneDate,
       surgeonIn(p, 'Primary surgeon'), surgeonIn(p, 'First assistant'), surgeonIn(p, 'Second assistant'), surgeonIn(p, 'Supervising trainer'), p.RemovedReason, p.Notes];
@@ -2952,7 +2965,7 @@ function listShared(l) { return !l.ConsultantId && roomShared(l.RoomId); }
 function listTitle(l) { return l.ConsultantId ? consName(l.ConsultantId) + (l.RoomId ? ' · ' + roomName(l.RoomId) : '') : (roomName(l.RoomId) || 'Shared list'); }
 function careShort(p) { return p.CareType === 'Inpatient' ? 'INP' : (p.CareType === 'Day-case' ? 'DCU' : ''); }
 function typeHtml(p) { return (careShort(p) ? '<strong>' + careShort(p) + '</strong><br>' : '') + esc(p.Category) + (p.NeedsAdmission && p.AdmitDays ? '<br><span class="small muted">Admit ' + esc(p.AdmitDays) + 'd before</span>' : ''); }
-function sideLetter(s) { return s === 'Right' ? 'R' : (s === 'Left' ? 'L' : (s === 'Bilateral' ? 'both' : '')); }
+function sideLetter(s) { return s === 'Right' ? 'R' : (s === 'Left' ? 'L' : (s === 'Bilateral' ? 'both' : (s ? String(s).toLowerCase() : ''))); }
 function pStr(p) { return p.Procedure + (p.Laterality ? ' ' + sideLetter(p.Laterality) : ''); }
 function admitText(p) { return p.NeedsAdmission ? (Number(p.AdmitDays) ? 'Admit ' + p.AdmitDays + 'd before' : 'Admit days not set') : ''; }
 
@@ -3024,7 +3037,7 @@ function patientRowsHtml(list) {
       '<th></th></tr></thead><tbody>' +
       list.map(function (p) {
         return '<tr class="click" data-id="' + esc(p.Id) + '">' +
-          '<td>' + (p.Starred ? '<span class="chip amber">★</span>' : '') + '<strong>' + esc(p.Name) + '</strong><br><span class="muted small">' + esc(p.MRN) + '</span>' + (all ? ' ' + iniChip(p.ConsultantId) : '') + '</td>' +
+          '<td>' + (p.Starred ? '<span class="chip amber">★</span>' : '') + '<strong>' + esc(p.Name) + '</strong><br><span class="muted small">' + esc(idShow(p)) + '</span>' + xlsChip(p) + (all ? ' ' + iniChip(p.ConsultantId) : '') + '</td>' +
           '<td>' + ageCell(p) + '</td><td>' + procCell(p) + '</td><td>' + statusHtml(p) + '</td>' +
           '<td class="' + (waitOver(p) ? 'wred' : '') + '">' + esc(waitText(p)) + '</td><td>' + flagsHtml(p) + '</td>' +
           '<td class="acts"><div class="actw">' + contactBtn(p) + sendBtn(p) + '</div></td></tr>';
@@ -3033,7 +3046,7 @@ function patientRowsHtml(list) {
   return '<div class="cards">' + list.map(function (p) {
     return '<div class="card" data-id="' + esc(p.Id) + '">' +
       '<div class="spread"><div class="name">' + (p.Starred ? '★ ' : '') + esc(p.Name) + ' <span class="muted small">· ' + ageCell(p) + '</span></div><div>' + statusHtml(p) + '</div></div>' +
-      '<div class="muted small">' + esc(p.MRN) + (all ? ' ' + iniChip(p.ConsultantId) : '') + '</div>' +
+      '<div class="muted small">' + esc(idShow(p)) + xlsChip(p) + (all ? ' ' + iniChip(p.ConsultantId) : '') + '</div>' +
       '<div style="margin-top:3px">' + procCell(p) + '</div>' +
       '<div style="margin-top:4px"><span class="chip' + (waitOver(p) ? ' red' : '') + '">Wait ' + esc(waitText(p)) + '</span>' + flagsHtml(p) + '</div>' +
       '<div class="actw" style="margin-top:6px">' + contactBtn(p) + sendBtn(p) + '</div></div>';
@@ -3060,7 +3073,7 @@ function flagAction(p, kind) {
   else openPatient(p.Id);
 }
 function dlgAdmitDays(p) {
-  var m = openModal('<div class="spread"><h2>Prior admission</h2><button id="ad_x">Close</button></div><p class="muted small">' + esc(p.Name) + ' · ' + esc(p.MRN) + '</p>' +
+  var m = openModal('<div class="spread"><h2>Prior admission</h2><button id="ad_x">Close</button></div><p class="muted small">' + esc(p.Name) + ' · ' + esc(idShow(p)) + '</p>' +
     '<div class="field"><label for="ad_d">Days before surgery the patient is admitted *</label><input type="number" id="ad_d" min="1" inputmode="numeric" value="' + esc(p.AdmitDays || '') + '"></div>' +
     '<div class="row"><button class="primary" id="ad_ok">Save</button></div>', { narrow: true });
   $('ad_x').addEventListener('click', m.close);
@@ -3162,7 +3175,7 @@ function dlgCall(p) {
     cap();
     var ns = nums();
     var h = '<div class="spread"><h2>' + esc(p.Name) + '</h2><button id="cl_x">Close</button></div>' +
-      '<p class="muted small" style="margin:0 0 8px">' + esc(p.MRN) + ' · ' + esc(consName(p.ConsultantId)) + '</p>' +
+      '<p class="muted small" style="margin:0 0 8px">' + esc(idShow(p)) + ' · ' + esc(consName(p.ConsultantId)) + '</p>' +
       (ns.length ? ns.map(function (x) { return '<div class="bignum' + (x.wrong ? ' wrong' : '') + '"><a href="tel:' + esc(x.v) + '">' + esc(phoneText(x.v)) + '</a></div>'; }).join('') : '<p class="muted">No contact number recorded.</p>') +
       '<div class="seg4" id="cl_mode">' + [['answered', 'Answered'], ['noanswer', 'No answer'], ['wrong', 'Wrong number'], ['schedule', 'Schedule']].map(function (o) { return '<button type="button" data-mode="' + o[0] + '"' + (st.mode === o[0] ? ' class="primary"' : '') + '>' + o[1] + '</button>'; }).join('') + '</div>';
     if (st.mode === 'answered') {
@@ -3170,7 +3183,7 @@ function dlgCall(p) {
       if (st.reason === 'Awaiting clearance') {
         var docs = specConsultants(st.spec);
         h += '<div class="grid2"><div class="field"><label for="cl_spec">Specialty</label><select id="cl_spec">' + SPECIALTIES.map(function (s) { return opt(s, s, s === st.spec); }).join('') + '</select></div>' +
-          (st.spec !== 'Anesthesia' ? '<div class="field"><label for="cl_doc">Consultant</label><select id="cl_doc">' + opt('', 'Not chosen', !st.doc) + docs.map(function (d) { return opt(d.Name, d.Name, d.Name === st.doc); }).join('') + '</select></div>' : '') + '</div>' +
+          (st.spec !== 'Anesthesia' ? '<div class="field"><label for="cl_doc">Pediatrician</label><select id="cl_doc">' + opt('', 'Not chosen', !st.doc) + docs.map(function (d) { return opt(d.Name, d.Name, d.Name === st.doc); }).join('') + '</select></div>' : '') + '</div>' +
           '<div class="field"><label for="cl_appt">Appointment date (optional)</label><input type="date" id="cl_appt" value="' + esc(st.appt) + '"></div>';
       } else if (st.reason) {
         h += (st.reason === 'Other' ? '<div class="field"><label for="cl_other">Reason *</label><input type="text" id="cl_other" value="' + esc(st.other) + '"></div>' : '') +
@@ -3260,7 +3273,7 @@ function openPatient(id, opts) {
     admit: p ? !!p.NeedsAdmission : false, seen: p ? (p.SeenByConsultant || '') : '', tags: p ? tagsOf(p) : [], tnotes: p ? tagNotes(p) : {},
     cl: p ? clearances(p) : [], ex: p ? extras(p) : [], showTargets: false, autoDob: !p,
     v: {
-      mrn: p ? p.MRN : '', dd: dob[2] ? String(+dob[2]) : '', dm: dob[1] ? String(+dob[1]) : '', dy: dob[0] || '', name: p ? p.Name : '', g1: p ? p.Guardian : '', g2: p ? p.Guardian2 : '',
+      mrn: p && /^\d{9}$/.test(p.MRN) ? p.MRN : '', tn: p ? (p.TNumber || '') : '', dd: dob[2] ? String(+dob[2]) : '', dm: dob[1] ? String(+dob[1]) : '', dy: dob[0] || '', name: p ? p.Name : '', g1: p ? p.Guardian : '', g2: p ? p.Guardian2 : '',
       cons: p ? p.ConsultantId : (S.cons !== 'all' ? S.cons : ''), proc: procSel, procother: p && procSel === '__other' ? p.Procedure : '',
       dx: p ? p.Diagnosis : '', admitdays: p ? p.AdmitDays : '', prio: p ? p.Priority : '', priorreason: p ? p.PriorityReason : '', spons: p ? p.Sponsorship : '',
       notes: p ? p.Notes : '', twd: p ? p.TargetWaitDays : '', tam: p ? p.TargetAgeMonths : '', star: p ? !!p.Starred : false
@@ -3288,7 +3301,8 @@ function openPatient(id, opts) {
     return '<div class="tags ' + (cls || '') + '">' + items.map(function (it) { return '<button type="button" class="opt' + (st[key] === it[0] ? ' on' : '') + '" data-k="' + key + '" data-val="' + esc(it[0]) + '">' + esc(it[1]) + '</button>'; }).join('') + '</div>';
   }
   function curProc() { return procById(st.v.proc); }
-  function needsSide() { var pr = curProc(); return (pr && pr.Laterality === 'Y') || st.v.proc === '__other'; }
+  function askK() { return st.v.proc === '__other' ? 'side' : askKind(curProc()); }
+  function needsSide() { return !!askK(); }
   function getDob() {
     var y = +st.v.dy, mo = +st.v.dm, dd = +st.v.dd;
     if (!(y >= 1990 && y <= +S.today.slice(0, 4)) || !(mo >= 1 && mo <= 12) || !(dd >= 1 && dd <= 31)) return '';
@@ -3309,7 +3323,8 @@ function openPatient(id, opts) {
       '<div class="ptabs"><button type="button" class="ptab' + (st.tab === 1 ? ' on' : '') + '" data-pt="1">1 Essentials</button><button type="button" class="ptab' + (st.tab === 2 ? ' on' : '') + '" data-pt="2">2 Details</button></div>';
     if (st.tab === 1) {
       h += '<div class="grid2">' +
-        '<div class="field"><label for="f_mrn">MRN * (9 digits, or T and digits)</label><input type="text" id="f_mrn" value="' + esc(v.mrn) + '" autocomplete="off" inputmode="text"></div>' +
+        '<div class="field"><label for="f_mrn">CPR (9 digits)</label><input type="text" id="f_mrn" value="' + esc(v.mrn) + '" autocomplete="off" inputmode="numeric" maxlength="9"></div>' +
+        '<div class="field"><label for="f_tn">T number (T and digits) <span class="muted">· CPR or T number, at least one</span></label><input type="text" id="f_tn" value="' + esc(v.tn) + '" autocomplete="off" autocapitalize="characters"></div>' +
         '<div class="field"><label>Date of birth * <span class="muted">(day, month, year)</span></label><div class="dobrow"><input type="text" id="f_dd" inputmode="numeric" maxlength="2" placeholder="Day" value="' + esc(v.dd) + '"><select id="f_dm">' + opt('', 'Month', !v.dm) + MONTHS.map(function (n, i) { return opt(String(i + 1), n, String(v.dm) === String(i + 1)); }).join('') + '</select><input type="text" id="f_dy" inputmode="numeric" maxlength="4" placeholder="Year" value="' + esc(v.dy) + '"></div></div>' +
         '<div class="field"><label for="f_name">Name *</label><input type="text" id="f_name" value="' + esc(v.name) + '"></div>' +
         '<div class="field"><label>Sex *</label>' + btns('sex', [['M', 'Male'], ['F', 'Female']]) + '</div>' +
@@ -3318,7 +3333,7 @@ function openPatient(id, opts) {
         '<div class="field"><label for="f_cons">Consultant *</label><select id="f_cons">' + opt('', 'Choose…', !v.cons) + cons.map(function (c) { return opt(c.Id, c.Name, c.Id === v.cons); }).join('') + '</select></div>' +
         '<div class="field"><label for="f_proc">Procedure *</label><select id="f_proc">' + opt('', 'Choose…', !v.proc) + procs.map(function (x) { return opt(x.Id, x.Name, x.Id === v.proc); }).join('') + opt('__other', 'Other (type the name)', v.proc === '__other') + '</select></div>' +
         (v.proc === '__other' ? '<div class="field"><label for="f_procother">Procedure name *</label><input type="text" id="f_procother" value="' + esc(v.procother) + '"></div>' : '') + '</div>' +
-        (needsSide() ? '<div class="field"><label>Side *</label>' + btns('lat', [['Left', 'Left'], ['Bilateral', 'Both'], ['Right', 'Right']]) + '</div>' : '') +
+        (askK() === 'side' ? '<div class="field"><label>Side *</label>' + btns('lat', [['Left', 'Left'], ['Bilateral', 'Both'], ['Right', 'Right']]) + '</div>' : (askK() === 'hypo' ? '<div class="field"><label>Hypospadias type *</label>' + btns('lat', HYPO_TYPES.map(function (t) { return [t, t]; })) + '</div>' : '')) +
         '<div class="field"><label>Medical status *</label>' + btns('med', [['Free', 'Medically free'], ['NotFree', 'Not medically free']]) + '</div>';
     } else {
       h += '<div class="field"><label>Category</label>' + btns('cat', CATS.map(function (c) { return [c, c]; })) + '</div>' +
@@ -3393,7 +3408,7 @@ function openPatient(id, opts) {
       $('f_proc').addEventListener('change', function () {
         capture();
         var pr = curProc();
-        if (pr) { st.cat = pr.DefaultCategory || st.cat; st.v.twd = ''; st.v.tam = ''; if (!st.v.dx || st.v.dx === st.prevDx) st.v.dx = pr.DefaultDiagnosis || ''; st.prevDx = pr.DefaultDiagnosis || ''; if (pr.Laterality !== 'Y') st.lat = ''; }
+        if (pr) { st.cat = pr.DefaultCategory || st.cat; st.v.twd = ''; st.v.tam = ''; if (!st.v.dx || st.v.dx === st.prevDx) st.v.dx = pr.DefaultDiagnosis || ''; st.prevDx = pr.DefaultDiagnosis || ''; if (askKind(pr) === 'side' && ['Left', 'Right', 'Bilateral'].indexOf(st.lat) < 0) st.lat = ''; if (askKind(pr) === 'hypo' && HYPO_TYPES.indexOf(st.lat) < 0) st.lat = ''; if (!askKind(pr)) st.lat = ''; }
         draw();
       });
     } else {
@@ -3430,7 +3445,10 @@ function openPatient(id, opts) {
   }
   function essentialsError() {
     var v = st.v;
-    if (!/^(\d{9}|T\d+)$/i.test(v.mrn.trim())) return 'Enter the MRN: 9 digits, or T and digits.';
+    var cpr0 = v.mrn.trim(), tn0 = v.tn.trim();
+    if (!cpr0 && !tn0) return 'Enter the CPR or the T number (at least one).';
+    if (cpr0 && !/^\d{9}$/.test(cpr0)) return 'The CPR must be 9 digits.';
+    if (tn0 && !/^T\d+$/i.test(tn0)) return 'The T number must be T followed by digits.';
     if (!getDob()) return 'Enter the full date of birth (day, month and year).';
     if (!v.name.trim()) return 'Enter the patient\'s name.';
     if (st.sex !== 'M' && st.sex !== 'F') return 'Choose the sex.';
@@ -3438,7 +3456,8 @@ function openPatient(id, opts) {
     if (!v.cons) return 'Choose a consultant.';
     if (!v.proc) return 'Choose the procedure.';
     if (v.proc === '__other' && !v.procother.trim()) return 'Type the procedure name.';
-    if (needsSide() && !st.lat) return 'Choose the side.';
+    if (askK() === 'side' && !st.lat) return 'Choose the side.';
+    if (askK() === 'hypo' && !st.lat) return 'Choose the hypospadias type.';
     if (!st.med && (isNew || opts.focusMed)) return 'Choose the medical status.';
     return '';
   }
@@ -3453,7 +3472,7 @@ function openPatient(id, opts) {
     var notes = {}; st.tags.forEach(function (t) { if (st.tnotes[t]) notes[t] = st.tnotes[t]; });
     var free = st.med === 'Free';
     var o = {
-      Id: p ? p.Id : '', Name: v.name.trim(), MRN: v.mrn.trim(), DOB: getDob(), Sex: st.sex, Guardian: v.g1, Guardian2: v.g2,
+      Id: p ? p.Id : '', Name: v.name.trim(), MRN: v.mrn.trim(), TNumber: v.tn.trim().toUpperCase(), DOB: getDob(), Sex: st.sex, Guardian: v.g1, Guardian2: v.g2,
       ConsultantId: v.cons, SeenByConsultant: st.seen, DateAdded: p ? p.DateAdded : S.today,
       ProcedureId: pr ? v.proc : '', Procedure: pr ? pr.Name : (v.proc === '__other' ? v.procother.trim() : ''),
       Laterality: needsSide() ? st.lat : '', Diagnosis: v.dx, Category: st.cat,
@@ -3491,7 +3510,7 @@ function openPatient(id, opts) {
     h += '<button id="a_del" class="danger">Delete whole entry…</button>';
     $('f_actions').innerHTML = h;
     var info = '';
-    if (cur.Status === 'Done') info = 'Done on ' + fmtDate(cur.DoneDate) + (cur.DoneNotes ? ': ' + cur.DoneNotes : '');
+    if (cur.Status === 'Done') info = 'Done on ' + ddText(cur.DoneDate) + (cur.DoneNotes ? ': ' + cur.DoneNotes : '');
     if (cur.Status === 'Removed') info = 'Removed on ' + fmtDate(cur.RemovedDate) + ': ' + cur.RemovedReason + (cur.RemovedNote ? ' (' + cur.RemovedNote + ')' : '');
     if (cur.ListId && listById(cur.ListId)) info = 'On the theatre list of ' + fmtDay(listById(cur.ListId).Date) + ' (' + listTitle(listById(cur.ListId)) + '). ';
     if (cur.Status === 'Not ready') info = 'Hold until ' + fmtDate(cur.NotReadyUntil) + ': ' + cur.NotReadyReason + '. The patient returns to the active list automatically after this date.';
@@ -3628,7 +3647,7 @@ function daySheet(dates, title) {
       var pts = listCases(l);
       if (l.Status !== 'Open') { rows.push([fmtDay(ds), listTitle(l), '', 'Cancelled' + (l.CancelReason ? ': ' + l.CancelReason : ''), '', '']); return; }
       if (!pts.length) { rows.push([fmtDay(ds), listTitle(l), '', 'No cases', '', '']); return; }
-      pts.forEach(function (p, i) { rows.push([i === 0 ? fmtDay(ds) : '', i === 0 ? listTitle(l) : '', String(i + 1), p.Name + ' · ' + p.MRN, procLabel(p), ageText(p.DOB) + ' · ' + p.Category]); });
+      pts.forEach(function (p, i) { rows.push([i === 0 ? fmtDay(ds) : '', i === 0 ? listTitle(l) : '', String(i + 1), p.Name + ' · ' + idShow(p), procLabel(p), ageText(p.DOB) + ' · ' + p.Category]); });
     });
   });
   return { title: title, lines: [dates.length > 1 ? fmtDate(dates[0]) + ' to ' + fmtDate(dates[dates.length - 1]) : fmtDay(dates[0])],
@@ -3656,7 +3675,7 @@ function dlgDay(ds) {
       var pts = listCases(l), shared = listShared(l), t = caseTarget(l);
       return '<div class="panel" style="border-left:6px solid ' + esc(shared ? JMH_COLOR : consColor(l.ConsultantId)) + '"><div class="spread"><strong>' + esc(listTitle(l)) + '</strong><button type="button" data-list="' + esc(l.Id) + '">Open list</button></div>' +
         '<p class="small muted" style="margin:2px 0">' + (l.Status !== 'Open' ? 'Cancelled: ' + esc(l.CancelReason) : pts.length + (t ? ' of ' + t : '') + (pts.length === 1 && !t ? ' case' : ' cases')) + '</p>' +
-        pts.map(function (p, i) { return '<div class="log"><strong>' + (i + 1) + '. ' + esc(p.Name) + '</strong> <span class="muted small">' + esc(p.MRN) + ' · ' + esc(ageText(p.DOB)) + (shared ? ' · ' + esc(consInit(p.ConsultantId)) : '') + '</span><br>' + esc(procLabel(p)) + ' <span class="muted small">· ' + esc(p.Category) + '</span></div>'; }).join('') + '</div>';
+        pts.map(function (p, i) { return '<div class="log"><strong>' + (i + 1) + '. ' + esc(p.Name) + '</strong> <span class="muted small">' + esc(idShow(p)) + ' · ' + esc(ageText(p.DOB)) + (shared ? ' · ' + esc(consInit(p.ConsultantId)) : '') + '</span><br>' + esc(procLabel(p)) + ' <span class="muted small">· ' + esc(p.Category) + '</span></div>'; }).join('') + '</div>';
     }).join('') : '<p class="muted">No lists on this day.</p>') +
     '<div class="row" style="margin-top:8px"><button class="primary" id="dy_share"' + (ls.length ? '' : ' disabled') + '>Share day</button><button id="dy_add">Add list</button></div>', { narrow: true });
   $('dy_x').addEventListener('click', m.close);
@@ -3721,7 +3740,7 @@ function dlgSendToList(p, after) {
   function draw() {
     var rows = (showAll ? all : mine).slice(0, 40);
     var html = '<div class="spread"><h2>Schedule</h2><button id="sl_close">Close</button></div>' +
-      '<p style="margin:4px 0"><strong>' + esc(p.Name) + '</strong> <span class="muted small">' + esc(ageText(p.DOB)) + ' · ' + esc(p.MRN) + '</span><br>' + esc(procLabel(p)) + ' <span class="muted small">· ' + esc(consName(p.ConsultantId)) + (admitText(p) ? ' · ' + esc(admitText(p)) : '') + '</span></p>' +
+      '<p style="margin:4px 0"><strong>' + esc(p.Name) + '</strong> <span class="muted small">' + esc(ageText(p.DOB)) + ' · ' + esc(idShow(p)) + '</span><br>' + esc(procLabel(p)) + ' <span class="muted small">· ' + esc(consName(p.ConsultantId)) + (admitText(p) ? ' · ' + esc(admitText(p)) : '') + '</span></p>' +
       '<p class="muted small">Check with the family before booking.' + (p.Sponsorship ? ' Sponsorship: ' + esc(p.Sponsorship) + '.' : ' Sponsorship is not recorded.') + '</p>' +
       '<div class="field"><label>Day-case or inpatient *</label><div class="tags"><button type="button" class="opt' + (care === 'Day-case' ? ' on' : '') + '" data-care="Day-case">Day-case</button><button type="button" class="opt' + (care === 'Inpatient' ? ' on' : '') + '" data-care="Inpatient">Inpatient</button></div></div>' +
       '<label class="check"><input type="checkbox" id="sl_all"' + (showAll ? ' checked' : '') + '> Show lists of all consultants</label>';
@@ -3774,7 +3793,7 @@ function missingSurgeons() { return S.d.patients.filter(function (p) { return p.
 function dlgSurgeons(p) {
   var pool = surgeonPool();
   var cur = {}; surgeonsOf(p).forEach(function (x) { cur[x.role] = x.name; });
-  var m = openModal('<div class="spread"><h2>Add surgeons</h2><button id="sg_x">Close</button></div><p class="muted small">' + esc(p.Name) + ' · ' + esc(p.MRN) + ' · ' + esc(procLabel(p)) + ' · ' + esc(fmtDate(p.DoneDate)) + '</p>' +
+  var m = openModal('<div class="spread"><h2>Add surgeons</h2><button id="sg_x">Close</button></div><p class="muted small">' + esc(p.Name) + ' · ' + esc(idShow(p)) + ' · ' + esc(procLabel(p)) + ' · ' + esc(ddText(p.DoneDate)) + '</p>' +
     SURGEON_ROLES.map(function (r, i) {
       var v = cur[r] || '';
       return '<div class="field"><label for="sg_' + i + '">' + esc(r) + (i === 0 ? ' *' : '') + '</label><select id="sg_' + i + '">' + opt('', '—', !v) + pool.map(function (n) { return opt(n, n, n === v); }).join('') + (v && pool.indexOf(v) < 0 ? opt(v, v, true) : '') + '</select></div>';
@@ -3796,7 +3815,7 @@ function dlgSurgeons(p) {
 function doneList() {
   var q = S.doneQ.toLowerCase(), f = S.dn;
   return S.d.patients.filter(function (p) {
-    return p.Status === 'Done' && (!q || (p.Name + ' ' + p.MRN).toLowerCase().indexOf(q) >= 0) && (!S.doneStar || p.Starred) && (!S.doneMissing || !surgeonIn(p, 'Primary surgeon')) &&
+    return p.Status === 'Done' && (!q || (p.Name + ' ' + p.MRN + ' ' + (p.TNumber || '')).toLowerCase().indexOf(q) >= 0) && (!S.doneStar || p.Starred) && (!S.doneMissing || !surgeonIn(p, 'Primary surgeon')) &&
       (!f.proc || p.ProcedureId === f.proc) && (!f.cons || p.ConsultantId === f.cons) && (!f.year || (p.DoneDate || '').slice(0, 4) === f.year);
   }).sort(function (a, b) { return (b.DoneDate || '').localeCompare(a.DoneDate || ''); });
 }
@@ -3808,7 +3827,7 @@ function surgeonsHtml(p) {
 function viewDone() {
   var miss = missingSurgeons().length;
   $('view').innerHTML = '<div class="spread"><h2>Done cases</h2><div class="row"><button id="dn_x">Export Excel</button></div></div>' +
-    '<div class="filters"><input type="text" id="dq" placeholder="Search name or MRN" value="' + esc(S.doneQ) + '">' +
+    '<div class="filters"><input type="text" id="dq" placeholder="Search name, CPR or T number" value="' + esc(S.doneQ) + '">' +
     '<label class="check" style="padding-top:8px"><input type="checkbox" id="dstar"' + (S.doneStar ? ' checked' : '') + '> Starred for case report</label>' +
     '<button type="button" class="schip' + (S.doneMissing ? ' on' : '') + '" id="dmiss"' + (miss ? '' : ' disabled') + '>Missing surgeons <b>' + miss + '</b></button></div>' +
     '<div id="doneBody"></div>';
@@ -3853,7 +3872,7 @@ function viewLogbook() {
     es.forEach(function (e) {
       byRole[e.role] = (byRole[e.role] || 0) + 1;
       var o = byProc[e.p.Procedure] = byProc[e.p.Procedure] || { pri: 0, ast: 0 }; if (e.role === 'Primary surgeon') o.pri++; else o.ast++;
-      var mk = (e.p.DoneDate || '').slice(0, 7); byMonth[mk] = (byMonth[mk] || 0) + 1;
+      var mk = (e.p.DoneDate || '').slice(0, 7); if (mk) byMonth[mk] = (byMonth[mk] || 0) + 1;
     });
     var pk = Object.keys(byProc).sort(function (a, b) { return (byProc[b].pri + byProc[b].ast) - (byProc[a].pri + byProc[a].ast); });
     var top = pk.length ? byProc[pk[0]].pri + byProc[pk[0]].ast : 1;
@@ -3865,13 +3884,13 @@ function viewLogbook() {
       }).join('') + '<p class="small muted">Dark: primary. Light: assisted.</p></div>' +
       '<div class="panel"><h3>Cases per month</h3><div class="mbars">' + months.map(function (k) { return '<div class="mb"><i style="height:' + Math.max(4, byMonth[k] / mtop * 70) + 'px"></i><span class="small">' + MONTHS[+k.slice(5) - 1] + '</span><b class="small">' + byMonth[k] + '</b></div>'; }).join('') + '</div></div></div>' +
       '<h3 style="margin-top:12px">Cases</h3><table class="tbl"><thead><tr><th>Date</th><th>MRN</th><th>Age</th><th>Procedure</th><th>Role</th><th>Operated with</th></tr></thead><tbody>' +
-      es.map(function (e) { return '<tr class="click" data-dn="' + esc(e.p.Id) + '"><td>' + esc(fmtDate(e.p.DoneDate)) + '</td><td>' + esc(e.p.MRN) + '</td><td>' + esc(ageAt(e.p, e.p.DoneDate)) + '</td><td>' + esc(procLabel(e.p)) + '</td><td>' + esc(e.role) + '</td><td>' + esc(withWho(e.p)) + '</td></tr>'; }).join('') + '</tbody></table>'
+      es.map(function (e) { return '<tr class="click" data-dn="' + esc(e.p.Id) + '"><td>' + esc(ddText(e.p.DoneDate)) + '</td><td>' + esc(idShow(e.p)) + '</td><td>' + esc(ageAt(e.p, e.p.DoneDate)) + '</td><td>' + esc(procLabel(e.p)) + '</td><td>' + esc(e.role) + '</td><td>' + esc(withWho(e.p)) + '</td></tr>'; }).join('') + '</tbody></table>'
       : '<p class="muted">No cases in the logbook of ' + esc(st.name || 'this surgeon') + ' for this period.</p>';
-    var data = es.map(function (e) { return [e.p.DoneDate, e.p.MRN, ageAt(e.p, e.p.DoneDate), procLabel(e.p), e.role, withWho(e.p)]; });
+    var data = es.map(function (e) { return [e.p.DoneDate, idShow(e.p), ageAt(e.p, e.p.DoneDate), procLabel(e.p), e.role, withWho(e.p)]; });
     sheetX = [{ name: 'Logbook', rows: [['Date', 'MRN', 'Age', 'Procedure', 'Role', 'Operated with']].concat(data) }];
     pdfInfo = { title: 'Surgeon logbook', lines: [st.name + (st.year ? ' · ' + st.year : ''), es.length + ' cases · ' + SURGEON_ROLES.map(function (r) { return (byRole[r] || 0) + ' ' + r.toLowerCase(); }).join(' · ')],
       cols: [{ h: 'Date', w: 0.12 }, { h: 'MRN', w: 0.15 }, { h: 'Age', w: 0.07 }, { h: 'Procedure', w: 0.32 }, { h: 'Role', w: 0.17 }, { h: 'With', w: 0.17 }],
-      rows: data.map(function (r) { var c = r.slice(); c[0] = fmtDate(c[0]); return c; }), footer: 'Generated ' + fmtDate(S.today) + ' · MRN and age only' };
+      rows: data.map(function (r) { var c = r.slice(); c[0] = ddText(c[0]); return c; }), footer: 'Generated ' + fmtDate(S.today) + ' · MRN and age only' };
   }
   $('view').innerHTML = h;
   var ex = $('lb_exp');
@@ -3890,7 +3909,7 @@ var FINAL_REASONS = ['Transferred to adult services', 'Done in private'];
 function remList() {
   var q = S.removedQ.toLowerCase(), r = S.rm;
   return S.d.patients.filter(function (p) {
-    return p.Status === 'Removed' && (!q || (p.Name + ' ' + p.MRN).toLowerCase().indexOf(q) >= 0) && (!r.reason || p.RemovedReason === r.reason) &&
+    return p.Status === 'Removed' && (!q || (p.Name + ' ' + p.MRN + ' ' + (p.TNumber || '')).toLowerCase().indexOf(q) >= 0) && (!r.reason || p.RemovedReason === r.reason) &&
       (!r.year || (p.RemovedDate || '').slice(0, 4) === r.year) && (!S.rmCons || S.rmCons === 'all' || p.ConsultantId === S.rmCons);
   }).sort(function (a, b) { return (b.RemovedDate || '').localeCompare(a.RemovedDate || ''); });
 }
@@ -3903,7 +3922,7 @@ function viewRemoved() {
   $('view').innerHTML = '<div class="spread"><h2>Removed from the list</h2><button id="rm_x">Export Excel</button></div>' +
     '<div class="row" style="margin:6px 0"><span class="segwrap"><button type="button" class="seg' + (S.rmCons === 'all' ? ' on' : '') + '" data-rc="all">All</button>' + cons.map(function (c) { return '<button type="button" class="seg' + (S.rmCons === c.Id ? ' on' : '') + '" data-rc="' + esc(c.Id) + '">' + esc(c.Name) + '</button>'; }).join('') + '</span>' +
     '<select id="rm_year" style="width:auto">' + opt('', 'All years', !S.rm.year) + Object.keys(ys).sort().reverse().map(function (y) { return opt(y, y, S.rm.year === y); }).join('') + '</select>' +
-    '<input type="text" id="rq" placeholder="Search name or MRN" value="' + esc(S.removedQ) + '" style="width:200px"></div>' +
+    '<input type="text" id="rq" placeholder="Search name, CPR or T number" value="' + esc(S.removedQ) + '" style="width:200px"></div>' +
     '<div class="sttabs"><div class="sttabs-in scrollx"><button type="button" class="sttab' + (!S.rm.reason ? ' on' : '') + '" data-rr="">All <b>' + base.length + '</b></button>' +
     REMOVE_REASONS.filter(function (r) { return cnt[r]; }).map(function (r) { return '<button type="button" class="sttab' + (S.rm.reason === r ? ' on' : '') + '" data-rr="' + esc(r) + '">' + esc(r) + ' <b>' + cnt[r] + '</b></button>'; }).join('') + '</div></div><div id="remBody"></div>';
   $('rq').addEventListener('input', function () { S.removedQ = this.value; remBody(); });
@@ -3926,12 +3945,12 @@ function remBody() {
     (!list.length ? '<p class="muted">Nobody has been removed.</p>' : useTable() ?
       '<table class="tbl rm"><thead><tr><th>Patient</th><th>Age</th><th>Procedure</th><th>Reason</th><th>Removed</th><th>Waited</th><th>By</th><th></th></tr></thead><tbody>' +
       list.map(function (p) {
-        return '<tr class="click" data-id="' + esc(p.Id) + '"><td><strong>' + esc(p.Name) + '</strong><br><span class="muted small">' + esc(p.MRN) + '</span>' + (all ? ' ' + iniChip(p.ConsultantId) : '') + '</td><td>' + esc(ageAt(p, p.RemovedDate)) + '</td>' +
+        return '<tr class="click" data-id="' + esc(p.Id) + '"><td><strong>' + esc(p.Name) + '</strong><br><span class="muted small">' + esc(idShow(p)) + '</span>' + xlsChip(p) + (all ? ' ' + iniChip(p.ConsultantId) : '') + '</td><td>' + esc(ageAt(p, p.RemovedDate)) + '</td>' +
           '<td>' + procCell(p) + '</td><td>' + esc(p.RemovedReason) + remDetail(p) + '</td><td>' + esc(fmtDate(p.RemovedDate)) + '</td><td>' + esc(waited(p)) + '</td><td class="small">' + esc(p.UpdatedBy) + '</td><td><button data-rest="' + esc(p.Id) + '" aria-label="Restore">&#8943;</button></td></tr>';
       }).join('') + '</tbody></table>' :
       '<div class="cards">' + list.map(function (p) {
         return '<div class="card" data-id="' + esc(p.Id) + '"><div class="spread"><div class="name">' + esc(p.Name) + ' <span class="muted small">· ' + esc(ageAt(p, p.RemovedDate)) + '</span></div><span class="muted small">' + esc(fmtDate(p.RemovedDate)) + '</span></div>' +
-          '<div class="muted small">' + esc(p.MRN) + (all ? ' ' + iniChip(p.ConsultantId) : '') + ' · waited ' + esc(waited(p)) + '</div>' + procCell(p) + '<div class="small">' + esc(p.RemovedReason) + remDetail(p) + '</div><div class="row" style="margin-top:6px"><button data-rest="' + esc(p.Id) + '">Restore…</button></div></div>';
+          '<div class="muted small">' + esc(idShow(p)) + xlsChip(p) + (all ? ' ' + iniChip(p.ConsultantId) : '') + ' · waited ' + esc(waited(p)) + '</div>' + procCell(p) + '<div class="small">' + esc(p.RemovedReason) + remDetail(p) + '</div><div class="row" style="margin-top:6px"><button data-rest="' + esc(p.Id) + '">Restore…</button></div></div>';
       }).join('') + '</div>');
   bindRows($('remBody'));
   on($('remBody'), '[data-rest]', 'click', function (e) {
@@ -3972,18 +3991,18 @@ function viewWarn() {
     '<button type="button" class="sttab' + (S.wtab === 'discarded' ? ' on' : '') + '" data-wt="discarded">Discarded <b>' + nd + '</b></button></div></div>' +
     (!shown.length ? '<p class="muted">' + (S.wtab === 'discarded' ? 'No discarded warnings.' : 'No warnings. Nice.') + '</p>' : useTable() ?
       '<table class="tbl"><thead><tr><th>Patient</th><th>Age</th><th>Procedure</th><th>Warning</th><th></th></tr></thead><tbody>' + shown.map(function (r, i) {
-        return '<tr class="click" data-id="' + esc(r.p.Id) + '"><td><strong>' + esc(r.p.Name) + '</strong><br><span class="muted small">' + esc(r.p.MRN) + '</span> ' + iniChip(r.p.ConsultantId) + '</td><td>' + ageCell(r.p) + '</td><td>' + procCell(r.p) + '</td>' +
+        return '<tr class="click" data-id="' + esc(r.p.Id) + '"><td><strong>' + esc(r.p.Name) + '</strong><br><span class="muted small">' + esc(idShow(r.p)) + '</span> ' + iniChip(r.p.ConsultantId) + '</td><td>' + ageCell(r.p) + '</td><td>' + procCell(r.p) + '</td>' +
           '<td><span class="chip ' + (r.w.sev === 'high' ? 'red' : 'amber') + '">' + esc(r.w.text) + '</span>' + (r.discarded ? '<br><span class="muted small">Discarded by ' + esc(r.dis.by) + ', ' + esc(fmtDate(r.dis.at)) + '</span>' : '') + '</td>' +
           '<td class="acts"><div class="actw">' + (r.discarded ? '<button data-wr="' + i + '">Restore</button>' : '<button class="primary" data-wa="' + i + '">' + esc(WARN_ACTION[r.w.kind]) + '</button><button data-wd="' + i + '">Discard</button>') + '</div></td></tr>';
       }).join('') + '</tbody></table>' :
       '<div class="cards">' + shown.map(function (r, i) {
-        return '<div class="card" data-id="' + esc(r.p.Id) + '"><div class="spread"><div class="name">' + esc(r.p.Name) + ' <span class="muted small">· ' + ageCell(r.p) + '</span></div>' + iniChip(r.p.ConsultantId) + '</div><div class="muted small">' + esc(r.p.MRN) + '</div>' + procCell(r.p) +
+        return '<div class="card" data-id="' + esc(r.p.Id) + '"><div class="spread"><div class="name">' + esc(r.p.Name) + ' <span class="muted small">· ' + ageCell(r.p) + '</span></div>' + iniChip(r.p.ConsultantId) + '</div><div class="muted small">' + esc(idShow(r.p)) + '</div>' + procCell(r.p) +
           '<div style="margin-top:4px"><span class="chip ' + (r.w.sev === 'high' ? 'red' : 'amber') + '">' + esc(r.w.text) + '</span></div><div class="actw" style="margin-top:6px">' + (r.discarded ? '<button data-wr="' + i + '">Restore</button>' : '<button class="primary" data-wa="' + i + '">' + esc(WARN_ACTION[r.w.kind]) + '</button><button data-wd="' + i + '">Discard</button>') + '</div></div>';
       }).join('') + '</div>');
   on($('view'), '[data-wc]', 'click', function (e) { S.wcons = e.currentTarget.getAttribute('data-wc'); viewWarn(); });
   on($('view'), '[data-wt]', 'click', function (e) { S.wtab = e.currentTarget.getAttribute('data-wt'); viewWarn(); });
   $('wn_x').addEventListener('click', function () {
-    exportXlsx('warnings', [{ name: 'Warnings', rows: [['MRN', 'Name', 'Consultant', 'Procedure', 'Warning', 'Status']].concat(shown.map(function (r) { return [r.p.MRN, r.p.Name, consName(r.p.ConsultantId), procLabel(r.p), r.w.text, r.discarded ? 'Discarded' : 'Active']; })) }]);
+    exportXlsx('warnings', [{ name: 'Warnings', rows: [['MRN', 'Name', 'Consultant', 'Procedure', 'Warning', 'Status']].concat(shown.map(function (r) { return [idShow(r.p), r.p.Name, consName(r.p.ConsultantId), procLabel(r.p), r.w.text, r.discarded ? 'Discarded' : 'Active']; })) }]);
   });
   function disc(i, restore) {
     var r = shown[i];
@@ -4075,7 +4094,7 @@ function drawSetPanel() {
   } else if (t === 'warnings') drawWarnPanel(el);
   else if (t === 'rooms') { el.innerHTML = '<div class="spread"><h3>Operating rooms</h3><button id="s_addroom">Add room</button></div><div id="s_rooms"></div>'; drawRooms(); $('s_addroom').addEventListener('click', function () { roomModal(null); }); }
   else if (t === 'import') {
-    el.innerHTML = '<h3>Import and export</h3><div class="row"><button id="x_import" class="primary">Import from Excel or CSV</button></div><div class="row" style="margin-top:8px"><button id="x_wait">Export waiting list (Excel)</button><button id="x_done">Export done cases (Excel)</button><button id="x_rem">Export removed (Excel)</button></div>';
+    el.innerHTML = '<h3>Import and export</h3><div class="row"><button id="x_import" class="primary">Import from Excel</button></div><div class="row" style="margin-top:8px"><button id="x_wait">Export waiting list (Excel)</button><button id="x_done">Export done cases (Excel)</button><button id="x_rem">Export removed (Excel)</button></div>';
     $('x_import').addEventListener('click', openImport);
     $('x_wait').addEventListener('click', function () { exportPatients('waiting-list', S.d.patients.filter(isActive)); });
     $('x_done').addEventListener('click', function () { exportPatients('done-cases', S.d.patients.filter(function (p) { return p.Status === 'Done'; })); });
@@ -4122,9 +4141,9 @@ function consModal(c) {
 }
 function drawProcs() {
   var l = S.d.procedures;
-  $('s_procs').innerHTML = '<table class="tbl"><thead><tr><th>Procedure</th><th>Category</th><th>Side</th><th>At JMH</th><th>Wait target</th><th>Age target</th><th>Active</th><th></th></tr></thead><tbody>' +
+  $('s_procs').innerHTML = '<table class="tbl"><thead><tr><th>Procedure</th><th>Category</th><th>Asks for</th><th>At JMH</th><th>Wait target</th><th>Age target</th><th>Active</th><th></th></tr></thead><tbody>' +
     l.map(function (p) {
-      return '<tr><td>' + esc(p.Name) + '<br><span class="muted small">' + esc(p.DefaultDiagnosis) + '</span></td><td>' + esc(p.DefaultCategory) + '</td><td>' + sw('data-pf="Laterality" data-pid="' + esc(p.Id) + '"', p.Laterality === 'Y') + '</td><td>' + sw('data-pf="JMH" data-pid="' + esc(p.Id) + '"', p.JMH === 'Y') + '</td>' +
+      return '<tr><td>' + esc(p.Name) + '<br><span class="muted small">' + esc(p.DefaultDiagnosis) + '</span></td><td>' + esc(p.DefaultCategory) + '</td><td class="small">' + ({ side: 'Side', hypo: 'Hypospadias type' }[askKind(p)] || '-') + '</td><td>' + sw('data-pf="JMH" data-pid="' + esc(p.Id) + '"', p.JMH === 'Y') + '</td>' +
         '<td>' + (p.TargetDays ? esc(p.TargetDays) + ' d' : '-') + '</td><td>' + (p.MaxAgeMonths ? esc(p.MaxAgeMonths) + ' mo' : '-') + '</td><td>' + sw('data-pf="Active" data-pid="' + esc(p.Id) + '"', p.Active === 'Y') + '</td><td><button data-e="' + esc(p.Id) + '">Edit</button></td></tr>';
     }).join('') + '</tbody></table>';
   on($('s_procs'), '[data-e]', 'click', function (e) { procModal(procById(e.currentTarget.getAttribute('data-e'))); });
@@ -4134,7 +4153,7 @@ function drawProcs() {
   });
 }
 function saveProc(pr, field, value, m) {
-  var pl = { Id: pr.Id || '', Name: pr.Name, DefaultDiagnosis: pr.DefaultDiagnosis, DefaultCategory: pr.DefaultCategory, DefaultCare: pr.DefaultCare, Laterality: pr.Laterality, JMH: pr.JMH, PriceDay: pr.PriceDay, PriceInpatient: pr.PriceInpatient, TargetDays: pr.TargetDays, MaxAgeMonths: pr.MaxAgeMonths, WarnMonthsBefore: pr.WarnMonthsBefore, Active: pr.Active };
+  var pl = { Id: pr.Id || '', Name: pr.Name, DefaultDiagnosis: pr.DefaultDiagnosis, DefaultCategory: pr.DefaultCategory, DefaultCare: pr.DefaultCare, AskFor: pr.AskFor || (pr.Laterality === 'Y' ? 'side' : (pr.Laterality === 'H' ? 'hypospadias' : '')), JMH: pr.JMH, PriceDay: pr.PriceDay, PriceInpatient: pr.PriceInpatient, TargetDays: pr.TargetDays, MaxAgeMonths: pr.MaxAgeMonths, WarnMonthsBefore: pr.WarnMonthsBefore, Active: pr.Active };
   if (field) pl[field] = value;
   call('saveProcedure', pl).then(function (l) { S.d.procedures = l; if (m) m.close(); drawSetPanel(); toast('Saved'); }).catch(function (e) { drawSetPanel(); fail(e); });
 }
@@ -4145,7 +4164,7 @@ function procModal(pr) {
     '<div class="field"><label for="p_dx">Default diagnosis</label><input type="text" id="p_dx" value="' + esc(pr.DefaultDiagnosis || '') + '"></div>' +
     '<div class="field"><label for="p_cat">Default category</label><select id="p_cat">' + CATS.map(function (s) { return opt(s, s, pr.DefaultCategory === s); }).join('') + '</select></div>' +
     '<div class="field"><label for="p_care">Usual care (price only)</label><select id="p_care">' + ['Day-case', 'Inpatient'].map(function (s) { return opt(s, s, pr.DefaultCare === s); }).join('') + '</select></div>' +
-    '<div class="field"><label>&nbsp;</label><label class="check"><input type="checkbox" id="p_lat"' + (pr.Laterality === 'Y' ? ' checked' : '') + '> Needs side (left, both, right)</label></div>' +
+    '<div class="field"><label for="p_ask">Asks for</label><select id="p_ask">' + opt('', 'Nothing', !askKind(pr)) + opt('side', 'Side (right, left, both)', askKind(pr) === 'side') + opt('hypospadias', 'Hypospadias type', askKind(pr) === 'hypo') + '</select></div>' +
     '<div class="field"><label>&nbsp;</label><label class="check"><input type="checkbox" id="p_jmh"' + (pr.JMH === 'Y' ? ' checked' : '') + '> Can be done at JMH</label></div>' +
     '<div class="field"><label for="p_pd">Price, day-case (BHD)</label><input type="number" id="p_pd" min="0" step="any" value="' + esc(pr.PriceDay || '') + '"></div>' +
     '<div class="field"><label for="p_pi">Price, inpatient (BHD)</label><input type="number" id="p_pi" min="0" step="any" value="' + esc(pr.PriceInpatient || '') + '"></div>' +
@@ -4156,7 +4175,7 @@ function procModal(pr) {
     '<div class="row"><button class="primary" id="p_save">Save</button><button id="p_cancel">Cancel</button></div>');
   $('p_cancel').addEventListener('click', m.close);
   $('p_save').addEventListener('click', function () {
-    saveProc({ Id: pr.Id || '', Name: val('p_name'), DefaultDiagnosis: val('p_dx'), DefaultCategory: val('p_cat'), DefaultCare: val('p_care'), Laterality: checked('p_lat') ? 'Y' : '', JMH: checked('p_jmh') ? 'Y' : '',
+    saveProc({ Id: pr.Id || '', Name: val('p_name'), DefaultDiagnosis: val('p_dx'), DefaultCategory: val('p_cat'), DefaultCare: val('p_care'), AskFor: val('p_ask'), JMH: checked('p_jmh') ? 'Y' : '',
       PriceDay: val('p_pd'), PriceInpatient: val('p_pi'), TargetDays: val('p_td'), MaxAgeMonths: val('p_ma'), WarnMonthsBefore: val('p_wm'), Active: checked('p_act') ? 'Y' : 'N' }, null, null, m);
   });
 }
@@ -4285,6 +4304,696 @@ function drawAccountPanel(el) {
   on(el, '[data-pk]', 'click', function (e) { setPref(e.currentTarget.getAttribute('data-pk'), e.currentTarget.getAttribute('data-pv')); drawAccountPanel(el); });
   if ($('t_idlesave')) $('t_idlesave').addEventListener('click', function () { call('saveSettings', { idleMinutes: val('t_idle') }).then(function (s) { S.d.settings = s; resetIdle(); toast('Saved'); }).catch(fail); });
 }
+
+
+// ================================================================ v0.10.0: import from Excel, xls tag
+function xlsIssues(p) {
+  if (!p || p.Imported !== 'Y') return [];
+  var o = [], active = p.Status === 'Ready' || p.Status === 'Awaiting clearance' || p.Status === 'Not ready';
+  if (!p.Sex) o.push('Sex not set');
+  if (p.DobFlag === 'day') o.push('Day of birth not confirmed (taken from the CPR)');
+  if (p.DobFlag === 'est') o.push('Date of birth estimated from the age');
+  if (!p.Guardian && p.Status !== 'Removed') o.push('No contact number');
+  if (!/^\d{9}$/.test(p.MRN || '')) o.push('Only a T number (no CPR yet)');
+  if (active && (p.MedicalStatus || 'Unknown') === 'Unknown') o.push(p.ListId ? 'Scheduled without a medical status' : 'Medical status not set');
+  if (p.Status === 'Done') {
+    var sg = []; try { sg = JSON.parse(p.Surgeons || '[]'); } catch (e) { sg = []; }
+    if (!sg.length) o.push('No surgeons');
+    if (!p.DoneDate) o.push('Operation date missing');
+  }
+  return o;
+}
+function xlsChip(p) {
+  return xlsIssues(p).length ? ' <span class="xls" data-xls="' + esc(p.Id) + '" title="Imported from Excel: tap to see what is missing">xls</span>' : '';
+}
+document.addEventListener('click', function (e) {
+  var t = e.target && e.target.closest ? e.target.closest('.xls[data-xls]') : null;
+  if (!t) return;
+  e.stopPropagation(); e.preventDefault();
+  var p = getP(t.getAttribute('data-xls'));
+  if (!p) return;
+  var m = openModal('<div class="spread"><h2>Imported from Excel</h2><button id="xl_x">Close</button></div>' +
+    '<p class="muted small" style="margin:0 0 6px">' + esc(p.Name) + ' · ' + esc(idShow(p)) + '. This patient does not yet follow every rule of the app. The tag goes away by itself when these are done:</p>' +
+    '<ul>' + xlsIssues(p).map(function (i) { return '<li>' + esc(i) + '</li>'; }).join('') + '</ul>' +
+    '<div class="row"><button class="primary" id="xl_open">Open patient</button></div>', { narrow: true });
+  $('xl_x').addEventListener('click', m.close);
+  $('xl_open').addEventListener('click', function () { m.close(); openPatient(p.Id); });
+}, true);
+
+// ---- reading an .xlsx file in the browser (zip + xml, no library)
+function xlsxUnzip(buf) {
+  var dv = new DataView(buf), u8 = new Uint8Array(buf), i, eocd = -1;
+  for (i = buf.byteLength - 22; i >= 0 && i > buf.byteLength - 70000; i--) if (dv.getUint32(i, true) === 0x06054b50) { eocd = i; break; }
+  if (eocd < 0) return Promise.reject(new Error('This is not an .xlsx file.'));
+  var n = dv.getUint16(eocd + 10, true), off = dv.getUint32(eocd + 16, true), files = {};
+  for (i = 0; i < n; i++) {
+    if (dv.getUint32(off, true) !== 0x02014b50) break;
+    var method = dv.getUint16(off + 10, true), csize = dv.getUint32(off + 20, true), nlen = dv.getUint16(off + 28, true), elen = dv.getUint16(off + 30, true), clen = dv.getUint16(off + 32, true), lo = dv.getUint32(off + 42, true);
+    var name = new TextDecoder().decode(u8.subarray(off + 46, off + 46 + nlen));
+    files[name] = { method: method, csize: csize, lo: lo };
+    off += 46 + nlen + elen + clen;
+  }
+  function read(name) {
+    var f = files[name]; if (!f) return Promise.resolve('');
+    var ds = f.lo + 30 + dv.getUint16(f.lo + 26, true) + dv.getUint16(f.lo + 28, true), data = u8.subarray(ds, ds + f.csize);
+    if (f.method === 0) return Promise.resolve(new TextDecoder().decode(data));
+    if (typeof DecompressionStream === 'undefined') return Promise.reject(new Error('This browser cannot open .xlsx files. Copy the cells and paste them instead.'));
+    var stream = new Blob([data]).stream().pipeThrough(new DecompressionStream('deflate-raw'));
+    return new Response(stream).text();
+  }
+  return Promise.resolve({ read: read, names: Object.keys(files) });
+}
+function xlsxSheets(buf) {
+  return xlsxUnzip(buf).then(function (z) {
+    function xml(t) { return new DOMParser().parseFromString(t, 'text/xml'); }
+    return Promise.all([z.read('xl/workbook.xml'), z.read('xl/_rels/workbook.xml.rels'), z.read('xl/sharedStrings.xml')]).then(function (a) {
+      var wb = xml(a[0]), rels = xml(a[1]), ss = [];
+      var sis = xml(a[2] || '<x/>').getElementsByTagName('si');
+      for (var i = 0; i < sis.length; i++) { var ts = sis[i].getElementsByTagName('t'), s = ''; for (var j = 0; j < ts.length; j++) s += ts[j].textContent; ss.push(s); }
+      var rmap = {}, rl = rels.getElementsByTagName('Relationship');
+      for (i = 0; i < rl.length; i++) rmap[rl[i].getAttribute('Id')] = rl[i].getAttribute('Target');
+      var sheets = [], sl = wb.getElementsByTagName('sheet');
+      for (i = 0; i < sl.length; i++) {
+        var rid = sl[i].getAttribute('r:id') || sl[i].getAttributeNS('http://schemas.openxmlformats.org/officeDocument/2006/relationships', 'id');
+        var tg = rmap[rid] || ('worksheets/sheet' + (i + 1) + '.xml');
+        tg = tg.replace(/^\//, ''); if (tg.indexOf('xl/') !== 0) tg = 'xl/' + tg;
+        sheets.push({ name: sl[i].getAttribute('name'), path: tg });
+      }
+      return Promise.all(sheets.map(function (sh) { return z.read(sh.path); })).then(function (texts) {
+        return sheets.map(function (sh, k) {
+          var d = xml(texts[k]), cells = d.getElementsByTagName('c'), rows = [], maxc = 0;
+          for (var c = 0; c < cells.length; c++) {
+            var ce = cells[c], ref = ce.getAttribute('r') || '', m = ref.match(/^([A-Z]+)(\d+)$/); if (!m) continue;
+            var col = 0; for (var q = 0; q < m[1].length; q++) col = col * 26 + (m[1].charCodeAt(q) - 64); col--;
+            var ri = +m[2] - 1, t = ce.getAttribute('t'), vEl = ce.getElementsByTagName('v')[0], v = vEl ? vEl.textContent : '';
+            if (t === 's') v = ss[+v] || ''; else if (t === 'inlineStr') { var is = ce.getElementsByTagName('t'), tx = ''; for (var z2 = 0; z2 < is.length; z2++) tx += is[z2].textContent; v = tx; }
+            else if (t === 'b') v = v === '1' ? 'TRUE' : 'FALSE';
+            if (!rows[ri]) rows[ri] = [];
+            rows[ri][col] = v; if (col + 1 > maxc) maxc = col + 1;
+          }
+          var out = [];
+          for (var r = 0; r < rows.length; r++) {
+            var row = rows[r] || [], line = [];
+            for (var cc = 0; cc < maxc; cc++) line.push(row[cc] === undefined ? '' : String(row[cc]));
+            if (line.some(function (x) { return x.trim() !== ''; })) { line._n = r + 1; out.push(line); }
+          }
+          return { name: sh.name, rows: out };
+        }).filter(function (s) { return s.rows.length; });
+      });
+    });
+  });
+}
+
+var IMP2 = [
+  { k: 'Name', label: 'Name', req: true, syn: ['name', 'patient name', 'patient', 'full name'] },
+  { k: 'MRN', label: 'MRN (CPR)', req: true, syn: ['cpr', 'mrn', 'file no', 'file number', 'hospital no', 'id'] },
+  { k: 'Procedure', label: 'Procedure', req: true, syn: ['procedure', 'operation', 'surgery', 'planned procedure'] },
+  { k: 'Age', label: 'Age (text)', syn: ['age'] },
+  { k: 'Diagnosis', label: 'Diagnosis', syn: ['diagnosis', 'dx'] },
+  { k: 'Type', label: 'Type (DCU / INP)', syn: ['type', 'care', 'care type', 'dcu'] },
+  { k: 'DateAdded', label: 'Date added', syn: ['date added', 'added', 'date of listing', 'listed'] },
+  { k: 'Contacts', label: 'Contacts', syn: ['contacts', 'contact', 'phone', 'mobile', 'tel', 'guardian'] },
+  { k: 'ProposedDate', label: 'Proposed date', syn: ['proposed date', 'scheduled date', 'operation date', 'date of operation', 'proposed'] },
+  { k: 'Comments', label: 'Comments', syn: ['comments', 'comment', 'notes', 'note', 'remarks'] },
+  { k: 'DOB', label: 'Date of birth (if you have it)', syn: ['date of birth', 'dob', 'birth date'] },
+  { k: 'Sex', label: 'Sex (if you have it)', syn: ['sex', 'gender'] }
+];
+var STD_ORDER = [null, 'Name', 'Age', 'MRN', 'Diagnosis', 'Procedure', 'Type', 'DateAdded', 'Contacts', 'ProposedDate', 'Comments'];
+
+function openImport() {
+  var cons = S.d.consultants.filter(function (c) { return c.Active === 'Y'; });
+  var st = { batch: 'waiting', cons: cons[0] ? cons[0].Id : '', table: null, header: true, map: {}, procMap: {}, apply: {}, plan: null, filter: 'all', sheets: null };
+  var m = openModal('<div id="im_body"></div>', { locked: true });
+  function norm(x) { return String(x).toLowerCase().replace(/[^a-z0-9 ]/g, ' ').replace(/\s+/g, ' ').trim(); }
+  function autoMap() {
+    st.map = {};
+    var first = st.table[0].map(norm), hits = 0, used = {};
+    IMP2.forEach(function (f) { for (var i = 0; i < first.length; i++) if (!used[i] && f.syn.indexOf(first[i]) >= 0) { st.map[f.k] = i; used[i] = true; hits++; return; } });
+    if (hits >= 3) { st.header = true; return; }
+    // no heading row: use the usual order of your sheet
+    st.header = false; st.map = {};
+    STD_ORDER.forEach(function (k, i) { if (k && i < st.table[0].length) st.map[k] = i; });
+  }
+  function BATCHES() { return [['waiting', 'Waiting patients'], ['done', 'Done cases'], ['removed', 'Removed cases']]; }
+  function step1(msg) {
+    $('im_body').innerHTML = '<div class="spread"><h2>Import from Excel</h2><button id="im_close">Close</button></div>' +
+      '<div class="field"><label>What are you importing?</label><div class="tags">' + BATCHES().map(function (b) { return '<button type="button" class="opt' + (st.batch === b[0] ? ' on' : '') + '" data-b="' + b[0] + '">' + b[1] + '</button>'; }).join('') + '</div></div>' +
+      '<div class="field"><label for="im_cons">Consultant for all these patients</label><select id="im_cons">' + cons.map(function (c) { return opt(c.Id, c.Name, c.Id === st.cons); }).join('') + '</select></div>' +
+      '<div class="field"><label for="im_text">Paste the cells you copied from Excel (with or without the heading row)</label><textarea id="im_text" style="min-height:130px"></textarea></div>' +
+      '<div class="field"><label for="im_file">Or choose the Excel file (.xlsx) or a CSV</label><input type="file" id="im_file" accept=".xlsx,.csv,.txt,.tsv"></div>' +
+      (msg ? '<p style="color:var(--red)">' + esc(msg) + '</p>' : '') +
+      '<p class="muted small">Nothing is saved until you have seen the preview and confirmed. Patients already in the app (same MRN, procedure and side) are updated, and only empty fields are filled. Nobody is removed. Imported patients get a small "xls" tag until what is missing is completed.</p>' +
+      '<button class="primary" id="im_read">Read the data</button>';
+    $('im_close').addEventListener('click', m.close);
+    on(m.el, '[data-b]', 'click', function (e) { st.batch = e.currentTarget.getAttribute('data-b'); var bs = m.el.querySelectorAll('[data-b]'); for (var i = 0; i < bs.length; i++) bs[i].classList.toggle('on', bs[i] === e.currentTarget); });
+    $('im_cons').addEventListener('change', function () { st.cons = this.value; });
+    $('im_file').addEventListener('change', function () {
+      var f = this.files[0]; if (!f) return;
+      if (/\.xlsx$/i.test(f.name)) {
+        f.arrayBuffer().then(xlsxSheets).then(function (sheets) {
+          if (!sheets.length) { step1('That file has no data.'); return; }
+          if (sheets.length === 1) { useRows(sheets[0].rows); return; }
+          st.sheets = sheets; pickSheet();
+        }).catch(function (e) { step1(e.message || 'Could not read that file.'); });
+      } else if (/\.xls$/i.test(f.name)) step1('Old .xls files cannot be read. In Excel use Save as .xlsx, or copy the cells and paste them here.');
+      else { var rd = new FileReader(); rd.onload = function () { $('im_text').value = rd.result; }; rd.readAsText(f); }
+    });
+    $('im_read').addEventListener('click', function () {
+      var t = parseTable($('im_text').value);
+      if (!t.length) { toast('Paste the cells or choose a file first', true); return; }
+      st.cons = val('im_cons'); useRows(t);
+    });
+  }
+  function pickSheet() {
+    $('im_body').innerHTML = '<div class="spread"><h2>Which sheet?</h2><button id="im_close">Close</button></div><div class="col">' +
+      st.sheets.map(function (s, i) { return '<button type="button" data-sh="' + i + '">' + esc(s.name) + ' (' + s.rows.length + ' rows)</button>'; }).join('') + '</div>';
+    $('im_close').addEventListener('click', m.close);
+    on(m.el, '[data-sh]', 'click', function (e) { useRows(st.sheets[+e.currentTarget.getAttribute('data-sh')].rows); });
+  }
+  function useRows(rows) {
+    // keep each row's Excel row number when it is known
+    st.table = rows.map(function (r, i) { var c = r.slice(); c._n = r._n || (i + 1); return c; });
+    autoMap(); st.procMap = {}; st.apply = {}; st.filter = 'all'; step2();
+  }
+  function dataRows() {
+    var out = [], start = st.header ? 1 : 0;
+    for (var r = start; r < st.table.length; r++) {
+      var row = st.table[r], o = { _n: row._n };
+      IMP2.forEach(function (f) { var i = st.map[f.k]; o[f.k] = i === undefined ? '' : String(row[i] === undefined ? '' : row[i]).trim(); });
+      if (!o.Name && !o.MRN && !o.Procedure) continue;
+      o.ProposedDate = o.ProposedDate; o.apply = !!st.apply[o._n];
+      out.push(o);
+    }
+    return out;
+  }
+  function chunks(rows) {
+    var groups = {}, order = [];
+    rows.forEach(function (r) { var k = String(r.MRN).replace(/[^a-z0-9]/gi, '').toUpperCase() || ('r' + r._n); if (!groups[k]) { groups[k] = []; order.push(k); } groups[k].push(r); });
+    var out = [], cur = [];
+    order.forEach(function (k) { if (cur.length + groups[k].length > 300) { out.push(cur); cur = []; } cur = cur.concat(groups[k]); });
+    if (cur.length) out.push(cur);
+    return out;
+  }
+  function run(dry) {
+    var parts = chunks(dataRows()), res = { items: [], counts: { new: 0, update: 0, unchanged: 0, problem: 0 }, unmatched: {} }, i = 0;
+    function next() {
+      if (i >= parts.length) { if ($('im_prog')) $('im_prog').textContent = ''; return Promise.resolve(res); }
+      var part = parts[i++];
+      $('im_prog') && ($('im_prog').textContent = (dry ? 'Checking ' : 'Saving ') + Math.min(i * 300, dataRows().length) + '…');
+      return call('importCases', { dry: dry, batch: st.batch, consultantId: st.cons, rows: part, procMap: st.procMap }).then(function (r) {
+        r.items.forEach(function (it) { res.items.push(it); });
+        Object.keys(r.counts).forEach(function (k) { res.counts[k] += r.counts[k]; });
+        r.unmatched.forEach(function (u) { res.unmatched[u.text] = (res.unmatched[u.text] || 0) + u.rows; });
+        return next();
+      });
+    }
+    return next();
+  }
+  function step2() {
+    var heads = st.table[0];
+    $('im_body').innerHTML = '<div class="spread"><h2>Check before importing</h2><button id="im_close">Close</button></div>' +
+      '<p class="muted small" style="margin:0 0 6px">' + esc(BATCHES().filter(function (b) { return b[0] === st.batch; })[0][1]) + ' for ' + esc(consName(st.cons)) + '. ' + (st.table.length - (st.header ? 1 : 0)) + ' rows read.</p>' +
+      '<details id="im_cols"><summary>Columns (' + IMP2.filter(function (f) { return st.map[f.k] !== undefined; }).length + ' matched)</summary>' +
+      '<label class="check"><input type="checkbox" id="im_hdr"' + (st.header ? ' checked' : '') + '> The first row is a heading</label><div class="grid2">' +
+      IMP2.map(function (f) {
+        return '<div class="field"><label for="im_f_' + f.k + '">' + esc(f.label) + (f.req ? ' *' : '') + '</label><select id="im_f_' + f.k + '" class="im_map" data-k="' + f.k + '">' +
+          opt('', 'Not in my file', st.map[f.k] === undefined) + heads.map(function (h, i) { return opt(String(i), (st.header ? (h || 'Column ' + (i + 1)) : 'Column ' + (i + 1) + ' (' + String(h).slice(0, 18) + ')'), st.map[f.k] === i); }).join('') + '</select></div>';
+      }).join('') + '</div></details>' +
+      '<div id="im_plan"><p class="muted">Checking…</p></div><p class="small muted" id="im_prog"></p>';
+    $('im_close').addEventListener('click', m.close);
+    $('im_hdr').addEventListener('change', function () { st.header = this.checked; step2(); });
+    on(m.el, '.im_map', 'change', function (e) { var k = e.currentTarget.getAttribute('data-k'); if (e.currentTarget.value === '') delete st.map[k]; else st.map[k] = +e.currentTarget.value; replan(); });
+    if (!st.map.Name || !st.map.MRN || !st.map.Procedure) { $('im_plan').innerHTML = '<p style="color:var(--red)">Choose the Name, MRN and Procedure columns above.</p>'; $('im_cols').open = true; return; }
+    replan();
+  }
+  function replan() {
+    if (!st.map.Name || !st.map.MRN || !st.map.Procedure) { $('im_plan').innerHTML = '<p style="color:var(--red)">Choose the Name, MRN and Procedure columns.</p>'; return; }
+    $('im_plan').innerHTML = '<p class="muted">Checking…</p>';
+    run(true).then(function (r) { st.plan = r; drawPlan(); }).catch(function (e) { $('im_plan').innerHTML = '<p style="color:var(--red)">' + esc(e.message || String(e)) + '</p>'; });
+  }
+  function drawPlan() {
+    var r = st.plan, c = r.counts, el = $('im_plan');
+    var unm = Object.keys(r.unmatched);
+    var sugg = r.items.filter(function (i) { return i.suggest && i.action !== 'problem' && i.action !== 'unchanged'; });
+    var shown = r.items.filter(function (i) { return st.filter === 'all' || i.action === st.filter; });
+    var h = '<div class="chiprow">' + [['all', 'All ' + r.items.length], ['new', 'New ' + c.new], ['update', 'Update ' + c.update], ['unchanged', 'Unchanged ' + c.unchanged], ['problem', 'Problems ' + c.problem]].map(function (x) {
+      return '<button type="button" class="schip' + (st.filter === x[0] ? ' on' : '') + '" data-f="' + x[0] + '">' + x[1] + '</button>'; }).join('') + '</div>';
+    if (unm.length) {
+      h += '<div class="banner" style="display:block"><strong>Procedures I could not match.</strong> Choose what each one is; I will remember your choice.' + unm.map(function (u, i) {
+        return '<div class="field" style="margin:6px 0 0"><label for="im_u' + i + '">"' + esc(u) + '" (' + r.unmatched[u] + ' rows)</label><select id="im_u' + i + '" data-u="' + esc(u) + '">' + opt('', 'Choose…', true) + S.d.procedures.filter(function (p) { return p.Active !== 'N'; }).map(function (p) { return opt(p.Id, p.Name); }).join('') + opt('__asis', 'Keep as typed (not in my list)') + opt('__skip', 'Skip these rows') + '</select></div>';
+      }).join('') + '</div>';
+    }
+    if (sugg.length) h += '<p class="small"><strong>' + sugg.length + '</strong> rows have suggestions from the comments (calls, conditions). They are only applied when ticked. <button type="button" class="link" id="im_tick">Tick all</button> · <button type="button" class="link" id="im_untick">Untick all</button></p>';
+    h += '<div style="overflow-x:auto"><table class="tbl" style="font-size:12px"><thead><tr><th>Row</th><th></th><th>Patient</th><th>Procedure</th><th>Notes</th><th>Comments say</th></tr></thead><tbody>' +
+      shown.slice(0, 200).map(function (i) {
+        var tagc = { 'new': 'green', update: 'amber', unchanged: '', problem: 'red' }[i.action];
+        var sg = i.suggest && i.action !== 'problem' && i.action !== 'unchanged' ? '<label class="check" style="margin:0"><input type="checkbox" data-ap="' + i.rowId + '"' + (st.apply[i.rowId] ? ' checked' : '') + '> ' + esc((i.suggest.calls ? 'no answer x' + i.suggest.calls : '') + (i.suggest.calls && i.suggest.tags.length ? '; ' : '') + i.suggest.tags.join(', ')) + '</label>' : '';
+        return '<tr><td>' + esc(i.n) + '</td><td><span class="chip ' + tagc + '">' + esc(i.action === 'new' ? 'New' : i.action === 'update' ? 'Update' : i.action === 'unchanged' ? 'Same' : 'Problem') + '</span></td><td>' + esc(i.name) + '<br><span class="muted">' + esc(i.mrn) + '</span></td><td>' + esc(i.procedure) + '</td><td>' +
+          esc(i.action === 'problem' ? i.reason : (i.action === 'update' ? 'Fills: ' + i.changes.join(', ') + (i.warnings.length ? '. ' : '') : '') + i.warnings.join('. ')) + '</td><td>' + sg + '</td></tr>';
+      }).join('') + '</tbody></table></div>' + (shown.length > 200 ? '<p class="muted small">Showing the first 200 of ' + shown.length + '. All of them are imported.</p>' : '');
+    var go = c.new + c.update;
+    h += '<div class="row" style="margin-top:10px"><button class="primary" id="im_go"' + (go ? '' : ' disabled') + '>Import ' + c.new + ' new, update ' + c.update + '</button><button id="im_back">Back</button></div>' +
+      (c.problem ? '<p class="muted small">Rows with problems are not imported. Fix them in Excel and import again: patients already imported are not duplicated.</p>' : '');
+    el.innerHTML = h;
+    on(el, '[data-f]', 'click', function (e) { st.filter = e.currentTarget.getAttribute('data-f'); drawPlan(); });
+    on(el, '[data-u]', 'change', function (e) { if (!e.currentTarget.value) return; st.procMap[e.currentTarget.getAttribute('data-u')] = e.currentTarget.value; replan(); });
+    on(el, '[data-ap]', 'change', function (e) { st.apply[e.currentTarget.getAttribute('data-ap')] = e.currentTarget.checked; });
+    if ($('im_tick')) {
+      $('im_tick').addEventListener('click', function () { sugg.forEach(function (i) { st.apply[i.rowId] = true; }); drawPlan(); });
+      $('im_untick').addEventListener('click', function () { st.apply = {}; drawPlan(); });
+    }
+    $('im_back').addEventListener('click', function () { step1(); });
+    $('im_go').addEventListener('click', function () {
+      $('im_go').disabled = true;
+      run(false).then(function (res) {
+        load().then(function () {
+          var c2 = res.counts;
+          $('im_body').innerHTML = '<h2>Import finished</h2><p><strong>' + c2.new + '</strong> added, <strong>' + c2.update + '</strong> updated, ' + c2.unchanged + ' unchanged, ' + c2.problem + ' not imported.</p>' +
+            (c2.problem ? '<div class="small">' + res.items.filter(function (i) { return i.action === 'problem'; }).slice(0, 40).map(function (i) { return 'Row ' + esc(i.n) + ': ' + esc(i.reason); }).join('<br>') + '</div>' : '') +
+            '<p class="muted small">Imported patients carry a small "xls" tag until their missing data is completed. In the waiting list, Filters has an "xls" option to show only them.</p><button class="primary" id="im_ok">Close</button>';
+          $('im_ok').addEventListener('click', function () { m.close(); render(); });
+        });
+      }).catch(function (e) { fail(e); $('im_go').disabled = false; });
+    });
+  }
+  step1();
+}
+
+// ---- xls filter in the waiting list filters
+(function () {
+  var oldApply = applyFilters, oldClear = clearFilters, oldDlg = dlgFilters;
+  applyFilters = function (list) { var r = oldApply(list); return S.f.xls ? r.filter(function (p) { return xlsIssues(p).length > 0; }) : r; };
+  clearFilters = function () { oldClear(); S.f.xls = false; };
+  dlgFilters = function () {
+    oldDlg();
+    var ok = $('fl_ok'); if (!ok) return;
+    var row = ok.parentNode, lab = document.createElement('label');
+    lab.className = 'check'; lab.innerHTML = '<input type="checkbox" id="fl_xls"' + (S.f.xls ? ' checked' : '') + '> Imported from Excel with something missing (xls)';
+    row.parentNode.insertBefore(lab, row);
+    var cb = lab.querySelector('input');
+    ok.addEventListener('click', function () { S.f.xls = cb.checked; listBody(); });
+  };
+})();
+
+// ================================================================ v0.11.0: rights, People, T number, import v3
+// ---- menu: paste import for everyone who has the right
+function importMenuHook(m) {
+  if (!can('importPaste') || !m.el.querySelector('.menulist')) return;
+  var b = document.createElement('button'); b.id = 'mm_imp'; b.innerHTML = ico('plus') + '<span>Import by pasting from Excel</span>';
+  var ref = $('mm_ref'); ref.parentNode.insertBefore(b, ref);
+  b.addEventListener('click', function () { m.close(); openImport('paste'); });
+}
+(function () {
+  var oldOpen = openModal;
+  openModal = function (html, o) {
+    var m = oldOpen(html, o);
+    try { if ($('mm_ref') && !$('mm_imp') && html.indexOf('<h2>Menu</h2>') === 0) importMenuHook(m); } catch (e) { /* ignore */ }
+    return m;
+  };
+})();
+
+// ---- export and logbook rights
+(function () {
+  var oldExp = exportPatients;
+  exportPatients = function (name, list) { if (!can('export')) { toast('You do not have the right to export', true); return; } oldExp(name, list); };
+  var oldLb = viewLogbook;
+  viewLogbook = function () {
+    oldLb();
+    if (can('teamLogbook')) return;
+    var t = document.querySelector('[data-team]'); if (t) t.remove();
+    if (S.lb && S.lb.team) { S.lb.team = false; oldLb(); var t2 = document.querySelector('[data-team]'); if (t2) t2.remove(); }
+    var mine = S.user.SurgeonName;
+    var chips = document.querySelectorAll('[data-who]');
+    for (var i = 0; i < chips.length; i++) if (chips[i].getAttribute('data-who') !== mine) chips[i].remove();
+    if (S.lb && mine && S.lb.name !== mine) { S.lb.name = mine; oldLb(); var c2 = document.querySelectorAll('[data-who]'); for (var j = 0; j < c2.length; j++) if (c2[j].getAttribute('data-who') !== mine) c2[j].remove(); var t3 = document.querySelector('[data-team]'); if (t3) t3.remove(); }
+  };
+})();
+
+// ---- settings menu by rights
+SET_GROUPS = [
+  ['People', [['people', 'People and rights', 'people']]],
+  ['Clinical', [['procedures', 'Procedures', 'settings'], ['pediatricians', 'Pediatricians', 'settings'], ['tags', 'Tags and reviews', 'settings'], ['warnings', 'Warnings', 'settings']]],
+  ['Hospital', [['rooms', 'Operating rooms', 'settings']]],
+  ['Data', [['import', 'Import and export', 'impexp'], ['backup', 'Backup', 'backup'], ['audit', 'Audit log', 'audit']]],
+  ['Account', [['account', 'My account', 'all']]]
+];
+setAllowed = function (t) {
+  if (t[2] === 'all') return true;
+  if (t[2] === 'impexp') return can('settings') || can('importFile') || can('importPaste') || can('export');
+  return can(t[2]);
+};
+var oldDrawSetPanel = drawSetPanel;
+drawSetPanel = function () {
+  if (S.setTab === 'people') return drawPeoplePanel($('s_main'));
+  if (S.setTab === 'pediatricians') {
+    S.setTab = 'consultants'; S.consKind = 'specialty'; oldDrawSetPanel(); S.setTab = 'pediatricians';
+    var el2 = $('s_main'), sg = el2.querySelector('.segwrap'); if (sg) sg.remove();
+    el2.innerHTML = el2.innerHTML.replace('Add specialty doctor', 'Add pediatrician').replace('Add specialty doctor', 'Add pediatrician');
+    el2.insertAdjacentHTML('afterbegin', '<h3>Pediatricians</h3>');
+    // innerHTML replacement dropped the handlers: redraw them
+    var ab = $('s_addcons'); if (ab) ab.addEventListener('click', function () {
+      var m2 = openModal('<h2>Add pediatrician</h2><div class="field"><label for="sc_name">Name</label><input type="text" id="sc_name"></div><div class="field"><label for="sc_spec">Specialty</label><select id="sc_spec">' + SPECIALTIES.filter(function (x) { return x !== 'Anesthesia'; }).map(function (x) { return opt(x, x); }).join('') + '</select></div><div class="row"><button class="primary" id="sc_ok">Add</button><button id="sc_x">Cancel</button></div>', { narrow: true });
+      $('sc_x').addEventListener('click', m2.close);
+      $('sc_ok').addEventListener('click', function () { call('saveSpecialtyConsultant', { Name: val('sc_name'), Specialty: val('sc_spec') }).then(function (l) { S.d.specialtyConsultants = l; m2.close(); drawSetPanel(); toast('Added'); }).catch(fail); });
+    });
+    if ($('s_sc')) drawSC();
+    return;
+  }
+  if (S.setTab === 'import') {
+    oldDrawSetPanel();
+    var el = $('s_main');
+    $('x_import').textContent = can('importFile') ? 'Import from Excel (file or paste)' : 'Import by pasting from Excel';
+    $('x_import').onclick = null;
+    var nb = $('x_import').cloneNode(true); $('x_import').parentNode.replaceChild(nb, $('x_import'));
+    nb.addEventListener('click', function () { openImport(can('importFile') ? '' : 'paste'); });
+    if (!can('importFile') && !can('importPaste')) nb.style.display = 'none';
+    if (!can('export')) { ['x_wait', 'x_done', 'x_rem'].forEach(function (i) { if ($(i)) $(i).style.display = 'none'; }); }
+    return;
+  }
+  oldDrawSetPanel();
+};
+function drawAccountRights(el) { }
+
+// ---- People page
+function peopleRows(users) {
+  var rows = [], usedU = {};
+  function loginOf(name) {
+    var u = (users || []).filter(function (x) { return !usedU[x.Username] && (x.SurgeonName === name || x.Name === name); })[0];
+    if (u) usedU[u.Username] = true; return u || null;
+  }
+  S.d.consultants.forEach(function (c) { rows.push({ kind: 'cons', role: 'Consultant', name: c.Name, active: c.Active === 'Y', c: c, u: loginOf(c.Name) }); });
+  (S.d.residents || []).forEach(function (r) { rows.push({ kind: 'res', role: r.Role === 'Chief' ? 'Chief' : 'Resident', name: r.Name, active: r.Active === 'Y', r: r, u: loginOf(r.Name) }); });
+  (users || []).forEach(function (u) { if (!usedU[u.Username]) rows.push({ kind: 'user', role: u.Type || 'Consultant', name: u.Name, active: u.Active === 'Y', u: u }); });
+  return rows;
+}
+function drawPeoplePanel(el) {
+  el.innerHTML = '<div class="spread"><h3>People</h3><button id="pp_add" class="primary">Add person</button></div>' +
+    '<p class="muted small">Consultants, chiefs and residents in one list. A login is optional; the rights of each person are set one by one.</p><div id="pp_list"><p class="muted small">Loading…</p></div>';
+  $('pp_add').addEventListener('click', function () { personModal(null, S._users || []); });
+  call('listUsers').then(function (users) {
+    S._users = users;
+    var box = $('pp_list'); if (!box) return;
+    var rows = peopleRows(users);
+    box.innerHTML = '<table class="tbl"><thead><tr><th>Name</th><th>Role</th><th>Login</th><th>Rights</th><th></th></tr></thead><tbody>' + rows.map(function (x, i) {
+      var ini = x.kind === 'cons' ? ' <span class="chip" style="background:' + esc(x.c.Color || '#ddd') + '">' + esc(x.c.Initials || '') + '</span>' : '';
+      return '<tr><td><strong>' + esc(x.name) + '</strong>' + ini + (x.active ? '' : ' <span class="chip">inactive</span>') + '</td><td>' + esc(x.role) + '</td>' +
+        '<td>' + (x.u ? esc(x.u.Username) + (x.u.Active === 'Y' ? '' : ' <span class="chip">disabled</span>') : '<span class="muted small">No login</span>') + '</td>' +
+        '<td class="small">' + (x.u ? (x.u.Rights.length === ALL_RIGHTS.length ? 'Everything' : x.u.Rights.length + ' of ' + ALL_RIGHTS.length) : '') + '</td>' +
+        '<td><button data-pe="' + i + '">Edit</button></td></tr>';
+    }).join('') + '</tbody></table>';
+    on(box, '[data-pe]', 'click', function (e) { personModal(rows[+e.currentTarget.getAttribute('data-pe')], users); });
+  }).catch(function (e) { if ($('pp_list')) $('pp_list').innerHTML = '<p style="color:var(--red)">' + esc(e.message || String(e)) + '</p>'; });
+}
+function personModal(x, users) {
+  var isNew = !x; x = x || { kind: 'new', role: 'Consultant', name: '', active: true, c: null, r: null, u: null };
+  var c = x.c || { OTDay: '', Active: 'Y', Initials: '', Color: '' }, u = x.u;
+  var used = {}; S.d.consultants.forEach(function (y) { if (!x.c || y.Id !== x.c.Id) if (y.Active === 'Y' && y.Color) used[y.Color.toLowerCase()] = y.Name; });
+  var color = c.Color || PASTELS.filter(function (q) { return !used[q.toLowerCase()]; })[0] || PASTELS[0];
+  var rights = u ? u.Rights : DEFAULT_RIGHTS_UI.slice();
+  var m = openModal('<h2>' + (isNew ? 'Add person' : 'Edit person') + '</h2>' +
+    '<div class="field"><label for="pe_name">Name</label><input type="text" id="pe_name" value="' + esc(x.name) + '"></div>' +
+    '<div class="field"><label for="pe_role">Role</label><select id="pe_role"' + (isNew || x.kind === 'user' ? '' : ' disabled') + '>' + ['Consultant', 'Chief', 'Resident'].map(function (r) { return opt(r, r, x.role === r); }).join('') + '</select></div>' +
+    '<div id="pe_cons"><div class="field"><label for="pe_ini">Initials (2 to 4 letters, empty = made from the name)</label><input type="text" id="pe_ini" maxlength="4" value="' + esc(c.Initials || '') + '" style="text-transform:uppercase"></div>' +
+    '<div class="field"><label>Colour</label><div class="tags">' + PASTELS.map(function (q) { return '<button type="button" class="colbtn' + (q.toLowerCase() === color.toLowerCase() ? ' on' : '') + '" data-col="' + q + '" style="background:' + q + '"' + (used[q.toLowerCase()] ? ' disabled title="Used by ' + esc(used[q.toLowerCase()]) + '"' : '') + '></button>'; }).join('') + '</div></div>' +
+    '<div class="field"><label for="pe_day">Operating day</label><select id="pe_day">' + DAYS.map(function (s) { return opt(s, s, c.OTDay === s); }).join('') + '</select></div>' +
+    '<div class="field"><label for="pe_room">Usual operating room</label><select id="pe_room">' + opt('', 'None', !c.DefaultRoomId) + (S.d.rooms || []).filter(function (r) { return r.Shared !== 'Y' && r.Active === 'Y'; }).map(function (r) { return opt(r.Id, r.Name, r.Id === c.DefaultRoomId); }).join('') + '</select></div></div>' +
+    '<label class="check"><input type="checkbox" id="pe_act"' + (x.active ? ' checked' : '') + '> Active (shown in lists and the logbook)</label>' +
+    '<div class="sect"><label class="check"><input type="checkbox" id="pe_login"' + (u ? ' checked' : '') + '> Has a login</label><div id="pe_lbox">' +
+    '<div class="field"><label for="pe_user">Username (letters and numbers, no spaces)</label><input type="text" id="pe_user" autocapitalize="none" autocorrect="off" spellcheck="false" value="' + esc(u ? u.Username : '') + '"' + (u ? ' readonly' : '') + '></div>' +
+    '<label class="check"><input type="checkbox" id="pe_can"' + (!u || u.Active === 'Y' ? ' checked' : '') + '> Can sign in</label>' +
+    '<h3 style="margin:10px 0 4px">Rights</h3>' + ALL_RIGHTS.map(function (r) { return '<div style="margin:3px 0">' + sw('class="pe_r" data-r="' + r[0] + '"', rights.indexOf(r[0]) >= 0, r[1]) + '</div>'; }).join('') + '</div></div>' +
+    '<div class="row" style="margin-top:12px"><button class="primary" id="pe_save">Save</button><button id="pe_cancel">Cancel</button>' + (isNew ? '' : '<button id="pe_del" style="margin-left:auto;color:var(--red)">Delete</button>') + '</div>', {});
+  function sync() {
+    $('pe_cons').style.display = val('pe_role') === 'Consultant' ? '' : 'none';
+    $('pe_lbox').style.display = $('pe_login').checked ? '' : 'none';
+  }
+  sync(); $('pe_role').addEventListener('change', sync); $('pe_login').addEventListener('change', sync);
+  on(m.el, '[data-col]', 'click', function (e) { color = e.currentTarget.getAttribute('data-col'); var bs = m.el.querySelectorAll('.colbtn'); for (var i = 0; i < bs.length; i++) bs[i].classList.toggle('on', bs[i].getAttribute('data-col') === color); });
+  $('pe_cancel').addEventListener('click', m.close);
+  function pickedRights() { var o = [], bs = m.el.querySelectorAll('.pe_r'); for (var i = 0; i < bs.length; i++) if (bs[i].checked) o.push(bs[i].getAttribute('data-r')); return o; }
+  $('pe_save').addEventListener('click', function () {
+    var name = val('pe_name').trim(), role = val('pe_role');
+    if (!name) { toast('Enter the name', true); return; }
+    var steps = Promise.resolve();
+    if (x.kind === 'user') { /* login-only person: handled below */ }
+    else if (role === 'Consultant') {
+      steps = call('saveConsultant', { Id: x.c ? x.c.Id : '', Name: name, OTDay: val('pe_day'), DefaultRoomId: val('pe_room'), Active: checked('pe_act') ? 'Y' : 'N', Initials: val('pe_ini'), Color: color }).then(function (r) { S.d.consultants = r.consultants; S.d.lists = r.lists; });
+    } else {
+      steps = call('saveResident', { Id: x.r ? x.r.Id : '', Name: name, Role: role, Active: checked('pe_act') ? 'Y' : 'N' }).then(function (l) { S.d.residents = l; });
+    }
+    steps.then(function () {
+      if (!$('pe_login').checked) return null;
+      var un = val('pe_user').trim().toLowerCase();
+      return call('saveUser', { Username: un, Name: name, Type: role, SurgeonName: name, Rights: pickedRights(), Active: checked('pe_can') ? 'Y' : 'N' });
+    }).then(function (r) {
+      m.close(); drawSetPanel(); toast('Saved');
+      if (r && r.tempPin) showPin(r);
+    }).catch(fail);
+  });
+  if ($('pe_del')) $('pe_del').addEventListener('click', function () {
+    var what = x.name + (x.u ? ' and the login ' + x.u.Username : '');
+    if (!window.confirm('Delete ' + what + '? Names already written on done cases stay there. This cannot be undone.')) return;
+    var p = Promise.resolve();
+    if (x.kind === 'cons') p = call('deleteConsultant', { Id: x.c.Id }).then(function (r) { S.d.consultants = r.consultants; S.d.lists = r.lists; });
+    else if (x.kind === 'res') p = call('deleteResident', { Id: x.r.Id }).then(function (l) { S.d.residents = l; });
+    p.then(function () { return x.u ? call('deleteUser', { Username: x.u.Username }) : null; })
+      .then(function () { m.close(); drawSetPanel(); toast('Deleted'); }).catch(fail);
+  });
+}
+var DEFAULT_RIGHTS_UI = ['patients', 'lists', 'done', 'remove', 'importPaste', 'export', 'teamLogbook'];
+showPin = function (r) {
+  var m = openModal('<h2>Temporary PIN</h2><p>Give this to <strong>' + esc(r.username) + '</strong> privately. They will be asked to choose their own at first sign-in.</p>' +
+    '<p style="font-size:22px;font-family:monospace;letter-spacing:1px">' + esc(r.tempPin) + '</p><p class="muted small">It is shown only once.</p><button class="primary" id="tp_ok">Done</button>', { narrow: true, locked: true });
+  $('tp_ok').addEventListener('click', function () { m.close(); });
+};
+
+// ---- xls filter on the Done and Removed pages
+(function () {
+  function btn(key, rerun) {
+    var n = S.d.patients.filter(function (p) { return (key === 'doneXls' ? p.Status === 'Done' : p.Status === 'Removed') && xlsIssues(p).length; }).length;
+    var b = document.createElement('button'); b.type = 'button'; b.className = 'schip' + (S[key] ? ' on' : ''); b.id = 'xls_' + key; b.innerHTML = 'xls <b>' + n + '</b>';
+    b.title = 'Imported from Excel with something missing';
+    b.addEventListener('click', function () { S[key] = !S[key]; rerun(); });
+    return b;
+  }
+  var oD = viewDone, oR = viewRemoved, oDL = doneList, oRL = remList;
+  doneList = function () { var l = oDL(); return S.doneXls ? l.filter(function (p) { return xlsIssues(p).length; }) : l; };
+  remList = function () { var l = oRL(); return S.remXls ? l.filter(function (p) { return xlsIssues(p).length; }) : l; };
+  viewDone = function () { oD(); var f = document.querySelector('#view .filters'); if (f) f.appendChild(btn('doneXls', viewDone)); };
+  viewRemoved = function () { oR(); var q = $('rq'); if (q && q.parentNode) q.parentNode.appendChild(btn('remXls', viewRemoved)); };
+})();
+
+// ---- import v3: whole workbook or pasted cells
+var IMP3 = [
+  { k: 'Name', label: 'Name', req: true, syn: ['name', 'patient name', 'patient', 'full name'] },
+  { k: 'MRN', label: 'CPR', syn: ['cpr', 'mrn', 'file no', 'file number', 'hospital no', 'id', 'cpr no'] },
+  { k: 'TNumber', label: 'T number', syn: ['t number', 't no', 't num', 't', 'temporary number', 'temp no'] },
+  { k: 'Procedure', label: 'Procedure', req: true, syn: ['procedure', 'operation', 'surgery', 'planned procedure'] },
+  { k: 'Consultant', label: 'Consultant / MRP (initials)', syn: ['mrp', 'consultant', 'consultant mrp', 'mrp consultant', 'surgeon', 'firm'] },
+  { k: 'Age', label: 'Age (text)', syn: ['age'] },
+  { k: 'Diagnosis', label: 'Diagnosis', syn: ['diagnosis', 'dx'] },
+  { k: 'Type', label: 'Type', syn: ['type', 'care', 'care type', 'category'] },
+  { k: 'DateAdded', label: 'Date added', syn: ['date added', 'added', 'date of listing', 'listed', 'date of addition'] },
+  { k: 'Date', label: 'Date (operation date)', syn: ['date', 'date of surgery', 'operation date', 'date of operation', 'surgery date'] },
+  { k: 'Contacts', label: 'Contacts', syn: ['contacts', 'contact', 'phone', 'mobile', 'tel', 'guardian', 'contact no'] },
+  { k: 'ProposedDate', label: 'Proposed date', syn: ['proposed date', 'scheduled date', 'proposed', 'planned date'] },
+  { k: 'Comments', label: 'Comments', syn: ['comments', 'comment', 'notes', 'note', 'remarks'] },
+  { k: 'DOB', label: 'Date of birth', syn: ['date of birth', 'dob', 'birth date'] },
+  { k: 'Sex', label: 'Sex', syn: ['sex', 'gender'] }
+];
+var STD3 = [null, 'Name', 'Age', 'MRN', 'Diagnosis', 'Procedure', 'Type', 'DateAdded', 'Contacts', 'ProposedDate', 'Comments'];
+function impNormH(x) { return String(x || '').toLowerCase().replace(/[^a-z0-9 ]/g, ' ').replace(/\s+/g, ' ').trim(); }
+/** Finds the heading row among the first 4 rows and the column of each field. */
+function impDetect(rows) {
+  var best = { hits: 0, idx: -1, map: {} };
+  for (var r = 0; r < Math.min(4, rows.length); r++) {
+    var heads = rows[r].map(impNormH), map = {}, used = {}, hits = 0;
+    IMP3.forEach(function (f) { for (var i = 0; i < heads.length; i++) if (!used[i] && f.syn.indexOf(heads[i]) >= 0) { map[f.k] = i; used[i] = true; hits++; return; } });
+    IMP3.forEach(function (f) { if (map[f.k] !== undefined) return; for (var i = 0; i < heads.length; i++) if (!used[i] && heads[i].length > 3 && f.syn.some(function (s) { return s.length > 3 && heads[i].indexOf(s) >= 0; })) { map[f.k] = i; used[i] = true; hits++; return; } });
+    if (hits > best.hits) best = { hits: hits, idx: r, map: map };
+  }
+  if (best.hits >= 3) return { header: best.idx, map: best.map };
+  var map2 = {}; STD3.forEach(function (k, i) { if (k && rows[0] && i < rows[0].length) map2[k] = i; });
+  return { header: -1, map: map2 };
+}
+function impKind(name) { var n = String(name || '').toLowerCase(); return /remov/.test(n) ? 'removed' : (/done|operat|complet/.test(n) ? 'done' : (/wait|list|pending/.test(n) ? 'waiting' : '')); }
+function impChunks(rows, size) {
+  var groups = {}, order = [];
+  rows.forEach(function (r) { var k = String(r.MRN || r.TNumber).replace(/[^a-z0-9]/gi, '').toUpperCase() || ('r' + r._n); if (!groups[k]) { groups[k] = []; order.push(k); } groups[k].push(r); });
+  var out = [], cur = [];
+  order.forEach(function (k) { if (cur.length && cur.length + groups[k].length > size) { out.push(cur); cur = []; } cur = cur.concat(groups[k]); });
+  if (cur.length) out.push(cur);
+  return out;
+}
+openImport = function (mode) {
+  var cons = S.d.consultants.filter(function (c) { return c.Active === 'Y'; });
+  var canFile = can('importFile');
+  var st = { source: mode === 'paste' || !canFile ? 'paste' : 'file', cons: '', sheets: [], procMap: {}, consMap: {}, apply: {}, cur: 0, filter: 'all', done: null };
+  var m = openModal('<div id="im_body"></div>', { locked: true });
+  var KINDS = [['waiting', 'Waiting'], ['done', 'Done'], ['removed', 'Removed']];
+  function dataRows(sh) {
+    var out = [];
+    for (var r = sh.header + 1; r < sh.rows.length; r++) {
+      var row = sh.rows[r], o = { _n: row._n };
+      IMP3.forEach(function (f) { var i = sh.map[f.k]; o[f.k] = i === undefined ? '' : String(row[i] === undefined ? '' : row[i]).trim(); });
+      if (!o.Name && !o.MRN && !o.TNumber && !o.Procedure) continue;
+      if (/^(no\.?|#)$/i.test(o.Name) || /^firm\b|waiting list|^pediatric/i.test(o.Name) && !o.Procedure) continue;
+      o.apply = !!st.apply[sh.idx + ':' + o._n];
+      out.push(o);
+    }
+    return out;
+  }
+  function step1(msg) {
+    $('im_body').innerHTML = '<div class="spread"><h2>Import from Excel</h2><button id="im_close">Close</button></div>' +
+      (canFile ? '<div class="tags" style="margin-bottom:8px"><button type="button" class="opt' + (st.source === 'file' ? ' on' : '') + '" data-src="file">Excel file</button><button type="button" class="opt' + (st.source === 'paste' ? ' on' : '') + '" data-src="paste">Paste cells</button></div>' : '') +
+      '<div class="field"><label for="im_cons">Consultant when the row has no initials</label><select id="im_cons">' + opt('', 'Choose…', !st.cons) + cons.map(function (c) { return opt(c.Id, c.Name + ' (' + c.Initials + ')', c.Id === st.cons); }).join('') + '</select></div>' +
+      (st.source === 'file' ? '<div class="field"><label for="im_file">Choose the Excel file (.xlsx). Sheets named waiting list, done or removed are recognised.</label><input type="file" id="im_file" accept=".xlsx,.csv,.txt,.tsv"></div>' :
+        '<div class="field"><label>These cells are</label><div class="tags">' + KINDS.map(function (k) { return '<button type="button" class="opt' + ((st.pkind || 'waiting') === k[0] ? ' on' : '') + '" data-pk="' + k[0] + '">' + k[1] + ' patients</button>'; }).join('') + '</div></div>' +
+        '<div class="field"><label for="im_text">Paste the cells you copied from Excel (up to 100 rows, heading row optional)</label><textarea id="im_text" style="min-height:130px"></textarea></div><button class="primary" id="im_read">Read the data</button>') +
+      (msg ? '<p style="color:var(--red)">' + esc(msg) + '</p>' : '') +
+      '<p class="muted small">Nothing is saved until you have seen the preview and confirmed. Patients already in the app (same CPR or T number, procedure and side) are updated and only empty fields are filled. Nobody is removed or duplicated. Imported patients get a small "xls" tag until what is missing is completed.</p>';
+    $('im_close').addEventListener('click', m.close);
+    $('im_cons').addEventListener('change', function () { st.cons = this.value; });
+    on(m.el, '[data-src]', 'click', function (e) { st.source = e.currentTarget.getAttribute('data-src'); step1(); });
+    on(m.el, '[data-pk]', 'click', function (e) { st.pkind = e.currentTarget.getAttribute('data-pk'); var bs = m.el.querySelectorAll('[data-pk]'); for (var i = 0; i < bs.length; i++) bs[i].classList.toggle('on', bs[i] === e.currentTarget); });
+    if ($('im_file')) $('im_file').addEventListener('change', function () {
+      var f = this.files[0]; if (!f) return;
+      if (/\.xlsx$/i.test(f.name)) f.arrayBuffer().then(xlsxSheets).then(function (sheets) {
+        if (!sheets.length) { step1('That file has no data.'); return; }
+        loadSheets(sheets.map(function (s) { return { name: s.name, rows: s.rows }; }));
+      }).catch(function (e) { step1(e.message || 'Could not read that file.'); });
+      else if (/\.xls$/i.test(f.name)) step1('Old .xls files cannot be read. In Excel use Save as .xlsx.');
+      else { var rd = new FileReader(); rd.onload = function () { loadSheets([{ name: f.name, rows: parseTable(rd.result).map(function (r, i) { r._n = i + 1; return r; }) }]); }; rd.readAsText(f); }
+    });
+    if ($('im_read')) $('im_read').addEventListener('click', function () {
+      var t = parseTable($('im_text').value);
+      if (!t.length) { toast('Paste the cells first', true); return; }
+      t.forEach(function (r, i) { r._n = i + 1; });
+      loadSheets([{ name: 'Pasted cells', rows: t, kind: st.pkind || 'waiting' }]);
+    });
+  }
+  function loadSheets(list) {
+    st.sheets = list.map(function (s, i) {
+      var d = impDetect(s.rows);
+      return { idx: i, name: s.name, rows: s.rows, header: d.header, map: d.map, kind: s.kind || impKind(s.name), include: !!(s.kind || impKind(s.name)), plan: null };
+    });
+    st.procMap = {}; st.consMap = {}; st.apply = {}; st.cur = 0; step2();
+  }
+  function callChunk(sh, part, dry) {
+    return call('importCases', { dry: dry, source: st.source, sheet: sh.name, batch: sh.kind, consultantId: st.cons, consMap: st.consMap, procMap: st.procMap, rows: part });
+  }
+  function checkSheet(sh) {
+    var parts = impChunks(dataRows(sh), st.source === 'paste' ? 100 : 150), res = { items: [], counts: { new: 0, update: 0, unchanged: 0, problem: 0 }, unmatched: {}, unmatchedCons: {} }, i = 0;
+    function next() {
+      if (i >= parts.length) return Promise.resolve(res);
+      return callChunk(sh, parts[i++], true).then(function (r) {
+        r.items.forEach(function (it) { res.items.push(it); });
+        Object.keys(r.counts).forEach(function (k) { res.counts[k] += r.counts[k]; });
+        r.unmatched.forEach(function (u) { res.unmatched[u.text] = (res.unmatched[u.text] || 0) + u.rows; });
+        (r.unmatchedCons || []).forEach(function (u) { res.unmatchedCons[u.text] = (res.unmatchedCons[u.text] || 0) + u.rows; });
+        return next();
+      });
+    }
+    return next();
+  }
+  function step2() {
+    $('im_body').innerHTML = '<div class="spread"><h2>Check before importing</h2><button id="im_close">Close</button></div>' +
+      '<div class="chiprow scrollx" id="im_tabs">' + st.sheets.map(function (s, i) {
+        return '<button type="button" class="schip' + (st.cur === i ? ' on' : '') + '" data-sh="' + i + '">' + esc(s.name) + (s.include ? '' : ' (off)') + '</button>'; }).join('') + '</div><div id="im_sheet"></div>';
+    $('im_close').addEventListener('click', m.close);
+    on(m.el, '[data-sh]', 'click', function (e) { st.cur = +e.currentTarget.getAttribute('data-sh'); step2(); });
+    drawSheet();
+  }
+  function drawSheet() {
+    var sh = st.sheets[st.cur], heads = sh.header >= 0 ? sh.rows[sh.header] : sh.rows[0];
+    var n = dataRows(sh).length;
+    var h = '<div class="row" style="margin:6px 0"><label class="check"><input type="checkbox" id="im_inc"' + (sh.include ? ' checked' : '') + '> Import this sheet</label>' +
+      '<span class="muted small">as</span><select id="im_kind" style="width:auto">' + opt('', 'Choose…', !sh.kind) + KINDS.map(function (k) { return opt(k[0], k[1] + ' patients', sh.kind === k[0]); }).join('') + '</select><span class="muted small">' + n + ' rows' + (sh.header > 0 ? ', ' + sh.header + ' title row(s) skipped' : '') + '</span></div>' +
+      '<details id="im_cols"><summary>Columns (' + IMP3.filter(function (f) { return sh.map[f.k] !== undefined; }).length + ' matched)</summary><div class="grid2">' +
+      IMP3.map(function (f) { return '<div class="field"><label>' + esc(f.label) + (f.req ? ' *' : '') + '</label><select class="im_map" data-k="' + f.k + '">' + opt('', 'Not in my file', sh.map[f.k] === undefined) + (heads || []).map(function (x, i) { return opt(String(i), (x || 'Column ' + (i + 1)).slice(0, 30), sh.map[f.k] === i); }).join('') + '</select></div>'; }).join('') + '</div></details>' +
+      '<div id="im_plan"></div><p class="small muted" id="im_prog"></p>';
+    $('im_sheet').innerHTML = h;
+    $('im_inc').addEventListener('change', function () { sh.include = this.checked; if (sh.include && !sh.kind) { toast('Choose what kind of patients this sheet has', true); this.checked = false; sh.include = false; return; } step2(); });
+    $('im_kind').addEventListener('change', function () { sh.kind = this.value; sh.plan = null; if (sh.kind && !sh.include) sh.include = true; step2(); });
+    on(m.el, '.im_map', 'change', function (e) { var k = e.currentTarget.getAttribute('data-k'); if (e.currentTarget.value === '') delete sh.map[k]; else sh.map[k] = +e.currentTarget.value; sh.plan = null; drawSheet(); });
+    if (!sh.include) { $('im_plan').innerHTML = '<p class="muted">This sheet is switched off. Tick "Import this sheet" and choose its kind to include it.</p>' + summaryBar(); wireGo(); return; }
+    if (sh.map.Name === undefined || sh.map.Procedure === undefined || (sh.map.MRN === undefined && sh.map.TNumber === undefined)) { $('im_plan').innerHTML = '<p style="color:var(--red)">Choose the Name, Procedure and CPR (or T number) columns above.</p>'; $('im_cols').open = true; return; }
+    if (sh.plan) { drawPlan(); return; }
+    $('im_plan').innerHTML = '<p class="muted">Checking…</p>';
+    checkSheet(sh).then(function (r) { sh.plan = r; if ($('im_plan')) drawPlan(); }).catch(function (e) { if ($('im_plan')) $('im_plan').innerHTML = '<p style="color:var(--red)">' + esc(e.message || String(e)) + '</p>'; });
+  }
+  function allUnmatched(key) {
+    var out = {};
+    st.sheets.forEach(function (s) { if (s.include && s.plan) Object.keys(s.plan[key]).forEach(function (k) { out[k] = (out[k] || 0) + s.plan[key][k]; }); });
+    return out;
+  }
+  function replanAll() { st.sheets.forEach(function (s) { s.plan = null; }); drawSheet(); }
+  function summaryBar() {
+    var t = { new: 0, update: 0, unchanged: 0, problem: 0 }, pending = false;
+    st.sheets.forEach(function (s) { if (!s.include) return; if (!s.plan) { pending = true; return; } Object.keys(t).forEach(function (k) { t[k] += s.plan.counts[k]; }); });
+    return '<div class="row" style="margin-top:10px"><button class="primary" id="im_go"' + ((t.new + t.update) && !pending && !st.sheets.some(function (s) { return s.include && !s.kind; }) ? '' : ' disabled') + '>Import ' + t.new + ' new, update ' + t.update + ' (all sheets)</button><button id="im_back">Back</button></div>' +
+      (pending ? '<p class="muted small">Open each switched-on sheet once so it is checked before importing.</p>' : '');
+  }
+  function drawPlan() {
+    var sh = st.sheets[st.cur], r = sh.plan, c = r.counts, el = $('im_plan');
+    var unm = allUnmatched('unmatched'), unc = allUnmatched('unmatchedCons');
+    var sugg = r.items.filter(function (i) { return i.suggest && i.action !== 'problem' && i.action !== 'unchanged'; });
+    var shown = r.items.filter(function (i) { return st.filter === 'all' || i.action === st.filter; });
+    var h = '<div class="chiprow">' + [['all', 'All ' + r.items.length], ['new', 'New ' + c.new], ['update', 'Update ' + c.update], ['unchanged', 'Unchanged ' + c.unchanged], ['problem', 'Problems ' + c.problem]].map(function (x) {
+      return '<button type="button" class="schip' + (st.filter === x[0] ? ' on' : '') + '" data-f="' + x[0] + '">' + x[1] + '</button>'; }).join('') + '</div>';
+    var uk = Object.keys(unm), ck = Object.keys(unc);
+    if (ck.length) h += '<div class="banner" style="display:block"><strong>Initials I do not know.</strong> Tell me who each one is; I will remember.' + ck.map(function (u, i) {
+      return '<div class="field" style="margin:6px 0 0"><label>"' + esc(u) + '" (' + unc[u] + ' rows)</label><select data-cu="' + esc(u) + '">' + opt('', 'Choose…', true) + cons.map(function (c2) { return opt(c2.Id, c2.Name); }).join('') + opt('__batch', 'Not a consultant: use the default') + '</select></div>'; }).join('') + '</div>';
+    if (uk.length) h += '<div class="banner" style="display:block"><strong>Procedures I could not match.</strong> Choose what each one is; I will remember.' + uk.map(function (u, i) {
+      return '<div class="field" style="margin:6px 0 0"><label>"' + esc(u) + '" (' + unm[u] + ' rows)</label><select data-u="' + esc(u) + '">' + opt('', 'Choose…', true) + S.d.procedures.filter(function (p) { return p.Active !== 'N'; }).map(function (p) { return opt(p.Id, p.Name); }).join('') + opt('__asis', 'Keep as typed (not in my list)') + opt('__skip', 'Skip these rows') + '</select></div>'; }).join('') + '</div>';
+    if (sugg.length) h += '<p class="small"><strong>' + sugg.length + '</strong> rows have suggestions from the comments. They are only applied when ticked. <button type="button" class="link" id="im_tick">Tick all</button> · <button type="button" class="link" id="im_untick">Untick all</button></p>';
+    h += '<div style="overflow-x:auto"><table class="tbl" style="font-size:12px"><thead><tr><th>Row</th><th></th><th>Patient</th><th>Procedure</th><th>Notes</th><th>Comments say</th></tr></thead><tbody>' +
+      shown.slice(0, 150).map(function (i) {
+        var tagc = { 'new': 'green', update: 'amber', unchanged: '', problem: 'red' }[i.action];
+        var sg = i.suggest && i.action !== 'problem' && i.action !== 'unchanged' ? '<label class="check" style="margin:0"><input type="checkbox" data-ap="' + i.rowId + '"' + (st.apply[sh.idx + ':' + i.rowId] ? ' checked' : '') + '> ' + esc((i.suggest.calls ? 'no answer x' + i.suggest.calls : '') + (i.suggest.calls && i.suggest.tags.length ? '; ' : '') + i.suggest.tags.join(', ')) + '</label>' : '';
+        var kindNote = i.kind && i.kind !== sh.kind ? ' <span class="chip red">as ' + esc(i.kind) + '</span>' : '';
+        return '<tr><td>' + esc(i.n) + '</td><td><span class="chip ' + tagc + '">' + esc(i.action === 'new' ? 'New' : i.action === 'update' ? 'Update' : i.action === 'unchanged' ? 'Same' : 'Problem') + '</span>' + kindNote + '</td><td>' + esc(i.name) + '<br><span class="muted">' + esc(i.mrn) + (i.t && i.cpr ? ' · ' + esc(i.t) : '') + '</span></td><td>' + esc(i.procedure) + '</td><td>' +
+          esc(i.action === 'problem' ? i.reason : (i.action === 'update' ? 'Fills: ' + i.changes.join(', ') + (i.warnings.length ? '. ' : '') : '') + i.warnings.join('. ')) + '</td><td>' + sg + '</td></tr>';
+      }).join('') + '</tbody></table></div>' + (shown.length > 150 ? '<p class="muted small">Showing the first 150 of ' + shown.length + '. All of them are imported.</p>' : '') + summaryBar();
+    el.innerHTML = h;
+    on(el, '[data-f]', 'click', function (e) { st.filter = e.currentTarget.getAttribute('data-f'); drawPlan(); });
+    on(el, '[data-u]', 'change', function (e) { if (!e.currentTarget.value) return; st.procMap[e.currentTarget.getAttribute('data-u')] = e.currentTarget.value; replanAll(); });
+    on(el, '[data-cu]', 'change', function (e) { if (!e.currentTarget.value) return; st.consMap[e.currentTarget.getAttribute('data-cu')] = e.currentTarget.value; replanAll(); });
+    on(el, '[data-ap]', 'change', function (e) { st.apply[sh.idx + ':' + e.currentTarget.getAttribute('data-ap')] = e.currentTarget.checked; });
+    if ($('im_tick')) { $('im_tick').addEventListener('click', function () { sugg.forEach(function (i) { st.apply[sh.idx + ':' + i.rowId] = true; }); drawPlan(); }); $('im_untick').addEventListener('click', function () { sugg.forEach(function (i) { delete st.apply[sh.idx + ':' + i.rowId]; }); drawPlan(); }); }
+    wireGo();
+  }
+  function wireGo() {
+    if ($('im_back')) $('im_back').addEventListener('click', function () { step1(); });
+    if ($('im_go')) $('im_go').addEventListener('click', runAll);
+  }
+  function runAll() {
+    var jobs = [], total = 0;
+    st.sheets.forEach(function (sh) { if (!sh.include || !sh.kind) return; impChunks(dataRows(sh), st.source === 'paste' ? 100 : 150).forEach(function (p) { jobs.push({ sh: sh, rows: p }); total += p.length; }); });
+    var doneRows = 0, summary = { new: 0, update: 0, unchanged: 0, problem: 0 }, problems = [], k = 0, lists = 0;
+    $('im_body').innerHTML = '<h2>Importing…</h2><div class="progress"><div class="bar" id="im_bar" style="height:10px;background:var(--accent,#2b6cb0);width:0%;border-radius:5px"></div></div><p class="muted small" id="im_pt">0 of ' + total + ' rows</p><p class="muted small">Keep this window open. If the connection drops, open Import again and import the same file: nothing is duplicated.</p>';
+    function next() {
+      if (k >= jobs.length) return Promise.resolve();
+      var j = jobs[k++];
+      return callChunk(j.sh, j.rows, false).then(function (r) {
+        Object.keys(r.counts).forEach(function (q) { summary[q] += r.counts[q]; });
+        lists += r.listsMade || 0;
+        r.items.forEach(function (i) { if (i.action === 'problem') problems.push([j.sh.name, i.n, i.name, i.mrn, i.procedure, i.reason]); });
+        doneRows += j.rows.length;
+        if ($('im_bar')) { $('im_bar').style.width = Math.round(doneRows / total * 100) + '%'; $('im_pt').textContent = doneRows + ' of ' + total + ' rows'; }
+        return next();
+      });
+    }
+    next().then(function () { return load(); }).then(function () {
+      $('im_body').innerHTML = '<h2>Import finished</h2><p><strong>' + summary.new + '</strong> added, <strong>' + summary.update + '</strong> updated, ' + summary.unchanged + ' unchanged, <strong>' + summary.problem + '</strong> not imported' + (lists ? '; ' + lists + ' theatre list(s) created' : '') + '.</p>' +
+        (problems.length ? '<p class="small">Rows not imported (first 15):<br>' + problems.slice(0, 15).map(function (p) { return esc(p[0]) + ' row ' + esc(p[1]) + ': ' + esc(p[5]); }).join('<br>') + '</p><button id="im_dl">Download the problem list (Excel)</button> ' : '') +
+        '<p class="muted small">Imported patients carry a small "xls" tag until their missing data is completed. The waiting list, Done and Removed pages have an "xls" filter.</p><button class="primary" id="im_ok">Close</button>';
+      if ($('im_dl')) $('im_dl').addEventListener('click', function () { exportXlsx('import-problems', [{ name: 'Not imported', rows: [['Sheet', 'Row', 'Name', 'CPR / T number', 'Procedure', 'Reason']].concat(problems) }]); });
+      $('im_ok').addEventListener('click', function () { m.close(); render(); });
+    }).catch(function (e) { fail(e); step2(); });
+  }
+  step1();
+};
 
 init();
 })();
