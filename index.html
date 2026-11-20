@@ -419,7 +419,7 @@ button.primary{background:var(--ink);color:var(--onink);border-color:var(--ink)}
     };
   }
   window.google = { script: { run: run() } };
-  window.APP_VERSION = '0.14.0';
+  window.APP_VERSION = '0.14.2';
   window.APP_HOST = 'GitHub Pages';
 })();
 
@@ -434,7 +434,7 @@ var TAG_SPEC_DEFAULT = { 'Congenital heart disease': 'Cardiology', 'Asthmatic': 
 var SPONSOR = ['Bahraini', 'Family of Bahraini', 'Family of government worker', 'Exempted', 'Self-payment', 'Covered by insurance'];
 var SURGEON_ROLES = ['Primary surgeon', 'First assistant', 'Second assistant', 'Supervising trainer'];
 var PRIORITY = ['', 'Clinical', 'Social', 'Age-sensitive', 'Other'];
-var REMOVE_REASONS = ['Patient refused procedure', 'Done in private', 'Left Bahrain / surgery abroad', 'Patient died', 'Wants to postpone, not ready', 'Not needed', 'Booked and did not attend', 'Called multiple times, no response', 'Transferred to adult services', 'Other'];
+var REMOVE_REASONS = ['Patient refused procedure', 'Done in private', 'Done in another hospital', 'Left Bahrain / surgery abroad', 'Patient died', 'Wants to postpone, not ready', 'Not needed', 'Booked and did not attend', 'Called multiple times, no response', 'Transferred to adult services', 'Other'];
 var HYPO_TYPES = ['Glanular', 'Coronal', 'Distal penile', 'Midpenile', 'Proximal penile', 'Penoscrotal', 'Scrotal', 'Perineal', 'Variant'];
 var ALL_RIGHTS = [
   ['patients', 'Add and edit patients'], ['lists', 'Schedule and manage theatre lists'], ['done', 'Mark cases done and edit surgeons'],
@@ -1308,6 +1308,7 @@ function viewDone() {
   $('dn_x').addEventListener('click', function () { exportPatients('done-cases', doneList()); });
   doneBody();
 }
+function ndChip(p) { return p.NotDoneHint ? ' <span class="chip amber">Maybe not done here: ' + esc(p.NotDoneHint) + '</span>' : ''; }
 function doneBody() {
   var list = doneList(), f = S.dn;
   var chips = [];
@@ -1321,13 +1322,13 @@ function doneBody() {
     rowsHtml = '<table class="tbl dntbl"><thead><tr>' + th('year', 'Date', f.year) + '<th>Patient</th><th>Age</th>' + th('proc', 'Procedure', f.proc) + '<th>Type</th>' + th('cons', 'Consultant', f.cons) + '<th>Surgeons</th><th></th></tr></thead><tbody>' +
       list.map(function (p) {
         return '<tr class="click" data-dn="' + esc(p.Id) + '"><td>' + esc(ddText(p.DoneDate)) + '</td>' +
-          '<td><strong>' + esc(p.Name) + '</strong><br><span class="muted small">' + esc(idShow(p)) + '</span>' + xlsChip(p) + '</td><td>' + esc(ageAt(p, p.DoneDate)) + '</td><td>' + esc(procLabel(p)) + '</td><td>' + typeHtml(p) + '</td>' +
+          '<td><strong>' + esc(p.Name) + '</strong><br><span class="muted small">' + esc(idShow(p)) + '</span>' + xlsChip(p) + ndChip(p) + '</td><td>' + esc(ageAt(p, p.DoneDate)) + '</td><td>' + esc(procLabel(p)) + '</td><td>' + typeHtml(p) + '</td>' +
           '<td>' + esc(consName(p.ConsultantId)) + '</td><td>' + surgeonsHtml(p) + '</td><td>' + (p.Starred ? '<span class="chip amber">★</span>' : '') + '</td></tr>';
       }).join('') + '</tbody></table>';
   } else {
     rowsHtml = '<div class="cards">' + list.map(function (p) {
       return '<div class="card" data-dn="' + esc(p.Id) + '"><div class="spread"><div class="name">' + (p.Starred ? '★ ' : '') + esc(p.Name) + ' <span class="muted small">· ' + esc(ageAt(p, p.DoneDate)) + '</span></div><span class="muted small">' + esc(ddText(p.DoneDate)) + '</span></div>' +
-        '<div class="muted small">' + esc(idShow(p)) + xlsChip(p) + ' · ' + esc(consName(p.ConsultantId)) + '</div><div class="small">' + esc(procLabel(p)) + ' · ' + careShort(p) + '</div><div class="small" style="margin-top:4px">' + surgeonsHtml(p) + '</div></div>';
+        '<div class="muted small">' + esc(idShow(p)) + xlsChip(p) + ndChip(p) + ' · ' + esc(consName(p.ConsultantId)) + '</div><div class="small">' + esc(procLabel(p)) + ' · ' + careShort(p) + '</div><div class="small" style="margin-top:4px">' + surgeonsHtml(p) + '</div></div>';
     }).join('') + '</div>';
   }
   $('doneBody').innerHTML = (chips.length ? '<div class="afrow">' + chips.map(function (c) { return '<button type="button" class="chip afc" data-xf="' + c[0] + '">' + esc(c[1]) + ' &times;</button>'; }).join('') + '</div>' : '') +
@@ -3899,7 +3900,7 @@ function dlgSurgeons(p) {
 function doneList() {
   var q = S.doneQ.toLowerCase(), f = S.dn;
   return S.d.patients.filter(function (p) {
-    return p.Status === 'Done' && (!q || searchMatch(p, q)) && (!S.doneStar || p.Starred) && (!S.doneMissing || !surgeonIn(p, 'Primary surgeon')) &&
+    return p.Status === 'Done' && (!q || searchMatch(p, q)) && (!S.doneStar || p.Starred) && (!S.doneMissing || !surgeonIn(p, 'Primary surgeon')) && (!S.doneNd || p.NotDoneHint) && (!S.doneNoDate || !p.DoneDate) &&
       (!f.proc || p.ProcedureId === f.proc) && (!f.cons || p.ConsultantId === f.cons) && (!f.year || (p.DoneDate || '').slice(0, 4) === f.year);
   }).sort(function (a, b) { return (b.DoneDate || '').localeCompare(a.DoneDate || ''); });
 }
@@ -3908,16 +3909,41 @@ function surgeonsHtml(p) {
   if (!a) return '<button type="button" class="amberbtn" data-addsg="' + esc(p.Id) + '">Add surgeons</button>';
   return '<div class="small"><span class="muted">Primary</span> ' + esc(a) + '</div>' + (b ? '<div class="small"><span class="muted">1st assistant</span> ' + esc(b) + '</div>' : '');
 }
+function dlgNotDone(list) {
+  var ids = list.filter(function (p) { return p.NotDoneHint; }), by = {};
+  ids.forEach(function (p) { by[p.NotDoneHint] = (by[p.NotDoneHint] || 0) + 1; });
+  if (!ids.length) { toast('No tagged cases in this list', true); return; }
+  var m = openModal('<div class="spread"><h2>Maybe not done here</h2><button id="nd_x">Close</button></div><p>' + ids.length + ' case' + (ids.length === 1 ? '' : 's') + ' (the current filter):</p>' +
+    '<ul>' + Object.keys(by).map(function (r) { return '<li>' + esc(r) + ': <b>' + by[r] + '</b></li>'; }).join('') + '</ul>' +
+    '<div class="field"><label for="nd_reason">Removed reason</label><select id="nd_reason">' + opt('', 'Each case\'s own reason (as listed)', true) + REMOVE_REASONS.map(function (x) { return opt(x, 'All: ' + x); }).join('') + '</select></div>' +
+    '<p class="muted small">Moved cases keep their notes and get a log entry. Search or filter first to move only some.</p>' +
+    '<div class="row"><button class="primary" id="nd_go">Move to Removed</button><button id="nd_keep">Done here: remove the tag</button></div>', { narrow: true });
+  $('nd_x').addEventListener('click', m.close);
+  function run(keep) {
+    $('nd_go').disabled = true; $('nd_keep').disabled = true;
+    call('moveNotDone', { ids: ids.map(function (p) { return p.Id; }), reason: val('nd_reason'), keep: keep }).then(function (r) {
+      (r.patients || []).forEach(upsertP); m.close(); S.doneNd = false; render(); toast(r.patients.length + (keep ? ' tags removed' : ' moved to Removed'));
+    }).catch(function (e) { $('nd_go').disabled = false; $('nd_keep').disabled = false; fail(e); });
+  }
+  $('nd_go').addEventListener('click', function () { run(false); });
+  $('nd_keep').addEventListener('click', function () { if (window.confirm('Keep all of these as Done and remove the tag?')) run(true); });
+}
 function viewDone() {
-  var miss = missingSurgeons().length;
+  var miss = missingSurgeons().length, nd = S.d.patients.filter(function (p) { return p.Status === 'Done' && p.NotDoneHint; }).length, nod = S.d.patients.filter(function (p) { return p.Status === 'Done' && !p.DoneDate; }).length;
   $('view').innerHTML = '<div class="spread"><h2>Done cases</h2><div class="row"><button id="dn_x">Export Excel</button></div></div>' +
     '<div class="filters"><input type="text" id="dq" placeholder="Search name, CPR or T number" value="' + esc(S.doneQ) + '">' +
     '<label class="check" style="padding-top:8px"><input type="checkbox" id="dstar"' + (S.doneStar ? ' checked' : '') + '> Starred for case report</label>' +
-    '<button type="button" class="schip' + (S.doneMissing ? ' on' : '') + '" id="dmiss"' + (miss ? '' : ' disabled') + '>Missing surgeons <b>' + miss + '</b></button></div>' +
+    '<button type="button" class="schip' + (S.doneMissing ? ' on' : '') + '" id="dmiss"' + (miss ? '' : ' disabled') + '>Missing surgeons <b>' + miss + '</b></button>' +
+    '<button type="button" class="schip' + (S.doneNd ? ' on' : '') + '" id="dnd"' + (nd ? '' : ' disabled') + '>Maybe not done here <b>' + nd + '</b></button>' +
+    '<button type="button" class="schip' + (S.doneNoDate ? ' on' : '') + '" id="dnodate"' + (nod ? '' : ' disabled') + '>No operation date <b>' + nod + '</b></button>' +
+    (S.doneNd && nd && can('remove') ? '<button type="button" class="primary" id="dnd_move">Move these to Removed…</button>' : '') + '</div>' +
     '<div id="doneBody"></div>';
   $('dq').addEventListener('input', function () { S.doneQ = this.value; doneBody(); });
   $('dstar').addEventListener('change', function () { S.doneStar = this.checked; doneBody(); });
   $('dmiss').addEventListener('click', function () { S.doneMissing = !S.doneMissing; viewDone(); });
+  $('dnd').addEventListener('click', function () { S.doneNd = !S.doneNd; viewDone(); });
+  $('dnodate').addEventListener('click', function () { S.doneNoDate = !S.doneNoDate; viewDone(); });
+  if ($('dnd_move')) $('dnd_move').addEventListener('click', function () { dlgNotDone(doneList()); });
   $('dn_x').addEventListener('click', function () { exportPatients('done-cases', doneList()); });
   doneBody();
 }
