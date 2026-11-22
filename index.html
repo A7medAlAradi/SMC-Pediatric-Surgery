@@ -7,7 +7,7 @@
 <meta name="robots" content="noindex, nofollow">
 <style>
 :root{
-  --header-h:56px; --nav-h:58px;
+  --header-h:56px; --nav-h:58px; --lift:16px;
   --bg:#f6f6f4; --card:#ffffff; --text:#1f1f1d; --muted:#6b6a64; --line:#e2e0d9; --line2:#cfcdc5;
   --ink:#1f1f1d; --onink:#ffffff;
   --green-bg:#e4f2d8; --green:#2f5d0e; --blue-bg:#e1edfa; --blue:#0f4a85; --red-bg:#fbe3e3; --red:#8a1f1f;
@@ -435,9 +435,9 @@ html{-webkit-text-size-adjust:100%;overscroll-behavior-x:none}
   .top,.top.sopen{position:fixed;top:0;left:0;right:0;z-index:100;box-sizing:border-box;height:calc(var(--header-h) + env(safe-area-inset-top));flex-wrap:nowrap;padding-top:env(safe-area-inset-top);padding-bottom:0}
   .top .consbar{flex:0 1 auto;min-width:0;overflow-x:auto;order:0}
   .top .consbar .seg{flex:none}
-  .tabbar{position:fixed;bottom:0;left:0;right:0;z-index:100;box-sizing:border-box;height:calc(var(--nav-h) + env(safe-area-inset-bottom));padding:0 env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
+  .tabbar{position:fixed;bottom:0;left:0;right:0;z-index:100;box-sizing:border-box;height:calc(var(--nav-h) + var(--lift) + env(safe-area-inset-bottom));padding:0 env(safe-area-inset-right) calc(var(--lift) + env(safe-area-inset-bottom)) env(safe-area-inset-left)}
   .tabbar button{min-height:44px;height:var(--nav-h);padding:6px 2px}
-  .page{padding-top:calc(var(--header-h) + env(safe-area-inset-top) + 8px);padding-bottom:calc(var(--nav-h) + env(safe-area-inset-bottom) + 16px)}
+  .page{padding-top:calc(var(--header-h) + env(safe-area-inset-top) + 8px);padding-bottom:calc(var(--nav-h) + var(--lift) + env(safe-area-inset-bottom) + 16px)}
 }
 /* ---- v0.14.8: solid bottom bar, More sheet, settings list ---- */
 .tabbar{background:var(--card);border-top:1px solid var(--line)}
@@ -451,7 +451,7 @@ html{-webkit-text-size-adjust:100%;overscroll-behavior-x:none}
 .tabbar .mid.on{background:var(--ink);color:var(--onink)}
 .tabbar .mid.on .ico{color:var(--onink)}
 .tabbar .badge{position:absolute;top:-4px;right:2px;left:auto;min-width:15px;height:15px;line-height:15px;font-size:9px;padding:0 3px;box-sizing:border-box;border-radius:8px}
-.sheetwrap{position:fixed;left:0;right:0;top:0;bottom:calc(var(--nav-h) + env(safe-area-inset-bottom));z-index:150;background:rgba(0,0,0,.4);display:flex;align-items:flex-end;justify-content:center;animation:shfade .18s ease-out}
+.sheetwrap{position:fixed;left:0;right:0;top:0;bottom:calc(var(--nav-h) + var(--lift) + env(safe-area-inset-bottom));z-index:150;background:rgba(0,0,0,.4);display:flex;align-items:flex-end;justify-content:center;animation:shfade .18s ease-out}
 .sheetwrap.out{opacity:0;transition:opacity .18s}
 .sheet{width:100%;max-width:560px;max-height:100%;overflow-y:auto;overscroll-behavior:contain;background:var(--bg);border-radius:18px 18px 0 0;padding:8px 14px 14px;box-sizing:border-box;animation:shup .2s ease-out;transition:transform .18s}
 .sheet.out{transform:translateY(100%)}
@@ -477,6 +477,27 @@ html{-webkit-text-size-adjust:100%;overscroll-behavior-x:none}
 .login .keeptip{margin:2px 0 12px}
 .devrow{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 0;border-top:1px solid var(--line)}
 .devrow:first-child{border-top:none}
+
+/* v0.14.9 header: one line, title in a fixed slot so the initials sit in the same place on every page */
+.top .ttl{flex:none;width:150px;overflow:hidden;text-overflow:ellipsis}
+.top .hx{display:flex;align-items:center;gap:6px;min-width:0;flex:1 1 auto}
+.top .hx:empty{display:none}
+.top .hx .hxt{flex:1;text-align:center;white-space:nowrap;font-size:14px;min-width:0;overflow:hidden;text-overflow:ellipsis}
+.top .hx .hxb{padding:4px 12px;min-height:32px;font-size:18px;line-height:1}
+.top .hx .hxsel{width:auto;min-height:32px;padding:2px 6px}
+.top .hx .segwrap{flex:none}
+.gsearch[data-hide="1"],.sbtn[data-hide="1"]{display:none!important}
+.addbtn.wide span{display:inline}
+.top .consbar{flex:0 0 auto}
+.pc-added{font-size:11px;color:var(--muted);white-space:nowrap;margin-left:6px;font-weight:400}
+.addedln{font-size:11px;color:var(--muted);white-space:nowrap}
+@media (max-width:699px){
+  .top .ttl{width:92px;font-size:15px}
+  .top .hx .hxt{font-size:12px}
+  .top .hx .hxb{padding:4px 8px}
+  .top .addbtn.wide span{font-size:12px}
+  .top .consbar{flex:0 1 auto}
+}
 </style>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
@@ -511,7 +532,7 @@ html{-webkit-text-size-adjust:100%;overscroll-behavior-x:none}
     };
   }
   window.google = { script: { run: run() } };
-  window.APP_VERSION = '0.14.8';
+  window.APP_VERSION = '0.14.9';
   window.APP_HOST = 'GitHub Pages';
 })();
 
@@ -1020,7 +1041,7 @@ function buildShell() {
     '<div class="sidefoot"><div class="muted small">' + esc(S.user.Name) + '</div>' +
     '<button type="button" class="syncbtn" id="syncinfo" title="Tap to reload"></button>' +
     '<div class="row" style="margin-top:6px"><button id="refresh" title="Reload data">Refresh</button><button id="logout">Sign out</button></div></div></aside>' +
-    '<div class="main"><header class="top"><div class="ttl" id="ttl"></div><div class="consbar scrollx" id="consbar"></div>' +
+    '<div class="main"><header class="top"><div class="ttl" id="ttl"></div><div class="consbar scrollx" id="consbar"></div><div class="hx" id="hx"></div>' +
     '<button type="button" class="sbtn" id="sbtn" aria-label="Search">' + ico('search') + '</button>' +
     '<label class="gsearch">' + ico('search') + '<input type="search" id="gq" placeholder="Search name, CPR, T number, LA or GA   ( / )" value="' + esc(S.f.q) + '" autocomplete="off"></label>' +
     '<button class="primary addbtn" id="addp" title="Add patient (N)">' + ico('plus') + '<span>Add patient</span></button>' +
@@ -1036,11 +1057,8 @@ function buildShell() {
   $('refresh').addEventListener('click', doRefresh);
   $('syncinfo').addEventListener('click', doRefresh);
   $('logout').addEventListener('click', doLogout);
-  $('addp').addEventListener('click', function () { openPatient(null); });
-  $('gq').addEventListener('input', function () {
-    S.f.q = this.value;
-    if (S.view !== 'list') { S.view = 'list'; store('psw_view', 'list'); render(); } else if (document.getElementById('listBody')) listBody();
-  });
+  $('addp').addEventListener('click', function () { if (S.hdrAdd) S.hdrAdd(); else openPatient(null); });
+  $('gq').addEventListener('input', function () { headSearch(this.value); });
   function more() {
     if (document.querySelector('.sheet')) return;
     var inBar = barSlots();
@@ -1092,7 +1110,7 @@ function buildShell() {
   $('sbtn').addEventListener('click', function () {
     var t = document.querySelector('.top'), open = !t.classList.contains('sopen');
     t.classList.toggle('sopen', open);
-    if (open) $('gq').focus(); else { S.f.q = ''; $('gq').value = ''; if (document.getElementById('listBody')) listBody(); }
+    if (open) $('gq').focus(); else { $('gq').value = ''; headSearch(''); }
   });
 }
 function render() {
@@ -1104,8 +1122,8 @@ function render() {
   drawBar();
   var bs = document.querySelectorAll('[data-b="warn"]');
   for (var j = 0; j < bs.length; j++) { bs[j].textContent = nw ? (nw > 99 ? '99+' : String(nw)) : ''; bs[j].style.display = nw ? '' : 'none'; }
-  $('ttl').textContent = navTitle(S.view); syncShow(); drawConsBar();
-  var g = $('gq'); if (g && document.activeElement !== g && g.value !== S.f.q) g.value = S.f.q;
+  $('ttl').textContent = navTitle(S.view); syncShow(); drawConsBar(); $('hx').innerHTML = '';
+  var g = $('gq'); var sq = searchVal(); if (g && document.activeElement !== g && g.value !== sq) g.value = sq;
   if (S.view === 'list') viewList();
   else if (S.view === 'cal') viewCalendar();
   else if (S.view === 'dash') viewDashboard();
@@ -1234,7 +1252,7 @@ function statusHtml(p) {
     return h;
   }
   if (p.Status === 'Not ready') return '<button type="button" class="chip tagbtn" data-nr="' + esc(p.Id) + '" title="Tap to change">Not ready until ' + esc(fmtDate(p.NotReadyUntil)) + '</button>' + (p.NotReadyReason ? '<br><span class="muted small">' + esc(p.NotReadyReason) + '</span>' : '');
-  if (si.booked) return '<span class="chip stbook">' + esc(si.label) + '</span>' + (si.sub ? '<br><span class="muted small">' + esc(si.sub) + '</span>' : '');
+  if (si.booked) return '<span class="chip stbook">Booked</span>';
   return '<span class="chip ' + si.cls + '">' + esc(si.label) + '</span>';
 }
 function typeHtml(p) {
@@ -1279,10 +1297,15 @@ function sendWhy(p) {
   return p.ListId ? 'Already scheduled on an OT list' : p.Status === 'Awaiting clearance' ? 'Not cleared yet' : p.Status === 'Not ready' ? 'Patient is not ready' :
     (p.Status === 'Ready' && medOf(p) === 'Unknown') ? 'Set the medical status first' : '';
 }
+function bookedText(p) {
+  var l = p.ListId ? listById(p.ListId) : null, rm = l && l.RoomId ? (S.d.rooms || []).filter(function (r) { return r.Id === l.RoomId; })[0] : null;
+  return fmtDate(p.ScheduledDate) + (rm ? ' · ' + rm.Name : '');
+}
+function addedLine(p) { return p.DateAdded ? 'Added ' + fmtDate(p.DateAdded) : ''; }
 function sendBtn(p) {
   if (canSend(p)) return '<button class="primary btn-sched" data-send="' + esc(p.Id) + '">Schedule</button>';
   if (isActive(p)) {
-    var lbl = p.ListId ? fmtDate(p.ScheduledDate) : (p.Status === 'Ready' ? 'Medical status' : 'Not ready');
+    var lbl = p.ListId ? bookedText(p) : (p.Status === 'Ready' ? 'Medical status' : 'Not ready');
     return '<button disabled class="greyed ' + (p.ListId ? 'bk' : 'nr') + '" title="' + esc(sendWhy(p)) + '">' + esc(lbl) + '</button>';
   }
   return '';
@@ -3381,7 +3404,7 @@ function patientRowsHtml(list) {
         return '<tr class="click" data-id="' + esc(p.Id) + '">' +
           '<td>' + (p.Starred ? '<span class="chip amber">★</span>' : '') + '<strong>' + esc(p.Name) + '</strong><br><span class="muted small">' + esc(idShow(p)) + '</span>' + xlsChip(p) + (all ? ' ' + iniChip(p.ConsultantId) : '') + '</td>' +
           '<td>' + ageCell(p) + '</td><td>' + procCell(p) + '</td><td>' + statusHtml(p) + '</td>' +
-          '<td class="' + (waitOver(p) ? 'wred' : '') + '">' + esc(waitText(p)) + '</td><td>' + flagsHtml(p) + '</td>' +
+          '<td class="' + (waitOver(p) ? 'wred' : '') + '">' + esc(waitText(p)) + (addedLine(p) ? '<div class="muted small addedln">' + esc(addedLine(p)) + '</div>' : '') + '</td><td>' + flagsHtml(p) + '</td>' +
           '<td class="acts"><div class="actw">' + contactBtn(p) + sendBtn(p) + '</div></td></tr>';
       }).join('') + '</tbody></table>';
   }
@@ -3404,14 +3427,14 @@ function pcCardHtml(p, all) {
   var sub = [p.Category]; if (admitText(p)) sub.push(admitText(p));
   var btn = '';
   if (canSend(p)) btn = '<button class="primary pcsend" data-send="' + esc(p.Id) + '">Schedule</button>';
-  else if (p.ListId) btn = '<span class="pcbk" title="' + esc(sendWhy(p)) + '">' + esc(fmtDate(p.ScheduledDate)) + '</span>';
+  else if (p.ListId) btn = '<span class="pcbk" title="' + esc(sendWhy(p)) + '">' + esc(bookedText(p)) + '</span>';
   return '<div class="card pc" data-id="' + esc(p.Id) + '"><div class="pc-l">' +
     '<div class="pc-name">' + (p.Starred ? '★ ' : '') + esc(p.Name) + ' <span class="muted">· ' + esc(ageText(p.DOB)) + '</span></div>' +
     '<div class="pc-proc">' + esc(procLabel(p)) + '</div>' +
     '<div class="pc-meta">' + (all ? iniChip(p.ConsultantId) + ' ' : '') + esc(idShow(p)) + xlsChip(p) + ' <span>' + esc(sub.join(' · ')) + '</span></div>' +
     '<div class="pc-tags">' + pcTagsHtml(p) + '</div></div>' +
     '<div class="pc-r"><div>' + statusHtml(p) + '</div>' +
-    '<div class="pc-wait' + (waitOver(p) ? ' over' : '') + '">' + ico('hourglass') + esc(waitText(p)) + '</div>' +
+    '<div class="pc-wait' + (waitOver(p) ? ' over' : '') + '">' + ico('hourglass') + esc(waitText(p)) + (addedLine(p) ? '<span class="pc-added">' + esc(addedLine(p)) + '</span>' : '') + '</div>' +
     '<div class="pc-btns">' + (p.Guardian || p.Guardian2 ? '<button type="button" class="phbtn pcph" data-call="' + esc(p.Id) + '" title="Call" aria-label="Call">' + ico('phone') + '</button>' : '') + btn + '</div></div></div>';
 }
 function flagsHtml(p) {
@@ -3444,14 +3467,49 @@ function dlgAdmitDays(p) {
   });
 }
 
+var CONS_VIEWS = ['list', 'warn', 'done', 'removed'];
+function searchVal() {
+  return S.view === 'done' ? (S.doneQ || '') : S.view === 'removed' ? (S.removedQ || '') : S.view === 'warn' ? (S.warnQ || '') : S.view === 'logbook' ? ((S.lb && S.lb.q) || '') : S.f.q;
+}
+function headSearch(v) {
+  if (S.view === 'done') { S.doneQ = v; doneBody(); }
+  else if (S.view === 'removed') { S.removedQ = v; remBody(); }
+  else if (S.view === 'warn') { S.warnQ = v; viewWarn(); }
+  else if (S.view === 'logbook') { if (!S.lb) S.lb = {}; S.lb.q = v; viewLogbook(); }
+  else {
+    S.f.q = v;
+    if (S.view !== 'list') { S.view = 'list'; store('psw_view', 'list'); render(); } else if (document.getElementById('listBody')) listBody();
+  }
+}
+/** the header of the page: initials, search and the one action of the page, in the same places on every page */
+function drawHeader() {
+  var t = document.querySelector('.top'); if (!t) return;
+  t.setAttribute('data-v', S.view);
+  var ab = $('addp'), sp = ab.querySelector('span');
+  var show = true;
+  if (S.view === 'done') {
+    if (can('patients') && can('done')) { S.hdrAdd = dlgEmergency; sp.textContent = 'Emergency'; ab.classList.add('wide'); ab.title = 'Emergency case'; }
+    else show = false;
+  } else if (S.view === 'list' || S.view === 'warn') { S.hdrAdd = null; sp.textContent = 'Add patient'; ab.classList.remove('wide'); ab.title = 'Add patient (N)'; }
+  else show = false;
+  if (S.view === 'cal') { S.hdrAdd = function () { listForm(null, S.today); }; sp.textContent = 'Add list'; ab.classList.remove('wide'); ab.title = 'Add list'; show = true; }
+  ab.style.display = show ? '' : 'none';
+  var sb = $('sbtn'); if (sb) sb.setAttribute('data-hide', ['list', 'warn', 'done', 'removed', 'logbook'].indexOf(S.view) < 0 ? '1' : '');
+  var gs = document.querySelector('.gsearch'); if (gs) gs.setAttribute('data-hide', ['list', 'warn', 'done', 'removed', 'logbook'].indexOf(S.view) < 0 ? '1' : '');
+  if (t.classList.contains('sopen') && ['list', 'warn', 'done', 'removed', 'logbook'].indexOf(S.view) < 0) t.classList.remove('sopen');
+}
 function drawConsBar() {
   var el = $('consbar'); if (!el) return;
-  if (S.view !== 'list') { el.innerHTML = ''; el.style.display = 'none'; return; }
+  if (CONS_VIEWS.indexOf(S.view) < 0) { el.innerHTML = ''; el.style.display = 'none'; drawHeader(); return; }
   el.style.display = '';
   var cons = S.d.consultants.filter(function (c) { return c.Active === 'Y'; });
   el.innerHTML = '<button type="button" class="seg' + (S.cons === 'all' ? ' on' : '') + '" data-c="all">All</button>' +
     cons.map(function (c) { return '<button type="button" class="seg' + (S.cons === c.Id ? ' on' : '') + '" data-c="' + esc(c.Id) + '" title="' + esc(c.Name) + '">' + esc(consInit(c.Id)) + '</button>'; }).join('');
-  on(el, '.seg', 'click', function (e) { S.cons = e.currentTarget.getAttribute('data-c'); drawConsBar(); listBody(); });
+  on(el, '.seg', 'click', function (e) {
+    S.cons = e.currentTarget.getAttribute('data-c'); drawConsBar();
+    if (S.view === 'list') listBody(); else if (S.view === 'warn') viewWarn(); else if (S.view === 'done') viewDone(); else if (S.view === 'removed') viewRemoved();
+  });
+  drawHeader();
 }
 function viewList() {
   $('view').innerHTML = '<div id="listBody"></div>';
@@ -3514,7 +3572,7 @@ function dlgFilters() {
 }
 
 // ---- call window
-var CALL_REASONS = [['', 'Just reached'], ['Sick', 'Sick'], ['Awaiting clearance', 'Awaiting clearance'], ['Travelling', 'Travelling'], ['Exams', 'Exams'], ['Other', 'Other']];
+var CALL_REASONS = [['Sick', 'Sick'], ['Awaiting clearance', 'Awaiting clearance'], ['Travelling', 'Travelling'], ['Exams', 'Exams'], ['Scheduled for surgery', 'Scheduled for surgery'], ['Other', 'Other']];
 function fmtDateTime(iso) {
   var d = new Date(iso); if (isNaN(d)) return '';
   var pad = function (n) { return (n < 10 ? '0' : '') + n; };
@@ -3548,6 +3606,8 @@ function dlgCall(p) {
         h += '<div class="grid2"><div class="field"><label for="cl_spec">Specialty</label><select id="cl_spec">' + SPECIALTIES.map(function (s) { return opt(s, s, s === st.spec); }).join('') + '</select></div>' +
           (st.spec !== 'Anesthesia' ? '<div class="field"><label for="cl_doc">Pediatrician</label><select id="cl_doc">' + opt('', 'Not chosen', !st.doc) + docs.map(function (d) { return opt(d.Name, d.Name, d.Name === st.doc); }).join('') + '</select></div>' : '') + '</div>' +
           '<div class="field"><label for="cl_appt">Appointment date (optional)</label><input type="date" id="cl_appt" value="' + esc(st.appt) + '"></div>';
+      } else if (st.reason === 'Scheduled for surgery') {
+        h += '<p class="small muted">Logs the call, then opens the Schedule step.</p>';
       } else if (st.reason) {
         h += (st.reason === 'Other' ? '<div class="field"><label for="cl_other">Reason *</label><input type="text" id="cl_other" value="' + esc(st.other) + '"></div>' : '') +
           '<div class="field"><label for="cl_until">Ready again on *</label><input type="date" id="cl_until" min="' + esc(S.today) + '" value="' + esc(st.until) + '"></div>' +
@@ -3560,7 +3620,7 @@ function dlgCall(p) {
       else h += '<p class="small muted">' + (ns.length ? 'Marks ' + esc(phoneText(ns[0].v)) + ' as a wrong number.' : '') + '</p>';
       h += '<p class="small muted">The number shows in red until it is edited in the patient page.</p>';
     }
-    if (st.mode !== 'schedule') h += '<div class="row" style="margin:10px 0"><button class="primary" id="cl_save">Save to log</button></div>';
+    if (st.mode !== 'schedule') h += '<div class="row" style="margin:10px 0"><button class="primary" id="cl_save"' + (st.mode === 'answered' && !st.reason ? ' disabled title="Choose what the call was about"' : '') + '>' + (st.reason === 'Scheduled for surgery' ? 'Save and schedule' : 'Save to log') + '</button></div>' + (st.mode === 'answered' && !st.reason ? '<p class="small muted" style="margin:-4px 0 8px">Nothing is logged until you choose one.</p>' : '');
     h += '<h3 style="margin-top:8px">Call log</h3><div id="cl_log">' + logHtml + '</div>';
     $('cl_body').innerHTML = h;
     $('cl_x').addEventListener('click', m.close);
@@ -3586,8 +3646,10 @@ function dlgCall(p) {
     cap();
     var pl = { patientId: p.Id };
     if (st.mode === 'answered') {
+      if (!st.reason) return;
       pl.outcome = 'answered'; pl.reason = st.reason;
-      if (st.reason === 'Awaiting clearance') {
+      if (st.reason === 'Scheduled for surgery') { /* logged as it is */ }
+      else if (st.reason === 'Awaiting clearance') {
         var arr = clearances(p), hit = false;
         arr = arr.map(function (c) { if (c.spec === st.spec) { hit = true; return { spec: c.spec, state: 'Requested', apptDate: st.appt || c.apptDate, doctor: st.doc || c.doctor }; } return c; });
         if (!hit) arr.push({ spec: st.spec, state: 'Requested', apptDate: st.appt, doctor: st.doc });
@@ -3600,7 +3662,11 @@ function dlgCall(p) {
     } else if (st.mode === 'noanswer') pl.outcome = 'noanswer';
     else { pl.outcome = 'wrong'; pl.number = st.num; if (!st.num) { toast('Choose which number is wrong', true); return; } }
     $('cl_save').disabled = true;
-    call('logCall', pl).then(function (r) { upsertP(r.patient); m.close(); render(); toast('Call saved'); }).catch(function (e) { $('cl_save').disabled = false; fail(e); });
+    call('logCall', pl).then(function (r) {
+      upsertP(r.patient); m.close(); render();
+      if (pl.reason === 'Scheduled for surgery') { var up = getP(p.Id) || r.patient; if (canSend(up)) dlgSendToList(up); else toast('Call saved. ' + (sendWhy(up) || 'Can\'t be scheduled yet'), true); }
+      else toast('Call saved');
+    }).catch(function (e) { $('cl_save').disabled = false; fail(e); });
   }
   draw();
   call('getContacts', { patientId: p.Id }).then(function (list) {
@@ -3655,7 +3721,8 @@ function openPatient(id, opts) {
       var dd = rows[i].querySelector('.cl_doc');
       st.cl[i] = { spec: st.cl[i].spec, state: rows[i].querySelector('.cl_ok').checked ? 'Cleared' : 'Requested', apptDate: rows[i].querySelector('.cl_date').value, doctor: dd ? dd.value : '' };
     }
-    if (m.el.querySelector('.exrow') || st.tab === 2) st.ex = exRead(m.el);
+    if (st.skipEx) st.skipEx = false;
+    else if (m.el.querySelector('.exrow') || st.tab === 2) st.ex = exRead(m.el);
     var tn = m.el.querySelectorAll('.f_tnote');
     for (var k2 = 0; k2 < tn.length; k2++) { var t = tn[k2].getAttribute('data-t'); if (tn[k2].value.trim()) st.tnotes[t] = tn[k2].value.trim(); else delete st.tnotes[t]; }
   }
@@ -3809,13 +3876,13 @@ function openPatient(id, opts) {
         var left = SPECIALTIES.filter(function (s) { return !st.cl.some(function (c) { return c.spec === s; }); });
         pickMenu('Add specialty', left.map(function (s) { return { label: s, fn: function () { st.cl.push({ spec: s, state: 'Requested', apptDate: '', doctor: '' }); draw(); } }; }));
       });
-      on(m.el, '.ex_x', 'click', function (e) { capture(); st.ex.splice(+e.currentTarget.getAttribute('data-i'), 1); draw(); });
-      on(m.el, '.ex_proc', 'change', function (e) { capture(); var rows = m.el.querySelectorAll('.exrow'), i = Array.prototype.indexOf.call(rows, e.currentTarget.parentNode), q = procById(e.currentTarget.value); if (st.ex[i] && q) { st.ex[i].approach = q.ApproachDefault || ''; st.ex[i].detail = ''; } draw(); });
+      on(m.el, '.ex_x', 'click', function (e) { capture(); st.ex.splice(+e.currentTarget.getAttribute('data-i'), 1); st.skipEx = true; draw(); });
+      on(m.el, '.ex_proc', 'change', function (e) { capture(); var rows = m.el.querySelectorAll('.exrow'), i = Array.prototype.indexOf.call(rows, e.currentTarget.parentNode), q = procById(e.currentTarget.value); if (st.ex[i] && q) { st.ex[i].approach = q.ApproachDefault || ''; st.ex[i].detail = ''; } st.skipEx = true; draw(); });
       $('f_addex').addEventListener('click', function () {
         capture();
         var first = S.d.procedures.filter(function (x) { return x.Active === 'Y' && x.Emergency !== 'E'; })[0];
         if (!first) { toast('Add a procedure in Settings first', true); return; }
-        st.ex.push({ procedureId: first.Id, procedure: first.Name, laterality: '', approach: first.ApproachDefault || '', detail: '' }); draw();
+        st.ex.push({ procedureId: first.Id, procedure: first.Name, laterality: '', approach: first.ApproachDefault || '', detail: '' }); st.skipEx = true; draw();
       });
       $('f_tgl').addEventListener('click', function () { capture(); st.showTargets = !st.showTargets; draw(); });
     }
@@ -4000,11 +4067,10 @@ function viewCalendar() {
       return '<div class="panel"><div class="spread"><button class="link wdbtn" data-day="' + ds3 + '"><strong>' + esc(fmtDay(ds3)) + '</strong></button><button class="link" data-add="' + ds3 + '">Add list</button></div>' + listsOn(ds3).map(function (l) { return otBlock(l, true); }).join('') + '</div>';
     }).join('') : '<p class="muted">No lists coming up.</p>';
   }
+  $('hx').innerHTML = mode !== 'agenda' ? '<button type="button" class="hxb" id="cal_prev" aria-label="Previous">&lsaquo;</button><strong class="hxt">' + esc(title) + '</strong><button type="button" class="hxb" id="cal_next" aria-label="Next">&rsaquo;</button>' +
+    '<span class="segwrap"><button type="button" class="seg' + (mode === 'week' ? ' on' : '') + '" data-mode="week">Week</button><button type="button" class="seg' + (mode === 'month' ? ' on' : '') + '" data-mode="month">Month</button></span>' : '';
   $('view').innerHTML =
-    '<div class="spread"><h2>OT schedule</h2><div class="row"><button id="cal_share">Share week</button><button class="primary" id="cal_add">Add list</button></div></div>' +
-    '<div class="row" style="margin:8px 0">' + (mode !== 'agenda' ? '<button id="cal_prev" aria-label="Previous">&lsaquo;</button><strong style="min-width:190px;text-align:center">' + esc(title) + '</strong><button id="cal_next" aria-label="Next">&rsaquo;</button><button id="cal_today">Today</button>' +
-      '<span class="segwrap"><button type="button" class="seg' + (mode === 'week' ? ' on' : '') + '" data-mode="week">Week</button><button type="button" class="seg' + (mode === 'month' ? ' on' : '') + '" data-mode="month">Month</button></span>' :
-      '<button class="primary" id="cal_next_list">Next list</button>') + '</div>' + body;
+    '<div class="spread" style="justify-content:flex-end"><div class="row">' + (mode !== 'agenda' ? '<button id="cal_today">Today</button>' : '<button class="primary" id="cal_next_list">Next list</button>') + '<button id="cal_share">Share week</button></div></div>' + body;
   function shift(n) {
     if (S.calMode === 'month') {
       var m2 = S.calMonth, t = new Date(Date.UTC(+m2.slice(0, 4), +m2.slice(5, 7) - 1 + n, 1));
@@ -4016,13 +4082,12 @@ function viewCalendar() {
     $('cal_prev').addEventListener('click', function () { shift(-1); });
     $('cal_next').addEventListener('click', function () { shift(1); });
     $('cal_today').addEventListener('click', function () { S.calWeek = weekStart(S.today); S.calMonth = S.today.slice(0, 7); viewCalendar(); });
-    on($('view'), '[data-mode]', 'click', function (e) { S.calMode = e.currentTarget.getAttribute('data-mode'); viewCalendar(); });
+    on($('hx'), '[data-mode]', 'click', function (e) { S.calMode = e.currentTarget.getAttribute('data-mode'); viewCalendar(); });
   }
   if ($('cal_next_list')) $('cal_next_list').addEventListener('click', function () {
     var nx = (S.d.lists || []).filter(function (l) { return l.Status === 'Open' && l.Date >= S.today; }).sort(function (a, b) { return a.Date.localeCompare(b.Date); })[0];
     if (nx) openList(nx.Id); else toast('No coming lists');
   });
-  $('cal_add').addEventListener('click', function () { listForm(null, S.today); });
   $('cal_share').addEventListener('click', shareWeek);
   on($('view'), '[data-list]', 'click', function (e) { openList(e.currentTarget.getAttribute('data-list')); });
   on($('view'), '[data-emcase]', 'click', function (e) { e.stopPropagation(); dlgDone(getP(e.currentTarget.getAttribute('data-emcase')), null, true); });
@@ -4207,7 +4272,7 @@ function dlgSurgeons(p) {
 function doneList() {
   var q = S.doneQ.toLowerCase(), f = S.dn;
   return S.d.patients.filter(function (p) {
-    return p.Status === 'Done' && (!q || searchMatch(p, q)) && (!S.doneStar || p.Starred) && (!S.doneMissing || !surgeonIn(p, 'Primary surgeon')) && (!S.doneNd || p.NotDoneHint) && (!S.doneNoDate || !p.DoneDate) && (!S.doneType || (S.doneType === 'E' ? p.Emergency === 'Y' : p.Emergency !== 'Y')) &&
+    return p.Status === 'Done' && (S.cons === 'all' || !S.cons || p.ConsultantId === S.cons) && (!q || searchMatch(p, q)) && (!S.doneStar || p.Starred) && (!S.doneMissing || !surgeonIn(p, 'Primary surgeon')) && (!S.doneNd || p.NotDoneHint) && (!S.doneNoDate || !p.DoneDate) && (!S.doneType || (S.doneType === 'E' ? p.Emergency === 'Y' : p.Emergency !== 'Y')) &&
       (!f.proc || p.ProcedureId === f.proc) && (!f.cons || p.ConsultantId === f.cons) && (!f.year || (p.DoneDate || '').slice(0, 4) === f.year);
   }).sort(function (a, b) { return (b.DoneDate || '').localeCompare(a.DoneDate || ''); });
 }
@@ -4237,22 +4302,20 @@ function dlgNotDone(list) {
 }
 function viewDone() {
   var miss = missingSurgeons().length, nd = S.d.patients.filter(function (p) { return p.Status === 'Done' && p.NotDoneHint; }).length, nod = S.d.patients.filter(function (p) { return p.Status === 'Done' && !p.DoneDate; }).length;
-  $('view').innerHTML = '<div class="spread"><h2>Done cases</h2><div class="row">' + (can('patients') && can('done') ? '<button id="dn_em" class="primary">+ Emergency case</button>' : '') + '<button id="dn_x">Export Excel</button></div></div>' +
+  $('view').innerHTML = '<div class="spread" style="justify-content:flex-end"><button id="dn_x">Export Excel</button></div>' +
     '<div class="chiprow">' + [['', 'All'], ['L', 'Elective'], ['E', 'Emergency']].map(function (t) { return '<button type="button" class="schip' + ((S.doneType || '') === t[0] ? ' on' : '') + '" data-dt="' + t[0] + '">' + t[1] + '</button>'; }).join('') + '</div>' +
-    '<div class="filters"><input type="text" id="dq" placeholder="Search name, CPR or T number" value="' + esc(S.doneQ) + '">' +
+    '<div class="filters">' +
     '<label class="check" style="padding-top:8px"><input type="checkbox" id="dstar"' + (S.doneStar ? ' checked' : '') + '> Starred for case report</label>' +
     '<button type="button" class="schip' + (S.doneMissing ? ' on' : '') + '" id="dmiss"' + (miss ? '' : ' disabled') + '>Missing surgeons <b>' + miss + '</b></button>' +
     '<button type="button" class="schip' + (S.doneNd ? ' on' : '') + '" id="dnd"' + (nd ? '' : ' disabled') + '>Maybe not done here <b>' + nd + '</b></button>' +
     '<button type="button" class="schip' + (S.doneNoDate ? ' on' : '') + '" id="dnodate"' + (nod ? '' : ' disabled') + '>No operation date <b>' + nod + '</b></button>' +
     (S.doneNd && nd && can('remove') ? '<button type="button" class="primary" id="dnd_move">Move these to Removed…</button>' : '') + '</div>' +
     '<div id="doneBody"></div>';
-  $('dq').addEventListener('input', function () { S.doneQ = this.value; doneBody(); });
   $('dstar').addEventListener('change', function () { S.doneStar = this.checked; doneBody(); });
   $('dmiss').addEventListener('click', function () { S.doneMissing = !S.doneMissing; viewDone(); });
   $('dnd').addEventListener('click', function () { S.doneNd = !S.doneNd; viewDone(); });
   $('dnodate').addEventListener('click', function () { S.doneNoDate = !S.doneNoDate; viewDone(); });
   if ($('dnd_move')) $('dnd_move').addEventListener('click', function () { dlgNotDone(doneList()); });
-  if ($('dn_em')) $('dn_em').addEventListener('click', dlgEmergency);
   on($('view'), '[data-dt]', 'click', function (e) { S.doneType = e.currentTarget.getAttribute('data-dt'); viewDone(); });
   $('dn_x').addEventListener('click', function () { exportPatients('done-cases', doneList()); });
   doneBody();
@@ -4271,12 +4334,11 @@ function viewLogbook() {
   if (!st.name && !st.team) st.name = mine || pool[0] || '';
   var inYear = function (p) { return p.Status === 'Done' && (!st.year || (p.DoneDate || '').slice(0, 4) === st.year) && (!st.type || (st.type === 'E' ? p.Emergency === 'Y' : p.Emergency !== 'Y')); };
   var miss = missingSurgeons().length;
-  var h = '<div class="spread"><h2>Logbook</h2><div class="row" id="lb_exp"></div></div>' +
-    '<div class="chiprow scrollx">' + (mine ? '<button type="button" class="schip' + (!st.team && st.name === mine ? ' on' : '') + '" data-who="' + esc(mine) + '">My logbook</button>' : '') +
-    pool.map(function (n) { return '<button type="button" class="schip' + (!st.team && st.name === n && n !== mine ? ' on' : '') + '" data-who="' + esc(n) + '">' + esc(n) + '</button>'; }).join('') +
-    '<button type="button" class="schip' + (st.team ? ' on' : '') + '" data-team="1">Team</button></div>' +
+  $('hx').innerHTML = '<select id="lb_year" class="hxsel" aria-label="Year">' + opt('', 'All years', !st.year) + logYears('').map(function (y) { return opt(y, y, y === st.year); }).join('') + '</select>' +
+    '<span class="segwrap"><button type="button" class="seg' + (!st.team ? ' on' : '') + '" data-me="1">Me</button><button type="button" class="seg' + (st.team ? ' on' : '') + '" data-team="1">Team</button></span>';
+  var h = '<div class="spread" style="justify-content:flex-end"><div class="row" id="lb_exp"></div></div>' +
+    (st.team ? '' : '<div class="chiprow scrollx">' + pool.map(function (n) { return '<button type="button" class="schip' + (st.name === n ? ' on' : '') + '" data-who="' + esc(n) + '">' + (n === mine ? 'Me · ' : '') + esc(n) + '</button>'; }).join('') + '</div>') +
     '<div class="chiprow">' + [['', 'All cases'], ['L', 'Elective'], ['E', 'Emergency']].map(function (t) { return '<button type="button" class="schip' + ((st.type || '') === t[0] ? ' on' : '') + '" data-lbtype="' + t[0] + '">' + t[1] + '</button>'; }).join('') + '</div>' +
-    '<div class="row" style="margin:6px 0"><label for="lb_year" style="margin:0">Year</label><select id="lb_year" style="width:auto">' + opt('', 'All years', !st.year) + logYears('').map(function (y) { return opt(y, y, y === st.year); }).join('') + '</select></div>' +
     (miss ? '<div class="banner">' + miss + ' done case' + (miss === 1 ? ' has' : 's have') + ' no surgeons yet. <button type="button" class="amberbtn" id="lb_add">Add surgeons</button></div>' : '');
   var rowsX = null, sheetX = null, pdfInfo = null;
   if (st.team) {
@@ -4287,7 +4349,7 @@ function viewLogbook() {
     sheetX = [{ name: 'Team', rows: [['Surgeon', 'Primary', 'Assisted', 'Total']].concat(names.map(function (n) { return [n, per[n].primary, per[n].assist, per[n].primary + per[n].assist]; })) }];
   } else {
     var es = [];
-    S.d.patients.filter(inYear).forEach(function (p) { surgeonsOf(p).forEach(function (x) { if (x.name === st.name) es.push({ p: p, role: x.role }); }); });
+    S.d.patients.filter(inYear).filter(function (p) { return !st.q || searchMatch(p, st.q.toLowerCase()); }).forEach(function (p) { surgeonsOf(p).forEach(function (x) { if (x.name === st.name) es.push({ p: p, role: x.role }); }); });
     es.sort(function (a, b) { return (b.p.DoneDate || '').localeCompare(a.p.DoneDate || ''); });
     var byRole = {}, byProc = {}, byMonth = {};
     es.forEach(function (e) {
@@ -4320,7 +4382,8 @@ function viewLogbook() {
   if ($('lb_pdf')) $('lb_pdf').addEventListener('click', function () { shareOrSave(pdfFromCanvases(renderTableDoc(pdfInfo, 1754)), 'logbook-' + st.name.replace(/[^A-Za-z0-9]+/g, '-') + '.pdf'); });
   on($('view'), '[data-who]', 'click', function (e) { st.name = e.currentTarget.getAttribute('data-who'); st.team = false; viewLogbook(); });
   on($('view'), '[data-lbtype]', 'click', function (e) { st.type = e.currentTarget.getAttribute('data-lbtype'); viewLogbook(); });
-  on($('view'), '[data-team]', 'click', function () { st.team = true; viewLogbook(); });
+  on($('hx'), '[data-team]', 'click', function () { st.team = true; viewLogbook(); });
+  on($('hx'), '[data-me]', 'click', function () { st.team = false; if (mine) st.name = mine; viewLogbook(); });
   $('lb_year').addEventListener('change', function () { st.year = this.value; viewLogbook(); });
   if ($('lb_add')) $('lb_add').addEventListener('click', function () { var n = missingSurgeons()[0]; if (n) dlgSurgeons(n); });
   on($('view'), '[data-dn]', 'click', function (e) { dlgDone(getP(e.currentTarget.getAttribute('data-dn')), function () { viewLogbook(); }, true); });
@@ -4340,16 +4403,11 @@ function viewRemoved() {
   var cnt = {}; base.forEach(function (p) { cnt[p.RemovedReason] = (cnt[p.RemovedReason] || 0) + 1; });
   var cons = S.d.consultants.filter(function (c) { return c.Active === 'Y'; }), ys = {};
   S.d.patients.forEach(function (p) { if (p.Status === 'Removed' && p.RemovedDate) ys[p.RemovedDate.slice(0, 4)] = true; });
-  if (!S.rmCons) S.rmCons = 'all';
-  $('view').innerHTML = '<div class="spread"><h2>Removed from the list</h2><button id="rm_x">Export Excel</button></div>' +
-    '<div class="row" style="margin:6px 0"><span class="segwrap"><button type="button" class="seg' + (S.rmCons === 'all' ? ' on' : '') + '" data-rc="all">All</button>' + cons.map(function (c) { return '<button type="button" class="seg' + (S.rmCons === c.Id ? ' on' : '') + '" data-rc="' + esc(c.Id) + '">' + esc(c.Name) + '</button>'; }).join('') + '</span>' +
-    '<select id="rm_year" style="width:auto">' + opt('', 'All years', !S.rm.year) + Object.keys(ys).sort().reverse().map(function (y) { return opt(y, y, S.rm.year === y); }).join('') + '</select>' +
-    '<input type="text" id="rq" placeholder="Search name, CPR or T number" value="' + esc(S.removedQ) + '" style="width:200px"></div>' +
+  S.rmCons = S.cons || 'all';
+  $('view').innerHTML = '<div class="spread"><select id="rm_year" style="width:auto">' + opt('', 'All years', !S.rm.year) + Object.keys(ys).sort().reverse().map(function (y) { return opt(y, y, S.rm.year === y); }).join('') + '</select><button id="rm_x">Export Excel</button></div>' +
     '<div class="sttabs"><div class="sttabs-in scrollx"><button type="button" class="sttab' + (!S.rm.reason ? ' on' : '') + '" data-rr="">All <b>' + base.length + '</b></button>' +
     REMOVE_REASONS.filter(function (r) { return cnt[r]; }).map(function (r) { return '<button type="button" class="sttab' + (S.rm.reason === r ? ' on' : '') + '" data-rr="' + esc(r) + '">' + esc(r) + ' <b>' + cnt[r] + '</b></button>'; }).join('') + '</div></div><div id="remBody"></div>';
-  $('rq').addEventListener('input', function () { S.removedQ = this.value; remBody(); });
   $('rm_year').addEventListener('change', function () { S.rm.year = this.value; viewRemoved(); });
-  on($('view'), '[data-rc]', 'click', function (e) { S.rmCons = e.currentTarget.getAttribute('data-rc'); viewRemoved(); });
   on($('view'), '[data-rr]', 'click', function (e) { S.rm.reason = e.currentTarget.getAttribute('data-rr'); viewRemoved(); });
   $('rm_x').addEventListener('click', function () { exportPatients('removed', remList()); });
   remBody();
@@ -4392,6 +4450,7 @@ function warnRows() {
   var out = [];
   S.d.patients.forEach(function (p) {
     if (S.wcons && S.wcons !== 'all' && p.ConsultantId !== S.wcons) return;
+    if (S.warnQ && !searchMatch(p, S.warnQ.toLowerCase())) return;
     var dis = discardedOf(p);
     warningsAll(p).forEach(function (w) { out.push({ p: p, w: w, discarded: !!dis[w.kind], dis: dis[w.kind] }); });
   });
@@ -4399,15 +4458,14 @@ function warnRows() {
 }
 function viewWarn() {
   if (!S.wtab) S.wtab = '';
-  if (!S.wcons) S.wcons = 'all';
+  S.wcons = S.cons || 'all';
   var rows = warnRows(), cons = S.d.consultants.filter(function (c) { return c.Active === 'Y'; });
   var cnt = {}, nd = 0;
   rows.forEach(function (r) { if (r.discarded) nd++; else cnt[r.w.kind] = (cnt[r.w.kind] || 0) + 1; });
   var total = rows.length - nd;
   var shown = rows.filter(function (r) { return S.wtab === 'discarded' ? r.discarded : (!r.discarded && (!S.wtab || r.w.kind === S.wtab)); });
   shown.sort(function (a, b) { return (a.w.sev === 'high' ? 0 : 1) - (b.w.sev === 'high' ? 0 : 1) || a.p.Name.localeCompare(b.p.Name); });
-  $('view').innerHTML = '<div class="spread"><h2>Warnings</h2><button id="wn_x">Export Excel</button></div>' +
-    '<div class="row" style="margin:6px 0"><span class="segwrap"><button type="button" class="seg' + (S.wcons === 'all' ? ' on' : '') + '" data-wc="all">All</button>' + cons.map(function (c) { return '<button type="button" class="seg' + (S.wcons === c.Id ? ' on' : '') + '" data-wc="' + esc(c.Id) + '">' + esc(c.Name) + '</button>'; }).join('') + '</span></div>' +
+  $('view').innerHTML = '<div class="spread" style="justify-content:flex-end"><button id="wn_x">Export Excel</button></div>' +
     '<div class="sttabs"><div class="sttabs-in scrollx"><button type="button" class="sttab' + (!S.wtab ? ' on' : '') + '" data-wt="">All <b>' + total + '</b></button>' +
     WARN_TABS.filter(function (t) { return cnt[t[0]]; }).map(function (t) { return '<button type="button" class="sttab' + (S.wtab === t[0] ? ' on' : '') + '" data-wt="' + t[0] + '">' + esc(t[1]) + ' <b>' + cnt[t[0]] + '</b></button>'; }).join('') +
     '<button type="button" class="sttab' + (S.wtab === 'discarded' ? ' on' : '') + '" data-wt="discarded">Discarded <b>' + nd + '</b></button></div></div>' +
@@ -4421,7 +4479,6 @@ function viewWarn() {
         return '<div class="card" data-id="' + esc(r.p.Id) + '"><div class="spread"><div class="name">' + esc(r.p.Name) + ' <span class="muted small">· ' + ageCell(r.p) + '</span></div>' + iniChip(r.p.ConsultantId) + '</div><div class="muted small">' + esc(idShow(r.p)) + '</div>' + procCell(r.p) +
           '<div style="margin-top:4px"><span class="chip ' + (r.w.sev === 'high' ? 'red' : 'amber') + '">' + esc(r.w.text) + '</span></div><div class="actw" style="margin-top:6px">' + (r.discarded ? '<button data-wr="' + i + '">Restore</button>' : '<button class="primary" data-wa="' + i + '">' + esc(WARN_ACTION[r.w.kind]) + '</button><button data-wd="' + i + '">Discard</button>') + '</div></div>';
       }).join('') + '</div>');
-  on($('view'), '[data-wc]', 'click', function (e) { S.wcons = e.currentTarget.getAttribute('data-wc'); viewWarn(); });
   on($('view'), '[data-wt]', 'click', function (e) { S.wtab = e.currentTarget.getAttribute('data-wt'); viewWarn(); });
   $('wn_x').addEventListener('click', function () {
     exportXlsx('warnings', [{ name: 'Warnings', rows: [['MRN', 'Name', 'Consultant', 'Procedure', 'Warning', 'Status']].concat(shown.map(function (r) { return [idShow(r.p), r.p.Name, consName(r.p.ConsultantId), procLabel(r.p), r.w.text, r.discarded ? 'Discarded' : 'Active']; })) }]);
@@ -5251,7 +5308,7 @@ showPin = function (r) {
   doneList = function () { var l = oDL(); return S.doneXls ? l.filter(function (p) { return xlsIssues(p).length; }) : l; };
   remList = function () { var l = oRL(); return S.remXls ? l.filter(function (p) { return xlsIssues(p).length; }) : l; };
   viewDone = function () { oD(); var f = document.querySelector('#view .filters'); if (f) f.appendChild(btn('doneXls', viewDone)); };
-  viewRemoved = function () { oR(); var q = $('rq'); if (q && q.parentNode) q.parentNode.appendChild(btn('remXls', viewRemoved)); };
+  viewRemoved = function () { oR(); var q = $('rm_year'); if (q && q.parentNode) q.parentNode.insertBefore(btn('remXls', viewRemoved), $('rm_x')); };
 })();
 
 // ---- import v3: whole workbook or pasted cells
@@ -5592,7 +5649,8 @@ function dlgEmergency() {
     var rows = m.el.querySelectorAll('.sgrow'), sg = [];
     for (var i = 0; i < rows.length; i++) sg.push({ role: rows[i].querySelector('.sg_role').value, name: rows[i].querySelector('.sg_name').value.trim() });
     if (rows.length) st.sg = sg;
-    if (m.el.querySelector('.exrow')) st.ex = exRead(m.el);
+    if (st.skipEx) st.skipEx = false;
+    else if (m.el.querySelector('.exrow')) st.ex = exRead(m.el);
   }
   function btns(key, items) {
     return '<div class="tags">' + items.map(function (it) { return '<button type="button" class="opt' + (st[key] === it[0] ? ' on' : '') + '" data-k="' + key + '" data-val="' + esc(it[0]) + '">' + esc(it[1]) + '</button>'; }).join('') + '</div>';
@@ -5671,14 +5729,14 @@ function dlgEmergency() {
     $('e_addex').addEventListener('click', function () {
       capture();
       var first = procs.filter(function (q) { return /central line/i.test(q.Name); })[0] || procs[0];
-      st.ex.push({ procedureId: first.Id, procedure: first.Name, laterality: '', approach: first.ApproachDefault || '', detail: '' }); draw();
+      st.ex.push({ procedureId: first.Id, procedure: first.Name, laterality: '', approach: first.ApproachDefault || '', detail: '' }); st.skipEx = true; draw();
     });
-    on(m.el, '.ex_x', 'click', function (e) { capture(); st.ex.splice(+e.currentTarget.getAttribute('data-i'), 1); draw(); });
+    on(m.el, '.ex_x', 'click', function (e) { capture(); st.ex.splice(+e.currentTarget.getAttribute('data-i'), 1); st.skipEx = true; draw(); });
     on(m.el, '.ex_proc', 'change', function (e) {
       capture();
       var rows = m.el.querySelectorAll('.exrow'), i = Array.prototype.indexOf.call(rows, e.currentTarget.parentNode), q = procById(e.currentTarget.value);
       if (st.ex[i] && q) { st.ex[i].approach = q.ApproachDefault || ''; st.ex[i].detail = ''; }
-      draw();
+      st.skipEx = true; draw();
     });
     $('e_save').addEventListener('click', save);
   }
