@@ -392,6 +392,7 @@ button.primary{background:var(--ink);color:var(--onink);border-color:var(--ink)}
 :root[data-theme="dark"] .xls{background:#2c2c2a;color:#b4b2a9;border-color:#444441}
 /* ---- v0.14.4: fixed one-line header, fit width, compact card ---- */
 html{-webkit-text-size-adjust:100%;overscroll-behavior-x:none}
+body::before{content:"";position:fixed;top:0;left:0;right:0;height:env(safe-area-inset-top);background:var(--card);z-index:400;pointer-events:none}
 .main,.page{overflow-x:clip}
 .top{position:-webkit-sticky;position:sticky;top:0}
 .sbtn{display:none;border-color:transparent;background:none;padding:6px;min-height:36px}
@@ -446,7 +447,7 @@ html{-webkit-text-size-adjust:100%;overscroll-behavior-x:none}
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Pediatric Surgery">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <link rel="shortcut icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -473,7 +474,7 @@ html{-webkit-text-size-adjust:100%;overscroll-behavior-x:none}
     };
   }
   window.google = { script: { run: run() } };
-  window.APP_VERSION = '0.14.6';
+  window.APP_VERSION = '0.14.7';
   window.APP_HOST = 'GitHub Pages';
 })();
 
