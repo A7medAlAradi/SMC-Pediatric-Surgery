@@ -650,7 +650,7 @@ tr.picked,.pc3.picked,.pc2.picked,.card.picked{outline:2px solid var(--accent,#0
     };
   }
   window.google = { script: { run: run() } };
-  window.APP_VERSION = '0.15.3';
+  window.APP_VERSION = '0.15.4';
   window.APP_HOST = 'GitHub Pages';
 })();
 
@@ -7045,7 +7045,7 @@ drawSetPanel = function () {
 
 // ======== v0.15.3: merge entries with the same name and CPR (keeps the newest procedure)
 function mergeLoosePreview() {
-  callBase15('mergeDuplicates', { loose: true, preview: true }).then(function (r) {
+  callBase15('mergeSameName', { preview: true }).then(function (r) {
     if (!r.items.length) { toast('No entries share both name and CPR / T number'); return; }
     var m = openModal('<div class="spread"><h2>Same name and CPR</h2><button id="ml_x">Close</button></div><p class="muted small">Each group is one patient entered more than once. The oldest entry is kept (it holds your edits) and takes the procedure of the newest entry. The others go to Removed as "Duplicate entry" and can be restored. Untick a group that is really two different operations.</p>' +
       '<div style="max-height:50vh;overflow:auto">' + r.items.map(function (it, i) {
@@ -7060,12 +7060,12 @@ function mergeLoosePreview() {
       $('ml_go').disabled = true;
       var ids = []; pick.forEach(function (it) { it.entries.forEach(function (e) { ids.push(e.id); }); });
       var snaps = ids.map(function (id) { var q = getP(id); return q ? JSON.parse(JSON.stringify(q)) : null; }).filter(Boolean);
-      callBase15('mergeDuplicates', { loose: true, groups: pick.map(function (it) { return it.entries.map(function (e) { return e.id; }); }) }).then(function (res) {
+      callBase15('mergeSameName', { groups: pick.map(function (it) { return it.entries.map(function (e) { return e.id; }); }) }).then(function (res) {
         res.patients.forEach(upsertP); m.close(); render(); S.undo = { snaps: snaps, at: Date.now() };
         toast('Merged ' + res.items.length + (res.items.length === 1 ? ' patient' : ' patients'));
       }).catch(function (e) { $('ml_go').disabled = false; fail(e); });
     });
-  }).catch(fail);
+  }).catch(function (e) { fail(/Unknown action|Choose at least two/.test(e.message || '') ? new Error('The server code is older than the app. Paste the latest Code.gs and deploy a NEW version.') : e); });
 }
 var viewWarnBase153 = viewWarn;
 viewWarn = function () {
