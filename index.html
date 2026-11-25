@@ -514,6 +514,22 @@ table.wl .actw>button:not(.phbtn){min-width:0;width:136px;white-space:nowrap;ove
 .exblk .exrow{margin:2px 0}
 .unl{border:1px solid var(--line,#ddd);border-radius:10px;padding:8px 10px;margin:8px 0}
 .procgrey{opacity:.55}
+
+/* v0.14.11: extra procedure block, choice beside the procedure; schedule calendar */
+.exblk.exrow{display:block}
+.exblk .exhd{margin-bottom:4px}
+.cr.cpx{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:end;margin:0 0 6px}
+.cr.c1x{display:grid;grid-template-columns:minmax(0,1fr);margin:0 0 6px}
+.cr.cpx .field,.cr.c1x .field{margin:0;min-width:0}
+.mcal{margin:8px 0}
+.mcal .mchead{display:flex;justify-content:space-between;align-items:center;margin:4px 0 8px}
+.mcal .mcgrid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px;text-align:center}
+.mcal .mcdow{font-size:11px;color:var(--muted)}
+.mcal button.mcd{height:44px;padding:0;line-height:1.1;font-size:15px;border:2px solid #333;font-weight:700;background:transparent}
+.mcal button.mcd small{display:block;font-size:10px;font-weight:400}
+.mcal button.mcd.sel{background:#333;color:#fff}
+.mcal button.mcd.near{box-shadow:0 0 0 2px var(--accent,#3b6ea5)}
+.mcal .mcn{height:44px;line-height:44px;color:var(--muted);opacity:.5;font-size:15px}
 </style>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
@@ -548,7 +564,7 @@ table.wl .actw>button:not(.phbtn){min-width:0;width:136px;white-space:nowrap;ove
     };
   }
   window.google = { script: { run: run() } };
-  window.APP_VERSION = '0.14.10';
+  window.APP_VERSION = '0.14.11';
   window.APP_HOST = 'GitHub Pages';
 })();
 
@@ -714,6 +730,7 @@ function consById(id) { var l = S.d.consultants; for (var i = 0; i < l.length; i
 function consName(id) { var c = consById(id); return c ? c.Name : '(unknown)'; }
 function getP(id) { var l = S.d.patients; for (var i = 0; i < l.length; i++) if (l[i].Id === id) return l[i]; return null; }
 function upsertP(p) {
+  S.dupV = (S.dupV || 0) + 1;
   var l = S.d.patients;
   for (var i = 0; i < l.length; i++) if (l[i].Id === p.Id) { l[i] = p; return; }
   l.push(p);
@@ -803,7 +820,7 @@ function exRowHtml(x, i, only) {
   if (ask === 'side') ch = '<div class="field"><label>Side</label>' + jn('ex_lb', [['Left', 'Left'], ['Bilateral', 'Both'], ['Right', 'Right']], x.laterality) + '</div>';
   else if (ask === 'anaes') ch = '<div class="field"><label>Anaesthesia</label>' + jn('ex_lb', [['LA', 'LA'], ['GA', 'GA']], x.laterality) + '</div>';
   else if (ask === 'hypo') ch = '<div class="field"><label>Hypospadias type</label><select class="ex_hy">' + opt('', 'Choose…', !x.laterality) + HYPO_TYPES.map(function (t) { return opt(t, t, x.laterality === t); }).join('') + '</select></div>';
-  h += '<div class="cr c2"><div class="field"><input type="text" class="ex_proc" list="ex_dl" autocomplete="off" data-pid="' + esc(x.procedureId || '') + '" placeholder="Type to search, or type a new name" value="' + esc(x.procedure || '') + '"></div>' + (ch || '<div></div>') + '</div>';
+  h += '<div class="cr ' + (ch ? 'cpx' : 'c1x') + '"><div class="field"><input type="text" class="ex_proc" list="ex_dl" autocomplete="off" data-pid="' + esc(x.procedureId || '') + '" placeholder="Type to search, or type a new name" value="' + esc(x.procedure || '') + '"></div>' + ch + '</div>';
   var sub = '';
   if (pr && pr.Approach === 'Y') sub += '<div class="field"><label>Approach</label>' + jn('ex_ab', [['Open', 'Open'], ['Laparoscopic', 'Laparoscopic']], x.approach) + '</div>';
   if (pr && (pr.DetailKind === 'list' || pr.DetailKind === 'steps')) sub += '<div class="field"><select class="ex_dt">' + opt('', pr.DetailLabel || 'Details', !x.detail) + detailAllowed(pr).map(function (z) { return opt(z, z, x.detail === z); }).join('') + '</select></div>';
@@ -3386,8 +3403,27 @@ function admitText(p) { return p.NeedsAdmission ? (Number(p.AdmitDays) ? 'Admit 
 
 // ---- warnings (with discard)
 function discardedOf(p) { try { var o = JSON.parse(p.Discarded || '{}'); return o && typeof o === 'object' ? o : {}; } catch (e) { return {}; } }
+/** v0.14.11: entries (any status) that share a CPR / MRN or T number. Cached until a patient changes. */
+function dupKeys_(p) { return [p.MRN, p.TNumber].map(function (v) { return String(v || '').replace(/\s+/g, '').toUpperCase(); }).filter(Boolean).filter(function (v, i, a) { return a.indexOf(v) === i; }); }
+function dupMap() {
+  var l = S.d.patients, ck = l.length + ':' + (S.dupV || 0);
+  if (S.dupC && S.dupC.l === l && S.dupC.k === ck) return S.dupC.m;
+  var byKey = {}, out = {};
+  l.forEach(function (p) { dupKeys_(p).forEach(function (k) { (byKey[k] = byKey[k] || []).push(p); }); });
+  l.forEach(function (p) {
+    var seen = {}, others = [];
+    dupKeys_(p).forEach(function (k) { (byKey[k] || []).forEach(function (q) { if (q.Id !== p.Id && !seen[q.Id]) { seen[q.Id] = 1; others.push(q); } }); });
+    if (others.length) out[p.Id] = others;
+  });
+  S.dupC = { l: l, k: ck, m: out };
+  return out;
+}
 function warningsAll(p) {
-  var w = [];
+  var w = [], du = dupMap()[p.Id];
+  if (du) {
+    var sts = du.map(function (q) { return q.Status === 'Done' ? 'Done' : q.Status === 'Removed' ? 'Removed' : 'Waiting'; }).filter(function (v, i, a) { return a.indexOf(v) === i; });
+    w.push({ kind: 'dupmrn', sev: 'high', text: 'Same MRN as ' + du.length + ' other ' + (du.length === 1 ? 'entry' : 'entries') + ' (' + sts.join(', ') + ')' });
+  }
   if (!isActive(p)) return w;
   var st = S.d.settings, t = S.today, pr = procById(p.ProcedureId);
   var wait = waitDays(p), lim = waitLimit(p), tw = Number(st.targetWarnDays) || 14;
@@ -3421,7 +3457,7 @@ function warningsAll(p) {
   return w;
 }
 function warnings(p) { var d = discardedOf(p); return warningsAll(p).filter(function (w) { return !d[w.kind]; }); }
-var FLAG_KINDS = [['contact', 'No contact'], ['clearance', 'Clearance date passed'], ['age14', 'Turning 14'], ['age', 'Age target'], ['wait', 'Wait target'], ['calls', 'Unanswered calls'], ['booked', 'Booked date passed'], ['med', 'Medical status not set'], ['admit', 'Admission days'], ['prio', 'Priority']];
+var FLAG_KINDS = [['contact', 'No contact'], ['clearance', 'Clearance date passed'], ['age14', 'Turning 14'], ['age', 'Age target'], ['wait', 'Wait target'], ['calls', 'Unanswered calls'], ['booked', 'Booked date passed'], ['med', 'Medical status not set'], ['admit', 'Admission days'], ['prio', 'Priority'], ['dupmrn', 'Duplicate MRN']];
 
 // ---- contact numbers
 function numSpan(n, wrong) { return '<span class="num' + (wrong ? ' wrong' : '') + '">' + esc(phoneText(n)) + '</span>'; }
@@ -3469,6 +3505,7 @@ function pcTagsHtml(p) {
     if (w.kind === 'contact' && (m = /(\d+) d/.exec(w.text))) h += fl('contact', cls, 'phoneoff', m[1] + 'd', w.text);
     else if (w.kind === 'calls') h += fl('calls', cls, 'phoneoff', (p.CallCount || '') + ' calls', w.text);
     else if (w.kind === 'med') h += fl('med', cls, 'heartq', 'not set', w.text);
+    else if (w.kind === 'dupmrn') h += fl('dupmrn', cls, '', 'Duplicate MRN', w.text);
     else h += fl(w.kind, cls, '', w.text, w.text);
   });
   return h;
@@ -4261,23 +4298,48 @@ function dlgSendToList(p, after) {
   var mine = all.filter(function (l) { return l.ConsultantId === p.ConsultantId || listShared(l); });
   var showAll = !mine.filter(function (l) { return !listShared(l); }).length;
   var care = p.CareType || '';
+  var sel = '', cmon = '';
   var m = openModal('<div id="sl_body"></div>', { narrow: true });
   function draw() {
-    var rows = (showAll ? all : mine).slice(0, 40);
+    var rows = showAll ? all : mine, byDay = {};
+    rows.forEach(function (l) { (byDay[l.Date] = byDay[l.Date] || []).push(l); });
+    var days = Object.keys(byDay).sort();
+    if (!sel || !byDay[sel]) sel = days[0] || '';
+    if (!cmon || (!sel && !cmon)) cmon = (sel || S.today).slice(0, 7);
+    if (sel && sel.slice(0, 7) !== cmon && !S.calTouched) cmon = sel.slice(0, 7);
     var html = '<div class="spread"><h2>Schedule</h2><button id="sl_close">Close</button></div>' +
       '<p style="margin:4px 0"><strong>' + esc(p.Name) + '</strong> <span class="muted small">' + esc(ageText(p.DOB)) + ' · ' + esc(idShow(p)) + '</span><br>' + esc(procLabel(p)) + ' <span class="muted small">· ' + esc(consName(p.ConsultantId)) + (admitText(p) ? ' · ' + esc(admitText(p)) : '') + '</span></p>' +
       '<p class="muted small">Check with the family before booking.' + (p.Sponsorship ? ' Sponsorship: ' + esc(p.Sponsorship) + '.' : ' Sponsorship is not recorded.') + '</p>' +
       '<div class="field"><label>Day-case or inpatient *</label><div class="tags jn"><button type="button" class="opt' + (care === 'Day-case' ? ' on' : '') + '" data-care="Day-case">Day-case</button><button type="button" class="opt' + (care === 'Inpatient' ? ' on' : '') + '" data-care="Inpatient">Inpatient</button></div></div>' +
       '<label class="check"><input type="checkbox" id="sl_all"' + (showAll ? ' checked' : '') + '> Show lists of all consultants</label>';
-    html += rows.length ? rows.map(function (l) {
-      var t = listShared(l) ? caseTarget(l) : 0, over = t && listUsed(l).n >= t;
-      return '<div class="log"><div class="spread"><div><strong>' + esc(fmtDay(l.Date)) + '</strong> <span class="muted small">' + esc(listTitle(l)) + '</span><br>' +
-        '<span class="small' + (over ? ' over' : '') + '">' + esc(listCountText(l)) + ' booked</span></div>' +
-        '<button class="primary" data-l="' + esc(l.Id) + '">Book here</button></div></div>';
-    }).join('') : '<p class="muted small">No open lists coming up. Set an operating day for the consultant in Settings, or add a list from the OT schedule.</p>';
+    if (!rows.length) html += '<p class="muted small">No open lists coming up. Set an operating day for the consultant in Settings, or add a list from the OT schedule.</p>';
+    else {
+      var y = +cmon.slice(0, 4), mo = +cmon.slice(5, 7), first = new Date(Date.UTC(y, mo - 1, 1)), dim = new Date(Date.UTC(y, mo, 0)).getUTCDate(), off = (first.getUTCDay() + 6) % 7;
+      var MN = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+      html += '<div class="mcal"><div class="mchead"><button type="button" id="mc_prev" aria-label="Previous month">&lsaquo;</button><strong>' + MN[mo - 1] + ' ' + y + '</strong><button type="button" id="mc_next" aria-label="Next month">&rsaquo;</button></div><div class="mcgrid">' +
+        ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map(function (d) { return '<span class="mcdow">' + d + '</span>'; }).join('');
+      for (var k = 0; k < off; k++) html += '<span></span>';
+      for (var d = 1; d <= dim; d++) {
+        var ds = cmon + '-' + (d < 10 ? '0' : '') + d, ls = byDay[ds];
+        if (ls) { var n = ls.reduce(function (a, l) { return a + listUsed(l).n; }, 0); html += '<button type="button" class="mcd' + (ds === sel ? ' sel' : '') + '" data-day="' + ds + '">' + d + '<small>' + n + (n === 1 ? ' case' : ' cases') + '</small></button>'; }
+        else html += '<span class="mcn">' + d + '</span>';
+      }
+      html += '</div><p class="muted small" style="margin-top:6px">Marked days have a list. Tap a day, then Book here.</p></div>';
+      html += (byDay[sel] || []).map(function (l) {
+        var t = listShared(l) ? caseTarget(l) : 0, over = t && listUsed(l).n >= t;
+        return '<div class="log"><div class="spread"><div><strong>' + esc(fmtDay(l.Date)) + '</strong> <span class="muted small">' + esc(listTitle(l)) + '</span><br>' +
+          '<span class="small' + (over ? ' over' : '') + '">' + esc(listCountText(l)) + ' booked</span></div>' +
+          '<button class="primary" data-l="' + esc(l.Id) + '">Book here</button></div></div>';
+      }).join('');
+    }
     $('sl_body').innerHTML = html;
     $('sl_close').addEventListener('click', m.close);
-    $('sl_all').addEventListener('change', function () { showAll = this.checked; draw(); });
+    $('sl_all').addEventListener('change', function () { showAll = this.checked; sel = ''; S.calTouched = false; draw(); });
+    var pv = $('mc_prev'), nx = $('mc_next');
+    function shiftM(dm) { var yy = +cmon.slice(0, 4), mm = +cmon.slice(5, 7) + dm; if (mm < 1) { mm = 12; yy--; } if (mm > 12) { mm = 1; yy++; } cmon = yy + '-' + (mm < 10 ? '0' : '') + mm; S.calTouched = true; draw(); }
+    if (pv) { if (cmon <= S.today.slice(0, 7)) pv.disabled = true; pv.addEventListener('click', function () { shiftM(-1); }); }
+    if (nx) nx.addEventListener('click', function () { shiftM(1); });
+    on($('sl_body'), '[data-day]', 'click', function (e) { sel = e.currentTarget.getAttribute('data-day'); draw(); });
     on($('sl_body'), '[data-care]', 'click', function (e) { care = e.currentTarget.getAttribute('data-care'); draw(); });
     on($('sl_body'), '[data-l]', 'click', function (e) {
       if (!care) { toast('Choose day-case or inpatient first', true); return; }
@@ -4289,7 +4351,7 @@ function dlgSendToList(p, after) {
       }).catch(fail);
     });
   }
-  draw();
+  S.calTouched = false; draw();
 }
 function dlgMoveCase(p, after) {
   var all = S.d.lists.filter(function (l) { return l.Status === 'Open' && l.Date >= S.today && l.Id !== p.ListId && listFitsPatient(l, p); }).sort(function (a, b) { return a.Date.localeCompare(b.Date); });
@@ -4523,8 +4585,8 @@ function remBody() {
 }
 
 // ---- Warnings page
-var WARN_TABS = [['wait', 'Wait target'], ['age14', 'Age 14'], ['age', 'Age target'], ['contact', 'No contact'], ['clearance', 'Clearance'], ['booked', 'Booked date passed'], ['calls', 'Unanswered calls'], ['med', 'Medical status'], ['admit', 'Admission days']];
-var WARN_ACTION = { wait: 'Set priority', age14: 'Adult services', age: 'Set priority', contact: 'Log call', clearance: 'Mark cleared / new date', booked: 'Done or reschedule', calls: 'Log call', med: 'Set medical status', admit: 'Set days' };
+var WARN_TABS = [['dupmrn', 'Duplicate MRN'], ['wait', 'Wait target'], ['age14', 'Age 14'], ['age', 'Age target'], ['contact', 'No contact'], ['clearance', 'Clearance'], ['booked', 'Booked date passed'], ['calls', 'Unanswered calls'], ['med', 'Medical status'], ['admit', 'Admission days']];
+var WARN_ACTION = { dupmrn: 'Open', wait: 'Set priority', age14: 'Adult services', age: 'Set priority', contact: 'Log call', clearance: 'Mark cleared / new date', booked: 'Done or reschedule', calls: 'Log call', med: 'Set medical status', admit: 'Set days' };
 function warnRows() {
   var out = [];
   S.d.patients.forEach(function (p) {
