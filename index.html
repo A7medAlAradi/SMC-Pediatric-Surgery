@@ -650,7 +650,7 @@ tr.picked,.pc3.picked,.pc2.picked,.card.picked{outline:2px solid var(--accent,#0
     };
   }
   window.google = { script: { run: run() } };
-  window.APP_VERSION = '0.15.2';
+  window.APP_VERSION = '0.15.3';
   window.APP_HOST = 'GitHub Pages';
 })();
 
@@ -6881,10 +6881,10 @@ function digits(h, n) { var out = '', x = h || 1; while (out.length < n) { x = M
 function fakeP(p) {
   var q = {}, k, h = hash32(p.Id);
   for (k in p) if (Object.prototype.hasOwnProperty.call(p, k)) q[k] = p[k];
-  q.Name = FAKE_FN[h % 20] + ' ' + FAKE_LN[(h >> 5) % 10] + '.';
+  q.Name = FAKE_FN[h % 20] + ' ' + FAKE_LN[(h >>> 5) % 10] + '.';
   if (p.MRN) q.MRN = /^T\d+$/i.test(p.MRN) ? 'T' + digits(h, 5) : digits(h, 9);
-  if (p.TNumber) q.TNumber = 'T' + digits(h >> 3, 5);
-  if (p.Guardian) q.Guardian = '3' + digits(h >> 7, 7);
+  if (p.TNumber) q.TNumber = 'T' + digits(h >>> 3, 5);
+  if (p.Guardian) q.Guardian = '3' + digits(h >>> 7, 7);
   ['Notes', 'DoneNotes', 'RemovedNote', 'Sponsorship'].forEach(function (f) { if (q[f]) q[f] = f === 'Sponsorship' ? 'Insurance' : 'Sample note'; });
   return q;
 }
@@ -7041,6 +7041,39 @@ drawSetPanel = function () {
   paint();
   $('cal_renew').addEventListener('click', function () { if (!window.confirm('Old links stop working. Continue?')) return; call('calReset').then(function () { toast('Links renewed'); paint(); }).catch(fail); });
   $('sh_sync').addEventListener('click', function () { $('sh_sync').disabled = true; call('syncSheets').then(function (r) { $('sh_sync').disabled = false; toast(r.tabs + ' tabs updated'); }).catch(function (e) { $('sh_sync').disabled = false; fail(e); }); });
+};
+
+// ======== v0.15.3: merge entries with the same name and CPR (keeps the newest procedure)
+function mergeLoosePreview() {
+  callBase15('mergeDuplicates', { loose: true, preview: true }).then(function (r) {
+    if (!r.items.length) { toast('No entries share both name and CPR / T number'); return; }
+    var m = openModal('<div class="spread"><h2>Same name and CPR</h2><button id="ml_x">Close</button></div><p class="muted small">Each group is one patient entered more than once. The oldest entry is kept (it holds your edits) and takes the procedure of the newest entry. The others go to Removed as "Duplicate entry" and can be restored. Untick a group that is really two different operations.</p>' +
+      '<div style="max-height:50vh;overflow:auto">' + r.items.map(function (it, i) {
+        return '<label class="mgrow" style="display:block"><input type="checkbox" class="ml_c" data-i="' + i + '" checked> <strong>' + esc(it.name) + '</strong> <span class="muted small">' + esc(it.mrn) + '</span>' +
+          it.entries.map(function (e) { return '<div class="small muted">' + esc(e.procedure) + (e.side ? ', ' + esc(e.side) : '') + ' · added ' + esc(fmtDate(e.added)) + '</div>'; }).join('') +
+          '<div class="small"><b>Result: ' + esc(it.resultProcedure) + '</b></div></label>';
+      }).join('') + '</div><div class="row" style="margin-top:10px"><button class="primary" id="ml_go">Merge selected</button><button id="ml_no">Cancel</button></div>', { narrow: true });
+    $('ml_x').addEventListener('click', m.close); $('ml_no').addEventListener('click', m.close);
+    $('ml_go').addEventListener('click', function () {
+      var pick = Array.prototype.filter.call(m.el.querySelectorAll('.ml_c'), function (c) { return c.checked; }).map(function (c) { return r.items[+c.getAttribute('data-i')]; });
+      if (!pick.length) { m.close(); return; }
+      $('ml_go').disabled = true;
+      var ids = []; pick.forEach(function (it) { it.entries.forEach(function (e) { ids.push(e.id); }); });
+      var snaps = ids.map(function (id) { var q = getP(id); return q ? JSON.parse(JSON.stringify(q)) : null; }).filter(Boolean);
+      callBase15('mergeDuplicates', { loose: true, groups: pick.map(function (it) { return it.entries.map(function (e) { return e.id; }); }) }).then(function (res) {
+        res.patients.forEach(upsertP); m.close(); render(); S.undo = { snaps: snaps, at: Date.now() };
+        toast('Merged ' + res.items.length + (res.items.length === 1 ? ' patient' : ' patients'));
+      }).catch(function (e) { $('ml_go').disabled = false; fail(e); });
+    });
+  }).catch(fail);
+}
+var viewWarnBase153 = viewWarn;
+viewWarn = function () {
+  viewWarnBase153();
+  if (S.wtab !== 'dupmrn' || !can('remove') || $('ml_open')) return;
+  var b = $('mg_all'); if (!b) return;
+  b.insertAdjacentHTML('beforebegin', '<button id="ml_open" style="margin-right:6px">Same name + CPR…</button>');
+  $('ml_open').addEventListener('click', mergeLoosePreview);
 };
 
 init();
