@@ -530,6 +530,92 @@ table.wl .actw>button:not(.phbtn){min-width:0;width:136px;white-space:nowrap;ove
 .mcal button.mcd.sel{background:#333;color:#fff}
 .mcal button.mcd.near{box-shadow:0 0 0 2px var(--accent,#3b6ea5)}
 .mcal .mcn{height:44px;line-height:44px;color:var(--muted);opacity:.5;font-size:15px}
+
+/* ---- v0.15.0 waiting list */
+.dsw{display:inline-flex;margin-left:auto;border:1px solid var(--line2);border-radius:8px;overflow:hidden;flex:none}
+.dsw button{border:none;border-radius:0;background:none;padding:5px 10px;min-height:0;font-size:12px;color:var(--muted)}
+.dsw button.on{background:var(--ink);color:var(--onink)}
+.pflag{display:inline-flex;align-items:center;justify-content:center;border:none;background:none;padding:0 2px;min-height:0;height:auto;vertical-align:middle}
+.pflag .ico{width:14px;height:14px;fill:currentColor}
+.pf-c{color:#c0392b}.pf-s{color:#d98e00}.pf-a{color:#2f6fb5}.pf-o{color:var(--muted)}
+.wbtn{min-height:0;height:26px;min-width:44px;padding:0 8px;border-radius:13px;font-size:12px;font-weight:600;border:1px solid;background:none;flex:none}
+.wbtn.red{color:#c0392b;border-color:#c0392b}.wbtn.amber{color:#a56a00;border-color:#d98e00}
+.wph{display:inline-block;width:44px;flex:none}.cph{display:inline-block;width:40px;flex:none}.aph{display:inline-block;width:118px;flex:none}
+.cbtn{width:40px;min-height:30px;height:30px;padding:0;flex:none}
+.abtn{display:inline-flex;align-items:center;justify-content:center;box-sizing:border-box;width:118px;height:30px;min-height:30px;padding:0 6px;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:none;border-radius:8px}
+.abtn.medb{border:1px solid #d98e00;color:#a56a00;background:none}
+.abtn.bk{border:1px solid var(--line2);color:var(--muted);background:none}
+.wt.over,.wr.over{color:#c0392b}
+.mk{display:inline-flex;align-items:center;justify-content:center;box-sizing:border-box;width:118px;flex:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wsrow{border:1px solid var(--line2);border-left-width:4px;border-radius:8px;padding:8px 10px;margin-bottom:8px}
+.wsrow.red{border-left-color:#c0392b}.wsrow.amber{border-left-color:#d98e00}.wst{margin-bottom:6px}
+.xwrap{overflow-x:auto}
+table.xl{font-size:13px;width:100%}
+table.xl th,table.xl td{padding:0 6px;height:31px;white-space:nowrap;vertical-align:middle;border-bottom:1px solid var(--line)}
+table.xl thead th{position:sticky;top:0;background:var(--card);z-index:2}
+table.xl tbody tr:nth-child(even){background:var(--bg)}
+table.xl td.n,table.xl th.n{color:var(--muted);width:32px;text-align:right}
+table.xl td.pr{max-width:260px;overflow:hidden;text-overflow:ellipsis}
+table.xl td.nm{font-weight:600;max-width:220px;overflow:hidden;text-overflow:ellipsis}
+table.xl .mk,table.xl .abtn{height:24px;min-height:24px;font-size:12px}
+table.xl .abtn{width:112px}table.xl .aph{width:112px}
+table.xl .cbtn{height:24px;min-height:24px}
+table.xl .wbtn{height:22px;min-height:0}
+.star{color:#d98e00;margin-right:3px}
+@media (max-width:859px){
+  .wlc .card{padding:8px 10px;margin-bottom:6px}
+  .pc3{height:108px;box-sizing:border-box;display:flex;flex-direction:column;justify-content:space-between;padding-bottom:12px!important}
+  .pc3 .a1,.pc3 .a2,.pc3 .a3,.pc2 .a1,.pc2 .a2{display:flex;align-items:center;gap:6px;min-width:0}
+  .pc3 .a1 .nm,.pc2 .a1 .nm{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+  .pc3 .ag,.pc2 .ag{color:var(--muted);white-space:nowrap;flex:none}
+  .pc3 .wr,.pc2 .wr{margin-left:auto;display:inline-flex;align-items:center;gap:3px;white-space:nowrap;flex:none;font-size:12px;color:var(--muted)}
+  .pc3 .wr .ico{width:13px;height:13px}
+  .pc3 .a2 .pr,.pc2 .a2 .pr{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:13px}
+  .pc3 .a3 .mt{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:12px;color:var(--muted)}
+  .pc2{height:62px;box-sizing:border-box;display:flex;flex-direction:column;justify-content:space-between;padding:6px 10px!important}
+  .pc2 .mk{width:68px;font-size:11px;padding:0 4px}
+  .pc2 .wph{display:none}
+  .pc2 .abtn,.pc2 .aph{width:92px;height:26px;min-height:26px;font-size:11px}
+  .pc2 .wbtn{height:22px;min-width:36px}.pc2 .wph{width:36px}
+}
+/* bottom bar: the Waiting button looks like the other four */
+.tabbar .mid{flex:1;background:none;color:var(--muted)}
+.tabbar .mid.on{background:none;color:var(--text);font-weight:600}
+.tabbar .mid.on .bp{background:var(--gray-bg)}
+.tabbar .mid.on .ico{color:var(--ink)}
+table.wl.xl th{white-space:nowrap}
+table.wl.xl td{white-space:nowrap!important;overflow-wrap:normal}
+table.wl.xl td:first-child{min-width:0;width:32px}
+table.wl.xl td.pr{max-width:210px;white-space:nowrap!important;overflow:hidden;text-overflow:ellipsis}
+table.wl.xl .chip{white-space:nowrap;text-align:center}
+table.wl.xl td.ac,table.wl.xl td.cc{width:1%}
+table.wl.xl .mk{width:104px}
+table.wl.xl td{padding:0 5px}
+.lsearch{width:100%;box-sizing:border-box;margin:6px 0 10px}
+.dxprocs{max-height:220px;overflow:auto;border:1px solid var(--line2);border-radius:8px;padding:6px 8px;margin-top:6px}
+.dxprocs .check{display:flex;margin:2px 0}
+.wnrow{border-top:1px solid var(--line);padding:8px 0}
+.lsearch{padding:9px 12px;border:1px solid var(--line2);border-radius:8px;background:var(--card);color:var(--text);font-size:15px}
+@media (max-width:700px){
+  .dgt th:nth-child(2),.dgt td:nth-child(2){display:none}
+  #dg_body .tbl td,#cm_body .tbl td{padding:6px 4px}
+  #dg_body .tbl td button,#cm_body .tbl td button{padding:4px 8px;min-height:30px;font-size:12px}
+  .unl .tbl th:nth-child(n+2):nth-child(-n+4),.unl .tbl td:nth-child(n+2):nth-child(-n+4){display:none}
+}
+.showm{display:none}
+@media (max-width:700px){#cm_body > table th:nth-child(2),#cm_body > table td:nth-child(2){display:none}.showm{display:block}}
+
+.mgbar{margin:8px 0}.mgrow{border-bottom:1px solid var(--line,#ddd);padding:8px 0}
+.tlf{display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap}.tlf button.on{background:var(--accent,#0a6);color:#fff}
+.tle{border-left:3px solid #bbb;padding:4px 10px;margin:6px 0}.tle.k-call{border-color:#2a7}.tle.k-booking{border-color:#27c}.tle.k-note{border-color:#c82}
+#toast .undo{margin-left:8px;background:#fff;color:#111;border:0;border-radius:6px;padding:4px 10px;font-weight:600}
+.selbar{position:fixed;left:8px;right:8px;bottom:64px;z-index:60;background:#1b2733;color:#fff;border-radius:12px;padding:8px;display:flex;gap:6px;flex-wrap:wrap;align-items:center}.selbar button{padding:6px 10px}
+tr.picked,.pc3.picked,.pc2.picked,.card.picked{outline:2px solid var(--accent,#0a6);background:rgba(0,160,100,.12)}
+.kb{outline:2px solid #27c}
+.shotpill{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(8px + env(safe-area-inset-bottom));z-index:80;background:#b36b00;color:#fff;border:0;border-radius:999px;padding:5px 12px;font-size:12px}
+.btnlike{display:inline-block;padding:6px 10px;border:1px solid var(--line,#ccc);border-radius:8px;text-decoration:none;color:inherit}
+.selbar{bottom:calc(62px + env(safe-area-inset-bottom))}.selbar button{background:#fff;color:#111;border:0;border-radius:8px;flex:0 0 auto}.selbar button:disabled{opacity:.45}
+#selbtn{padding:4px 10px;font-size:13px;min-height:0;height:32px}
 </style>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
@@ -564,7 +650,7 @@ table.wl .actw>button:not(.phbtn){min-width:0;width:136px;white-space:nowrap;ove
     };
   }
   window.google = { script: { run: run() } };
-  window.APP_VERSION = '0.14.11';
+  window.APP_VERSION = '0.15.1';
   window.APP_HOST = 'GitHub Pages';
 })();
 
@@ -760,7 +846,7 @@ function waitLimit(p) {
   return Number(p.TargetWaitDays) || (pr && Number(pr.TargetDays)) || Number(S.d.settings['waitDays' + p.Category]) || 0;
 }
 function ageLimit(p) { var pr = procById(p.ProcedureId); return Number(p.TargetAgeMonths) || (pr && Number(pr.MaxAgeMonths)) || 0; }
-function waitOver(p) { var l = waitLimit(p); return l > 0 && waitDays(p) > l; }
+function waitOver(p) { if (S.d && S.d.settings && S.d.settings.warnWaitOff === 'Y') return false; var l = waitLimit(p); return l > 0 && waitDays(p) > l; }
 function medOf(p) { return p.MedicalStatus === 'Free' || p.MedicalStatus === 'NotFree' ? p.MedicalStatus : (p.MedicalStatus === 'Unknown' ? 'Unknown' : (tagsOf(p).length ? 'NotFree' : 'Unknown')); }
 function tagNotes(p) { try { var o = JSON.parse(p.TagNotes || '{}'); return o && typeof o === 'object' ? o : {}; } catch (e) { return {}; } }
 function careShort(p) { return p.CareType === 'Inpatient' ? 'INP' : 'DCU'; }
@@ -827,7 +913,7 @@ function exRowHtml(x, i, only) {
   else if (pr && pr.DetailKind === 'text') sub += '<div class="field"><input type="text" class="ex_dt" placeholder="' + esc(pr.DetailLabel || 'Details') + '" value="' + esc(x.detail || '') + '"></div>';
   if (free) sub += '<div class="field"><label>Category *</label>' + jn('ex_cb', CATS.map(function (c) { return [c, c === 'Intermediate' ? 'Inter.' : c]; }), x.category) + '</div><div class="field"><label>Care *</label>' + jn('ex_kb', [['Day-case', 'Day-case'], ['Inpatient', 'Inpatient']], x.care) + '</div>';
   if (sub) h += '<div class="cr cflex">' + sub + '</div>';
-  h += '<div class="field dxrow"><label>Diagnosis (procedure ' + (i + 2) + ')</label><input type="text" class="ex_dx" value="' + esc(x.diagnosis || '') + '"></div></div>';
+  h += '<div class="field dxrow"><label>Diagnosis (procedure ' + (i + 2) + ') *</label><input type="text" class="ex_dx" list="dx_dl" autocomplete="off" value="' + esc(x.diagnosis || '') + '"></div></div>';
   return h;
 }
 function exBlocksHtml(ex, only) {
@@ -1725,6 +1811,8 @@ function dlgDone(p, after, edit) {
     '<h3 style="margin-top:6px">Surgeons</h3><p class="muted small" style="margin:2px 0 6px">In order. Choose from the list or type a name. Can be added or corrected later from the Done page.</p><div id="d_sg"></div>' +
     '<div class="row" style="margin:6px 0"><button type="button" id="d_addsg">+ Add surgeon</button></div>' +
     '<div class="field"><label for="d_notes">Notes: outcome or complications (optional)</label><textarea id="d_notes">' + esc(edit ? p.DoneNotes : '') + '</textarea></div>' +
+    (edit ? '<div class="field"><label for="d_dx">Diagnosis *</label><input type="text" id="d_dx" list="dx_dl" autocomplete="off" value="' + esc(p.Diagnosis || '') + '">' + dxDatalist(p.ProcedureId) + '</div>' +
+      extras(p).map(function (x, i) { return '<div class="field"><label>Diagnosis (procedure ' + (i + 2) + ': ' + esc(x.procedure || '') + ') *</label><input type="text" class="d_xdx" list="dx_dl" autocomplete="off" value="' + esc(x.diagnosis || '') + '"></div>'; }).join('') : '') +
     (edit ? doneAskHtml(p) : '') +
     '<div id="d_convrow">' + (p.Approach === 'Laparoscopic' ? '<label class="check" style="display:block;margin:6px 0"><input type="checkbox" id="d_conv"' + (p.Converted === 'Y' ? ' checked' : '') + '> Converted to open</label>' : '') + '</div>' +
     (edit ? '<label class="check"><input type="checkbox" id="d_star"' + (p.Starred ? ' checked' : '') + '> Starred for case report</label>' : '') +
@@ -1757,6 +1845,10 @@ function dlgDone(p, after, edit) {
     if (edit && $('d_appr')) payload.approach = val('d_appr');
     if (edit && $('d_dt')) payload.detail = val('d_dt');
     if (edit) payload.starred = checked('d_star');
+    if (edit) {
+      payload.diagnosis = val('d_dx'); payload.extraDx = Array.prototype.map.call(m.el.querySelectorAll('.d_xdx'), function (e) { return e.value.trim(); });
+      if (!payload.diagnosis.trim() || payload.extraDx.some(function (x) { return !x; })) { toast('Enter the diagnosis of every procedure', true); return; }
+    }
     $('d_go').disabled = true;
     call(edit ? 'saveDone' : 'markDone', payload).then(function (r) {
       upsertP(r); m.close(); if (after) after(); render(); toast(edit ? 'Saved' : 'Moved to done cases');
@@ -3418,7 +3510,8 @@ function dupMap() {
   S.dupC = { l: l, k: ck, m: out };
   return out;
 }
-function warningsAll(p) {
+function warningsAll(p) { return warningsAll0(p).filter(function (w) { return !warnOff(w.kind); }); }
+function warningsAll0(p) {
   var w = [], du = dupMap()[p.Id];
   if (du) {
     var sts = du.map(function (q) { return q.Status === 'Done' ? 'Done' : q.Status === 'Removed' ? 'Removed' : 'Waiting'; }).filter(function (v, i, a) { return a.indexOf(v) === i; });
@@ -3456,7 +3549,13 @@ function warningsAll(p) {
   if (p.NeedsAdmission && !Number(p.AdmitDays)) w.push({ kind: 'admit', sev: 'med', text: 'Admission days not set' });
   return w;
 }
-function warnings(p) { var d = discardedOf(p); return warningsAll(p).filter(function (w) { return !d[w.kind]; }); }
+function warnOff(kind) {
+  var s = (S.d && S.d.settings) || {};
+  if (kind === 'wait') return s.warnWaitOff === 'Y';
+  if (kind === 'contact' || kind === 'calls') return s.warnContactOff === 'Y';
+  return false;
+}
+function warnings(p) { var d = discardedOf(p); return warningsAll(p).filter(function (w) { return !d[w.kind] && !warnOff(w.kind); }); }
 var FLAG_KINDS = [['contact', 'No contact'], ['clearance', 'Clearance date passed'], ['age14', 'Turning 14'], ['age', 'Age target'], ['wait', 'Wait target'], ['calls', 'Unanswered calls'], ['booked', 'Booked date passed'], ['med', 'Medical status not set'], ['admit', 'Admission days'], ['prio', 'Priority'], ['dupmrn', 'Duplicate MRN']];
 
 // ---- contact numbers
@@ -3622,7 +3721,7 @@ function listBody() {
   $('listBody').innerHTML =
     '<div class="sttabs"><div class="sttabs-in scrollx">' + chips.map(function (c) {
       return '<button type="button" class="sttab' + (S.f.chip === c[0] ? ' on' : '') + '" data-chip="' + esc(c[0]) + '">' + esc(c[1]) + ' <b>' + c[2] + '</b></button>';
-    }).join('') + '</div><button type="button" class="fbtn' + (S.f.prio || S.f.med || S.f.cat || S.f.ageFrom !== '' || S.f.ageTo !== '' ? ' on' : '') + '" id="fbtn">Filters</button></div>' +
+    }).join('') + '</div><button type="button" class="fbtn' + (S.f.prio || S.f.med || S.f.cat || S.f.ageFrom !== '' || S.f.ageTo !== '' ? ' on' : '') + '" id="fbtn">Filters</button><div class="dsw" role="group" aria-label="Row size"><button type="button" data-dens="compact" class="' + (densMode() === 'compact' ? 'on' : '') + '">Compact</button><button type="button" data-dens="comfortable" class="' + (densMode() === 'comfortable' ? 'on' : '') + '">Comfortable</button></div></div>' +
     '<div class="ptags scrollx">' + procTags + '</div>' +
     (af.length ? '<div class="afrow">' + af.map(function (x, i) { return '<button type="button" class="chip afc" data-af="' + i + '">' + esc(x.label) + ' &times;</button>'; }).join('') + '<button type="button" class="link" id="fclear">Clear filters</button></div>' : '') +
     patientRowsHtml(list);
@@ -3636,6 +3735,7 @@ function listBody() {
   });
   if ($('fclear')) $('fclear').addEventListener('click', function () { clearFilters(); listBody(); });
   $('fbtn').addEventListener('click', dlgFilters);
+  on(lb, '[data-dens]', 'click', function (e) { setDens(e.currentTarget.getAttribute('data-dens')); listBody(); });
   on(lb, '[data-col]', 'click', function (e) { e.stopPropagation(); headerMenu(e.currentTarget.getAttribute('data-col')); });
   bindRows(lb);
 }
@@ -3785,11 +3885,11 @@ function openPatient(id, opts) {
   var procSel = p ? (procById(p.ProcedureId) ? p.ProcedureId : (p.Procedure ? '__other' : '')) : '';
   var dob = p && p.DOB ? p.DOB.split('-') : ['', '', ''];
   var st = {
-    tab: opts.focusMed ? 2 : 1, sex: p ? p.Sex : '', lat: p ? p.Laterality : '', med: medStart(p, opts), cat: p ? p.Category : 'Minor',
+    dayOpt: !!(p && p.DobFlag === 'day'), tab: opts.focusMed ? 2 : 1, sex: p ? p.Sex : '', lat: p ? p.Laterality : '', med: medStart(p, opts), cat: p ? p.Category : 'Minor',
     admit: p ? !!p.NeedsAdmission : false, seen: p ? (p.SeenByConsultant || '') : '', tags: p ? tagsOf(p) : [], tnotes: p ? tagNotes(p) : {},
     cl: p ? clearances(p) : [], ex: p ? extras(p) : [], care: p && !p.ProcedureId ? (p.CareType || '') : '', catSet: !!(p && !p.ProcedureId), catF: p && !p.ProcedureId ? (p.Category || '') : '', showTargets: false, autoDob: !p, appr: p ? (p.Approach || '') : '', detail: p ? (p.Detail || '') : '', dyes: '',
     v: {
-      mrn: p && /^\d{9}$/.test(p.MRN) ? p.MRN : '', tn: p ? (p.TNumber || '') : '', dd: dob[2] || '', dm: dob[1] || '', dy: dob[0] || '', name: p ? p.Name : '', g1: p ? p.Guardian : '', g2: p ? p.Guardian2 : '',
+      mrn: p && /^\d{9}$/.test(p.MRN) ? p.MRN : '', tn: p ? (p.TNumber || '') : '', dd: p && p.DobFlag === 'day' ? '' : (dob[2] || ''), dm: dob[1] || '', dy: dob[0] || '', name: p ? p.Name : '', g1: p ? p.Guardian : '', g2: p ? p.Guardian2 : '',
       cons: p ? p.ConsultantId : (S.cons !== 'all' ? S.cons : ''), proc: procSel, procother: p && procSel === '__other' ? p.Procedure : '',
       dx: p ? p.Diagnosis : '', admitdays: p ? p.AdmitDays : '', prio: p ? p.Priority : '', priorreason: p ? p.PriorityReason : '', spons: p ? p.Sponsorship : '',
       notes: p ? p.Notes : '', twd: p ? p.TargetWaitDays : '', tam: p ? p.TargetAgeMonths : '', star: p ? !!p.Starred : false, dtext: p ? (p.Detail || '') : ''
@@ -3824,6 +3924,7 @@ function openPatient(id, opts) {
   function needsSide() { return !!askK(); }
   function getDob() {
     var y = +st.v.dy, mo = +st.v.dm, dd = +st.v.dd;
+    if (!st.v.dd && st.dayOpt) dd = 1;   // an imported patient may keep year and month only
     if (!(y >= 1990 && y <= +S.today.slice(0, 4)) || !(mo >= 1 && mo <= 12) || !(dd >= 1 && dd <= 31)) return '';
     var dt = new Date(Date.UTC(y, mo - 1, dd));
     if (dt.getUTCMonth() !== mo - 1) return '';
@@ -3839,7 +3940,7 @@ function openPatient(id, opts) {
     var v = st.v, si = '';
     if (p) { var sinfo = statusInfo(p); si = '<span class="chip ' + sinfo.cls + '">' + esc(sinfo.booked ? 'Scheduled ' + sinfo.label : sinfo.label) + '</span>' + (sinfo.sub ? '<span class="muted small"> ' + esc(sinfo.sub) + '</span>' : ''); }
     var h = '<div class="spread"><h2>' + (isNew ? 'Add patient' : esc(p.Name)) + '</h2><div class="row" style="gap:6px">' + (isNew && can('importPaste') ? '<button id="f_paste">Paste from Excel</button>' : '') + '<button id="f_close">Close</button></div></div>' + (p ? '<div style="margin-bottom:8px">' + si + '</div>' : '') +
-      '<div class="ptabs"><button type="button" class="ptab' + (st.tab === 1 ? ' on' : '') + '" data-pt="1">1 Essentials</button><button type="button" class="ptab' + (st.tab === 2 ? ' on' : '') + '" data-pt="2">2 Details</button></div>';
+      '<div class="ptabs"><button type="button" class="ptab' + (st.tab === 1 ? ' on' : '') + '" data-pt="1">1 Essentials</button><button type="button" class="ptab' + (st.tab === 2 ? ' on' : '') + '" data-pt="2">2 Details</button>' + (p ? '<button type="button" class="ptab' + (st.tab === 3 ? ' on' : '') + '" data-pt="3">3 Timeline</button>' : '') + '</div>';
     if (st.tab === 1) {
       var pk = askK();
       var side = pk === 'side' ? '<div class="field"><label>Side *</label>' + btns('lat', [['Left', 'Left'], ['Bilateral', 'Both'], ['Right', 'Right']]) + '</div>' :
@@ -3857,9 +3958,11 @@ function openPatient(id, opts) {
         '<div class="cr c2"><div class="field"><label for="f_proc">Procedure *</label><select id="f_proc">' + opt('', 'Choose…', !v.proc) + procs.map(function (x) { return opt(x.Id, x.Name, x.Id === v.proc); }).join('') + opt('__other', 'Other (type the name)', v.proc === '__other') + '</select></div>' + (side || '<div></div>') + '</div>' + askMore() +
         (v.proc === '__other' ? '<div class="field"><label for="f_procother">New procedure name *</label><input type="text" id="f_procother" value="' + esc(v.procother) + '"></div>' +
           '<div class="cr cflex"><div class="field"><label>Category *</label>' + btns('catF', CATS.map(function (c) { return [c, c === 'Intermediate' ? 'Inter.' : c]; })) + '</div><div class="field"><label>Care *</label>' + btns('care', [['Day-case', 'Day-case'], ['Inpatient', 'Inpatient']]) + '</div></div>' : '') +
-        '<div class="field dxrow"><label for="f_dx">Diagnosis' + (st.ex.length ? ' (procedure 1)' : '') + '</label><input type="text" id="f_dx" value="' + esc(v.dx) + '"></div>' +
+        '<div class="field dxrow"><label for="f_dx">Diagnosis' + (st.ex.length ? ' (procedure 1)' : '') + ' *</label><input type="text" id="f_dx" list="dx_dl" autocomplete="off" value="' + esc(v.dx) + '">' + (S.dxMain = v.proc, '') + '</div>' +
         exBlocksHtml(st.ex, function (q) { return q.Emergency !== 'E'; }) +
         '<div class="row" style="margin:6px 0"><button type="button" id="f_addex">+ Add procedure</button></div>';
+    } else if (st.tab === 3) {
+      h += '<div id="tl_body"><p class="muted small">Loading…</p></div>';
     } else {
       h += '<div class="field"><label>Medical status *</label>' + btns('med', [['Free', 'Medically free'], ['NotFree', 'K/C/O']]) + '</div>' +
         '<div class="cr cNA"><div class="field"><label>Category</label>' + btns('cat', CATS.map(function (c) { return [c, c === 'Intermediate' ? 'Inter.' : c]; })) + '</div>' +
@@ -3893,6 +3996,7 @@ function openPatient(id, opts) {
     $('pt_body').innerHTML = h;
     bind();
     if (p && st.tab === 2) drawActions();
+    if (p && st.tab === 3) drawTimeline(p, $('tl_body'));
   }
   function targetLine() {
     var pr = curProc(), w = pr && Number(pr.TargetDays) ? Number(pr.TargetDays) : (Number(S.d.settings['waitDays' + st.cat]) || 0);
@@ -3936,7 +4040,7 @@ function openPatient(id, opts) {
         var s = this.value.trim();
         if (/^\d{9}$/.test(s) && +s.slice(2, 4) >= 1 && +s.slice(2, 4) <= 12 && (st.autoDob || !$('f_dy').value)) {
           $('f_dy').value = '20' + s.slice(0, 2); $('f_dm').value = s.slice(2, 4); st.autoDob = true;
-          if (!$('f_dd').value || st.autoDay) { $('f_dd').value = '01'; st.autoDay = true; }   // the CPR has no day: 01 is assumed, change it if known
+          if (st.autoDay) { $('f_dd').value = ''; }   // the CPR has no day: it stays vacant and must be typed
         }
       });
       // typed date of birth: only digits, the cursor moves on when a box is full
@@ -3954,9 +4058,10 @@ function openPatient(id, opts) {
         if (st.v.proc === '__other' && window.__freeProc) { st.v.procother = window.__freeProc; window.__freeProc = ''; st.lat = ''; }
         var pr = curProc();
         if (pr) { st.appr = pr.ApproachDefault || ''; st.detail = ''; st.dyes = ''; st.v.dtext = ''; st.cat = pr.DefaultCategory || st.cat; st.v.twd = ''; st.v.tam = ''; if (!st.v.dx || st.v.dx === st.prevDx) st.v.dx = pr.DefaultDiagnosis || ''; st.prevDx = pr.DefaultDiagnosis || ''; if (askKind(pr) === 'side' && ['Left', 'Right', 'Bilateral'].indexOf(st.lat) < 0) st.lat = ''; if (askKind(pr) === 'hypo' && HYPO_TYPES.indexOf(st.lat) < 0) st.lat = ''; if (askKind(pr) === 'anaes' && ['LA', 'GA'].indexOf(st.lat) < 0) st.lat = ''; if (!askKind(pr)) st.lat = ''; if (!st.sex && maleProc(pr.Name)) st.sex = 'M'; }
+        if ($('f_dx')) $('f_dx').value = st.v.dx || ''; /* draw() captures the form first, so the default must be in the box */
         draw();
       });
-    } else {
+    } else if (st.tab === 2) {
       $('f_admitchk').addEventListener('change', function () { capture(); st.admit = this.checked; draw(); });
       if ($('f_addtag')) $('f_addtag').addEventListener('click', function () {
         capture();
@@ -3987,13 +4092,15 @@ function openPatient(id, opts) {
     if (!cpr0 && !tn0) return 'Enter the CPR or the T number (at least one).';
     if (cpr0 && !/^\d{9}$/.test(cpr0)) return 'The CPR must be 9 digits.';
     if (tn0 && !/^T\d+$/i.test(tn0)) return 'The T number must be T followed by digits.';
-    if (!getDob()) return 'Enter the full date of birth (day, month and year).';
+    if (!getDob()) return st.v.dd ? 'Enter a valid date of birth.' : 'Enter the day of birth (the CPR gives only the month and year).';
     if (!v.name.trim()) return 'Enter the patient\'s name.';
     if (st.sex !== 'M' && st.sex !== 'F') return 'Choose the sex.';
     if (!/^\d{8}$/.test(String(v.g1).replace(/[\s\-()]/g, '').replace(/^\+?(00)?973/, ''))) return 'The contact number must be 8 digits.';
     if (!v.cons) return 'Choose a consultant.';
     if (!v.proc) return 'Choose the procedure.';
     if (v.proc === '__other' && !v.procother.trim()) return 'Type the procedure name.';
+    if (!String(v.dx || '').trim()) return 'Enter the diagnosis.';
+    if ((st.ex || []).some(function (x) { return !String(x.diagnosis || '').trim(); })) return 'Enter the diagnosis of each extra procedure.';
     if (askK() === 'side' && !st.lat && !optionalProc()) return 'Choose the side.';
     if (askK() === 'hypo' && !st.lat) return 'Choose the hypospadias type.';
     if (askK() === 'anaes' && !st.lat) return 'Choose local (LA) or general (GA) anaesthesia.';
@@ -4022,7 +4129,7 @@ function openPatient(id, opts) {
     var notes = {}; st.tags.forEach(function (t) { if (st.tnotes[t]) notes[t] = st.tnotes[t]; });
     var free = st.med === 'Free';
     var o = {
-      Id: p ? p.Id : '', Name: v.name.trim(), MRN: v.mrn.trim(), TNumber: v.tn.trim().toUpperCase(), DOB: getDob(), Sex: st.sex, Guardian: v.g1, Guardian2: v.g2,
+      Id: p ? p.Id : '', Name: v.name.trim(), MRN: v.mrn.trim(), TNumber: v.tn.trim().toUpperCase(), DOB: getDob(), Sex: st.sex, dayKnown: v.dd ? 'Y' : '', Guardian: v.g1, Guardian2: v.g2,
       ConsultantId: v.cons, SeenByConsultant: st.seen, DateAdded: p ? p.DateAdded : S.today,
       ProcedureId: pr ? v.proc : '', Procedure: pr ? pr.Name : (v.proc === '__other' ? v.procother.trim() : ''),
       Laterality: needsSide() ? st.lat : '', Approach: pr && pr.Approach === 'Y' ? st.appr : '', Detail: detailValue(), Diagnosis: v.dx, Category: st.cat,
@@ -4858,7 +4965,7 @@ function procModal(pr, prefill) {
   var isNew = !pr || !!prefill; pr = pr || { DefaultCategory: 'Minor', DefaultCare: 'Day-case', Active: 'Y', WarnMonthsBefore: '3' };
   var m = openModal('<h2>' + (isNew ? 'Add procedure' : 'Edit procedure') + '</h2><div class="grid2">' +
     '<div class="field"><label for="p_name">Name</label><input type="text" id="p_name" value="' + esc(pr.Name || '') + '"></div>' +
-    '<div class="field"><label for="p_dx">Default diagnosis</label><input type="text" id="p_dx" value="' + esc(pr.DefaultDiagnosis || '') + '"></div>' +
+    '<div class="field"><label for="p_dx">Default diagnosis</label><input type="text" id="p_dx" list="dx_dl" autocomplete="off" value="' + esc(pr.DefaultDiagnosis || '') + '">' + dxDatalist(pr.Id) + '</div>' +
     '<div class="field"><label for="p_cat">Default category</label><select id="p_cat">' + CATS.map(function (s) { return opt(s, s, pr.DefaultCategory === s); }).join('') + '</select></div>' +
     '<div class="field"><label for="p_care">Usual care (price only)</label><select id="p_care">' + ['Day-case', 'Inpatient'].map(function (s) { return opt(s, s, pr.DefaultCare === s); }).join('') + '</select></div>' +
     '<div class="field"><label for="p_ask">Asks for</label><select id="p_ask">' + opt('', 'Nothing', !askKind(pr)) + opt('side', 'Side (right, left, both)', askKind(pr) === 'side') + opt('hypospadias', 'Hypospadias type', askKind(pr) === 'hypo') + opt('anaesthesia', 'Local or general (LA / GA)', askKind(pr) === 'anaes') + '</select></div>' +
@@ -4965,7 +5072,16 @@ function drawWarnPanel(el) {
   el.innerHTML = '<h3>Warnings</h3><p class="muted small">Wait targets by category apply when a procedure has no wait target of its own. A patient can also have their own targets.</p>' +
     '<div class="setgt">Wait targets</div><div class="grid3">' + f('t_min', 'waitDaysMinor', 'Minor', 'days') + f('t_int', 'waitDaysIntermediate', 'Intermediate', 'days') + f('t_maj', 'waitDaysMajor', 'Major', 'days') + '</div>' +
     '<div class="setgt">Reminders</div><div class="grid3">' + f('t_nc', 'noContactDays', 'No contact for', 'days') + f('t_tg', 'targetWarnDays', 'Warn before the wait target', 'days') + f('t_14', 'warn14Months', 'Notice before age 14', 'months') + '</div>' +
+    '<div class="setgt">Turn warnings off for everyone</div><p class="muted small">A warning that is off is hidden everywhere: no tag, no tab, not counted, not in exports. The wait stops turning red too.</p>' +
+    '<div class="field">' + sw('id="w_waitoff"', S.d.settings.warnWaitOff !== 'Y', 'Wait target passed') + '</div>' +
+    '<div class="field">' + sw('id="w_contactoff"', S.d.settings.warnContactOff !== 'Y', 'Not called in a long time and unanswered calls') + '</div>' +
     '<div class="row" style="margin-top:8px"><button class="primary" id="t_save">Save</button><button id="t_reset">Reset to defaults</button></div>';
+  ['w_waitoff', 'w_contactoff'].forEach(function (id) {
+    $(id).addEventListener('change', function () {
+      var pl = {}; pl[id === 'w_waitoff' ? 'warnWaitOff' : 'warnContactOff'] = this.checked ? '' : 'Y';
+      call('saveSettings', pl).then(function (s) { S.d.settings = s; render(); toast(pl.warnWaitOff === 'Y' || pl.warnContactOff === 'Y' ? 'Warning turned off' : 'Warning turned on'); }).catch(function (e) { fail(e); drawSetPanel(); });
+    });
+  });
   $('t_save').addEventListener('click', function () {
     call('saveSettings', { waitDaysMinor: val('t_min'), waitDaysIntermediate: val('t_int'), waitDaysMajor: val('t_maj'), noContactDays: val('t_nc'), targetWarnDays: val('t_tg'), warn14Months: val('t_14') }).then(function (s) { S.d.settings = s; toast('Saved'); }).catch(fail);
   });
@@ -5033,7 +5149,8 @@ function xlsIssues(p) {
   if (!p || p.Imported !== 'Y') return [];
   var o = [], active = p.Status === 'Ready' || p.Status === 'Awaiting clearance' || p.Status === 'Not ready';
   if (!p.Sex) o.push('Sex not set');
-  if (p.DobFlag === 'day') o.push('Day of birth not confirmed (taken from the CPR)');
+  if (p.DobFlag === 'day') o.push('Day of birth missing');
+  if (!String(p.Diagnosis || '').trim() || extras(p).some(function (x) { return !String(x.diagnosis || '').trim(); })) o.push('Diagnosis missing');
   if (p.DobFlag === 'est') o.push('Date of birth estimated from the age');
   if (!p.Guardian && p.Status !== 'Removed') o.push('No contact number');
   if (!/^\d{9}$/.test(p.MRN || '')) o.push('Only a T number (no CPR yet)');
@@ -5597,6 +5714,8 @@ openImport = function (mode) {
   function step1(msg) {
     $('im_body').innerHTML = '<div class="spread"><h2>Import from Excel</h2><button id="im_close">Close</button></div>' +
       (canFile ? '<div class="tags" style="margin-bottom:8px"><button type="button" class="opt' + (st.source === 'file' ? ' on' : '') + '" data-src="file">Excel file</button><button type="button" class="opt' + (st.source === 'paste' ? ' on' : '') + '" data-src="paste">Paste cells</button></div>' : '') +
+      '<div class="field"><label>What should the import do?</label><div class="tags jn"><button type="button" class="opt' + (st.mode !== 'procOnly' ? ' on' : '') + '" data-mode="">Add and fill missing data</button><button type="button" class="opt' + (st.mode === 'procOnly' ? ' on' : '') + '" data-mode="procOnly">Update procedures only</button></div>' +
+        (st.mode === 'procOnly' ? '<p class="muted small" style="margin:6px 0 0">Only the procedure (side or type, LA / GA, approach, detail, extra procedures) of cases already in the app is brought in line with the sheet. Nothing else is changed. A row with no case in the app is added as a new case only if that CPR / T number has no entry in any list. Old-name and new-name pairs for the same operation are merged. You see a preview first.</p>' : '') + '</div>' +
       '<div class="field"><label for="im_cons">Consultant when the row has no initials</label><select id="im_cons">' + opt('', 'Choose…', !st.cons) + cons.map(function (c) { return opt(c.Id, c.Name + ' (' + c.Initials + ')', c.Id === st.cons); }).join('') + '</select></div>' +
       (st.source === 'file' ? '<div class="field"><label for="im_file">Choose the Excel file (.xlsx). Sheets named waiting list, done or removed are recognised.</label><input type="file" id="im_file" accept=".xlsx,.csv,.txt,.tsv"></div>' :
         '<div class="field"><label>These cells are</label><div class="tags">' + KINDS.map(function (k) { return '<button type="button" class="opt' + ((st.pkind || 'waiting') === k[0] ? ' on' : '') + '" data-pk="' + k[0] + '">' + k[1] + ' patients</button>'; }).join('') + '</div></div>' +
@@ -5606,6 +5725,7 @@ openImport = function (mode) {
     $('im_close').addEventListener('click', m.close);
     $('im_cons').addEventListener('change', function () { st.cons = this.value; });
     on(m.el, '[data-src]', 'click', function (e) { st.source = e.currentTarget.getAttribute('data-src'); step1(); });
+    on(m.el, '[data-mode]', 'click', function (e) { st.mode = e.currentTarget.getAttribute('data-mode'); step1(); });
     on(m.el, '[data-pk]', 'click', function (e) { st.pkind = e.currentTarget.getAttribute('data-pk'); var bs = m.el.querySelectorAll('[data-pk]'); for (var i = 0; i < bs.length; i++) bs[i].classList.toggle('on', bs[i] === e.currentTarget); });
     if ($('im_file')) $('im_file').addEventListener('change', function () {
       var f = this.files[0]; if (!f) return;
@@ -5631,7 +5751,7 @@ openImport = function (mode) {
     st.procMap = {}; st.consMap = {}; st.apply = {}; st.fix = {}; st.cur = 0; st.filter = ''; step2();
   }
   function callChunk(sh, part, dry) {
-    return call('importCases', { dry: dry, source: st.source, sheet: sh.name, batch: sh.kind, consultantId: st.cons, consMap: st.consMap, procMap: st.procMap, rows: part });
+    return call('importCases', { dry: dry, source: st.source, sheet: sh.name, batch: sh.kind, mode: st.mode || '', consultantId: st.cons, consMap: st.consMap, procMap: st.procMap, rows: part });
   }
   function checkSheet(sh) {
     var parts = impChunks(dataRows(sh), st.source === 'paste' ? 100 : 150), res = { items: [], counts: { new: 0, update: 0, unchanged: 0, problem: 0 }, unmatched: {}, unmatchedCons: {} }, i = 0;
@@ -5904,7 +6024,7 @@ function dlgEmergency() {
       '<div class="cr c2"><div class="field"><label for="f_proc">Procedure *</label><select id="f_proc">' + opt('', 'Choose…', !v.proc) + procs.map(function (x) { return opt(x.Id, x.Name, x.Id === v.proc); }).join('') + '</select></div>' + (side || '<div></div>') + '</div>' +
       askMoreHtml(pr, st, btns) +
       (st.appr === 'Laparoscopic' && pr && pr.Approach === 'Y' ? '<label class="check" style="display:block;margin:6px 0"><input type="checkbox" id="e_conv"' + (st.conv ? ' checked' : '') + '> Converted to open</label>' : '') +
-      '<div class="field dxrow"><label for="e_dx">Diagnosis' + (st.ex.length ? ' (procedure 1)' : '') + '</label><input type="text" id="e_dx" value="' + esc(v.dx) + '"></div>' +
+      '<div class="field dxrow"><label for="e_dx">Diagnosis' + (st.ex.length ? ' (procedure 1)' : '') + ' *</label><input type="text" id="e_dx" list="dx_dl" autocomplete="off" value="' + esc(v.dx) + '">' + (S.dxMain = v.proc, '') + '</div>' +
       exBlocksHtml(st.ex, isEmergencyProc) +
       '<div class="row" style="margin:4px 0"><button type="button" id="e_addex">+ Add procedure</button></div>' +
       '<datalist id="e_pool">' + pool.map(function (n) { return '<option value="' + esc(n) + '">'; }).join('') + '</datalist>' +
@@ -5932,6 +6052,7 @@ function dlgEmergency() {
       var q = curProc();
       st.lat = ''; st.detail = ''; st.dyes = ''; st.v.dtext = ''; st.appr = q ? (q.ApproachDefault || '') : ''; st.conv = false;
       if (q && !st.v.dx) st.v.dx = q.DefaultDiagnosis || '';
+      if ($('e_dx')) $('e_dx').value = st.v.dx || '';
       draw();
     });
     [['e_dd', 2, 'e_dm'], ['e_dm', 2, 'e_dy'], ['e_dy', 4, '']].forEach(function (x) {
@@ -5965,6 +6086,8 @@ function dlgEmergency() {
     if (!v.date || v.date > S.today) return 'The operation date cannot be in the future.';
     if (!st.cons) return 'Choose the consultant.';
     if (!pr) return 'Choose the procedure.';
+    if (!String(v.dx || '').trim()) return 'Enter the diagnosis.';
+    if (st.ex.some(function (x) { return !String(x.diagnosis || '').trim(); })) return 'Enter the diagnosis of each extra procedure.';
     if (askKind(pr) === 'side' && !st.lat && !optionalProc()) return 'Choose the side.';
     if (pr.Approach === 'Y' && !st.appr) return 'Choose open or laparoscopic.';
     if (pr.DetailKind && !optionalProc() && !detailValue()) return 'Fill in: ' + (pr.DetailLabel || 'details') + '.';
@@ -6052,6 +6175,872 @@ drawAccountPanel = function (el) {
     }).catch(function (e) { if ($('dv_list')) $('dv_list').innerHTML = '<p class="small" style="color:var(--red)">' + esc(e.message || String(e)) + '</p>'; });
   }
   drawDevices();
+};
+
+// ======== v0.15.0 stage 1: waiting list (compact / comfortable), one action button, priority flag, warnings button
+ICON.flag = '<path d="M5 21V4M5 4h11l-2 4 2 4H5"/>';
+function densMode() {
+  var v = ''; try { v = localStorage.getItem('psw_dens') || ''; } catch (e) { /* ignore */ }
+  return v === 'comfortable' ? 'comfortable' : 'compact';
+}
+function setDens(v) { try { localStorage.setItem('psw_dens', v); } catch (e) { /* ignore */ } }
+function discardedOf(p) {
+  var o; try { o = JSON.parse(p.Discarded || '{}'); } catch (e) { o = {}; }
+  if (!o || typeof o !== 'object') return {};
+  var out = {};
+  Object.keys(o).forEach(function (k) { var v = o[k]; if (v && v.until && v.until < S.today) return; out[k] = v; });
+  return out;
+}
+function prioClass(p) { return p.Priority === 'Clinical' ? 'pf-c' : p.Priority === 'Social' ? 'pf-s' : p.Priority === 'Age-sensitive' ? 'pf-a' : 'pf-o'; }
+function prioFlag(p) {
+  if (!p.Priority) return '';
+  return '<button type="button" class="pflag ' + prioClass(p) + '" data-flag="prio" data-id="' + esc(p.Id) + '" title="' + esc('Priority: ' + p.Priority + (p.PriorityReason ? ' – ' + p.PriorityReason : '')) + '" aria-label="Priority ' + esc(p.Priority) + '">' + ico('flag') + '</button>';
+}
+function rowWarnings(p) { return warnings(p).filter(function (w) { return w.kind !== 'wait' && w.kind !== 'med'; }); }
+function warnBtn(p) {
+  var ws = rowWarnings(p);
+  if (!ws.length) return '<span class="wph"></span>';
+  var hi = ws.some(function (w) { return w.sev === 'high'; });
+  return '<button type="button" class="wbtn ' + (hi ? 'red' : 'amber') + '" data-warn="' + esc(p.Id) + '" title="' + esc(ws.map(function (w) { return w.text; }).join('; ')) + '" aria-label="' + ws.length + ' warnings">! ' + ws.length + '</button>';
+}
+function firstReq(p) { var cl = clearances(p), i; for (i = 0; i < cl.length; i++) if (cl[i].state === 'Requested') return i; return 0; }
+/** the one action button of a row: always the same size and place */
+function actionBtn(p) {
+  if (!isActive(p)) return '<span class="aph"></span>';
+  if (p.ListId) return '<span class="abtn bk" title="' + esc(sendWhy(p)) + '">' + esc(fmtDate(p.ScheduledDate)) + '</span>';
+  if (p.Status === 'Ready' && medOf(p) === 'Unknown') return '<button type="button" class="abtn medb" data-med="' + esc(p.Id) + '">Medical status</button>';
+  if (canSend(p)) return '<button type="button" class="abtn primary" data-send="' + esc(p.Id) + '">Schedule</button>';
+  if (p.Status === 'Not ready') return '<button type="button" class="abtn" data-nr="' + esc(p.Id) + '">Mark ready</button>';
+  if (p.Status === 'Awaiting clearance') return '<button type="button" class="abtn" data-clr="' + firstReq(p) + '" data-id="' + esc(p.Id) + '">Clearance</button>';
+  return '<span class="aph"></span>';
+}
+/** short status text for the compact rows and the phone chip */
+function stShort(p) {
+  var si = statusInfo(p);
+  if (p.Status === 'Awaiting clearance') {
+    var cl = clearances(p), req = cl.filter(function (c) { return c.state === 'Requested'; });
+    return { cls: 'blue', t: 'Awaiting', d: req.length ? req[0].spec.replace(/logy$/i, '') + (req.length > 1 ? ' +' + (req.length - 1) : '') : '' };
+  }
+  if (p.Status === 'Not ready') return { cls: '', t: 'Not ready', d: fmtDate(p.NotReadyUntil) };
+  if (si.booked || p.ListId) return { cls: 'stbook', t: 'Booked', d: '' };
+  return { cls: si.cls, t: si.label, d: '' };
+}
+function stChip(p, withDetail) {
+  var s = stShort(p);
+  var inner = esc(s.t) + (withDetail && s.d ? ' · ' + esc(s.d) : '');
+  if (p.Status === 'Not ready') return '<button type="button" class="chip tagbtn mk" data-nr="' + esc(p.Id) + '" title="Tap to change">' + inner + '</button>';
+  if (p.Status === 'Awaiting clearance') return '<button type="button" class="chip blue tagbtn mk" data-clr="' + firstReq(p) + '" data-id="' + esc(p.Id) + '" title="Tap to change">' + inner + '</button>';
+  return '<span class="chip mk ' + s.cls + '">' + inner + '</span>';
+}
+function catShort(p) { return p.Category ? p.Category.slice(0, 3) : ''; }
+function callIcoBtn(p) {
+  if (!p.Guardian && !p.Guardian2) return '<span class="cph"></span>';
+  return '<button type="button" class="phbtn cbtn" data-call="' + esc(p.Id) + '" title="Call" aria-label="Call">' + ico('phone') + '</button>';
+}
+function tagsShort(p) {
+  var t = tagsOf(p); if (!t.length) return '';
+  return t.slice(0, 2).map(function (x) { return '<span class="chip small">' + esc(x) + '</span>'; }).join('') + (t.length > 2 ? '<span class="chip small" title="' + esc(t.slice(2).join(', ')) + '">+' + (t.length - 2) + '</span>' : '');
+}
+function waitHtml(p) { return '<span class="wt' + (waitOver(p) ? ' over' : '') + '">' + esc(waitText(p)) + '</span>'; }
+
+function patientRowsHtml(list) {
+  if (!list.length) return '<p class="muted">No patients match.</p>';
+  var f = S.f, all = S.cons === 'all', dens = densMode();
+  if (useTable() && dens === 'compact') {
+    var sorted = function (k) { return S.sort === k; };
+    return '<div class="xwrap"><table class="tbl wl xl"><thead><tr><th class="n">#</th><th>Patient</th><th>CPR / MRN</th>' + (all ? '<th>Cons</th>' : '') +
+      thf('age', 'Age', f.age || f.ageFrom !== '' || f.ageTo !== '' || sorted('age')) +
+      thf('procedure', 'Procedure', f.proc || sorted('procedure')) + thf('category', 'Cat', f.cat || sorted('category')) +
+      thf('status', 'Status', f.chip) + thf('wait', 'Wait', f.wait || sorted('wait')) + '<th>Flags</th><th></th><th></th></tr></thead><tbody>' +
+      list.map(function (p, i) {
+        return '<tr class="click" data-id="' + esc(p.Id) + '"><td class="n">' + (i + 1) + '</td>' +
+          '<td class="nm">' + (p.Starred ? '<span class="star">★</span>' : '') + esc(p.Name) + xlsChip(p) + '</td>' +
+          '<td class="id">' + esc(idShow(p)) + '</td>' + (all ? '<td>' + iniChip(p.ConsultantId) + '</td>' : '') +
+          '<td class="ag">' + esc(ageText(p.DOB)) + prioFlag(p) + '</td>' +
+          '<td class="pr" title="' + esc(procLabel(p)) + '">' + esc(procLabel(p)) + '</td><td>' + esc(catShort(p)) + '</td>' +
+          '<td>' + stChip(p, true) + '</td><td>' + waitHtml(p) + '</td><td class="fl">' + warnBtn(p) + '</td>' +
+          '<td class="cc">' + callIcoBtn(p) + '</td><td class="ac">' + actionBtn(p) + '</td></tr>';
+      }).join('') + '</tbody></table></div>';
+  }
+  if (useTable()) {
+    var so = function (k) { return S.sort === k; };
+    return '<table class="tbl wl"><thead><tr><th>Patient</th>' +
+      thf('age', 'Age', f.age || f.ageFrom !== '' || f.ageTo !== '' || so('age')) +
+      thf('procedure', 'Procedure', f.proc || f.cat || so('procedure') || so('category')) +
+      thf('status', 'Status', f.chip) + thf('wait', 'Wait', f.wait || so('wait')) + '<th>Flags</th><th></th></tr></thead><tbody>' +
+      list.map(function (p) {
+        return '<tr class="click" data-id="' + esc(p.Id) + '">' +
+          '<td>' + (p.Starred ? '<span class="chip amber">★</span>' : '') + '<strong>' + esc(p.Name) + '</strong><br><span class="muted small">' + esc(idShow(p)) + '</span>' + xlsChip(p) + (all ? ' ' + iniChip(p.ConsultantId) : '') + '</td>' +
+          '<td>' + ageCell(p) + prioFlag(p) + '</td><td>' + procCell(p) + '</td><td>' + statusHtml(p) + '</td>' +
+          '<td class="' + (waitOver(p) ? 'wred' : '') + '">' + esc(waitText(p)) + (addedLine(p) ? '<div class="muted small addedln">' + esc(addedLine(p)) + '</div>' : '') + '</td>' +
+          '<td>' + warnBtn(p) + tagsShort(p) + '</td>' +
+          '<td class="acts"><div class="actw">' + (contactBtn(p) || '<span class="phsp"></span>') + actionBtn(p) + '</div></td></tr>';
+      }).join('') + '</tbody></table>';
+  }
+  return '<div class="cards wlc ' + dens + '">' + list.map(function (p) { return dens === 'compact' ? pcRow2(p, all) : pcRow3(p, all); }).join('') + '</div>';
+}
+function pcRow3(p, all) {
+  return '<div class="card pc3" data-id="' + esc(p.Id) + '">' +
+    '<div class="a1"><span class="nm">' + (p.Starred ? '★ ' : '') + esc(p.Name) + '</span><span class="ag">· ' + esc(ageText(p.DOB)) + '</span>' + prioFlag(p) +
+    '<span class="wr' + (waitOver(p) ? ' over' : '') + '">' + ico('hourglass') + esc(waitText(p)) + '</span></div>' +
+    '<div class="a2"><span class="pr">' + esc(procLabel(p)) + '</span>' + stChip(p, true) + '</div>' +
+    '<div class="a3"><span class="mt">' + (all ? iniChip(p.ConsultantId) + ' ' : '') + esc(idShow(p)) + xlsChip(p) + ' · ' + esc(p.Category || '') + '</span>' + warnBtn(p) + callIcoBtn(p) + actionBtn(p) + '</div></div>';
+}
+function pcRow2(p, all) {
+  return '<div class="card pc2" data-id="' + esc(p.Id) + '">' +
+    '<div class="a1"><span class="nm">' + (p.Starred ? '★ ' : '') + esc(p.Name) + '</span><span class="ag">· ' + esc(ageText(p.DOB)) + '</span>' + prioFlag(p) +
+    '<span class="wr' + (waitOver(p) ? ' over' : '') + '">' + esc(waitText(p)) + '</span></div>' +
+    '<div class="a2"><span class="pr">' + (all ? iniChip(p.ConsultantId) + ' ' : '') + esc(procLabel(p)) + '</span>' + stChip(p, false) + warnBtn(p) + actionBtn(p) + '</div></div>';
+}
+function dlgWarnSheet(p) {
+  if (!p) return;
+  var ws = rowWarnings(p);
+  var m = openModal('<div class="spread"><h2>Warnings</h2><button id="ws_x">Close</button></div><p class="muted small">' + esc(p.Name) + ' · ' + esc(idShow(p)) + '</p>' +
+    (ws.length ? ws.map(function (w, i) {
+      return '<div class="wsrow ' + (w.sev === 'high' ? 'red' : 'amber') + '"><div class="wst">' + esc(w.text) + '</div><div class="row"><button type="button" class="primary" data-wa="' + i + '">' + esc(WARN_ACTION[w.kind] || 'Open') + '</button><button type="button" data-sn="' + i + '">Snooze</button><button type="button" data-di="' + i + '">Discard</button></div></div>';
+    }).join('') : '<p class="muted">No warnings.</p>'), { narrow: true });
+  $('ws_x').addEventListener('click', m.close);
+  function discard(w, until) {
+    call('discardWarning', { patientId: p.Id, kind: w.kind, until: until || '' }).then(function (r) { upsertP(r); m.close(); render(); toast(until ? 'Snoozed' : 'Warning discarded'); }).catch(fail);
+  }
+  function plus(d) { var t = new Date(S.today + 'T00:00:00'); t.setDate(t.getDate() + d); var pad = function (n) { return (n < 10 ? '0' : '') + n; }; return t.getFullYear() + '-' + pad(t.getMonth() + 1) + '-' + pad(t.getDate()); }
+  on(m.el, '[data-wa]', 'click', function (e) { var w = ws[+e.currentTarget.getAttribute('data-wa')]; m.close(); flagAction(p, w.kind); });
+  on(m.el, '[data-di]', 'click', function (e) { discard(ws[+e.currentTarget.getAttribute('data-di')]); });
+  on(m.el, '[data-sn]', 'click', function (e) {
+    var w = ws[+e.currentTarget.getAttribute('data-sn')];
+    pickMenu('Snooze until', [{ label: '1 week', fn: function () { discard(w, plus(7)); } }, { label: '2 weeks', fn: function () { discard(w, plus(14)); } }, { label: '1 month', fn: function () { discard(w, plus(30)); } }, { label: '3 months', fn: function () { discard(w, plus(90)); } }]);
+  });
+}
+function bindRows(root) {
+  on(root, '[data-send]', 'click', function (e) { e.stopPropagation(); dlgSendToList(getP(e.currentTarget.getAttribute('data-send'))); });
+  on(root, '[data-med]', 'click', function (e) { e.stopPropagation(); dlgMedical(getP(e.currentTarget.getAttribute('data-med'))); });
+  on(root, '[data-warn]', 'click', function (e) { e.stopPropagation(); dlgWarnSheet(getP(e.currentTarget.getAttribute('data-warn'))); });
+  on(root, '[data-call]', 'click', function (e) { e.stopPropagation(); dlgCall(getP(e.currentTarget.getAttribute('data-call'))); });
+  on(root, '[data-flag]', 'click', function (e) { e.stopPropagation(); flagAction(getP(e.currentTarget.getAttribute('data-id')), e.currentTarget.getAttribute('data-flag')); });
+  on(root, '[data-clr]', 'click', function (e) { e.stopPropagation(); dlgClearQuick(getP(e.currentTarget.getAttribute('data-id')), +e.currentTarget.getAttribute('data-clr')); });
+  on(root, '[data-nr]', 'click', function (e) { e.stopPropagation(); dlgNotReadyQuick(getP(e.currentTarget.getAttribute('data-nr'))); });
+  on(root, '[data-id]', 'click', function (e) {
+    if (e.target.closest && e.target.closest('button')) return;
+    openPatient(e.currentTarget.getAttribute('data-id'));
+  });
+}
+
+// ======== v0.15.0 stage 2: diagnoses, comorbidities, search in lists, warning switches, what's new
+function dxList() { try { var a = JSON.parse((S.d && S.d.settings && S.d.settings.diagnoses) || '[]'); return Array.isArray(a) ? a : []; } catch (e) { return []; } }
+function dxActiveNames(procId) {
+  var l = dxList().filter(function (d) { return d.active !== 'N'; });
+  var linked = l.filter(function (d) { return procId && (d.procs || []).indexOf(procId) >= 0; }), rest = l.filter(function (d) { return linked.indexOf(d) < 0; });
+  var by = function (a, b) { return a.name.localeCompare(b.name); };
+  return linked.sort(by).concat(rest.sort(by)).map(function (d) { return d.name; });
+}
+/** suggestions for a diagnosis box: the ones linked to the procedure come first */
+function dxDatalist(procId) { return '<datalist id="dx_dl">' + dxActiveNames(procId).map(function (n) { return '<option value="' + esc(n) + '"></option>'; }).join('') + '</datalist>'; }
+function exBlocksHtml(ex, only) {
+  var act = S.d.procedures.filter(function (q) { return q.Active === 'Y' && (!only || only(q)); }).sort(byName);
+  return '<div id="f_ex"><datalist id="ex_dl">' + act.map(function (q) { return '<option value="' + esc(q.Name) + '"></option>'; }).join('') + '</datalist>' + dxDatalist(S.dxMain) + ex.map(function (x, i) { return exRowHtml(x, i, only); }).join('') + '</div>';
+}
+function ignoredOf(key) { try { var a = JSON.parse((S.d.settings && S.d.settings[key]) || '[]'); return Array.isArray(a) ? a : []; } catch (e) { return []; } }
+function unlistedDx() {
+  var known = {}, ign = ignoredOf('ignoredDx'), g = {};
+  dxList().forEach(function (d) { known[d.name.toLowerCase()] = 1; });
+  function add(name, p, pid) {
+    name = String(name || '').trim(); if (!name) return;
+    var k = name.toLowerCase(); if (known[k] || ign.indexOf(k) >= 0) return;
+    var o = g[k] = g[k] || { name: name, n: 0, wait: 0, done: 0, rem: 0, procs: {} };
+    o.n++; if (p.Status === 'Done') o.done++; else if (p.Status === 'Removed') o.rem++; else o.wait++;
+    if (pid) o.procs[pid] = (o.procs[pid] || 0) + 1;
+  }
+  S.d.patients.forEach(function (p) { add(p.Diagnosis, p, p.ProcedureId); extras(p).forEach(function (x) { add(x.diagnosis, p, x.procedureId); }); });
+  return Object.keys(g).map(function (k) { return g[k]; }).sort(function (a, b) { return b.n - a.n || a.name.localeCompare(b.name); });
+}
+function comorbList() { try { var a = JSON.parse((S.d && S.d.settings && S.d.settings.comorbidities) || ''); return Array.isArray(a) ? a : null; } catch (e) { return null; } }
+function unlistedTags() {
+  var l = comorbList() || [], known = { other: 1 }, ign = ignoredOf('ignoredTags'), g = {};
+  l.forEach(function (d) { known[d.name.toLowerCase()] = 1; });
+  S.d.patients.forEach(function (p) {
+    var names = tagsOf(p).concat(String(p.TagsOther || '').split(/\s*,\s*/).filter(Boolean));
+    names.forEach(function (name) {
+      var k = name.toLowerCase(); if (known[k] || ign.indexOf(k) >= 0) return;
+      var o = g[k] = g[k] || { name: name, n: 0, wait: 0, done: 0, rem: 0 };
+      o.n++; if (p.Status === 'Done') o.done++; else if (p.Status === 'Removed') o.rem++; else o.wait++;
+    });
+  });
+  return Object.keys(g).map(function (k) { return g[k]; }).sort(function (a, b) { return b.n - a.n || a.name.localeCompare(b.name); });
+}
+function tagSpec(t) {
+  var l = comorbList();
+  if (l) { for (var i = 0; i < l.length; i++) if (l[i].name === t) return l[i].spec || ''; return TAG_SPEC_DEFAULT[t] || ''; }
+  var links = {};
+  try { links = JSON.parse((S.d && S.d.settings && S.d.settings.tagLinks) || '{}') || {}; } catch (e) { links = {}; }
+  if (Object.prototype.hasOwnProperty.call(links, t)) return links[t];
+  return TAG_SPEC_DEFAULT[t] || '';
+}
+function allTagList(p) {
+  var l = comorbList(), out;
+  if (l) out = l.filter(function (d) { return d.active !== 'N'; }).map(function (d) { return d.name; }).sort(function (a, b) { return a.localeCompare(b); }).concat(['Other']);
+  else {
+    var hidden = [], custom = [];
+    try { hidden = JSON.parse(S.d.settings.hiddenTags || '[]'); } catch (e) { hidden = []; }
+    try { custom = JSON.parse(S.d.settings.customTags || '[]'); } catch (e2) { custom = []; }
+    out = TAGS.filter(function (t) { return hidden.indexOf(t) < 0; }).concat(custom.filter(function (t) { return TAGS.indexOf(t) < 0; }));
+  }
+  (p ? tagsOf(p) : []).forEach(function (t) { if (out.indexOf(t) < 0) out.push(t); });
+  return out;
+}
+function setLbl(t) {
+  if (S.d && t[0] === 'procedures') { var n = unlistedProcs().length; if (n) return t[1] + ' (' + n + ' new)'; }
+  if (S.d && t[0] === 'diagnoses') { var n2 = unlistedDx().length; if (n2) return t[1] + ' (' + n2 + ' new)'; }
+  if (S.d && t[0] === 'comorb') { var n3 = unlistedTags().length; if (n3) return t[1] + ' (' + n3 + ' new)'; }
+  return t[1];
+}
+function listSearchHtml(id, ph) { return '<input type="search" id="' + id + '" class="lsearch" placeholder="' + esc(ph) + '" autocomplete="off" value="' + esc(S[id] || '') + '">'; }
+function unlHtml(title, none, l, cols) {
+  if (!l.length) return '<div class="unl"><strong>' + esc(title) + '</strong><p class="muted small" style="margin:4px 0 0">' + esc(none) + '</p></div>';
+  return '<div class="unl"><strong>' + esc(title) + ' (' + l.length + ')</strong><table class="tbl"><thead><tr><th>Name</th><th>Waiting</th><th>Done</th><th>Removed</th><th></th></tr></thead><tbody>' +
+    l.map(function (u, i) { return '<tr><td>' + esc(u.name) + '</td><td>' + u.wait + '</td><td>' + u.done + '</td><td>' + u.rem + '</td><td style="white-space:nowrap"><button data-ul-add="' + i + '">Add to list</button> <button data-ul-same="' + i + '">Same as…</button> <button data-ul-ign="' + i + '">Ignore</button></td></tr>'; }).join('') + '</tbody></table></div>';
+}
+// ---- Diagnoses panel
+function drawDiagPanel(el) {
+  el.innerHTML = '<div class="spread"><h3>Diagnoses</h3><button id="dg_add">Add diagnosis</button></div><p class="muted small">The list behind the diagnosis boxes. A diagnosis linked to a procedure is suggested first for that procedure.</p>' + listSearchHtml('dgq', 'Search diagnoses or procedures') + '<div id="dg_body"></div>';
+  $('dgq').addEventListener('input', function () { S.dgq = this.value; drawDiagBody(); });
+  $('dg_add').addEventListener('click', function () { dxModal(null); });
+  drawDiagBody();
+}
+function dxProcNames(d) { return (d.procs || []).map(function (id) { var p = procById(id); return p ? p.Name : ''; }).filter(Boolean); }
+function drawDiagBody() {
+  var q = String(S.dgq || '').trim().toLowerCase(), unl = unlistedDx();
+  var l = dxList().slice().sort(function (a, b) { return a.name.localeCompare(b.name); }).filter(function (d) { return !q || d.name.toLowerCase().indexOf(q) >= 0 || dxProcNames(d).some(function (n) { return n.toLowerCase().indexOf(q) >= 0; }); });
+  var box = $('dg_body');
+  box.innerHTML = unlHtml('Unlisted diagnoses', 'None. Diagnoses typed as free text will show here.', unl) +
+    '<table class="tbl dgt"><thead><tr><th>Diagnosis</th><th>Linked procedures</th><th>Active</th><th></th></tr></thead><tbody>' + l.map(function (d) {
+      var pn = dxProcNames(d);
+      return '<tr' + (d.active === 'N' ? ' class="procgrey"' : '') + '><td>' + esc(d.name) + '</td><td class="small">' + esc(pn.slice(0, 3).join(', ')) + (pn.length > 3 ? ' +' + (pn.length - 3) : '') + '</td><td>' + sw('data-dact="' + esc(d.name) + '"', d.active !== 'N') + '</td><td style="white-space:nowrap"><button data-de="' + esc(d.name) + '">Edit</button> <button data-dd="' + esc(d.name) + '" class="danger">Delete</button></td></tr>';
+    }).join('') + '</tbody></table>' + (l.length ? '' : '<p class="muted">No diagnosis matches.</p>');
+  on(box, '[data-de]', 'click', function (e) { dxModal(dxFind(e.currentTarget.getAttribute('data-de'))); });
+  on(box, '[data-dd]', 'click', function (e) { dlgDeleteDx(dxFind(e.currentTarget.getAttribute('data-dd'))); });
+  on(box, '[data-dact]', 'change', function (e) { var d = dxFind(e.currentTarget.getAttribute('data-dact')); saveDx(dxList().map(function (x) { return x === d || x.name === d.name ? { name: x.name, procs: x.procs, active: e.currentTarget.checked ? 'Y' : 'N' } : x; }), {}); });
+  on(box, '[data-ul-add]', 'click', function (e) {
+    var u = unl[+e.currentTarget.getAttribute('data-ul-add')]; if (!u) return;
+    var best = Object.keys(u.procs).sort(function (a, b) { return u.procs[b] - u.procs[a]; })[0];
+    dxModal({ name: u.name, procs: best ? [best] : [], active: 'Y', isNew: true });
+  });
+  on(box, '[data-ul-same]', 'click', function (e) {
+    var u = unl[+e.currentTarget.getAttribute('data-ul-same')]; if (!u) return;
+    pickMenu('Same as…', dxList().filter(function (d) { return d.active !== 'N'; }).sort(function (a, b) { return a.name.localeCompare(b.name); }).map(function (d) { return { label: d.name, fn: function () { sameDx(u.name, d.name); } }; }));
+  });
+  on(box, '[data-ul-ign]', 'click', function (e) {
+    var u = unl[+e.currentTarget.getAttribute('data-ul-ign')]; if (!u) return;
+    var cur = ignoredOf('ignoredDx'); cur.push(u.name.toLowerCase());
+    call('saveSettings', { ignoredDx: JSON.stringify(cur) }).then(function (r) { S.d.settings = r; drawSetPanel(); toast('Ignored'); }).catch(fail);
+  });
+}
+function dxFind(name) { var l = dxList(); for (var i = 0; i < l.length; i++) if (l[i].name === name) return l[i]; return null; }
+function saveDx(list, renames, m) {
+  call('saveDiagnoses', { list: list, renames: renames || {} }).then(function (r) {
+    S.d.settings = r.settings; S.d.procedures = r.procedures;
+    var map = {}; Object.keys(renames || {}).forEach(function (o) { map[o.toLowerCase()] = renames[o]; });
+    if (Object.keys(map).length) S.d.patients.forEach(function (p) {
+      if (map[String(p.Diagnosis || '').toLowerCase()]) p.Diagnosis = map[String(p.Diagnosis).toLowerCase()];
+      var ex = extras(p), ch = false; ex.forEach(function (x) { var k = String(x.diagnosis || '').toLowerCase(); if (map[k]) { x.diagnosis = map[k]; ch = true; } }); if (ch) p.Extra = JSON.stringify(ex);
+    });
+    if (m) m.close(); drawSetPanel(); toast('Saved');
+  }).catch(function (e) { drawSetPanel(); fail(e); });
+}
+function sameDx(from, to) {
+  call('sameDiagnosis', { from: from, to: to }).then(function (r) {
+    var k = from.toLowerCase();
+    S.d.patients.forEach(function (p) {
+      if (String(p.Diagnosis || '').toLowerCase() === k) p.Diagnosis = to;
+      var ex = extras(p), ch = false; ex.forEach(function (x) { if (String(x.diagnosis || '').toLowerCase() === k) { x.diagnosis = to; ch = true; } }); if (ch) p.Extra = JSON.stringify(ex);
+    });
+    drawSetPanel(); toast(r.changed + ' case' + (r.changed === 1 ? '' : 's') + ' now use "' + to + '"');
+  }).catch(fail);
+}
+function dxModal(d) {
+  var isNew = !d || d.isNew, cur = d || { name: '', procs: [], active: 'Y' }, orig = isNew ? '' : cur.name;
+  var sel = (cur.procs || []).slice();
+  var procs = S.d.procedures.slice().sort(byName);
+  var m = openModal('<h2>' + (isNew ? 'Add diagnosis' : 'Edit diagnosis') + '</h2><div class="field"><label for="dx_name">Diagnosis</label><input type="text" id="dx_name" value="' + esc(cur.name) + '"></div>' +
+    '<div class="field"><label>Linked procedures</label><input type="search" id="dx_pq" placeholder="Search procedures" autocomplete="off"><div class="dxprocs" id="dx_pl"></div></div>' +
+    '<label class="check"><input type="checkbox" id="dx_act"' + (cur.active !== 'N' ? ' checked' : '') + '> Active</label>' +
+    '<div class="row" style="margin-top:12px"><button class="primary" id="dx_save">Save</button><button id="dx_cancel">Cancel</button></div>', { narrow: true });
+  function draw() {
+    var q = val('dx_pq').toLowerCase();
+    $('dx_pl').innerHTML = procs.filter(function (p) { return !q || p.Name.toLowerCase().indexOf(q) >= 0 || sel.indexOf(p.Id) >= 0 && !q; }).map(function (p) { return '<label class="check"><input type="checkbox" data-pp="' + esc(p.Id) + '"' + (sel.indexOf(p.Id) >= 0 ? ' checked' : '') + '> ' + esc(p.Name) + '</label>'; }).join('');
+  }
+  draw();
+  $('dx_pq').addEventListener('input', draw);
+  on(m.el, '[data-pp]', 'change', function (e) { var id = e.currentTarget.getAttribute('data-pp'), i = sel.indexOf(id); if (e.currentTarget.checked && i < 0) sel.push(id); else if (!e.currentTarget.checked && i >= 0) sel.splice(i, 1); });
+  $('dx_cancel').addEventListener('click', m.close);
+  $('dx_save').addEventListener('click', function () {
+    var name = val('dx_name').trim(); if (!name) { toast('Enter the diagnosis', true); return; }
+    var item = { name: name, procs: sel, active: checked('dx_act') ? 'Y' : 'N' }, ren = {};
+    var l = dxList().filter(function (x) { return x.name !== orig; }); l.push(item);
+    if (orig && orig !== name) ren[orig] = name;
+    saveDx(l, ren, m);
+  });
+}
+function dlgDeleteDx(d) {
+  if (!d) return;
+  var k = d.name.toLowerCase(), n = S.d.patients.filter(function (p) { return String(p.Diagnosis || '').toLowerCase() === k || extras(p).some(function (x) { return String(x.diagnosis || '').toLowerCase() === k; }); }).length;
+  function go() { saveDx(dxList().filter(function (x) { return x.name !== d.name; }), {}); }
+  if (!n) { if (window.confirm('Delete "' + d.name + '"? No patient uses it.')) go(); return; }
+  var m = openModal('<h2>Delete "' + esc(d.name) + '"?</h2><p><strong>' + n + ' patient' + (n === 1 ? '' : 's') + '</strong> use' + (n === 1 ? 's' : '') + ' this diagnosis. If you delete it they keep the text and it shows under Unlisted diagnoses.</p>' +
+    '<div class="row"><button class="primary" id="dd_off">' + (d.active !== 'N' ? 'Deactivate instead' : 'Keep (already inactive)') + '</button><button class="danger" id="dd_del">Delete anyway</button><button id="dd_x">Cancel</button></div>', { narrow: true });
+  $('dd_x').addEventListener('click', m.close);
+  $('dd_off').addEventListener('click', function () { m.close(); if (d.active !== 'N') saveDx(dxList().map(function (x) { return x.name === d.name ? { name: x.name, procs: x.procs, active: 'N' } : x; }), {}); });
+  $('dd_del').addEventListener('click', function () { m.close(); go(); });
+}
+// ---- Comorbidities panel (the old "Tags and reviews")
+function drawComorbPanel(el) {
+  el.innerHTML = '<div class="spread"><h3>Comorbidities</h3><button id="cm_add">Add comorbidity</button></div><p class="muted small">When a comorbidity is added to a patient, its specialty review is added as not cleared. An inactive one is hidden from the form but stays on patients who have it.</p>' + listSearchHtml('cmq', 'Search comorbidities') + '<div id="cm_body"></div>';
+  $('cmq').addEventListener('input', function () { S.cmq = this.value; drawComorbBody(); });
+  $('cm_add').addEventListener('click', function () { cmModal(null); });
+  drawComorbBody();
+}
+function cmFind(name) { var l = comorbList() || []; for (var i = 0; i < l.length; i++) if (l[i].name === name) return l[i]; return null; }
+function drawComorbBody() {
+  var q = String(S.cmq || '').trim().toLowerCase(), unl = unlistedTags();
+  var l = (comorbList() || []).slice().sort(function (a, b) { return a.name.localeCompare(b.name); }).filter(function (d) { return !q || d.name.toLowerCase().indexOf(q) >= 0 || String(d.spec || '').toLowerCase().indexOf(q) >= 0; });
+  var box = $('cm_body');
+  box.innerHTML = unlHtml('Unlisted comorbidities', 'None. Comorbidities typed as free text will show here.', unl) +
+    '<table class="tbl"><thead><tr><th>Comorbidity</th><th>Review added</th><th>Active</th><th></th></tr></thead><tbody>' + l.map(function (d) {
+      return '<tr' + (d.active === 'N' ? ' class="procgrey"' : '') + '><td>' + esc(d.name) + '<div class="muted small showm">' + esc(d.spec || 'No review') + '</div></td><td class="small">' + esc(d.spec || 'No review') + '</td><td>' + sw('data-cact="' + esc(d.name) + '"', d.active !== 'N') + '</td><td style="white-space:nowrap"><button data-ce="' + esc(d.name) + '">Edit</button> <button data-cd="' + esc(d.name) + '" class="danger">Delete</button></td></tr>';
+    }).join('') + '</tbody></table>' + (l.length ? '' : '<p class="muted">No comorbidity matches.</p>');
+  on(box, '[data-ce]', 'click', function (e) { cmModal(cmFind(e.currentTarget.getAttribute('data-ce'))); });
+  on(box, '[data-cd]', 'click', function (e) { dlgDeleteCm(cmFind(e.currentTarget.getAttribute('data-cd'))); });
+  on(box, '[data-cact]', 'change', function (e) { var n = e.currentTarget.getAttribute('data-cact'), on_ = e.currentTarget.checked; saveCm((comorbList() || []).map(function (x) { return x.name === n ? { name: x.name, spec: x.spec, active: on_ ? 'Y' : 'N' } : x; }), {}, []); });
+  on(box, '[data-ul-add]', 'click', function (e) { var u = unl[+e.currentTarget.getAttribute('data-ul-add')]; if (u) cmModal({ name: u.name, spec: '', active: 'Y', isNew: true }); });
+  on(box, '[data-ul-same]', 'click', function (e) {
+    var u = unl[+e.currentTarget.getAttribute('data-ul-same')]; if (!u) return;
+    pickMenu('Same as…', (comorbList() || []).filter(function (d) { return d.active !== 'N'; }).sort(function (a, b) { return a.name.localeCompare(b.name); }).map(function (d) { return { label: d.name, fn: function () { sameCm(u.name, d.name); } }; }));
+  });
+  on(box, '[data-ul-ign]', 'click', function (e) {
+    var u = unl[+e.currentTarget.getAttribute('data-ul-ign')]; if (!u) return;
+    var cur = ignoredOf('ignoredTags'); cur.push(u.name.toLowerCase());
+    call('saveSettings', { ignoredTags: JSON.stringify(cur) }).then(function (r) { S.d.settings = r; drawSetPanel(); toast('Ignored'); }).catch(fail);
+  });
+}
+function saveCm(list, renames, deleted, m) {
+  call('saveComorbidities', { list: list, renames: renames || {}, deleted: deleted || [] }).then(function (r) {
+    S.d.settings = r.settings;
+    S.d.patients.forEach(function (p) {
+      var tags = tagsOf(p), ch = false, nt = [], oth = p.TagsOther || '';
+      tags.forEach(function (t) { if (renames && renames[t]) { t = renames[t]; ch = true; } if ((deleted || []).indexOf(t) >= 0) { oth = oth ? oth + ', ' + t : t; ch = true; return; } if (nt.indexOf(t) < 0) nt.push(t); });
+      if (ch) { p.Tags = nt.join(','); p.TagsOther = oth; }
+    });
+    if (m) m.close(); drawSetPanel(); toast('Saved');
+  }).catch(function (e) { drawSetPanel(); fail(e); });
+}
+function sameCm(from, to) {
+  call('sameComorbidity', { from: from, to: to }).then(function (r) { load().then(function () { drawSetPanel(); toast(r.changed + ' case' + (r.changed === 1 ? '' : 's') + ' updated'); }); }).catch(fail);
+}
+function cmModal(d) {
+  var isNew = !d || d.isNew, cur = d || { name: '', spec: '', active: 'Y' }, orig = isNew ? '' : cur.name, specs = SPECIALTIES.filter(function (x) { return x !== 'Anesthesia'; });
+  var m = openModal('<h2>' + (isNew ? 'Add comorbidity' : 'Edit comorbidity') + '</h2><div class="field"><label for="cm_name">Comorbidity</label><input type="text" id="cm_name" value="' + esc(cur.name) + '"></div>' +
+    '<div class="field"><label for="cm_spec">Specialty review it adds</label><select id="cm_spec">' + opt('', 'No review', !cur.spec) + specs.map(function (x) { return opt(x, x, x === cur.spec); }).join('') + '</select></div>' +
+    '<label class="check"><input type="checkbox" id="cm_act"' + (cur.active !== 'N' ? ' checked' : '') + '> Active</label>' +
+    (orig ? '<p class="muted small">Renaming also renames it on every patient who has it.</p>' : '') +
+    '<div class="row" style="margin-top:12px"><button class="primary" id="cm_save">Save</button><button id="cm_cancel">Cancel</button></div>', { narrow: true });
+  $('cm_cancel').addEventListener('click', m.close);
+  $('cm_save').addEventListener('click', function () {
+    var name = val('cm_name').trim(); if (!name) { toast('Enter the name', true); return; }
+    var l = (comorbList() || []).filter(function (x) { return x.name !== orig; }), ren = {};
+    l.push({ name: name, spec: val('cm_spec'), active: checked('cm_act') ? 'Y' : 'N' });
+    if (orig && orig !== name) ren[orig] = name;
+    saveCm(l, ren, [], m);
+  });
+}
+function dlgDeleteCm(d) {
+  if (!d) return;
+  var n = S.d.patients.filter(function (p) { return tagsOf(p).indexOf(d.name) >= 0; }).length;
+  function go() { saveCm((comorbList() || []).filter(function (x) { return x.name !== d.name; }), {}, [d.name]); }
+  if (!n) { if (window.confirm('Delete "' + d.name + '"? No patient has it.')) go(); return; }
+  var m = openModal('<h2>Delete "' + esc(d.name) + '"?</h2><p><strong>' + n + ' patient' + (n === 1 ? '' : 's') + '</strong> ha' + (n === 1 ? 's' : 've') + ' it. If you delete it they keep it as free text and it shows under Unlisted comorbidities.</p>' +
+    '<div class="row"><button class="primary" id="cd_off">' + (d.active !== 'N' ? 'Deactivate instead' : 'Keep (already inactive)') + '</button><button class="danger" id="cd_del">Delete anyway</button><button id="cd_x">Cancel</button></div>', { narrow: true });
+  $('cd_x').addEventListener('click', m.close);
+  $('cd_off').addEventListener('click', function () { m.close(); if (d.active !== 'N') saveCm((comorbList() || []).map(function (x) { return x.name === d.name ? { name: x.name, spec: x.spec, active: 'N' } : x; }), {}, []); });
+  $('cd_del').addEventListener('click', function () { m.close(); go(); });
+}
+// ---- Settings menu and the two new panels
+SET_GROUPS = [
+  ['People', [['people', 'People and rights', 'people']]],
+  ['Clinical', [['diagnoses', 'Diagnoses', 'settings'], ['procedures', 'Procedures', 'settings'], ['comorb', 'Comorbidities', 'settings'], ['pediatricians', 'Pediatricians', 'settings'], ['warnings', 'Warnings', 'settings']]],
+  ['Hospital', [['rooms', 'Operating rooms', 'settings']]],
+  ['Data', [['import', 'Import and export', 'impexp'], ['backup', 'Backup', 'backup'], ['audit', 'Audit log', 'audit']]],
+  ['Account', [['account', 'My account', 'all']]]
+];
+var prevDrawSetPanel15 = drawSetPanel;
+drawSetPanel = function () {
+  if (S.setTab === 'tags') S.setTab = 'comorb';
+  if (S.setTab === 'diagnoses') return drawDiagPanel($('s_main'));
+  if (S.setTab === 'comorb') return drawComorbPanel($('s_main'));
+  prevDrawSetPanel15();
+  if (S.setTab === 'procedures' && $('s_main') && !$('s_procq')) {
+    var h = $('s_main').querySelector('.spread');
+    if (h) h.insertAdjacentHTML('afterend', '<input type="search" id="s_procq" class="lsearch" placeholder="Search procedures or default diagnosis" autocomplete="off" value="' + esc(S.procQ || '') + '">');
+    if ($('s_procq')) $('s_procq').addEventListener('input', function () { S.procQ = this.value; drawProcs(); });
+    if (S.procQ) drawProcs();
+  }
+};
+var drawProcsAll15 = drawProcs;
+drawProcs = function () {
+  var q = String(S.procQ || '').trim().toLowerCase();
+  if (!q) return drawProcsAll15();
+  var keep = S.d.procedures;
+  S.d.procedures = keep.filter(function (p) { return p.Name.toLowerCase().indexOf(q) >= 0 || String(p.DefaultDiagnosis || '').toLowerCase().indexOf(q) >= 0; });
+  try { drawProcsAll15(); } finally { S.d.procedures = keep; }
+};
+
+// ---- item 82: What's new
+var WHATS_NEW = [
+  ['0.15.0', 'Waiting list: Compact and Comfortable rows, one action button, priority flag, small warnings button. Settings: Diagnoses, Procedures and Comorbidities lists with search. Diagnosis is now required. Day of birth is never assumed from the CPR. Select several patients and act on them together; Undo after removing, booking or marking done; patient Timeline; merge duplicates; sign-in that survives the server resting, plus passkeys; calendar links for theatre lists; readable Google Sheet tabs per consultant; Screenshot mode; Developer mode.'],
+  ['0.14.11', 'Schedule step with a mini calendar, extra-procedure layout, Duplicate MRN warnings tab.'],
+  ['0.14.10', 'Patient page re-layout, joined buttons, unlisted procedures, Logbook Me / Team.']
+];
+var VERSION_RULE = 'Version numbers: the last digit is a fix, the middle number is new features, the first number is a redesign.';
+function dlgWhatsNew() {
+  var m = openModal('<div class="spread"><h2>What\'s new</h2><button id="wn_x">Close</button></div><p class="muted small">You use version ' + esc(VERSION) + '. ' + esc(VERSION_RULE) + '</p>' +
+    WHATS_NEW.map(function (w) { return '<div class="wnrow"><strong>' + esc(w[0]) + '</strong><div class="small">' + esc(w[1]) + '</div></div>'; }).join(''), { narrow: true });
+  $('wn_x').addEventListener('click', m.close);
+}
+var prevDrawSetPanel15b = drawSetPanel;
+drawSetPanel = function () {
+  prevDrawSetPanel15b();
+  var el = $('s_main');
+  if (el && S.setTab === 'account' && !$('wn_open')) {
+    el.insertAdjacentHTML('beforeend', '<div class="sect"><h3>What\'s new</h3><p class="muted small">' + esc(VERSION_RULE) + '</p><button id="wn_open">What\'s new in version ' + esc(VERSION) + '</button></div>');
+    $('wn_open').addEventListener('click', dlgWhatsNew);
+  }
+};
+
+// ======== v0.15.0 stage 3: undo, merge duplicates, timeline, multi-select, click-to-edit, shortcuts
+// ---- Undo toast (item 93)
+var UNDO_LABEL = { removePatient: 1, markDone: 1, addToList: 1, removeFromList: 1 };
+var callBase15 = call;
+call = function (action, payload) {
+  var ids = null;
+  if (UNDO_LABEL[action] && payload) ids = payload.patientIds || (payload.patientId ? [payload.patientId] : null);
+  var snaps = ids ? ids.map(function (id) { var q = getP(id); return q ? JSON.parse(JSON.stringify(q)) : null; }).filter(Boolean) : null;
+  var pr = callBase15(action, payload);
+  if (snaps && snaps.length) pr = pr.then(function (r) { S.undo = { snaps: snaps, at: Date.now() }; return r; });
+  return pr;
+};
+var toastBase15 = toast;
+toast = function (msg, isErr) {
+  toastBase15(msg, isErr);
+  var u = S.undo;
+  if (!u || isErr || Date.now() - u.at > 2500) return;
+  S.undo = null;
+  var t = $('toast'); t.textContent = ''; t.appendChild(document.createTextNode(msg + '  '));
+  var b = document.createElement('button'); b.type = 'button'; b.className = 'undo'; b.textContent = 'Undo';
+  b.addEventListener('click', function () { t.style.display = 'none'; clearTimeout(toast.h); doUndo(u); });
+  t.appendChild(b);
+  clearTimeout(toast.h); toast.h = setTimeout(function () { t.style.display = 'none'; }, 10000);
+};
+function doUndo(u) {
+  callBase15('restoreSnapshots', { patients: u.snaps }).then(function (r) { r.patients.forEach(upsertP); render(); toastBase15('Undone'); }).catch(fail);
+}
+
+// ---- Merge duplicates (item 72): Warnings > Duplicate MRN
+function mergePreview(payload) {
+  callBase15('mergeDuplicates', Object.assign({ preview: true }, payload)).then(function (r) {
+    if (!r.items.length) { toast(payload.all ? 'No exact duplicates to merge' : 'Nothing to merge'); return; }
+    var m = openModal('<div class="spread"><h2>Merge duplicates</h2><button id="mg_x">Close</button></div><p class="muted small">The older entry is kept and its empty fields are filled from the copy. The copy is removed as "Duplicate entry" and can be restored from the Removed page.</p>' +
+      '<div style="max-height:46vh;overflow:auto">' + r.items.map(function (it) {
+        return '<div class="mgrow"><strong>' + esc(it.name) + '</strong> <span class="muted small">' + esc(it.mrn) + '</span><div class="small">Keep: ' + esc(it.keepProcedure) + (it.resultProcedure !== it.keepProcedure ? ' <b>→ ' + esc(it.resultProcedure) + '</b>' : '') + '</div>' +
+          it.drops.map(function (d) { return '<div class="small muted">Remove copy: ' + esc(d.procedure) + (d.side ? ', ' + esc(d.side) : '') + ' (added ' + esc(fmtDate(d.added)) + ')</div>'; }).join('') +
+          (it.filled.length ? '<div class="small">Filled from the copy: ' + esc(it.filled.join(', ')) + '</div>' : '') + '</div>';
+      }).join('') + '</div><div class="row" style="margin-top:10px"><button class="primary" id="mg_go">Merge ' + r.items.length + (r.items.length === 1 ? ' group' : ' groups') + '</button><button id="mg_no">Cancel</button></div>', { narrow: true });
+    $('mg_x').addEventListener('click', m.close); $('mg_no').addEventListener('click', m.close);
+    $('mg_go').addEventListener('click', function () {
+      $('mg_go').disabled = true;
+      var ids = []; r.items.forEach(function (it) { ids.push(it.keepId); it.drops.forEach(function (d) { ids.push(d.id); }); });
+      var snaps = ids.map(function (id) { var q = getP(id); return q ? JSON.parse(JSON.stringify(q)) : null; }).filter(Boolean);
+      callBase15('mergeDuplicates', Object.assign({}, payload)).then(function (res) {
+        res.patients.forEach(upsertP); m.close(); render(); S.undo = { snaps: snaps, at: Date.now() };
+        toast('Merged ' + res.items.length + (res.items.length === 1 ? ' group' : ' groups'));
+      }).catch(function (e) { $('mg_go').disabled = false; fail(e); });
+    });
+  }).catch(fail);
+}
+var viewWarnBase15 = viewWarn;
+viewWarn = function () {
+  viewWarnBase15();
+  if (S.wtab !== 'dupmrn' || !can('remove')) return;
+  var st = document.querySelector('#view .sttabs'); if (!st) return;
+  st.insertAdjacentHTML('afterend', '<div class="panel mgbar"><div class="spread"><div class="small muted">Same CPR / T number, same operation and side.</div><button class="primary" id="mg_all">Merge all exact duplicates</button></div></div>');
+  $('mg_all').addEventListener('click', function () { mergePreview({ all: true }); });
+  var rows = document.querySelectorAll('#view [data-id]');
+  Array.prototype.forEach.call(rows, function (r) {
+    var id = r.getAttribute('data-id'), p = getP(id), others = p && dupMap()[id] ? dupMap()[id].filter(isActive) : [];
+    if (!p || !isActive(p) || !others.length) return;
+    var box = r.querySelector('.actw'); if (!box) return;
+    var b = document.createElement('button'); b.type = 'button'; b.textContent = 'Merge…';
+    b.addEventListener('click', function (e) { e.stopPropagation(); mergePreview({ ids: [id].concat(others.map(function (q) { return q.Id; })) }); });
+    box.appendChild(b);
+  });
+};
+
+// ---- Timeline (item 94): a third tab on the patient page, replacing the contact log
+function drawTimeline(p, box) {
+  if (!box) return;
+  var filt = S.tlf || 'all', ev = null;
+  function draw() {
+    if (!ev) return;
+    var list = ev.filter(function (e) { return filt === 'all' || (filt === 'calls' && e.kind === 'call') || (filt === 'booking' && e.kind === 'booking') || (filt === 'changes' && (e.kind === 'change' || e.kind === 'note')); });
+    box.innerHTML = '<div class="row" style="margin-bottom:8px;gap:6px"><button type="button" id="tl_call">' + ico('phone') + ' Log call</button><button type="button" id="tl_note">+ Note</button></div>' +
+      '<div class="tlf">' + [['all', 'All'], ['calls', 'Calls'], ['booking', 'Booking'], ['changes', 'Changes']].map(function (f) { return '<button type="button" class="' + (filt === f[0] ? 'on' : '') + '" data-tf="' + f[0] + '">' + f[1] + '</button>'; }).join('') + '</div>' +
+      (list.length ? list.map(function (e) { return '<div class="tle k-' + e.kind + '"><div class="small muted">' + esc(fmtDate(e.date)) + (e.at && e.at.length > 11 && e.at.slice(11, 16) !== '00:00' && e.at.slice(11, 16) !== '23:00' ? ' ' + esc(e.at.slice(11, 16)) : '') + (e.by ? ' · ' + esc(e.by) : '') + '</div><div>' + esc(e.text) + '</div></div>'; }).join('') : '<p class="muted small">Nothing here yet.</p>');
+    on(box, '[data-tf]', 'click', function (e) { filt = S.tlf = e.currentTarget.getAttribute('data-tf'); draw(); });
+    $('tl_call').addEventListener('click', function () { dlgCall(getP(p.Id) || p); });
+    $('tl_note').addEventListener('click', function () {
+      var m = openModal('<h2>Add a note</h2><div class="field"><textarea id="tn_t" rows="3"></textarea></div><div class="row"><button class="primary" id="tn_ok">Save</button><button id="tn_x">Cancel</button></div>', { narrow: true });
+      $('tn_x').addEventListener('click', m.close);
+      $('tn_ok').addEventListener('click', function () {
+        if (!val('tn_t').trim()) return;
+        callBase15('addContact', { patientId: p.Id, type: 'Note', date: S.today, note: val('tn_t') }).then(function () { m.close(); load15(); toast('Note added'); }).catch(fail);
+      });
+    });
+  }
+  function load15() { callBase15('getTimeline', { patientId: p.Id }).then(function (l) { ev = l; draw(); }).catch(function () { box.innerHTML = '<p class="muted small">Could not load the timeline.</p>'; }); }
+  load15();
+}
+
+// ======== v0.15.0 stage 3b: multi-select (item 91), double-click edit + arrow keys (item 92)
+S.selOn = false; S.sel = {};
+function selIds() { return Object.keys(S.sel).filter(function (k) { return S.sel[k] && getP(k); }); }
+function selBarDraw() {
+  var bar = $('selbar'), ids = selIds();
+  if (!S.selOn) { if (bar) bar.parentNode.removeChild(bar); return; }
+  if (!bar) { bar = document.createElement('div'); bar.id = 'selbar'; bar.className = 'selbar'; document.body.appendChild(bar); }
+  bar.innerHTML = '<strong>' + ids.length + ' selected</strong>' +
+    '<button type="button" data-sa="sched"' + (ids.length ? '' : ' disabled') + '>Schedule</button>' +
+    '<button type="button" data-sa="call"' + (ids.length ? '' : ' disabled') + '>Log call</button>' +
+    '<button type="button" data-sa="med"' + (ids.length ? '' : ' disabled') + '>Medical status</button>' +
+    '<button type="button" data-sa="prio"' + (ids.length ? '' : ' disabled') + '>Priority</button>' +
+    (can('remove') ? '<button type="button" data-sa="rm"' + (ids.length ? '' : ' disabled') + '>Remove</button>' : '') +
+    '<button type="button" data-sa="done">Done</button>';
+  on(bar, '[data-sa]', 'click', function (e) { selAct(e.currentTarget.getAttribute('data-sa')); });
+}
+function selMark() {
+  var lb = $('listBody'); if (!lb) return;
+  Array.prototype.forEach.call(lb.querySelectorAll('[data-id]:not(button)'), function (r) { r.classList.toggle('picked', !!S.sel[r.getAttribute('data-id')]); });
+}
+function selBulk(action, mk, okMsg, ids) {
+  var bad = [], done = [];
+  var snaps = ids.map(function (id) { return JSON.parse(JSON.stringify(getP(id))); });
+  var chain = Promise.resolve();
+  ids.forEach(function (id) {
+    chain = chain.then(function () { return callBase15(action, mk(id)).then(function (r) { if (r && r.patient) upsertP(r.patient); if (r && r.patients) r.patients.forEach(upsertP); done.push(id); }).catch(function (e) { bad.push(getP(id).Name + ': ' + (e.message || e)); }); });
+  });
+  return chain.then(function () {
+    S.sel = {}; render();
+    if (done.length) { S.undo = { snaps: snaps.filter(function (s) { return done.indexOf(s.Id) >= 0; }), at: Date.now() }; }
+    toast(okMsg + ' ' + done.length + (bad.length ? ' · skipped ' + bad.length : ''));
+    if (bad.length) openModal('<h2>Skipped</h2><p class="small">' + bad.map(esc).join('<br>') + '</p><button id="sk_x">Close</button>', { narrow: true }).el.querySelector('#sk_x').addEventListener('click', function () { var o = document.querySelectorAll('.overlay'); o[o.length - 1].remove(); });
+  });
+}
+function selAct(k) {
+  var ids = selIds();
+  if (k === 'done') { S.selOn = false; S.sel = {}; selBarDraw(); listBody(); return; }
+  if (!ids.length) return;
+  var m;
+  if (k === 'sched') {
+    var lists = S.d.lists.filter(function (l) { return l.Status === 'Open' && l.Date >= S.today; }).sort(function (a, b) { return a.Date.localeCompare(b.Date); });
+    var elig = ids.filter(function (id) { var p = getP(id); return p.Status === 'Ready' && !p.ListId; });
+    m = openModal('<h2>Schedule ' + elig.length + ' of ' + ids.length + '</h2>' + (elig.length < ids.length ? '<p class="small muted">Only Ready patients not already on a list are scheduled.</p>' : '') +
+      '<div class="field"><label>List</label><select id="ms_l">' + lists.map(function (l) { return '<option value="' + esc(l.Id) + '">' + esc(fmtDate(l.Date) + ' · ' + listTitle(l)) + '</option>'; }).join('') + '</select></div><div class="row"><button class="primary" id="ms_ok"' + (elig.length && lists.length ? '' : ' disabled') + '>Schedule</button><button id="ms_x">Cancel</button></div>', { narrow: true });
+    $('ms_x').addEventListener('click', m.close);
+    $('ms_ok').addEventListener('click', function () { var l = val('ms_l'); m.close(); selBulk('addToList', function (id) { return { listId: l, patientIds: [id] }; }, 'Scheduled', elig); });
+  } else if (k === 'call') {
+    m = openModal('<h2>Log call for ' + ids.length + '</h2><div class="field"><select id="mc_o"><option value="noanswer">No answer</option><option value="answered">Answered, scheduled for surgery</option></select></div><div class="row"><button class="primary" id="mc_ok">Save</button><button id="mc_x">Cancel</button></div>', { narrow: true });
+    $('mc_x').addEventListener('click', m.close);
+    $('mc_ok').addEventListener('click', function () { var o = val('mc_o'); m.close(); selBulk('logCall', function (id) { return o === 'answered' ? { patientId: id, outcome: 'answered', reason: 'Scheduled for surgery' } : { patientId: id, outcome: 'noanswer' }; }, 'Call logged for', ids); });
+  } else if (k === 'med') {
+    m = openModal('<h2>Medical status for ' + ids.length + '</h2><p class="small muted">Sets "Medically free".</p><div class="row"><button class="primary" id="mm_ok">Set medically free</button><button id="mm_x">Cancel</button></div>', { narrow: true });
+    $('mm_x').addEventListener('click', m.close);
+    $('mm_ok').addEventListener('click', function () { m.close(); selBulk('patchPatient', function (id) { return { patientId: id, MedicalStatus: 'Free' }; }, 'Updated', ids); });
+  } else if (k === 'prio') {
+    m = openModal('<h2>Priority for ' + ids.length + '</h2><div class="field"><label>Priority</label><select id="mp_p"><option value="Urgent">Urgent</option><option value="">None</option></select></div><div class="field"><label>Reason</label><input type="text" id="mp_r"></div><div class="row"><button class="primary" id="mp_ok">Save</button><button id="mp_x">Cancel</button></div>', { narrow: true });
+    $('mp_x').addEventListener('click', m.close);
+    $('mp_ok').addEventListener('click', function () { var pr = val('mp_p'), rs = val('mp_r').trim(); if (pr && !rs) { toast('Write the reason for the priority.', true); return; } m.close(); selBulk('patchPatient', function (id) { return { patientId: id, Priority: pr, PriorityReason: rs, logNote: pr ? 'Priority: ' + rs : '' }; }, 'Updated', ids); });
+  } else if (k === 'rm') {
+    m = openModal('<h2>Remove ' + ids.length + ' patients</h2><div class="field"><label>Reason *</label><select id="mr_r">' + REMOVE_REASONS.map(function (x) { return '<option>' + esc(x) + '</option>'; }).join('') + '</select></div><div class="row"><button class="danger" id="mr_ok">Remove</button><button id="mr_x">Cancel</button></div>', { narrow: true });
+    $('mr_x').addEventListener('click', m.close);
+    $('mr_ok').addEventListener('click', function () { var r = val('mr_r'); m.close(); selBulk('removePatient', function (id) { return { patientId: id, reason: r }; }, 'Removed', ids); });
+  }
+}
+var listBodyBase15 = listBody;
+listBody = function () {
+  listBodyBase15();
+  var lb = $('listBody'); if (!lb) return;
+  var sw = lb.querySelector('.dsw');
+  if (sw && !lb.querySelector('#selbtn')) {
+    sw.insertAdjacentHTML('afterend', '<button type="button" id="selbtn" class="fbtn' + (S.selOn ? ' on' : '') + '">Select</button>');
+    $('selbtn').addEventListener('click', function () { S.selOn = !S.selOn; if (!S.selOn) S.sel = {}; selBarDraw(); listBody(); });
+  }
+  selMark(); selBarDraw();
+};
+document.addEventListener('click', function (e) {
+  if (!S.selOn) return;
+  var lb = $('listBody'), r = e.target.closest && e.target.closest('[data-id]:not(button)');
+  if (!lb || !r || !lb.contains(r)) return;
+  e.stopPropagation(); e.preventDefault();
+  var id = r.getAttribute('data-id'); S.sel[id] = !S.sel[id]; selMark(); selBarDraw();
+}, true);
+// phone: long-press a card starts selecting
+(function () {
+  var tm = null;
+  document.addEventListener('touchstart', function (e) {
+    var r = e.target.closest && e.target.closest('#listBody [data-id]:not(button)'); if (!r || S.selOn) return;
+    tm = setTimeout(function () { S.selOn = true; S.sel = {}; S.sel[r.getAttribute('data-id')] = true; S.noOpen = Date.now(); listBody(); }, 600);
+  }, { passive: true });
+  ['touchend', 'touchmove', 'touchcancel'].forEach(function (ev) { document.addEventListener(ev, function () { clearTimeout(tm); }, { passive: true }); });
+})();
+// double-click a row: straight to the details form
+document.addEventListener('dblclick', function (e) {
+  if (S.selOn) return;
+  var r = e.target.closest && e.target.closest('#listBody [data-id]:not(button)'); if (!r || (e.target.closest('button'))) return;
+  setTimeout(function () { var b = document.querySelector('[data-pt="2"]'); if (b) b.click(); }, 50);
+});
+// arrow keys move through the list, Enter opens
+document.addEventListener('keydown', function (e) {
+  if (!S.d || S.view !== 'list' || document.querySelector('.overlay')) return;
+  var t = e.target; if (t && (/^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName) || t.isContentEditable)) return;
+  if (e.key !== 'ArrowDown' && e.key !== 'ArrowUp' && e.key !== 'Enter') return;
+  var rows = Array.prototype.slice.call(document.querySelectorAll('#listBody [data-id]:not(button)')); if (!rows.length) return;
+  var cur = rows.findIndex(function (r) { return r.classList.contains('kb'); });
+  if (e.key === 'Enter') { if (cur >= 0) { e.preventDefault(); openPatient(rows[cur].getAttribute('data-id')); } return; }
+  e.preventDefault();
+  var nx = Math.max(0, Math.min(rows.length - 1, cur + (e.key === 'ArrowDown' ? 1 : -1)));
+  rows.forEach(function (r) { r.classList.remove('kb'); }); rows[nx].classList.add('kb'); rows[nx].scrollIntoView({ block: 'nearest' });
+});
+
+// ======== v0.15.0 stage 4: reliability (80), passkeys (86), speed (95), Developer mode (96), Screenshot mode (97)
+ALL_RIGHTS.push(['developer', 'Developer mode (error log, speed, data checks)']);
+var READ_ACT = { bootstrap: 1, ping: 1, getTimeline: 1, devInfo: 1, passkeyList: 1, stamp: 1, resume: 1, autoLogin: 1, passkeyBegin: 1, passkeyLogin: 1, login: 1, logout: 1 };
+S.mon = {}; S.errLog = []; S.monLog = [];
+function logErr(kind, msg) {
+  S.errLog.unshift({ at: new Date().toISOString().slice(0, 19).replace('T', ' '), kind: kind, msg: String(msg).slice(0, 300) });
+  if (S.errLog.length > 100) S.errLog.length = 100;
+}
+window.addEventListener('error', function (e) { logErr('script', (e.message || '') + (e.lineno ? ' (line ' + e.lineno + ')' : '')); });
+window.addEventListener('unhandledrejection', function (e) { logErr('promise', e.reason && e.reason.message ? e.reason.message : e.reason); });
+function monAdd(action, ms, ok, msg) {
+  var m = S.mon[action] || (S.mon[action] = { n: 0, ms: 0, max: 0, bad: 0 });
+  m.n++; m.ms += ms; if (ms > m.max) m.max = ms; if (!ok) { m.bad++; logErr('call ' + action, msg); }
+  S.monLog.unshift({ a: action, ms: ms, ok: ok }); if (S.monLog.length > 60) S.monLog.length = 60;
+}
+// every server call: timed, read calls retried when the network drops, sign-out reason kept
+var rawCallBase15 = rawCall;
+rawCall = function (action, payload, token) {
+  var tries = 0;
+  function go() {
+    var t0 = Date.now();
+    return rawCallBase15(action, payload, token).then(function (r) { monAdd(action, Date.now() - t0, true); return r; }, function (e) {
+      var m = String((e && e.message) || ''), mm = /^SESSION_EXPIRED(?::(.*))?$/.exec(m);
+      monAdd(action, Date.now() - t0, !!mm, m);
+      if (mm) { S.expReason = mm[1] || ''; throw new Error('SESSION_EXPIRED'); }
+      if (READ_ACT[action] && tries < 2 && /reach|network|fetch|timed? ?out|failed/i.test(m)) { tries++; return new Promise(function (res) { setTimeout(res, 700 * tries); }).then(go); }
+      if (/reach the server/i.test(m)) e = new Error('Could not reach the server. Check the connection and try again.');
+      throw e;
+    });
+  }
+  return go();
+};
+expire = function () {
+  var why = S.expReason; S.expReason = '';
+  S.token = null; S.d = null; S.real = null; S.shot = false; shotPill(); store('psw_token', null); clearTimeout(S.idleTimer);
+  closeAllModals();
+  showLogin('Signed out: ' + (why || 'your session ended') + '. Sign in again.');
+};
+// keep the session warm and notice changes made by others
+setInterval(function () { if (S.d && S.token && !document.hidden) callBase15('ping').catch(function () { /* the next real call shows the problem */ }); }, 240000);
+setInterval(function () {
+  if (!S.d || !S.token || document.hidden || S.shot || document.querySelector('.overlay')) return;
+  var t = document.activeElement; if (t && /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName)) return;
+  callBase15('stamp').then(function (r) {
+    if (S.stampV && S.stampV !== r.stamp && !document.querySelector('.overlay')) { S.stampV = r.stamp; load().catch(function () { }); } else S.stampV = r.stamp;
+  }).catch(function () { });
+}, 90000);
+var loadBase15 = load;
+load = function () {
+  return loadBase15().then(function (r) {
+    S.stampV = null;
+    if (S.shot) { S.real = S.d.patients; S.d.patients = S.real.map(fakeP); render(); }
+    return r;
+  });
+};
+
+// ---- Screenshot mode (item 97): made-up names and numbers on screen; nothing can be saved meanwhile
+var FAKE_FN = ['Aisha', 'Omar', 'Fatima', 'Yusuf', 'Layla', 'Hassan', 'Maryam', 'Ali', 'Noor', 'Khalid', 'Zainab', 'Ahmed', 'Sara', 'Mohammed', 'Huda', 'Ibrahim', 'Reem', 'Jasim', 'Dana', 'Salman'];
+var FAKE_LN = ['A', 'B', 'H', 'K', 'M', 'S', 'R', 'N', 'J', 'F'];
+function hash32(s) { var h = 2166136261; s = String(s); for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
+function digits(h, n) { var out = '', x = h || 1; while (out.length < n) { x = Math.imul(x, 1103515245) + 12345 >>> 0; out += String(x).slice(-6); } return out.slice(0, n); }
+function fakeP(p) {
+  var q = {}, k, h = hash32(p.Id);
+  for (k in p) if (Object.prototype.hasOwnProperty.call(p, k)) q[k] = p[k];
+  q.Name = FAKE_FN[h % 20] + ' ' + FAKE_LN[(h >> 5) % 10] + '.';
+  if (p.MRN) q.MRN = /^T\d+$/i.test(p.MRN) ? 'T' + digits(h, 5) : digits(h, 9);
+  if (p.TNumber) q.TNumber = 'T' + digits(h >> 3, 5);
+  if (p.Guardian) q.Guardian = '3' + digits(h >> 7, 7);
+  ['Notes', 'DoneNotes', 'RemovedNote', 'Sponsorship'].forEach(function (f) { if (q[f]) q[f] = f === 'Sponsorship' ? 'Insurance' : 'Sample note'; });
+  return q;
+}
+function shotMinutes() { try { var v = localStorage.getItem('psw_shotmin_' + (S.user && S.user.Username)); return v === null ? 15 : +v; } catch (e) { return 15; } }
+function shotPill() {
+  var el = $('shotpill');
+  if (!S.shot) { if (el) el.parentNode.removeChild(el); return; }
+  if (!el) { el = document.createElement('button'); el.id = 'shotpill'; el.type = 'button'; el.className = 'shotpill'; el.addEventListener('click', function () { shotOff(); }); document.body.appendChild(el); }
+  el.textContent = 'Screenshot mode · made-up data · tap to turn off';
+}
+function shotOn() {
+  if (S.shot || !S.d) return;
+  S.real = S.d.patients; S.d.patients = S.real.map(fakeP); S.shot = true; shotPill();
+  clearTimeout(S.shotTimer); var m = shotMinutes(); if (m > 0) S.shotTimer = setTimeout(function () { shotOff(); toast('Screenshot mode turned off'); }, m * 60000);
+  render();
+}
+function shotOff() {
+  clearTimeout(S.shotTimer);
+  if (S.shot && S.d && S.real) S.d.patients = S.real;
+  S.real = null; S.shot = false; shotPill();
+  if (S.d) render();
+}
+var callBase15b = call;
+call = function (action, payload) {
+  if (S.shot && !READ_ACT[action]) return Promise.reject(new Error('Turn off Screenshot mode first. It shows made-up data, so nothing is saved.'));
+  var wr = !READ_ACT[action]; if (wr) S.stampV = null;
+  return callBase15b(action, payload).then(function (r) {
+    if (S.shot && action === 'getTimeline' && Array.isArray(r)) r.forEach(function (e) { if (e.kind === 'note' || e.kind === 'call') e.text = 'Sample entry'; e.by = ''; });
+    return r;
+  });
+};
+var doLogoutBase15 = doLogout;
+doLogout = function () { clearTimeout(S.shotTimer); S.shot = false; S.real = null; shotPill(); doLogoutBase15(); };
+
+// ---- passkeys (item 86)
+function u8b64(buf) { var s = '', a = new Uint8Array(buf); for (var i = 0; i < a.length; i++) s += String.fromCharCode(a[i]); return btoa(s).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, ''); }
+function b64u8(s) { s = String(s).replace(/-/g, '+').replace(/_/g, '/'); while (s.length % 4) s += '='; var b = atob(s), a = new Uint8Array(b.length); for (var i = 0; i < b.length; i++) a[i] = b.charCodeAt(i); return a; }
+function pkSupported() { return !!(window.PublicKeyCredential && navigator.credentials && navigator.credentials.create); }
+function pkAdd(name) {
+  return call('passkeyBegin').then(function (r) {
+    return navigator.credentials.create({ publicKey: { challenge: b64u8(r.challenge), rp: { name: 'Pediatric Surgery', id: location.hostname },
+      user: { id: new TextEncoder().encode(S.user.Username), name: S.user.Username, displayName: S.user.Name }, pubKeyCredParams: [{ type: 'public-key', alg: -7 }],
+      authenticatorSelection: { residentKey: 'preferred', userVerification: 'preferred' }, timeout: 60000 } });
+  }).then(function (cred) {
+    if (!cred || !cred.response.getPublicKey) throw new Error('This browser cannot make a passkey for this app.');
+    return call('passkeyAdd', { credId: cred.id, publicKey: u8b64(cred.response.getPublicKey()), clientDataJSON: u8b64(cred.response.clientDataJSON), name: name });
+  });
+}
+function pkLogin(keep) {
+  return rawCall('passkeyBegin', {}, null).then(function (r) {
+    return navigator.credentials.get({ publicKey: { challenge: b64u8(r.challenge), rpId: location.hostname, userVerification: 'preferred', timeout: 60000 } });
+  }).then(function (a) {
+    if (!a) throw new Error('No passkey chosen.');
+    return call('passkeyLogin', { credId: a.id, clientDataJSON: u8b64(a.response.clientDataJSON), authenticatorData: u8b64(a.response.authenticatorData), signature: u8b64(a.response.signature), remember: keep ? 'Y' : '', deviceName: deviceName() });
+  });
+}
+var showLoginBase15 = showLogin;
+showLogin = function (msg) {
+  showLoginBase15(msg);
+  if (!pkSupported() || !$('l_go')) return;
+  $('l_go').insertAdjacentHTML('afterend', '<button type="button" id="l_pk" style="width:100%;margin-top:8px">Sign in with a passkey</button>');
+  $('l_pk').addEventListener('click', function () {
+    $('l_pk').disabled = true;
+    pkLogin(!!$('l_keep').checked).then(function (r) {
+      S.token = r.token; store('psw_token', r.token);
+      if ($('l_keep') && $('l_keep').checked && r.deviceId && r.deviceKey) devSet(r.deviceId, r.deviceKey);
+      return load();
+    }).catch(function (e) { if ($('l_pk')) $('l_pk').disabled = false; toast(e && e.name === 'NotAllowedError' ? 'Passkey cancelled' : (e.message || String(e)), true); });
+  });
+};
+
+// ---- account panel: passkeys + Screenshot mode; Settings > Developer
+var drawAccountBase15 = drawAccountPanel;
+drawAccountPanel = function (el) {
+  drawAccountBase15(el);
+  var mins = shotMinutes();
+  el.insertAdjacentHTML('beforeend',
+    '<div class="sect" id="pk_sect"><h3>Passkeys</h3><p class="muted small">Sign in with Face ID, Touch ID or the phone\'s screen lock instead of typing the PIN. The PIN keeps working.</p><div id="pk_list" class="small muted">Loading…</div>' +
+    (pkSupported() ? '<div class="row" style="margin-top:6px"><input type="text" id="pk_name" placeholder="Name, e.g. My iPhone" style="max-width:220px"><button id="pk_add" class="primary">Add a passkey on this device</button></div>' : '<p class="muted small">This browser does not support passkeys.</p>') + '</div>' +
+    '<div class="sect"><h3>Screenshot mode</h3><p class="muted small">Shows made-up names, CPR, T numbers and phone numbers so you can take screenshots safely. Nothing can be saved while it is on. It turns itself off after the time below and when you sign out.</p>' +
+    '<div class="row"><button id="sh_tg" class="' + (S.shot ? 'danger' : 'primary') + '">' + (S.shot ? 'Turn off' : 'Turn on') + '</button><label class="small">Auto-off after <select id="sh_min">' + [5, 15, 30, 60, 0].map(function (m) { return '<option value="' + m + '"' + (m === mins ? ' selected' : '') + '>' + (m ? m + ' min' : 'never') + '</option>'; }).join('') + '</select></label></div></div>');
+  function pkDraw() {
+    call('passkeyList').then(function (l) {
+      $('pk_list').innerHTML = l.length ? l.map(function (k) { return '<div class="spread"><span>' + esc(k.Name) + ' <span class="muted small">· added ' + esc(fmtDate(String(k.CreatedAt).slice(0, 10))) + (k.LastUsed ? ' · used ' + esc(fmtDate(String(k.LastUsed).slice(0, 10))) : '') + '</span></span><button data-pkx="' + esc(k.Id) + '">Remove</button></div>'; }).join('') : 'No passkeys yet.';
+      on($('pk_list'), '[data-pkx]', 'click', function (e) { call('passkeyRemove', { id: e.currentTarget.getAttribute('data-pkx') }).then(function () { toast('Passkey removed'); pkDraw(); }).catch(fail); });
+    }).catch(function () { if ($('pk_list')) $('pk_list').textContent = 'Could not load.'; });
+  }
+  pkDraw();
+  if ($('pk_add')) $('pk_add').addEventListener('click', function () {
+    $('pk_add').disabled = true;
+    pkAdd(val('pk_name').trim() || deviceName()).then(function () { toast('Passkey added'); $('pk_add').disabled = false; $('pk_name').value = ''; pkDraw(); })
+      .catch(function (e) { $('pk_add').disabled = false; toast(e && e.name === 'NotAllowedError' ? 'Passkey cancelled' : (e.message || String(e)), true); });
+  });
+  $('sh_tg').addEventListener('click', function () { if (S.shot) shotOff(); else shotOn(); drawAccountPanel(el); });
+  $('sh_min').addEventListener('change', function () { try { localStorage.setItem('psw_shotmin_' + S.user.Username, this.value); } catch (e) { /* ignore */ } toast('Saved'); });
+};
+SET_GROUPS = SET_GROUPS.map(function (g) { return g[0] === 'Account' ? ['Account', g[1].concat([['developer', 'Developer', 'developer']])] : g; });
+var drawSetPanelBase15 = drawSetPanel;
+drawSetPanel = function () {
+  if (S.setTab === 'developer' && !can('developer')) S.setTab = 'account';
+  drawSetPanelBase15();
+  if (S.setTab !== 'developer') return;
+  var el = $('s_main'); if (!el) return;
+  var tab = S.devTab || 'speed';
+  var head = '<h3>Developer</h3><div class="tlf">' + [['speed', 'Speed'], ['errors', 'Errors ' + S.errLog.length], ['health', 'Data health'], ['server', 'Server']].map(function (t) { return '<button type="button" class="' + (tab === t[0] ? 'on' : '') + '" data-dv="' + t[0] + '">' + t[1] + '</button>'; }).join('') + '</div>';
+  function paint(body) { el.innerHTML = head + body; on(el, '[data-dv]', 'click', function (e) { S.devTab = e.currentTarget.getAttribute('data-dv'); drawSetPanel(); }); }
+  if (tab === 'speed') {
+    var rows = Object.keys(S.mon).sort(function (a, b) { return S.mon[b].ms - S.mon[a].ms; }).map(function (k) { var m = S.mon[k]; return '<tr><td>' + esc(k) + '</td><td>' + m.n + '</td><td>' + Math.round(m.ms / m.n) + ' ms</td><td>' + m.max + ' ms</td><td>' + m.bad + '</td></tr>'; }).join('');
+    var size = S.d ? Math.round(JSON.stringify(S.d).length / 1024) : 0;
+    paint('<p class="small">Loaded ' + esc(String(S.loadedAt ? Math.round((Date.now() - S.loadedAt) / 1000) : '?')) + ' s ago · data in memory about ' + size + ' KB · ' + (S.d ? S.d.patients.length : 0) + ' patients</p>' +
+      '<div class="row"><button id="dv_test" class="primary">Run speed test (5 pings)</button><span id="dv_res" class="small muted"></span></div>' +
+      '<table class="tbl"><thead><tr><th>Call</th><th>Count</th><th>Average</th><th>Slowest</th><th>Failed</th></tr></thead><tbody>' + (rows || '<tr><td colspan="5" class="muted">No calls yet.</td></tr>') + '</tbody></table>');
+    $('dv_test').addEventListener('click', function () {
+      var t = [], chain = Promise.resolve(); $('dv_res').textContent = 'Running…';
+      for (var i = 0; i < 5; i++) chain = chain.then(function () { var t0 = Date.now(); return callBase15('ping').then(function () { t.push(Date.now() - t0); }); });
+      chain.then(function () { $('dv_res').textContent = 'Round trip: ' + t.join(', ') + ' ms (first one is often the slowest)'; }).catch(function (e) { $('dv_res').textContent = e.message; });
+    });
+  } else if (tab === 'errors') {
+    paint('<div class="row"><button id="dv_clr">Clear</button></div>' + (S.errLog.length ? S.errLog.map(function (e) { return '<div class="tle k-note"><div class="small muted">' + esc(e.at) + ' · ' + esc(e.kind) + '</div><div>' + esc(e.msg) + '</div></div>'; }).join('') : '<p class="muted small">No errors since the app was opened.</p>'));
+    $('dv_clr').addEventListener('click', function () { S.errLog = []; drawSetPanel(); });
+  } else {
+    paint('<p class="muted small">Loading…</p>');
+    call('devInfo').then(function (r) {
+      if (S.setTab !== 'developer' || (S.devTab || 'speed') !== tab) return;
+      if (tab === 'health') paint('<table class="tbl"><tbody>' + r.health.map(function (h) { return '<tr><td>' + esc(h[0]) + '</td><td>' + (h[1] ? '<span class="chip red">' + h[1] + '</span>' : '<span class="chip green">0</span>') + '</td></tr>'; }).join('') + '</tbody></table><p class="muted small">Checked ' + esc(r.time) + '</p>');
+      else paint('<p class="small">Server version ' + esc(r.version) + ' · app version ' + esc(VERSION) + '</p><p class="small">Triggers: ' + (r.triggers.length ? r.triggers.map(esc).join(', ') : 'none') + '</p><table class="tbl"><thead><tr><th>Sheet</th><th>Rows</th></tr></thead><tbody>' + Object.keys(r.sheets).map(function (k) { return '<tr><td>' + esc(k) + '</td><td>' + esc(String(r.sheets[k])) + '</td></tr>'; }).join('') + '</tbody></table>');
+    }).catch(function (e) { paint('<p class="small" style="color:var(--red)">' + esc(e.message) + '</p>'); });
+  }
+};
+
+// ======== v0.15.0 stage 5: calendar feeds (81) and sheet tabs (84) in Settings > Data
+SET_GROUPS = SET_GROUPS.map(function (g) { return g[0] === 'Data' ? ['Data', g[1].concat([['calendar', 'Calendar and sheet tabs', 'settings']])] : g; });
+var drawSetPanelBase15c = drawSetPanel;
+drawSetPanel = function () {
+  drawSetPanelBase15c();
+  if (S.setTab !== 'calendar') return;
+  var el = $('s_main'); if (!el) return;
+  el.innerHTML = '<h3>Calendar and sheet tabs</h3><div class="sect"><h4>Calendar links</h4><p class="muted small">Subscribe in Apple, Google or Outlook calendar. Each link shows the theatre lists (date, consultant, room, number of cases) and no patient information. Anyone with a link can see it, so share it only with the team. Renew the links if one gets out.</p><div id="cal_list" class="small muted">Loading…</div>' +
+    '<div class="row" style="margin-top:8px"><button id="cal_renew">Renew all links</button></div></div>' +
+    '<div class="sect"><h4>Google Sheet tabs</h4><p class="muted small">The Sheet gets one readable tab per consultant plus one for everyone ("Waiting - …"). They update every hour by themselves. The data tabs stay grey and must not be edited by hand.</p><div class="row"><button id="sh_sync" class="primary">Update the tabs now</button></div></div>';
+  function paint() {
+    call('calFeeds').then(function (r) {
+      if (!$('cal_list')) return;
+      if (!r.base) { $('cal_list').textContent = 'The web app address is not available. Deploy the script as a web app first.'; return; }
+      $('cal_list').innerHTML = r.feeds.map(function (f, i) {
+        return '<div class="spread" style="margin:6px 0"><strong>' + esc(f.name) + '</strong><span class="row"><button data-cc="' + i + '">Copy link</button><a class="btnlike" href="' + esc(f.url.replace(/^https?:/, 'webcal:')) + '">Subscribe</a></span></div>';
+      }).join('');
+      on($('cal_list'), '[data-cc]', 'click', function (e) {
+        var u = r.feeds[+e.currentTarget.getAttribute('data-cc')].url;
+        (navigator.clipboard && navigator.clipboard.writeText ? navigator.clipboard.writeText(u) : Promise.reject()).then(function () { toast('Link copied'); }, function () { window.prompt('Copy this link', u); });
+      });
+    }).catch(function (e) { if ($('cal_list')) $('cal_list').textContent = e.message; });
+  }
+  paint();
+  $('cal_renew').addEventListener('click', function () { if (!window.confirm('Old links stop working. Continue?')) return; call('calReset').then(function () { toast('Links renewed'); paint(); }).catch(fail); });
+  $('sh_sync').addEventListener('click', function () { $('sh_sync').disabled = true; call('syncSheets').then(function (r) { $('sh_sync').disabled = false; toast(r.tabs + ' tabs updated'); }).catch(function (e) { $('sh_sync').disabled = false; fail(e); }); });
 };
 
 init();
